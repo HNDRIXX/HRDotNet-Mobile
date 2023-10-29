@@ -7,7 +7,7 @@
     "plugins": [
       "expo-router"
     ],
-    "name": "HRDotTest",
-    "slug": "HRDotTest"
+    "name": "HRDotNet-Mobile",
+    "slug": "HRDotNet-Mobile"
   }
 }
