@@ -1,27 +1,33 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StatusBar, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Easing } from 'react-native-reanimated';
 
 import Home from './pages/webuser/home';
 import Calendar from './pages/webuser/calendar';
 import Request from './pages/webuser/request';
 import Profile from './pages/profile';
+import MorePage from './access/navigate/request/MorePage';
+import ClockInOut from './access/home/ClockInOut';
 import BottomNavigation from '../components/navigation/BottomNavigation';
 
 import { useFonts } from '../constant/fonts';
+import LoanLedgerPage from './access/navigate/home/webuser/loanledger';
 
 export default function Index() {
     const [fontsLoaded] = useFonts()
-    const Stack = createStackNavigator()
-    const customEasing = Easing.bezier(0.42, 0, 0.58, 1)
+    const [show, setShow] = useState()
 
-    if(!fontsLoaded) {
+    const Stack = createStackNavigator()
+    const Tab = createBottomTabNavigator()
+
+    if (!fontsLoaded) {
         return (
             <View style={{ flex: 1, justifyContent: 'center' }}>
-                <ActivityIndicator size={'large'} />                
-            </View> 
+                <ActivityIndicator size={'large'} />
+            </View>
         )
     }
 
@@ -33,7 +39,35 @@ export default function Index() {
         },
     }
 
-    const IndexStack = () => {
+    const TabStack = () => {
+        return (
+            <>
+                <Tab.Navigator
+                    screenOptions={{
+                        headerShown: false,
+                    }}
+                    initialRouteName="HomeScreen"
+                >
+                    <Stack.Screen name="Home" component={Home} />
+                    <Stack.Screen 
+                        name="Calendar" 
+                        options={{ unmountOnBlur: true }} 
+                        component={Calendar} />
+                    <Stack.Screen 
+                        name="Request"
+                        options={{ unmountOnBlur: true }} 
+                        component={Request} />
+                    <Stack.Screen 
+                        name="Profile" 
+                        component={Profile}
+                        options={{ unmountOnBlur: true }} 
+                    />
+                </Tab.Navigator>
+            </>
+        )
+    }
+
+    const MainStack = () => {
         return (
             <>
                 <Stack.Navigator
@@ -43,24 +77,23 @@ export default function Index() {
                         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
                     }}
                 >
-                    <Stack.Screen name="HomeScreen" component={Home} />
-                    <Stack.Screen name="CalendarScreen" component={Calendar} />
-                    <Stack.Screen name="RequestScreen" component={Request} />
-                    <Stack.Screen name="ProfileScreen" component={Profile} />
+                    <Stack.Screen name="TabStack" component={TabStack} />
+                    <Stack.Screen name="ClockInOut" component={ClockInOut} />
+                    <Stack.Screen name="LoanLedger" component={LoanLedgerPage} />
                 </Stack.Navigator>
-
-                <BottomNavigation />
             </>
         )
     }
 
     return (
         <NavigationContainer independent={true}>
-            <IndexStack />
+            <MainStack />
         </NavigationContainer>
     )
 }
 
 const styles = StyleSheet.create({
-  
+    showNav: (show) => ({
+
+    })
 })

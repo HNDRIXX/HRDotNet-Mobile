@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     
       
     dayBelowEvent: {
-        fontSize: 10,
+        fontSize: 13,
         fontFamily: 'Inter_400Regular'
     },
     
@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
     },
     
     dayContentText: {
+        fontSize: 14,
         textAlign: 'center',
         fontFamily: 'Inter_500Medium',
     },

@@ -1,51 +1,65 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, RefreshControl, ActivityIndicator } from "react-native";
+import { View, StyleSheet,  RefreshControl, ActivityIndicator, BackHandler, Platform  } from "react-native";
 import { Calendar } from "react-native-calendars";
 import * as Animatable from 'react-native-animatable';
-import { StatusBar } from "expo-status-bar";
-import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import { useNavigation, useRoute } from '@react-navigation/native';
 import moment from "moment";
-import { Shadow } from "react-native-shadow-2";
 
 import { COLORS } from "../../../constant";
 import CalendarNote from "../../../components/note/CalendarNote";
 import NavigationHeader from "../../../components/header/NavigationHeader";
 import CalendarEvent from "../../../components/section/calendar/CalendarEvent";
+import BottomNavigation from "../../../components/navigation/BottomNavigation";
+
+const valueEvents = {
+  '20231001': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day', }, ],
+  '20231002': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day', }, ],
+  '20231003': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day', }, ],
+  '20231004': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day', }, ],
+  '20231005': [ { event: 'Approved Leave', status: 'Leave', }, ],
+  '20231006': [ { event: 'Government Declared Holiday', status: 'Holiday' } ],
+  '20231007': [ { event: 'No Work Schedule', status: 'Rest Day' } ],
+  '20231008': [ { event: 'No Work Schedule', status: 'Rest Day' } ],
+  '20231018': [ { event: 'No Work Schedule', status: 'Rest Day' } ],
+  '20231019': [ { event: 'No Work Schedule', status: 'Rest Day' } ],
+  '20231020': [ { event: 'No Work Schedule', status: 'Rest Day' } ],
+  '20231030': [ { event: 'Election', status: 'Holiday' } ],
+  '20231031': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day' } ],
+}
 
 export default function CalendarScreen() {
   const [isLoading, setIsLoading] = useState(true)
-  const [currDate, setCurrDate] = useState(null)
+  const [refreshing, setRefreshing] = useState(false)
+
   const [selectedDate, setSelectedDate] = useState(null)
   const [events, setEvents] = useState(null)
   const [previousDate, setPreviousDate] = useState(null)
   const [nextDate, setNextDate] = useState(null)
-  const [refreshing, setRefreshing] = useState(false)
   const scrollViewRef = useRef(null)
 
+  const navigation = useNavigation()
   const updatedValueEvents = {}
 
   useEffect(() => {
       setTimeout(() => {
-      setIsLoading(false)
+        setIsLoading(false)
       }, 800)
+
+      //BackHandler sa Android
+      const backAction = () => { return true }
+      const backHandlerAndroid = BackHandler.addEventListener('hardwareBackPress', backAction)
+    
+      return () => backHandlerAndroid.remove()
   }, [])
 
-  const valueEvents = {
-    '20231001': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day', }, ],
-    '20231002': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day', }, ],
-    '20231003': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day', }, ],
-    '20231004': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day', }, ],
-    '20231005': [ { event: 'Approved Leave', status: 'Leave', }, ],
-    '20231006': [ { event: 'Government Declared Holiday', status: 'Holiday' } ],
-    '20231007': [ { event: 'No Work Schedule', status: 'Rest Day' } ],
-    '20231008': [ { event: 'No Work Schedule', status: 'Rest Day' } ],
-    '20231018': [ { event: 'No Work Schedule', status: 'Rest Day' } ],
-    '20231019': [ { event: 'No Work Schedule', status: 'Rest Day' } ],
-    '20231020': [ { event: 'No Work Schedule', status: 'Rest Day' } ],
-    '20231030': [ { event: 'Election', status: 'Holiday' } ],
-    '20231031': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day' } ],
-  }
-
+  //BackHandler sa IOS
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      const backHandlerIOS = navigation.addListener('beforeRemove', (e) => { e.preventDefault() })
+      return () => backHandlerIOS.remove()
+    }
+  }, [navigation])
+  
   for (const key in valueEvents) {
     const formattedDate = key.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')
     updatedValueEvents[formattedDate] = valueEvents[key]
@@ -211,6 +225,8 @@ export default function CalendarScreen() {
               </View>
           </Animatable.View>
       )}
+
+      {/* <BottomNavigation showValue={true}/> */}
     </>
   )
 }

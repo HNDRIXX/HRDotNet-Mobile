@@ -2,17 +2,22 @@ import React, { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
 import { Image } from "expo-image";
+import { useRoute } from "@react-navigation/native";
 import { Shadow } from "react-native-shadow-2";
 import * as Animatable from 'react-native-animatable';
 import { FontAwesome, Entypo } from "@expo/vector-icons";
+import { useGlobalSearchParams } from "expo-router";
 
 import { COLORS } from "../../../constant";
-import ClockInOut from "../../../components/section/home/ClockInOut";
+import TimeClock from "../../../components/section/home/TimeClock";
 import MenuButton from "../../../components/button/webuser/MenuButton";
 import TimeOff from "../../../components/button/TimeOff";
+import BottomNavigation from "../../../components/navigation/BottomNavigation";
 
-export default function Home ({ navigation }) {  
+export default function Home () {  
     const [isLoading, setIsLoading] = useState(true)
+    const route = useRoute()
+    
     const insets = useSafeAreaInsets()
 
     useEffect(() => {
@@ -66,14 +71,15 @@ export default function Home ({ navigation }) {
 
                     <Shadow
                         distance={20}
-                        style={styles.clockInOutView}
+                        style={styles.TimeClockView}
                     >
-                        <ClockInOut 
-                            // clockedValue = { params.clockedValue == undefined ? 1 : params.clockedValue }
-                            // clockedStatus = { params.clockedStatus == undefined ? null : params.clockedStatus }
-                            // clockedDate = { params.clockedDate == undefined ? null : params.clockedDate }
-                            // clockedTime = { params.clockedTime == undefined ? null : params.clockedTime }
-                        /> 
+                        <TimeClock
+                            clockedValue={route.params?.clockedValue}
+                            clockedStatus={route.params?.clockedStatus}
+                            clockedDate={route.params?.clockedDate}
+                            clockedTime={route.params?.clockedTime}
+                        />
+
                     </Shadow>
 
                     <View style={styles.menuView}>
@@ -92,6 +98,8 @@ export default function Home ({ navigation }) {
                 </View>
                 </Animatable.View>
             )}
+{/* 
+            <BottomNavigation showValue={true}/> */}
         </>
     )
 }
@@ -176,7 +184,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter_700Bold'
     },
 
-    clockInOutView: {
+    TimeClockView: {
         backgroundColor: COLORS.clearWhite,
         alignContent: 'center',
         alignItems: 'center',

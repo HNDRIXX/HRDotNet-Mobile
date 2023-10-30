@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 import { Link } from 'expo-router';
 import { router } from 'expo-router';
 import moment from 'moment';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../../constant';
+import BottomNavigation from '../../navigation/BottomNavigation';
 
-export default function ClockInOut ({ clockedValue, clockedStatus, clockedDate, clockedTime }) {
+export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, clockedTime }) {
     const [currTime, setCurrTime] = useState(new Date())
     const [time, setTime] = useState(moment())
+
+    const navigation = useNavigation()
+
 
     useEffect(() => {
         const timer = setInterval(() => setTime(moment()), 1000);
@@ -33,25 +38,14 @@ export default function ClockInOut ({ clockedValue, clockedStatus, clockedDate, 
                     Clocked Out: September 18 at 6:18:00 PM
                 </Text>
 
-                <TouchableOpacity style={styles.linkButton}>
-                    <View style={styles.clockOutButton}>
-                        <Ionicons
-                            name='stopwatch'
-                            size={25}
-                            color={COLORS.clearWhite}
-                        />
-
-                        <Text style={styles.timeInOutText}>Clock-Out</Text>
-                    </View>
-                </TouchableOpacity>
-
-                { clockedValue == 0 && (
-                    <Link
+                { clockedValue == 0 ? (
+                    <TouchableOpacity
                         style={styles.linkButton}
-                        href={{
-                            pathname: `/access/access/geofence/[geofence]`,
-                            params: { clockedValue: clockedValue },
-                        }}
+                        onPress={() => 
+                            navigation.navigate('ClockInOut', {
+                                clockedValue: clockedValue
+                            })
+                        }
                     >
                         <View style={styles.clockOutButton}>
                             <Ionicons
@@ -62,16 +56,15 @@ export default function ClockInOut ({ clockedValue, clockedStatus, clockedDate, 
 
                             <Text style={styles.timeInOutText}>Clock-Out</Text>
                         </View>
-                    </Link>
-                )}
-                
-                { clockedValue == 1 && (
-                    <Link
+                    </TouchableOpacity>
+                ) :  (
+                    <TouchableOpacity
                         style={styles.linkButton}
-                        href={{
-                            pathname: `/access/access/geofence/[geofence]`,
-                            params: { clockedValue: clockedValue },
-                        }} 
+                        onPress={() => 
+                            navigation.navigate('ClockInOut', {
+                                clockedValue: clockedValue
+                            })
+                        }
                     >
                         <View style={styles.clockInButton}>
                             <Ionicons
@@ -83,7 +76,7 @@ export default function ClockInOut ({ clockedValue, clockedStatus, clockedDate, 
 
                             <Text style={styles.timeInOutText}>Clock-In</Text>
                         </View>
-                    </Link>
+                    </TouchableOpacity>
                 )}
             </View>
         </View>

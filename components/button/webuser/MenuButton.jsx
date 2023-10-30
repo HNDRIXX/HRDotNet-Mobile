@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Platform, Dimensions } from 'react-native'
-import { router } from 'expo-router'
 import { Image } from 'expo-image'
-import { Ionicons, Foundation, MaterialCommunityIcons } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
 
 import { COLORS } from '../../../constant'
 // import HomeButtonLoader from '../loader/HomeButtonLoader'
@@ -11,6 +10,7 @@ export default function MenuButton () {
     const [isLoading, setIsLoading] = useState(false)
 
     const { width, height } = Dimensions.get('window')
+    const navigation = useNavigation()
 
     // useEffect(() => {
     //     setTimeout(() => {
@@ -41,7 +41,8 @@ export default function MenuButton () {
 
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity 
-                                style={[styles.gridButton, { width: width / 5.5, height: height / 11 }]}>
+                                style={[styles.gridButton, { width: width / 5.5, height: height / 11 }]}
+                                onPress={() => navigation.navigate('LoanLedger')}>
                                 <Image 
                                     source={require('../../../assets/icons/ledger.png')}
                                     style={{ width: width / 5 ,  height: height / 14 }}

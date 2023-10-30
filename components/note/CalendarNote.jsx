@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
 
     text: {
         fontFamily: 'Inter_400Regular',
-        fontStyle: 'italic',
         color: COLORS.tr_gray,
         paddingTop: 20
     }

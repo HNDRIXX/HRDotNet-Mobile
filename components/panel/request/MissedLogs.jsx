@@ -1,0 +1,238 @@
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
+import * as Animatable from 'react-native-animatable';
+import { AntDesign } from "@expo/vector-icons";
+import moment from "moment/moment";
+
+import { COLORS } from "../../../constant";
+import { SearchAndNew } from "../../use/SearchAndNew";
+import RequestItem from "../../items/request/RequestItem"
+
+const data = [
+    { 
+        status: 'Reviewed',  
+        logTime: '8:34 PM',
+        logType: 'Time-in',
+        reason: 'Biometrics Issue',
+        attachedFile: '------',
+        documentNo: 'ML22307248376',
+        missedLogsDate: '20230925',
+        filedDate: '20230916',
+        statusBy: 'Kenneth Parungao',
+        statusByDate: '20230913',
+        reviewedBy: 'Benjamin Peralta',
+        reviewedDate: '20230916',
+    },
+    { 
+        status: 'Approved',  
+        logTime: '8:34 PM',
+        logType: 'Time-out',
+        reason: 'Biometrics Issue',
+        attachedFile: '-----',
+        documentNo: 'ML22307248376',
+        missedLogsDate: '20230925',
+        filedDate: '20230916',
+        statusBy: 'Kenneth Parungao',
+        statusByDate: '20230913',
+        reviewedBy: 'Benjamin Peralta',
+        reviewedDate: '20230916',
+    },
+]
+
+export default function MissedLogsPanel ( onAnimate ) {
+    const [isLoading, setIsLoading] = useState(true)
+    const [filterText, setFilterText] = useState('')
+
+    const momentDate = moment()
+    const dateThreshold = momentDate.clone().subtract(7, 'days')
+
+    const [newCount1, setNewCount1] = useState(0)
+    const [newCount2, setNewCount2] = useState(0)
+
+    const filteredData = data.filter((newItem) => {
+            const formattedDate = formattedDateString(newItem.missedLogsDate)
+            const itemAppliedDate = moment(formattedDate, 'MMMM DD YYYY')
+            
+            return (
+                newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
+                formattedDate.toLowerCase().includes(filterText.toLowerCase())
+            )
+        }
+    )
+
+    useEffect(() => {
+        let count1 = 0
+        let count2 = 0
+    
+        filteredData.forEach((item) => {
+          const formattedDate = formattedDateString(item.missedLogsDate)
+          const itemAppliedDate = moment(formattedDate, 'MMMM DD YYYY')
+    
+          if (!itemAppliedDate.isBefore(dateThreshold)) {
+            count1++
+          }
+    
+          if (itemAppliedDate.isBefore(dateThreshold)) {
+            count2++
+          }
+        })
+    
+        setNewCount1(count1)
+        setNewCount2(count2)
+    }, [filteredData, dateThreshold])
+
+    useEffect(() => {
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 800)
+    }, [])
+
+    const requestItemDisplay = ({ item, index }) => {
+        return (
+            <RequestItem 
+                onPanel={5}
+                item={item}
+                index={index}
+                newItem={{ ...item, 
+                    formattedMissedLogDate: formattedDateString(item.missedLogsDate), 
+                    formattedFiledDate: formattedDateString(item.filedDate), 
+                    formattedStatusByDate: formattedDateString(item.statusByDate),
+                    formattedReviewedDate: formattedDateString(item.reviewedDate),
+                    requestType: "Missed Logs"
+                }}
+                key={index}
+            />
+        )
+    }
+      
+    return (
+        <>
+            {isLoading ? (
+                <ActivityIndicator size="large" color={COLORS.powderBlue} style={styles.loader} />
+            ) : (
+                <Animatable.View
+                    animation={'fadeIn'}
+                    duration={500}
+                    style={{ opacity: 1, flex: 1 }}
+                >
+                   <SearchAndNew 
+                        filterText={filterText}
+                        setFilterText={setFilterText}
+                    />
+
+                    { filteredData.length > 0 ? (
+                        <ScrollView>
+                            { newCount1 > 0 && (<Text style={styles.itemStatusText}>New</Text>) }
+
+                            { filteredData.map((item, index) => {
+                                const itemAppliedDate = moment(formattedDateString(item.missedLogsDate), 'MMMM DD YYYY')
+
+                                if (!itemAppliedDate.isBefore(dateThreshold)) {
+                                    return (
+                                        requestItemDisplay({ item, index })
+                                    )
+                                }
+                            })}
+
+                            { newCount2 > 0 && (<Text style={styles.itemStatusText}>Earlier</Text>) }
+
+                            { filteredData.map((item, index) => {
+                                const itemAppliedDate = moment(formattedDateString(item.missedLogsDate), 'MMMM DD YYYY')
+
+                                if (itemAppliedDate.isBefore(dateThreshold)) {
+                                    return (
+                                        requestItemDisplay({ item, index })
+                                    )
+                                }
+                            })}
+                        </ScrollView>
+                    ) : ( 
+                        <View style={styles.noSearchWrapper}>
+                            <AntDesign
+                                name="search1"
+                                size={55}
+                                color={COLORS.darkGray}
+                                style={{ padding: 20 }}
+                            />
+                            <Text>No Search Found.</Text>
+                        </View>
+                    )}
+                </Animatable.View>
+            )}
+        </>
+    )
+}
+
+const formattedDateString = (dateString) => {
+    const year = dateString.substring(0, 4);
+    const month = dateString.substring(4, 6);
+    const day = dateString.substring(6);
+
+    return moment(`${month}-${day}-${year}`, 'MM-DD-YYYY').format('MMMM DD YYYY');
+}
+
+const styles = StyleSheet.create({
+    loader: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    
+    bodyContainer: {
+        flex: 1,
+    },
+
+    titleText: {
+        fontSize: 25,
+        fontFamily: 'Inter_600SemiBold',
+        margin: 10,
+    },
+
+    moreText: {
+        fontSize: 12,
+        color: COLORS.tr_gray,
+        paddingTop: 10,
+    },
+
+    itemStatusText: {
+        fontFamily: 'Inter_500Medium',
+        color: COLORS.darkGray,
+        padding: 10,
+        fontSize: 18,
+        marginHorizontal: 15
+    },
+
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+      
+    modalContent: {
+        width: 300,
+        padding: 20,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+
+    closeBtn: {
+        padding: 10,
+        width: 100,
+        alignSelf: 'flex-end',
+        alignItems: 'center',
+        borderRadius: 20,
+        marginTop: 10,
+    },
+
+    closeText: {
+        color: COLORS.white,
+        fontFamily: 'Inter_500Medium',
+    },
+
+    noSearchWrapper: {
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+})
