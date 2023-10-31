@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from "react-native";
+import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions } from "react-native";
 import { Image } from "expo-image";
 import { useRoute } from "@react-navigation/native";
 import { Shadow } from "react-native-shadow-2";
@@ -14,7 +14,7 @@ import MenuButton from "../../../components/button/webuser/MenuButton";
 import TimeOff from "../../../components/button/TimeOff";
 import BottomNavigation from "../../../components/navigation/BottomNavigation";
 
-export default function Home () {  
+export default function Home ({ navigation }) {  
     const [isLoading, setIsLoading] = useState(true)
     const route = useRoute()
     
@@ -42,11 +42,14 @@ export default function Home () {
 
                     <View style={styles.headerView}>
                         <View style={styles.headerNavigation}>
-                            <TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('SideDrawer')}>
                                 <FontAwesome name={'bars'} size={25} color={COLORS.clearWhite} />
                             </TouchableOpacity>
 
-                            <TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => navigation.navigate('Notification')}
+                            >
                                 <FontAwesome name={'bell'} size={25} color={COLORS.clearWhite} />
                             </TouchableOpacity>
                         </View>
@@ -83,13 +86,13 @@ export default function Home () {
                     </Shadow>
 
                     <View style={styles.menuView}>
-                        <ScrollView style={styles.scrollView}>
-                            <View>
+                        <ScrollView style={styles.scrollView} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+                            <View style={styles.sectionView}>
                                 <Text style={styles.mainTitle}>Menu</Text>
                                 <MenuButton />
                             </View>
 
-                            <View>
+                            <View style={styles.sectionView}>
                                 <Text style={styles.mainTitle}>Time Off</Text>
                                 <TimeOff />
                             </View>
@@ -113,7 +116,7 @@ const styles = StyleSheet.create({
 
     headerView: {
         padding: 20,
-        paddingTop: 5,
+        paddingTop: 15,
         height: 235,
         backgroundColor: COLORS.powderBlue,
     },
@@ -127,7 +130,7 @@ const styles = StyleSheet.create({
     welcomeView: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 15,
+        marginTop: 8,
         marginHorizontal: 10
     },
 
@@ -180,7 +183,7 @@ const styles = StyleSheet.create({
         color: COLORS.clearWhite,
         fontSize: 15,
         paddingHorizontal: 5,
-        marginTop: 19,
+        marginTop: 10,
         fontFamily: 'Inter_700Bold'
     },
 
@@ -196,11 +199,18 @@ const styles = StyleSheet.create({
    
     menuView: {
         flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: COLORS.clearWhite,
     },
 
     scrollView: {
         marginHorizontal: 10,
+    },
+
+    sectionView: {
+        width: Dimensions.get('window').width, 
+        paddingRight: 25
     },
 
     mainTitle: {

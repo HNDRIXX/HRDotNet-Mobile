@@ -174,25 +174,36 @@ export default function ClockInOut () {
           <Text style={styles.textHeader}>Time Clock</Text>
       </View>
 
-      { isLoading ? ( <ActivityIndicator size={'large'}/>) : (
+      { onLocation ? (
+        <View style={styles.locWrapper}>
+          <View style={styles.locationPrompt}>
+            <View style={styles.locationPromptWrapper}>
+              <Ionicons name="warning" size={24} color="red" />
+              <Text style={styles.promptText}>Prompt</Text>
+            </View>
+
+            <Text style={styles.subPromptText}>Please turn on your location.</Text>
+
+            <TouchableOpacity style={styles.locationPromptBtn} onPress={permissionLocation}>
+              <Text style={styles.locationPromptBtnText}>TURN ON</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      ) : ( null )}
+
+      { isLoading ? (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator size={'large'}/>
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Home')}
+          >
+            <Text>Restart Page</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
         <>
           <View style={styles.container}>
-            { onLocation ? (
-              <View style={styles.locWrapper}>
-                <View style={styles.locationPrompt}>
-                  <View style={styles.locationPromptWrapper}>
-                    <Ionicons name="warning" size={24} color="red" />
-                    <Text style={styles.promptText}>Prompt</Text>
-                  </View>
-
-                  <Text style={styles.subPromptText}>Please turn on your location.</Text>
-
-                  <TouchableOpacity style={styles.locationPromptBtn} onPress={permissionLocation}>
-                    <Text style={styles.locationPromptBtnText}>TURN ON</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            ) : ( null )}
 
             <MapView
               showsPointsOfInterest

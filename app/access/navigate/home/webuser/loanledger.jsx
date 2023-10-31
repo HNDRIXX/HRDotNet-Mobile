@@ -20,14 +20,13 @@ const data = [
         firstDueDate: "20230510",
         referenceNo: "SL201708181674086",
         loanAmount: "11,013.84",
-        dirbusedAmount: "11,013.84",
+        disbursedAmount: "11,013.84",
         cycle: "Period 1",
         installmentAmountPerMonth: "458.91",
         totalInstallmentAmount: "458.91",
-        balance: "10,554.93",
     },
     {
-        status: "Approved",
+        status: "Filed",
         loanTitle: "HDMF Salary Loan",
         balance: "3,671.93",
         documentNo: "LA22305230075",
@@ -39,11 +38,27 @@ const data = [
         firstDueDate: "20230510",
         referenceNo: "SL201708181674086",
         loanAmount: "11,013.84",
-        dirbusedAmount: "11,013.84",
+        disbursedAmount: "11,013.84",
         cycle: "Period 1",
         installmentAmountPerMonth: "458.91",
         totalInstallmentAmount: "458.91",
+    },
+]
+
+const details = [
+    {
+        loanTitle: "SSS Salary Loan",
         balance: "10,554.93",
+        documentNo: "LA22305230009",
+        paymentDate: "20230823",
+        paymentAmount: "458.91",
+    },
+    {
+        loanTitle: "HDMF Salary Loan",
+        balance: "3,671.28",
+        documentNo: "LA22305230075",
+        paymentDate: "20230823",
+        paymentAmount: "458.91",
     },
 ]
 export default function LoanLedgerPage ({ navigation }) {
@@ -77,7 +92,8 @@ export default function LoanLedgerPage ({ navigation }) {
                         <LoanLedgerItem 
                             key={index}
                             newItem={{ 
-                                ...item, 
+                                ...item,
+                                details: details,
                                 formattedTransactionDate: formattedDateString(item.transactionDate), 
                                 formattedApprovedDate: formattedDateString(item.approvedDate),
                                 formattedGrantedDate: formattedDateString(item.grantedDate),

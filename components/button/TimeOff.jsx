@@ -1,19 +1,21 @@
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions} from "react-native";
 import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import { Image } from "expo-image";
-import { router } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 
 import { COLORS } from "../../constant";
 
 export default function TimeOff () {
     const { width, height } = Dimensions.get('window')
+    const navigation = useNavigation()
 
     return (
         <View style={styles.container}>
             <TouchableOpacity 
-                style={[styles.button,  ]}
+                style={[styles.button]}
+                onPress={() => navigation.navigate('VacationLeave')}
             >
-                <View style={[styles.alignWrapper, { height: height / 10 }]}>
+                <View style={[styles.alignWrapper, { height: height * .12 }]}>
                     <Image 
                         source={require('../../assets/icons/vacation.png')}
                         style={{ width: 55, height: 55, marginRight: 10 }}
@@ -29,8 +31,9 @@ export default function TimeOff () {
 
             <TouchableOpacity 
                 style={[styles.button, ]}
+                onPress={() => navigation.navigate('SickLeave')}
             >
-                <View style={[styles.alignWrapper, { height: height / 10 }]}>
+                <View style={[styles.alignWrapper, { height: height * .12 }]}>
                     <Image 
                         source={require('../../assets/icons/health.png')}
                         style={{ width: 50, height: 50, paddingVertical: 34,  marginRight: 10, }}

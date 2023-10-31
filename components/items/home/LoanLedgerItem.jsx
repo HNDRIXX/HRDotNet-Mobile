@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Link } from 'react-native';
 import { FontAwesome5, MaterialCommunityIcons, AntDesign, Entypo } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { router } from 'expo-router';
 
 import { COLORS } from '../../../constant';
 
-export default function LoanLedgerItem ({ newItem, index}) {
+export default function LoanLedgerItem ({ newItem, details, index}) {
+    const navigation = useNavigation()
+
     return (
         <View style={styles.itemContainer} key={index}>
             <View style={styles.itemWrapper}>
@@ -57,7 +60,10 @@ export default function LoanLedgerItem ({ newItem, index}) {
                         </View>
 
                         <TouchableOpacity
-                            onPress={() => router.push(`access/navigation/home/webuser/items/${encodeURIComponent(JSON.stringify(newItem))}`)}
+                            onPress={() => router.push({ 
+                                pathname: 'access/navigate/home/more/LoanDetails', 
+                                params: { newItem: encodeURIComponent(JSON.stringify(newItem)) }
+                            })}
                         >
                             <Text style={styles.moreText}>More {'>'}</Text>
                         </TouchableOpacity>

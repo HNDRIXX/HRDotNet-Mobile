@@ -1,15 +1,18 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 import { COLORS } from "../../constant";
 
 export default function PageHeader ({ pageName }) {
+    const navigation = useNavigation()
+
     return (
         <View style={styles.topHeader}>
             <TouchableOpacity 
                 style={styles.backButton} 
-                onPress={() => router.back()}
+                onPress={() => { router.back(); navigation.goBack(); }}
             >
                 <AntDesign name='arrowleft' size={30} color={COLORS.clearWhite} />
             </TouchableOpacity>

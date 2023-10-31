@@ -1,9 +1,15 @@
 import React from "react";
 import { View, TextInput, TouchableOpacity, StyleSheet, Text } from "react-native";
 import { FontAwesome, Entypo } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+
 import { COLORS } from "../../constant";
 
-export const SearchAndNew = ({ filterText, setFilterText, toggleModal }) => {
+
+export const SearchAndNew = ({ filterText, setFilterText }) => {
+
+  const navigation = useNavigation()
+
   return (
     <View style={styles.topContainer}>
       <View style={styles.searchContainer}>
@@ -18,7 +24,10 @@ export const SearchAndNew = ({ filterText, setFilterText, toggleModal }) => {
         />
       </View>
 
-      <TouchableOpacity style={styles.newRequestButton} onPress={toggleModal}>
+      <TouchableOpacity 
+        style={styles.newRequestButton} 
+        onPress={() => navigation.navigate('NewRequest', { onPanel: 0 })}
+      >
         <Entypo name="circle-with-plus" size={23} color={COLORS.orange} />
         <Text style={styles.newRequestText}>New Request</Text>
       </TouchableOpacity>

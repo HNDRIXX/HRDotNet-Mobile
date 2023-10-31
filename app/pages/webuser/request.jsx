@@ -27,23 +27,7 @@ const data = [
 export default function WebUserRequest() {
     const [selectedButtonIndex, setSelectedButtonIndex] = useState(0)
     const navigation = useNavigation()
-
-    useEffect(() => {
-        //BackHandler sa Android
-        const backAction = () => { return true }
-        const backHandlerAndroid = BackHandler.addEventListener('hardwareBackPress', backAction)
-      
-        return () => backHandlerAndroid.remove()
-    }, [])
-  
-    //BackHandler sa IOS
-    useEffect(() => {
-      if (Platform.OS === 'ios') {
-        const backHandlerIOS = navigation.addListener('beforeRemove', (e) => { e.preventDefault() })
-        return () => backHandlerIOS.remove()
-      }
-    }, [navigation])
-
+    
     const handleButtonPress = (index, title) => {
         setSelectedButtonIndex(index)
     }

@@ -116,6 +116,7 @@ export default function ChangeOfSchedulePanel ( onAnimate ) {
                    <SearchAndNew 
                         filterText={filterText}
                         setFilterText={setFilterText}
+                        onPanel={0}
                     />
 
                     { filteredData.length > 0 ? (
