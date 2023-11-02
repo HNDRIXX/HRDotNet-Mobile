@@ -9,7 +9,6 @@ import { COLORS } from "../../../constant";
 import CalendarNote from "../../../components/note/CalendarNote";
 import NavigationHeader from "../../../components/header/NavigationHeader";
 import CalendarEvent from "../../../components/section/calendar/CalendarEvent";
-import BottomNavigation from "../../../components/navigation/BottomNavigation";
 
 const valueEvents = {
   '20231001': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day', }, ],
@@ -225,8 +224,6 @@ export default function CalendarScreen() {
               </View>
           </Animatable.View>
       )}
-
-      {/* <BottomNavigation showValue={true}/> */}
     </>
   )
 }

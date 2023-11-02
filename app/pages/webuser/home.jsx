@@ -12,7 +12,6 @@ import { COLORS } from "../../../constant";
 import TimeClock from "../../../components/section/home/TimeClock";
 import MenuButton from "../../../components/button/webuser/MenuButton";
 import TimeOff from "../../../components/button/TimeOff";
-import BottomNavigation from "../../../components/navigation/BottomNavigation";
 
 export default function Home ({ navigation }) {  
     const [isLoading, setIsLoading] = useState(true)
@@ -55,7 +54,10 @@ export default function Home ({ navigation }) {
                         </View>
 
                         <View style={styles.welcomeView}>
-                            <Image style={styles.userIcon} source={require('../../../assets/icons/profile.png')} />
+                            <Image 
+                                style={styles.userIcon} 
+                                source={require('../../../assets/user/juan.jpg')}
+                                contentFit="contain" />
 
                             <View>
                                 <Text style={styles.helloText}>Hello,</Text>
@@ -101,8 +103,6 @@ export default function Home ({ navigation }) {
                 </View>
                 </Animatable.View>
             )}
-{/* 
-            <BottomNavigation showValue={true}/> */}
         </>
     )
 }

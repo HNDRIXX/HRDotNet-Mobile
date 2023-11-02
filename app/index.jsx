@@ -28,6 +28,8 @@ import ForgotPasswordPage from './authentication/base/forgotpass';
 import ResetPasswordPage from './authentication/base/resetpassword';
 import VerifyCodePage from './authentication/auth/verifycode';
 import NewRequest from './access/navigate/request/NewRequest';
+import RequestSummary from './access/navigate/request/RequestSummary';
+import CameraAccess from './access/use/camera';
 
 export default function Index() {
     const [fontsLoaded] = useFonts()
@@ -149,6 +151,20 @@ export default function Index() {
                     />
 
                     <Stack.Screen name="NewRequest" component={NewRequest} />
+                    <Stack.Screen 
+                        name="RequestSummary" 
+                        component={RequestSummary}
+                        options={{
+                            cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
+                        }}/>
+
+                    <Stack.Screen 
+                        name="CameraAccess" 
+                        component={CameraAccess}
+                        options={{
+                            cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid
+                        }}/>
+
                 </Stack.Navigator>
         )
     }

@@ -6,6 +6,7 @@ import { StatusBar } from "expo-status-bar";
 import { AntDesign } from "@expo/vector-icons";
 
 import { COLORS, useFonts } from "../../../constant";
+import { Image } from "expo-image";
 
 export default function LogInPage ({ navigation }) {
     const [fontsLoaded] = useFonts()
@@ -25,6 +26,12 @@ export default function LogInPage ({ navigation }) {
             <StatusBar style='dark' />
 
             <View style={styles.inputContainer}>
+                <Image
+                    source={require('../../../assets/logoword.png')}
+                    style={styles.logo}
+                    contentFit="contain"
+                />
+
                 <View style={styles.inputWrapper}>
                     <TextInput
                         style={styles.textInput}
@@ -70,6 +77,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.clearWhite,
+    },
+    
+    logo: {
+        width: 230, height: 100,
+        marginBottom: 20,
     },
 
     inputContainer: {

@@ -1,88 +1,219 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, BackHandler, Alert } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from "moment";
 import { FontAwesome } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
+import RadioButtonRN from "radio-buttons-react-native";
+import { useRoute } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
+import { router, useGlobalSearchParams } from 'expo-router'
+import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
+
 
 import PageHeader from "../../../../components/header/PagesHeader";
 import { COLORS } from "../../../../constant";
+import { Image } from "expo-image";
 
-export default function COSNewRequest () {
-    const [date, setDate] = useState(new Date())
-    const [showDatePicker, setShowDatePicker] = useState(false)
+const radioLabel = [{ label: 'Rest Day '}]
+
+export default function NewRequest ({ navigation }) {
+    const [startDate, setStartDate] = useState(null)
+    const [endDate, setEndDate] = useState(null)
+    const [reason, setReason] = useState(null)
+    const [imageUpload, setImageUpload] = useState(null)
+    const [selectedFile, setSelectedFile] = useState("Camera/Image")
+
+    const [showStartPicker, setShowStartPicker] = useState(false)
+    const [showEndPicker, setShowEndDatePicker] = useState(false)
     const [shiftSched, setShiftSched] = useState(null)
 
-    const showDatepicker = () => {
-        setShowDatePicker(true)
+    const route = useRoute()
+    const imageURL = decodeURIComponent(route.params.image)
+
+    useEffect(() => {
+        imageURL != "undefined" && setSelectedFile(imageURL)
+    }, [imageURL])
+
+    const onStartDateChange = (event, selectedDate) => {
+        event.type === 'set'
+            ? (setShowStartPicker(Platform.OS === 'ios'), setStartDate(moment(selectedDate).format('YYYYMMDD')))
+            : setShowStartPicker(false)
     }
 
-    const onDateChange = (event, selectedDate) => {
-        if (event.type === 'set') {
-            setShowDatePicker(Platform.OS === 'ios')
-            setDate(selectedDate)
-        } else {
-            setShowDatePicker(false)
+    const onEndDateChange = (event, selectedDate) => {
+        event.type === 'set'
+            ? (setShowEndDatePicker(Platform.OS === 'ios'), setEndDate(moment(selectedDate).format('YYYYMMDD')))
+            : setShowEndDatePicker(false)
+    }
+    
+    const selectDocument = async () => {
+        try {
+            const result = await DocumentPicker.getDocumentAsync()
+
+            if (!result.canceled){
+                const fileInfo = result.assets[0]
+                const uri = fileInfo.uri
+
+                const fileExtension = uri.substring(uri.lastIndexOf('.') + 1).toLowerCase()
+                
+                const fileSizeInMB = fileInfo.size / (1024 * 1024)
+
+                if (fileSizeInMB <= 5 && ['docx', 'pdf', 'jpeg', 'jpg', 'txt'].includes(fileExtension)) {
+                    setSelectedFile(fileInfo)
+                } else {
+                    if (fileSizeInMB > 5) {
+                        Alert.alert('File Too Large', 'Please select a file with a size of 5MB or less.')
+                    } else {
+                        Alert.alert('Unsupported File Format', 'Please select a docx, pdf, jpeg, jpg, or txt file.')
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error picking document:', error);
         }
     }
 
     return (
         <>
-            <PageHeader pageName={"New Request"} />
+            <PageHeader pageName={"New Request"} backStatus="react" />
 
             <View style={styles.container}>
-                <View>
-                    <Text>Start Date</Text>
+                <View style={styles.wrapper}>
+                    <Text style={styles.title}>Start Date</Text>
 
-                    <View style={styles.dateView}>
-                        <Text>{moment(date).format('MMM DD, YYYY')}</Text>
+                    <View style={[styles.rowView, styles.border]}>
+                        <Text>
+                            {startDate == null ? "mm/dd/yyyy" : startDate}
+                        </Text>
                         
                         <FontAwesome 
                             name="calendar"
                             size={20}
                             color={COLORS.darkGray}
-                            onPress={showDatepicker}
+                            onPress={() =>  setShowStartPicker(true)}
                         />
                     </View>
                 </View>
 
-                <View>
-                    <Text>End Date</Text>
+                <View style={styles.wrapper}>
+                    <Text style={styles.title}>End Date</Text>
 
-                    <View style={styles.dateView}>
-                        <Text>{moment(date).format('MMM DD, YYYY')}</Text>
+                    <View style={[styles.rowView, styles.border]}>
+                        <Text>
+                            {endDate == null ? "mm/dd/yyyy" : endDate}
+                        </Text>
                         
                         <FontAwesome 
                             name="calendar"
                             size={20}
                             color={COLORS.darkGray}
-                            onPress={showDatepicker}
+                            onPress={() => setShowEndDatePicker(true)}
                         />
                     </View>
                 </View>
 
-                <View>
-                    <Text>Shift Schedule</Text>
+                <View style={styles.wrapper}>
+                    <Text style={styles.title}>Shift Schedule</Text>
 
-                    <Picker
-                        shiftSched={shiftSched}
-                        style={{ height: 50, width: 150 }}
-                        onValueChange={(itemValue, itemIndex) => setShiftSched(itemValue)}
-                    >
-                        <Picker.Item label="Select an option" value={null} enabled={false} />
-                        <Picker.Item label="Option 1" value="" enabled={false} />
-                    </Picker>
+                    <View style={[styles.pickerView, styles.border]}>
+                        <Picker
+                            selectedValue={shiftSched}
+                            onValueChange={(itemValue, itemIndex) => setShiftSched(itemValue)}
+                        >
+                            <Picker.Item 
+                                label="Select an option" 
+                                style={styles.itemPicker} 
+                                color={COLORS.tr_gray} 
+                                value={null} enabled={false} /> 
+                            <Picker.Item 
+                                label="10:00 AM to 7:00 PM" 
+                                style={styles.itemPicker} 
+                                value="10:00 AM to 7:00 PM" />
+                        </Picker>
+                    </View>
+
+                    <RadioButtonRN
+                        data={radioLabel}
+                        box={false}
+                        animationTypes={['pulse']}
+                        selectedBtn={(e) => console.log(e)}
+                    />
                 </View>
+
+                <View style={styles.wrapper}>
+                    <Text style={styles.title}>Reason</Text>
+
+                    <TextInput
+                        style={[styles.textInput, styles.border]}
+                        onChangeText={(text) => setReason(text)}
+                        value={reason}
+                        placeholder="Details"
+                        placeholderTextColor={COLORS.tr_gray}
+                    />
+                </View>
+
+                <View style={styles.wrapper}>
+                    <Text style={styles.title}>File</Text>
+
+                    {/* <Image source={{ uri: 'file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FHRDotNet-Mobile-f9593d9f-5528-4a12-9b72-90d1709677bd/Camera/bb809554-3bac-434b-83ac-1467391d8e11.jpg'}} style={{ width: 100, height: 100 }} /> */}
+
+                    <View style={[styles.rowView, styles.border]}>
+                        {/* {imageUpload && ( <Text>{imageUpload}</Text> )} */}
+
+                        {typeof selectedFile === 'string' && selectedFile.includes("Camera") ? (
+                            <Text style={{ width: 220 }}>{selectedFile}</Text>
+                        ) : (
+                            <Text>{selectedFile.name || selectedFile} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)</Text>
+                        )}
+
+                        <View style={[styles.rowView, { alignItems: 'center' }]}>
+                            <Ionicons 
+                                name="camera" size={26}
+                                onPress={() => navigation.navigate('CameraAccess')} />
+
+                            <FontAwesome 
+                                name="file" size={18} style={{ marginLeft: 15 }}
+                                onPress={selectDocument}
+                                />
+                        </View>
+                    </View>
+                </View>
+
+                <TouchableOpacity 
+                    style={styles.button}
+                    onPress={() => 
+                        navigation.navigate('RequestSummary', {
+                            startDate: startDate,
+                            endDate: endDate,
+                            shiftSchedule: shiftSched,
+                            attachedFile: selectedFile,
+                        })   
+                    }>
+                    <Text style={styles.textButton}>NEXT</Text>
+                </TouchableOpacity>
             </View>
 
-            {showDatePicker && (
+            {showStartPicker && (
                 <DateTimePicker
                     testID="dateTimePicker"
-                    value={date}
+                    value={new Date()}
                     mode="date"
                     is24Hour={true}
                     display="default"
-                    onChange={onDateChange}
+                    onChange={onStartDateChange}
+                />
+            )}
+
+            {showEndPicker && (
+                <DateTimePicker
+                    testID="dateTimePicker"
+                    value={new Date()}
+                    mode="date"
+                    is24Hour={true}
+                    display="default"
+                    onChange={onEndDateChange}
                 />
             )}
         </>
@@ -92,16 +223,52 @@ export default function COSNewRequest () {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        margin: 15,
+        marginVertical: 15,
+        marginHorizontal: 20
     },
 
-    dateView: {
+    wrapper: {
+        marginVertical: 10,
+    },
+
+    border: {
         borderColor: COLORS.darkGray,
         borderWidth: 1,
         borderRadius: 12,
-        padding: 10,
+    },
+
+    title: {
+        fontFamily: 'Inter_600SemiBold'
+    },
+
+    rowView: {
+        padding: 15,
         justifyContent: 'space-between',
         flexDirection: 'row',
+    },
+
+    itemPicker: {
+        fontSize: 14
+    },
+
+    textInput: {
+        paddingLeft: 15,
+        paddingVertical: 13
+    },
+
+    button: {
+        justifyContent: 'center',
+        alignSelf: 'center',
+        backgroundColor: COLORS.orange,
+        width: 170,
+        padding: 10,
+        borderRadius: 20,
+    },
+
+    textButton: {
+        fontFamily: 'Inter_700Bold',
+        fontSize: 16,
+        color: COLORS.clearWhite,
+        textAlign: 'center',
     }
-    
 })

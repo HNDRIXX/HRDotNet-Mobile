@@ -8,6 +8,15 @@
       "expo-router"
     ],
     "name": "HRDotNet-Mobile",
-    "slug": "HRDotNet-Mobile"
+    "slug": "HRDotNet-Mobile",
+    "android": {
+      "permissions": ["READ_EXTERNAL_STORAGE"]
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIFileSharingEnabled": true
+      }
+    }
   }
 }

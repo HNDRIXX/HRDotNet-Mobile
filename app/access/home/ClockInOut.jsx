@@ -10,7 +10,6 @@ import { useNavigation, useIsFocused, useRoute } from '@react-navigation/native'
 import { Shadow } from 'react-native-shadow-2';
 
 import { COLORS } from '../../../constant';
-import BottomNavigation from '../../../components/navigation/BottomNavigation';
 import SuccessTimeClock from '../../../components/prompt/SuccessTimeClock';
 
 export default function ClockInOut () {
@@ -146,20 +145,20 @@ export default function ClockInOut () {
     setClockedTime(time.format('h:mm:ss A'))
   }
 
-    const closeCustomAlert = () => {
-        setIsSuccessAlertVisible(false)
+  const closeCustomAlert = () => {
+      setIsSuccessAlertVisible(false)
 
-        navigation.navigate('TabStack', {
-            screen: 'Home',
-            params: {
-              clockedValue: clockedValue,
-              clockedStatus: clockedStatus,
-              clockedDate: clockedDate,
-              clockedTime: clockedTime,
-            },
-        })
-          
-    }
+      navigation.navigate('TabStack', {
+          screen: 'Home',
+          params: {
+            clockedValue: clockedValue,
+            clockedStatus: clockedStatus,
+            clockedDate: clockedDate,
+            clockedTime: clockedTime,
+          },
+      })
+        
+  }
 
   return (
     <>
@@ -282,8 +281,6 @@ export default function ClockInOut () {
           />
         </>
       )}
-
-      <BottomNavigation showValue={0} />
     </>
   )
 }

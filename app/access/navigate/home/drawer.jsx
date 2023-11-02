@@ -3,7 +3,6 @@ import { AntDesign, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-ic
 // import { Image } from "expo-image";
 import { router } from "expo-router";
 import { Image } from "react-native-expo-image-cache";
-import CachedImage from "react-native-expo-cached-image";
 
 import { COLORS, ICONS } from "../../../../constant";
 
@@ -23,45 +22,38 @@ export default function DrawerPage ({ navigation }) {
                 </View>
 
                 <View style={{marginTop: 20}}>
-                    <TouchableOpacity
-                        style={styles.button}
-                    >
+                    <TouchableOpacity style={styles.button} >
+                 
                         <Image 
-                            style={{height: 30, width: 30, borderRadius: 500}} 
+                            style={{height: 30, width: 30 }}
                             uri={ICONS.privacy}
-                            preview={{ uri: ICONS.privacy }}
                         />
 
                         <Text style={styles.textButton}>Privacy Policy</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity
-                        style={styles.button}
-                    >
+                    <TouchableOpacity style={styles.button} >
                         <Image 
-                            style={{height: 30, width: 30, borderRadius: 500}} 
+                            style={{height: 30, width: 30 }}
                             uri={ICONS.terms}
-                            preview={{ uri: ICONS.terms }}
                         />
-
+                    
                         <Text style={styles.textButton}>Terms and Condition</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity
-                        style={styles.button}
-                    >
+                    <TouchableOpacity style={styles.button} >
                         <Image 
-                            style={{height: 30, width: 30, borderRadius: 500}} 
+                            style={{height: 30, width: 30 }} 
                             uri={ICONS.info}
-                            preview={{ uri: ICONS.info }}
                         />
-
+                        
                         <Text style={styles.textButton}>About Us</Text>
                     </TouchableOpacity>
                 </View>
 
                 <TouchableOpacity
                     style={styles.logOutButton}
+                    onPress={() => navigation.navigate('LogIn')}
                 >
                     <Text style={styles.logOutText}>LOG-OUT</Text>
                 </TouchableOpacity>
@@ -105,11 +97,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderRadius: 20,
-        elevation: 5,
-        shadowColor: COLORS.darkGray,
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        shadowOffset : { width: 1, height: 5},
+        // elevation: 5,
+        // shadowColor: COLORS.darkGray,
+        // shadowOpacity: 0.1,
+        // shadowRadius: 2,
+        // shadowOffset : { width: 1, height: 5},
     },
 
     textButton: {

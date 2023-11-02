@@ -6,7 +6,6 @@ import { router } from 'expo-router';
 import moment from 'moment';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../../constant';
-import BottomNavigation from '../../navigation/BottomNavigation';
 
 export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, clockedTime }) {
     const [currTime, setCurrTime] = useState(new Date())

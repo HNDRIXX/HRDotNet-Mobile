@@ -5,14 +5,18 @@ import { useNavigation } from "@react-navigation/native";
 
 import { COLORS } from "../../constant";
 
-export default function PageHeader ({ pageName }) {
+export default function PageHeader ({ pageName, backStatus }) {
     const navigation = useNavigation()
+
+    const onBackHandler = () => {
+        backStatus == "expo" ? router.back() : navigation.goBack()
+    }
 
     return (
         <View style={styles.topHeader}>
             <TouchableOpacity 
                 style={styles.backButton} 
-                onPress={() => { router.back(); navigation.goBack(); }}
+                onPress={onBackHandler}
             >
                 <AntDesign name='arrowleft' size={30} color={COLORS.clearWhite} />
             </TouchableOpacity>

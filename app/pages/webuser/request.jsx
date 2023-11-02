@@ -6,7 +6,6 @@ import * as Animatable from 'react-native-animatable';
 
 import { COLORS } from '../../../constant'
 import NavigationHeader from '../../../components/header/NavigationHeader';
-import BottomNavigation from '../../../components/navigation/BottomNavigation';
 import ChangeOfSchedulePanel from '../../../components/panel/request/ChangeOfSchedule';
 import OfficialWorkPanel from '../../../components/panel/request/OfficialWork';
 import OverTimePanel from '../../../components/panel/request/OverTime';
@@ -81,8 +80,6 @@ export default function WebUserRequest() {
                 
                 </View>
             </Animatable.View>
-
-            <BottomNavigation showValue={true}/>
         </>
     )
 }
