@@ -4,6 +4,7 @@ import { Camera } from 'expo-camera';
 import { Image } from 'expo-image';
 import { router, Redirect } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
+import { useRoute } from '@react-navigation/native';
 
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -17,6 +18,8 @@ export default function CameraAccess ({ navigation }) {
     const [imgPath, setImgPath] = useState("")
     const [isBack, setIsBack] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
+
+    const route = useRoute()
 
     useEffect(() => {
         (async () => {     
@@ -68,6 +71,12 @@ export default function CameraAccess ({ navigation }) {
         }
     }
 
+    const onRequestHandle = () => {
+        route.params?.onPanel == 0 ?
+            navigation.navigate('COSRequest', { image: encodeURIComponent(imgPath) })
+        : navigation.navigate('OBRequest', { image: encodeURIComponent(imgPath) }) 
+    }
+
     return (
         <>
             { imgPath !== '' ? (
@@ -88,9 +97,7 @@ export default function CameraAccess ({ navigation }) {
                     <View style={styles.btnWrapper}>
                         <TouchableOpacity
                             style={styles.doneBtn}
-                            onPress={() => 
-                                { navigation.navigate('NewRequest', { image: encodeURIComponent(imgPath) }) }   
-                            }
+                            onPress={onRequestHandle}
                         >
                             <FontAwesome 
                                 name={'check'}

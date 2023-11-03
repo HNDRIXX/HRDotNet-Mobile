@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.clearWhite, 
         padding: 30, 
         borderRadius: 15,
+        margin: 20,
         alignItems: 'center',
         justifyContent: 'center'
       },
@@ -59,6 +60,7 @@ const styles = StyleSheet.create({
     
       subTitleText: {
         fontSize: 13,
+        textAlign: 'center',
         fontFamily: 'Inter_400Regular',
       },
     

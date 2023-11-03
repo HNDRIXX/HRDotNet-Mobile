@@ -5,10 +5,24 @@ import { useNavigation } from "@react-navigation/native";
 
 import { COLORS } from "../../constant";
 
-
-export const SearchAndNew = ({ filterText, setFilterText }) => {
+export const SearchAndNew = ({ filterText, setFilterText, onPanel }) => {
 
   const navigation = useNavigation()
+
+  const onNewRequestHandle = () => {
+    switch(onPanel) {
+      case 0:
+        navigation.navigate('COSRequest')
+        break
+      
+      case 1:
+        navigation.navigate('OBRequest')
+        break
+
+      default:
+        break
+    }
+  }
 
   return (
     <View style={styles.topContainer}>
@@ -26,7 +40,7 @@ export const SearchAndNew = ({ filterText, setFilterText }) => {
 
       <TouchableOpacity 
         style={styles.newRequestButton} 
-        onPress={() => navigation.navigate('NewRequest', { onPanel: 0 })}
+        onPress={onNewRequestHandle}
       >
         <Entypo name="circle-with-plus" size={23} color={COLORS.orange} />
         <Text style={styles.newRequestText}>New Request</Text>

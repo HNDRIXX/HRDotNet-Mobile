@@ -118,6 +118,7 @@ export default function OfficialWorkPanel ( onAnimate ) {
                    <SearchAndNew 
                         filterText={filterText}
                         setFilterText={setFilterText}
+                        onPanel={1}
                     />
 
                     { filteredData.length > 0 ? (

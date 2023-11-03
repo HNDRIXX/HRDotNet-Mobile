@@ -11,7 +11,7 @@ export default function ResetPasswordPage () {
     const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false)
 
     const openCustomAlert = () => {
-        setIsSuccessAlertVisible(true);
+        setIsSuccessAlertVisible(true)
     }
 
     const closeCustomAlert = () => {

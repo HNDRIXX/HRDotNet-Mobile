@@ -27,9 +27,10 @@ import LogInPage from './authentication/base/login';
 import ForgotPasswordPage from './authentication/base/forgotpass';
 import ResetPasswordPage from './authentication/base/resetpassword';
 import VerifyCodePage from './authentication/auth/verifycode';
-import NewRequest from './access/navigate/request/NewRequest';
+import COSRequest from './access/navigate/request/newrequest/COSRequest';
 import RequestSummary from './access/navigate/request/RequestSummary';
 import CameraAccess from './access/use/camera';
+import OBRequest from './access/navigate/request/newrequest/OBRequest';
 
 export default function Index() {
     const [fontsLoaded] = useFonts()
@@ -150,7 +151,9 @@ export default function Index() {
                         }}
                     />
 
-                    <Stack.Screen name="NewRequest" component={NewRequest} />
+                    <Stack.Screen name="COSRequest" component={COSRequest} />
+                    <Stack.Screen name="OBRequest" component={OBRequest} />
+
                     <Stack.Screen 
                         name="RequestSummary" 
                         component={RequestSummary}

@@ -10,27 +10,29 @@ import { Ionicons } from "@expo/vector-icons";
 import { router, useGlobalSearchParams } from 'expo-router'
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
-
-
-import PageHeader from "../../../../components/header/PagesHeader";
-import { COLORS } from "../../../../constant";
 import { Image } from "expo-image";
+import { Snackbar } from "react-native-paper";
 
-const radioLabel = [{ label: 'Rest Day '}]
+import PageHeader from "../../../../../components/header/PagesHeader";
+import { COLORS } from "../../../../../constant";
 
-export default function NewRequest ({ navigation }) {
+const radioLabel = [{ label: 'Rest Day' }]
+
+export default function COSRequest ({ navigation }) {
     const [startDate, setStartDate] = useState(null)
     const [endDate, setEndDate] = useState(null)
     const [reason, setReason] = useState(null)
+    const [restDay, setRestDay] = useState(null)
+
     const [imageUpload, setImageUpload] = useState(null)
-    const [selectedFile, setSelectedFile] = useState("Camera/Image")
+    const [selectedFile, setSelectedFile] = useState(null)
 
     const [showStartPicker, setShowStartPicker] = useState(false)
     const [showEndPicker, setShowEndDatePicker] = useState(false)
     const [shiftSched, setShiftSched] = useState(null)
 
     const route = useRoute()
-    const imageURL = decodeURIComponent(route.params.image)
+    const imageURL = decodeURIComponent(route.params?.image)
 
     useEffect(() => {
         imageURL != "undefined" && setSelectedFile(imageURL)
@@ -61,7 +63,7 @@ export default function NewRequest ({ navigation }) {
                 const fileSizeInMB = fileInfo.size / (1024 * 1024)
 
                 if (fileSizeInMB <= 5 && ['docx', 'pdf', 'jpeg', 'jpg', 'txt'].includes(fileExtension)) {
-                    setSelectedFile(fileInfo)
+                    setSelectedFile(fileInfo.uri)
                 } else {
                     if (fileSizeInMB > 5) {
                         Alert.alert('File Too Large', 'Please select a file with a size of 5MB or less.')
@@ -71,7 +73,22 @@ export default function NewRequest ({ navigation }) {
                 }
             }
         } catch (error) {
-            console.error('Error picking document:', error);
+            console.error('Error picking document:', error)
+        }
+    }
+
+    const onNextHandler = () => {
+        if(!startDate || !endDate || !reason || !selectedFile){
+            alert("Please complete your request form.")
+        } else {
+            navigation.navigate('RequestSummary', {
+                startDate: startDate,
+                endDate: endDate,
+                restDay: restDay,
+                shiftSchedule: shiftSched,
+                reason: reason,
+                attachedFile: selectedFile,
+            })    
         }
     }
 
@@ -85,7 +102,8 @@ export default function NewRequest ({ navigation }) {
 
                     <View style={[styles.rowView, styles.border]}>
                         <Text>
-                            {startDate == null ? "mm/dd/yyyy" : startDate}
+                            {startDate == null ? "mm/dd/yyyy" 
+                            : moment(startDate, "YYYYMMDD").format("MMMM DD, YYYY")}
                         </Text>
                         
                         <FontAwesome 
@@ -102,7 +120,8 @@ export default function NewRequest ({ navigation }) {
 
                     <View style={[styles.rowView, styles.border]}>
                         <Text>
-                            {endDate == null ? "mm/dd/yyyy" : endDate}
+                            {endDate == null ? "mm/dd/yyyy"
+                            : moment(endDate, "YYYYMMDD").format("MMMM DD, YYYY")}
                         </Text>
                         
                         <FontAwesome 
@@ -138,7 +157,7 @@ export default function NewRequest ({ navigation }) {
                         data={radioLabel}
                         box={false}
                         animationTypes={['pulse']}
-                        selectedBtn={(e) => console.log(e)}
+                        selectedBtn={(e) => setRestDay(e.label)}
                     />
                 </View>
 
@@ -157,21 +176,21 @@ export default function NewRequest ({ navigation }) {
                 <View style={styles.wrapper}>
                     <Text style={styles.title}>File</Text>
 
-                    {/* <Image source={{ uri: 'file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252FHRDotNet-Mobile-f9593d9f-5528-4a12-9b72-90d1709677bd/Camera/bb809554-3bac-434b-83ac-1467391d8e11.jpg'}} style={{ width: 100, height: 100 }} /> */}
-
                     <View style={[styles.rowView, styles.border]}>
-                        {/* {imageUpload && ( <Text>{imageUpload}</Text> )} */}
-
-                        {typeof selectedFile === 'string' && selectedFile.includes("Camera") ? (
-                            <Text style={{ width: 220 }}>{selectedFile}</Text>
+                        {selectedFile == null ? (
+                            <Text>Camera/Image</Text>
                         ) : (
-                            <Text>{selectedFile.name || selectedFile} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)</Text>
+                            typeof selectedFile === 'string' && selectedFile.includes("Camera") ? (
+                                <Text style={{ width: 220 }}>{selectedFile}</Text>
+                            ) : (
+                                <Text style={{ width: 220 }}>{selectedFile.name || selectedFile}</Text>
+                            )
                         )}
 
                         <View style={[styles.rowView, { alignItems: 'center' }]}>
                             <Ionicons 
                                 name="camera" size={26}
-                                onPress={() => navigation.navigate('CameraAccess')} />
+                                onPress={() => navigation.navigate('CameraAccess', { onPanel: 0 })} />
 
                             <FontAwesome 
                                 name="file" size={18} style={{ marginLeft: 15 }}
@@ -183,14 +202,7 @@ export default function NewRequest ({ navigation }) {
 
                 <TouchableOpacity 
                     style={styles.button}
-                    onPress={() => 
-                        navigation.navigate('RequestSummary', {
-                            startDate: startDate,
-                            endDate: endDate,
-                            shiftSchedule: shiftSched,
-                            attachedFile: selectedFile,
-                        })   
-                    }>
+                    onPress={onNextHandler}>
                     <Text style={styles.textButton}>NEXT</Text>
                 </TouchableOpacity>
             </View>
@@ -242,9 +254,10 @@ const styles = StyleSheet.create({
     },
 
     rowView: {
-        padding: 15,
+        padding: 10,
         justifyContent: 'space-between',
         flexDirection: 'row',
+        alignItems: 'center',
     },
 
     itemPicker: {
