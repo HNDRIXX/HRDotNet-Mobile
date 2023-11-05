@@ -76,7 +76,7 @@ export default function Home ({ navigation }) {
 
                     <Shadow
                         distance={20}
-                        style={styles.TimeClockView}
+                        style={styles.timeClockView}
                     >
                         <TimeClock
                             clockedValue={route.params?.clockedValue}
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     headerView: {
         padding: 20,
         paddingTop: 15,
-        height: 235,
+        height: 225,
         backgroundColor: COLORS.powderBlue,
     },
 
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter_700Bold'
     },
 
-    TimeClockView: {
+    timeClockView: {
         backgroundColor: COLORS.clearWhite,
         alignContent: 'center',
         alignItems: 'center',

@@ -14,10 +14,11 @@ import { Image } from "expo-image";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
 import { COLORS } from "../../../../../constant";
+import OverTimePrompt from "../../../../../components/prompt/OverTimePrompt";
 
 const radioLabel = [{ label: 'Rest Day' }]
 
-export default function COSRequest ({ navigation }) {
+export default function OTRequest ({ navigation }) {
     const [startDate, setStartDate] = useState(null)
     const [endDate, setEndDate] = useState(null)
     const [reason, setReason] = useState(null)
@@ -26,6 +27,7 @@ export default function COSRequest ({ navigation }) {
     const [imageUpload, setImageUpload] = useState(null)
     const [selectedFile, setSelectedFile] = useState(null)
 
+    const [isVisible, setVisible] = useState(true)
     const [showStartPicker, setShowStartPicker] = useState(false)
     const [showEndPicker, setShowEndDatePicker] = useState(false)
     const [shiftSched, setShiftSched] = useState(null)
@@ -92,9 +94,24 @@ export default function COSRequest ({ navigation }) {
         }
     }
 
+    const onCancel = () => {
+        setVisible(false)
+        navigation.goBack()
+    }
+
+    const onSelect = () => {
+        setVisible(false)
+    }
+
     return (
         <>
             <PageHeader pageName={"New Request"} backStatus="react" />
+
+            <OverTimePrompt 
+                isVisible={isVisible}
+                onCancel={onCancel}
+                onSelect={onSelect}
+            />
 
             <View style={styles.container}>
                 <View style={styles.wrapper}>

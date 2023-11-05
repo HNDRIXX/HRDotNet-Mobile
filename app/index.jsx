@@ -31,6 +31,7 @@ import COSRequest from './access/navigate/request/newrequest/COSRequest';
 import RequestSummary from './access/navigate/request/RequestSummary';
 import CameraAccess from './access/use/camera';
 import OBRequest from './access/navigate/request/newrequest/OBRequest';
+import OTRequest from './access/navigate/request/newrequest/OTRequest';
 
 export default function Index() {
     const [fontsLoaded] = useFonts()
@@ -153,6 +154,7 @@ export default function Index() {
 
                     <Stack.Screen name="COSRequest" component={COSRequest} />
                     <Stack.Screen name="OBRequest" component={OBRequest} />
+                    <Stack.Screen name="OTRequest" component={OTRequest} />
 
                     <Stack.Screen 
                         name="RequestSummary" 

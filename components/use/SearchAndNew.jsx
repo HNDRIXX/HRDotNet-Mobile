@@ -19,6 +19,22 @@ export const SearchAndNew = ({ filterText, setFilterText, onPanel }) => {
         navigation.navigate('OBRequest')
         break
 
+      case 2:
+        navigation.navigate('OTRequest')
+        break
+      
+      case 3:
+        navigation.navigate('OSRequest')
+        break
+      
+      case 4:
+        navigation.navigate('LVRequest')
+        break
+      
+      case 5:
+        navigation.navigate('MLRequest')
+        break
+
       default:
         break
     }

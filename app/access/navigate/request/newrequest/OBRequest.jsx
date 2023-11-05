@@ -16,16 +16,17 @@ import { ScrollView } from "react-native";
 const radioLabel = [{ label: 'Rest Day' }]
 
 export default function OBRequest ({ navigation }) {
-    const [startDate, setStartDate] = useState(null)
-    const [endDate, setEndDate] = useState(null)
+    const [OBDate, setOBDate] = useState(null)
+    const [timeIn, setTimeIn] = useState(null)
+    const [timeOut, setTimeOut] = useState(null)
     const [reason, setReason] = useState(null)
-    const [restDay, setRestDay] = useState(null)
 
-    const [imageUpload, setImageUpload] = useState(null)
     const [selectedFile, setSelectedFile] = useState(null)
 
-    const [showStartPicker, setShowStartPicker] = useState(false)
-    const [showEndPicker, setShowEndDatePicker] = useState(false)
+    const [isDatePicker, setDatePicker] = useState(false)
+    const [isTimeInPicker, setTimeInPicker] = useState(false)
+    const [isTimeOutPicker, setTimeOutPicker] = useState(false)
+
     const [shiftSched, setShiftSched] = useState(null)
 
     const route = useRoute()
@@ -35,16 +36,22 @@ export default function OBRequest ({ navigation }) {
         imageURL != "undefined" && setSelectedFile(imageURL)
     }, [imageURL])
 
-    const onStartDateChange = (event, selectedDate) => {
+    const handleOBDate = (event, date) => {
         event.type === 'set'
-            ? (setShowStartPicker(Platform.OS === 'ios'), setStartDate(moment(selectedDate).format('YYYYMMDD')))
-            : setShowStartPicker(false)
+            ? (setDatePicker(Platform.OS === 'ios'), setOBDate(moment(date).format('YYYYMMDD')))
+            : setDatePicker(false)
     }
 
-    const onEndDateChange = (event, selectedDate) => {
+    const handleTimeIn = (event, time) => {
         event.type === 'set'
-            ? (setShowEndDatePicker(Platform.OS === 'ios'), setEndDate(moment(selectedDate).format('YYYYMMDD')))
-            : setShowEndDatePicker(false)
+            ? (setTimeInPicker(Platform.OS === 'ios'), setTimeIn(moment(time).format('HH:mm')))
+            : setTimeInPicker(false)
+    }
+
+    const handleTimeOut = (event, time) => {
+        event.type === 'set'
+            ? (setTimeOutPicker(Platform.OS === 'ios'), setTimeOut(moment(time).format('HH:mm')))
+            : setTimeOutPicker(false)
     }
     
     const selectDocument = async () => {
@@ -75,18 +82,16 @@ export default function OBRequest ({ navigation }) {
     }
 
     const onNextHandler = () => {
-        if(!startDate || !endDate || !reason || !selectedFile){
-            alert("Please complete your request form.")
-        } else {
-            navigation.navigate('RequestSummary', {
-                startDate: startDate,
-                endDate: endDate,
-                restDay: restDay,
-                shiftSchedule: shiftSched,
-                reason: reason,
-                attachedFile: selectedFile,
-            })    
-        }
+        navigation.navigate('RequestSummary', {
+            onPanel: 1,
+            OBDate:  OBDate,
+            location: '',
+            shiftSchedule: shiftSched,
+            timeIn: timeIn,
+            timeOut: timeOut,
+            reason: reason,
+            attachedFile: selectedFile,
+        })   
     }
 
     return (
@@ -100,15 +105,15 @@ export default function OBRequest ({ navigation }) {
 
                         <View style={[styles.rowView, styles.border]}>
                             <Text>
-                                {startDate == null ? "mm/dd/yyyy" 
-                                : moment(startDate, "YYYYMMDD").format("MMMM DD, YYYY")}
+                                {OBDate == null ? "mm/dd/yyyy" 
+                                : moment(OBDate, "YYYYMMDD").format("MMMM DD, YYYY")}
                             </Text>
                             
                             <FontAwesome 
                                 name="calendar"
                                 size={20}
                                 color={COLORS.darkGray}
-                                onPress={() =>  setShowStartPicker(true)}
+                                onPress={() =>  setDatePicker(true)}
                             />
                         </View>
                     </View>
@@ -137,19 +142,19 @@ export default function OBRequest ({ navigation }) {
                                 <Picker.Item 
                                     label="10:00 AM to 7:00 PM (Approved COS)"  
                                     style={styles.itemPicker} 
-                                    value="10:00 AM to 7:00 PM" />
+                                    value="10:00 AM to 7:00 PM (Approved COS)" />
                             </Picker>
                         </View>
 
                         <View style={styles.timeWrapper}>
                             <View style={styles.timeView}>
                                 <Text style={styles.text}>Time-in</Text>
-                                <Text style={styles.timeContent}>10:00 AM</Text>
+                                <Text style={styles.timeContent}>00:00 AM</Text>
                             </View>
 
                             <View style={styles.timeView}>
                                 <Text style={styles.text}>Time-out</Text>
-                                <Text style={styles.timeContent}>07:00 PM</Text>
+                                <Text style={styles.timeContent}>00:00 PM</Text>
                             </View>
                         </View>
                     </View>
@@ -158,12 +163,13 @@ export default function OBRequest ({ navigation }) {
                         <Text style={styles.title}>OB Time-in</Text>
 
                         <View style={[styles.rowView, styles.border]}>
-                            <Text>OB Time-in</Text>
+                            <Text>{timeIn == null ? "Time-In" : timeIn}</Text>
 
                             <AntDesign 
                                 name="clockcircle"
                                 size={17}
                                 color={COLORS.darkGray}
+                                onPress={() => setTimeInPicker(true)}
                             />
                         </View>
                     </View>
@@ -172,12 +178,13 @@ export default function OBRequest ({ navigation }) {
                         <Text style={styles.title}>OB Time-out</Text>
 
                         <View style={[styles.rowView, styles.border]}>
-                            <Text>OB Time-out</Text>
+                            <Text>{timeOut == null ? "Time-out" : timeOut}</Text>
 
                             <AntDesign 
                                 name="clockcircle"
                                 size={17}
                                 color={COLORS.darkGray}
+                                onPress={() => setTimeOutPicker(true)}
                             />
                         </View>
                     </View>
@@ -211,7 +218,7 @@ export default function OBRequest ({ navigation }) {
                             <View style={[styles.rowView, { alignItems: 'center' }]}>
                                 <Ionicons 
                                     name="camera" size={26}
-                                    onPress={() => navigation.navigate('CameraAccess', { onPanel: 0 })} />
+                                    onPress={() => navigation.navigate('CameraAccess', { onPanel: 1 })} />
 
                                 <FontAwesome 
                                     name="file" size={18} style={{ marginLeft: 15 }}
@@ -229,25 +236,30 @@ export default function OBRequest ({ navigation }) {
                 </View>
             </ScrollView>
 
-            {showStartPicker && (
+            { isDatePicker && (
                 <DateTimePicker
-                    testID="dateTimePicker"
                     value={new Date()}
                     mode="date"
-                    is24Hour={true}
                     display="default"
-                    onChange={onStartDateChange}
+                    onChange={handleOBDate}
                 />
             )}
 
-            {showEndPicker && (
+            { isTimeInPicker && (
                 <DateTimePicker
-                    testID="dateTimePicker"
                     value={new Date()}
-                    mode="date"
-                    is24Hour={true}
+                    mode="time"
                     display="default"
-                    onChange={onEndDateChange}
+                    onChange={handleTimeIn}
+                />
+            )}
+
+            { isTimeOutPicker && (
+                <DateTimePicker
+                    value={new Date()}
+                    mode="time"
+                    display="default"
+                    onChange={handleTimeOut}
                 />
             )}
         </>

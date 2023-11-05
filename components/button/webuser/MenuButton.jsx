@@ -18,6 +18,10 @@ export default function MenuButton () {
     //     }, 2000)
     // }, [])
 
+    const screenWidth = Dimensions.get('window').height
+    const imageSize = Math.max(15, screenWidth / 12.3)
+    const padding = screenWidth * 0.010
+
     return (
 
         <View style={styles.container}>     
@@ -28,11 +32,11 @@ export default function MenuButton () {
                     <View style={styles.buttonWrapper}>
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity 
-                                style={[styles.gridButton, { width: width * .2, height: height * .1 }]}
+                                style={[styles.gridButton, { padding: padding }]}
                                 onPress={() => navigation.navigate('TimeSheet')}>
                                 <Image 
                                     source={require('../../../assets/icons/timesheet.png')}
-                                    style={{ width: width / 5 ,  height: height / 14 }}
+                                    style={{ width: imageSize ,  height: imageSize }}
                                     contentFit="contain"
                                 />
                             </TouchableOpacity>
@@ -42,11 +46,11 @@ export default function MenuButton () {
 
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity 
-                                style={[styles.gridButton, { width: width * .2, height: height * .1 }]}
+                                style={[styles.gridButton, { padding: padding }]}
                                 onPress={() => navigation.navigate('LoanLedger')}>
                                 <Image 
                                     source={require('../../../assets/icons/ledger.png')}
-                                    style={{ width: width / 5 ,  height: height / 14 }}
+                                    style={{ width: imageSize ,  height: imageSize }}
                                     contentFit="contain"
                                 />
                             </TouchableOpacity>
@@ -56,11 +60,11 @@ export default function MenuButton () {
 
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity 
-                                style={[styles.gridButton, { width: width * .2, height: height * .1 }]}
+                                style={[styles.gridButton, { padding: padding }]}
                                 onPress={() => navigation.navigate('Pending')}>
                                 <Image 
                                     source={require('../../../assets/icons/pending.png')}
-                                    style={{ width: width / 5 ,  height: height / 14 }}
+                                    style={{ width: imageSize ,  height: imageSize }}
                                     contentFit="contain"
                                 />
 
@@ -73,10 +77,10 @@ export default function MenuButton () {
                     <View style={styles.buttonWrapper}>
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity 
-                                style={[styles.gridButton, { width: width * .2, height: height * .1 }]}>
+                                style={[styles.gridButton, { padding: padding }]}>
                                 <Image 
                                     source={require('../../../assets/icons/cos.png')}
-                                    style={{ width: width / 5 ,  height: height / 14 }}
+                                    style={{ width: imageSize ,  height: imageSize }}
                                     contentFit="contain"
                                 />
                             
@@ -87,10 +91,10 @@ export default function MenuButton () {
 
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity 
-                                style={[styles.gridButton, { width: width * .2, height: height * .1 }]}>
+                                style={[styles.gridButton, { padding: padding }]}>
                                 <Image 
                                     source={require('../../../assets/icons/ob.png')}
-                                    style={{ width: width / 5 ,  height: height / 14 }}
+                                    style={{ width: imageSize ,  height: imageSize }}
                                     contentFit="contain"
                                 />
                               
@@ -101,10 +105,10 @@ export default function MenuButton () {
 
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity 
-                                style={[styles.gridButton, { width: width * .2, height: height * .1 }]}>
+                                style={[styles.gridButton, { padding: padding }]}>
                                 <Image 
                                     source={require('../../../assets/icons/ot.png')}
-                                    style={{ width: width / 5 ,  height: height / 14 }}
+                                    style={{ width: imageSize ,  height: imageSize }}
                                     contentFit="contain"
                                 />
                                

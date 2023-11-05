@@ -115,6 +115,7 @@ export default function OverTimePanel ( onAnimate ) {
                     style={{ opacity: 1, flex: 1 }}
                 >
                    <SearchAndNew 
+                        onPanel={2}
                         filterText={filterText}
                         setFilterText={setFilterText}
                     />

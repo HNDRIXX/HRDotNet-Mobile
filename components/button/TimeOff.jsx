@@ -9,13 +9,17 @@ export default function TimeOff () {
     const { width, height } = Dimensions.get('window')
     const navigation = useNavigation()
 
+    const screenWidth = Dimensions.get('window').height
+    const imageSize = Math.max(15, screenWidth * 0.11 / 1)
+    const padding = screenWidth * 0.008
+
     return (
         <View style={styles.container}>
             <TouchableOpacity 
                 style={[styles.button]}
                 onPress={() => navigation.navigate('VacationLeave')}
             >
-                <View style={[styles.alignWrapper, { height: height * .12 }]}>
+                <View style={[styles.alignWrapper, { height: imageSize}]}>
                     <Image 
                         source={require('../../assets/icons/vacation.png')}
                         style={{ width: 55, height: 55, marginRight: 10 }}
@@ -33,7 +37,7 @@ export default function TimeOff () {
                 style={[styles.button, ]}
                 onPress={() => navigation.navigate('SickLeave')}
             >
-                <View style={[styles.alignWrapper, { height: height * .12 }]}>
+                <View style={[styles.alignWrapper, { height: imageSize }]}>
                     <Image 
                         source={require('../../assets/icons/health.png')}
                         style={{ width: 50, height: 50, paddingVertical: 34,  marginRight: 10, }}
@@ -58,7 +62,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         alignItems: 'center',
         marginHorizontal: 11,
-        marginBottom: 20,
+        marginBottom: 10,
     },
 
     button: {
