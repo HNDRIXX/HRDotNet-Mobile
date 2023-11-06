@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, BackHandler, ScrollView, ActivityIndicator, Redirect } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, BackHandler, ScrollView, ActivityIndicator, Alert, Linking } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
 import * as Location from 'expo-location';
@@ -13,9 +13,6 @@ import { COLORS } from '../../../constant';
 import SuccessTimeClock from '../../../components/prompt/SuccessTimeClock';
 
 export default function ClockInOut () {
-  const [onLocation, setOnLocation] = useState(false)
-  const [isDisabled, setIsDisabled] = useState(true)
-  const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false)
   const [clockedStatus, setClockedStatus] = useState('')
   const [clockedValue, setClockedValue] = useState(1)
   const [clockedTime, setClockedTime] = useState('')
@@ -23,17 +20,21 @@ export default function ClockInOut () {
   const [location, setLocation] = useState(null)
   const [currAddress, setCurrAddress] = useState("")
   const [mapRegion, setMapRegion] = useState({})
-  const [isLoading, setIsLoading] = useState(true)
-  const [time, setTime] = useState(moment())
 
+  const [onLocation, setOnLocation] = useState(false)
+  const [isDisabled, setIsDisabled] = useState(true)
+  const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isRestart, setRestart] = useState(false)
+
+  const [time, setTime] = useState(moment())
   const route = useRoute()
 
-    useEffect(() => {
-        const timer = setInterval(() => setTime(moment()), 1000);
-        return () => clearInterval(timer);
-      }, []);
-
-    const currentDate = moment().format('MMMM D, YYYY, dddd')
+  useEffect(() => {
+    const timer = setInterval(() => setTime(moment()), 1000)  
+    return () => clearInterval(timer)
+  }, [])
+  const currentDate = moment().format('MMMM D, YYYY, dddd')
 
   const [markerCoordinate, setMarkerCoordinate] = useState({
     latitude: 14.643779,
@@ -72,37 +73,31 @@ export default function ClockInOut () {
   const permissionLocation = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync()
   
-    if (status !== 'granted') {
-      return
+    if (status != 'granted') {
+      const openSettings = () => {
+        Linking.openSettings()
+      };
+    
+      // Display the alert and call openSettings when OK is clicked
+      Alert.alert(
+        'Permission Required',
+        'Please allow location permissions',
+        [
+          {
+            text: 'OK',
+            onPress: openSettings,
+          },
+        ]
+      )
     }
   
     try {
       const location = await Location.getCurrentPositionAsync({})
-      fetchLocationAndAddress()
+      // fetchData()
     } catch (error) {
       console.log(error)
     }
   }
-
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      try {
-
-        const isLocationEnabled = await Location.getProviderStatusAsync()
-
-        if (!isLocationEnabled.locationServicesEnabled) {
-          setOnLocation(true)
-          setIsDisabled(true)
-        } else {
-          setOnLocation(false)
-          setIsDisabled(false)
-        }                  
-
-      } catch (error) { console.error("Error checking location services:", error) }
-    }, 1000)
-
-    return () => clearInterval(interval)
-  }, [])
   
   useEffect(() => {
     const fetchData = async () => {
@@ -135,8 +130,26 @@ export default function ClockInOut () {
     }
   
     fetchData()
-  }, [])  
-  
+  }, [isRestart])  
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const isLocationEnabled = await Location.getProviderStatusAsync()
+
+        if (!isLocationEnabled.locationServicesEnabled) {
+          setOnLocation(true)
+          setIsDisabled(true)
+        } else {
+          setOnLocation(false)
+          setIsDisabled(false)
+        }                  
+
+      } catch (error) { console.error("Error checking location services:", error) }
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [])
   
   const openCustomAlert = () => {
     setIsSuccessAlertVisible(true)
@@ -156,8 +169,7 @@ export default function ClockInOut () {
             clockedDate: clockedDate,
             clockedTime: clockedTime,
           },
-      })
-        
+      })  
   }
 
   return (
@@ -195,7 +207,7 @@ export default function ClockInOut () {
           <ActivityIndicator size={'large'}/>
 
           <TouchableOpacity
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => setRestart(true)}
           >
             <Text>Restart Page</Text>
           </TouchableOpacity>
@@ -203,7 +215,6 @@ export default function ClockInOut () {
       ) : (
         <>
           <View style={styles.container}>
-
             <MapView
               showsPointsOfInterest
               showsMyLocationButton

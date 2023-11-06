@@ -1,0 +1,220 @@
+// Project Planning and Requirements Gathering:
+
+- Define the goals and objectives in HRDotNet Mobile Application.
+- Identify the specific features and functionalities that needed to include.
+
+<!-- Gather requirements from HR and other stakeholders.
+Design and Wireframing:
+
+Create wireframes and mockups of your app's user interface using tools like Figma or Sketch.
+Design the app's layout, navigation, and user experience. -->
+
+// UI/UX Designing:
+
+- Creating wireframes and prototype for the mobile application's user interface using tools like Figma.
+- Designing the mobile application's layout, navigation, imagery and user experience.
+
+
+// Set Up the Development Environment:
+
+<!-- Install Node.js and npm (Node Package Manager) if not already installed.
+Install Expo CLI globally: npm install -g expo-cli.
+Create a new Expo project: expo init project-name. -->
+
+- Install Node.JS and npm (Node Package Manager) needed to use.
+- Install packages that needed to use (react-native-gestures, expo-images, expo-calendar, etc.)
+
+// Frontend Development (React Native):
+
+- Develop the HRDotNet's frontend using React Native components.
+- Implement navigation like bottom navigation using React Navigation.
+- Create screens for user log-in, forgot password, home, calendar, request, profile, etc.
+- Incorporate UI/UX designs from the wireframes or prototype.
+
+<!-- Develop the frontend of your HRIS app using React Native components.
+Implement navigation using React Navigation.
+Create screens for user registration, login, employee profiles, time tracking, leave requests, etc.
+Incorporate UI/UX designs from the wireframes. -->
+
+// Backend Development (React Native):
+
+<!-- Choose a backend technology stack (Node.js, Python, Ruby, etc.).
+Set up a server to handle authentication, data storage, and business logic.
+Implement APIs for communication between the frontend and backend. -->
+
+- Choose a backend technology stack (Node.js, Express).
+- Set up a server to handle data storage and logic.
+- Implement APIs for communication between the frontend and backend.
+
+// Database Integration:
+
+<!-- Select and set up a database system (e.g., PostgreSQL, MongoDB).
+Create database schemas to store user data, employee records, and other relevant information. -->
+
+- Select and set up a database (if needed).
+- Create database schemas to store the data features (if needed).
+
+<!-- Authentication and Authorization:
+
+Implement user authentication using tools like Firebase Authentication or JWT tokens.
+Set up role-based access control to ensure data security. -->
+
+<!-- Integration with HR Systems:
+
+Integrate with existing HR systems, if applicable, for data synchronization.
+Develop APIs or connectors to exchange data with external systems. -->
+
+<!-- Testing:
+
+Perform unit testing, integration testing, and end-to-end testing.
+Test on various devices and screen sizes to ensure compatibility. -->
+
+// Testing: 
+
+- Perform unit testing, integration testing and end-to-end testing.
+- Test on functionalities and features.
+- Test on various devices and screen size to ensure compatibility.
+
+
+<!-- Deployment:
+
+Deploy your backend server to a hosting provider (e.g., AWS, Heroku).
+Publish your React Native app to app stores (iOS App Store and Google Play Store) using Expo's build and release tools. -->
+
+<!-- Monitoring and Analytics:
+
+Implement analytics tools (e.g., Google Analytics, Mixpanel) to track user behavior.
+Set up error monitoring and crash reporting for debugging. -->
+
+<!-- Security and Compliance:
+
+Ensure data security and privacy compliance (e.g., GDPR, HIPAA) if necessary.
+Regularly update dependencies and libraries to patch security vulnerabilities. -->
+
+// Compliance 
+
+- Regularly update dependencies and libraries to patch and harm vulnerabilities.
+
+<!-- Maintenance and Updates:
+
+Continuously improve the app based on user feedback.
+Release updates with new features and bug fixes.
+Documentation:
+
+Create comprehensive documentation for developers, administrators, and users.
+User Training and Support:
+
+Provide training and support to HR staff and end-users.
+Feedback and Iteration:
+
+Collect feedback from users and stakeholders to identify areas for improvement.
+Iterate on the app to enhance its functionality and user experience. -->
+
+// Maintenance and Updates:
+
+- Continously improve the app based on user feedback.
+- Realease updates with new features and bug fixes.
+
+// User Support
+
+- Provide training and support to the users like HR staff and end-users.
+
+// October 16, 2923
+// Goals Accomplished :
+// Home Page Interface (Web User)
+// Left Drawer in Home Page Interface (Web User)
+// Log-In Page Interface (Web User)
+// Forgot Password Page Interface (Web User)
+// Verfication Page Interface (Web User)
+// Calendar Page Interface (Web User)
+
+// On going :
+// Notification Page Interface (Web User)
+// Verification Page Alert Inteface (Web User)
+// Calendar Page (Click Dates Functions)
+// Verification Page (Input Verification Code Function)
+// Request Page Interface (Web User)
+// Clock In/Out Page (CLock In/Out Function)
+// Profile Page Interface (Web User)
+
+// To Do :
+// Notification Page Interface (Web User)
+// Verification Page Alert Inteface (Web User)
+// Calendar Page (Click Dates Functions)
+// Verification Page (Input Verification Code Function)
+// Request Page Interface (Web User)
+// Clock In/Out Page (CLock In/Out Function)
+// Profile Page Interface (Web User)
+
+Username: MGL5459
+Pass: sql123$%^
+
+// October 23, 2023
+// Goals Accomplished
+// Reset Password Interface
+// Time Clock Page Interface  (Web User)
+// Request Page Horizontal Navigation 
+// Change of Schedule Interface (Web User)
+// Official Work Interface (Web User)
+// Verification Page Alert Interface (Web User)
+
+// Ongoing
+// Calendar View Functions (Web User)
+// Calendar Date Event Functions (Web User)
+// Official Work Functions (Web User)
+// Change of Schedule Functions (Web User)
+
+// To Do
+// Calendar View Functions (Web User)
+// Calendar Date Event Functions (Web User)
+// Official Work Functions (Web User)
+// Change of Schedule Functions (Web User)
+// Notification Page Interface (Web User)
+
+
+// Timesheet
+// Payslip Docx Downloadable
+
+October 31, 2023 to November 06, 2023
+-- Accomplished
+Verification Code Page Function
+Verification Code Function
+Notification Page Interface
+Calendar View Functions
+Calendar Date Event Functions 
+Reset Password Page
+
+Change of Schedule More Page (Web User)
+Official Work Interface (Web User)
+Official Work More Page (Web User)
+Overtime Interface (Web User)
+Overtime - More Page (Web User)
+Offset Interface (Web User)
+Offset - More Page (Web User)
+Leave Interface (Web User)
+Leave - More Page (Web User)
+Missed Logs Interface (Web User)
+Missed Logs - More Page (Web User)
+
+ONGOING -------
+Time Clock Functions
+Menu Button Page Functions
+Time Off Page (Individual Page Route)
+Time Off Page (Individual Page Interface)
+Change of Schedule Functions
+Overtime Functions
+Offset Functions
+Leave Functions
+Missed Logs Functions
+
+TO DO TASK --------
+Time Clock Functions
+Menu Button Page Functions
+Time Off Page (Individual Page Route)
+Time Off Page (Individual Page Interface)
+Change of Schedule Functions
+Overtime Functions
+Offset Functions
+Leave Functions
+Missed Logs Functions
+

@@ -91,7 +91,11 @@ export default function Home ({ navigation }) {
                         <ScrollView style={styles.scrollView} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
                             <View style={styles.sectionView}>
                                 <Text style={styles.mainTitle}>Menu</Text>
-                                <MenuButton />
+                                <MenuButton 
+                                    clockedDate={route.params?.clockedDate}
+                                    clockedTime={route.params?.clockedTime}
+                                    clockedLocation={"Location Location"}
+                                />
                             </View>
 
                             <View style={styles.sectionView}>

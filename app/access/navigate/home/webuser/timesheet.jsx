@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
-import { router } from 'expo-router'
-import { AntDesign } from '@expo/vector-icons'
+import moment from 'moment'
 import { Agenda } from 'react-native-calendars'
 import { Calendar } from 'react-native-big-calendar'
 import { Entypo, FontAwesome } from '@expo/vector-icons'
@@ -9,15 +8,20 @@ import DashedLine from 'react-native-dashed-line'
 
 import { COLORS } from '../../../../../constant'
 import CalendarNote from '../../../../../components/note/CalendarNote'
+import PageHeader from '../../../../../components/header/PagesHeader'
+
+import { useRoute } from '@react-navigation/native'
 
 export default function TimeSheetPage ({ navigation }) {
     const [isLoading, setIsLoading] = useState(true)
     
-    const [month, setMonth] = useState('October')
-    const [year, setYear] = useState('2023')
+    const [month, setMonth] = useState(moment().format('MMMM'))
+    const [year, setYear] = useState(moment().format('YYYY'))
 
     const [selectedDate, setSelectedDate] = useState(null)
     const [events, setEvents] = useState(null)
+
+    const route = useRoute()
 
     const items = {
         '2023-10-10': [
@@ -36,120 +40,132 @@ export default function TimeSheetPage ({ navigation }) {
             { time: '07:21:19 AM', location: '12 Cataduanes St. Quezon City' },
             { time: null, location: null }],
     }
-    
+
+    const newData = {
+        time: route.params?.clockedTime,
+        location: route.params?.clockedLocation
+    }
+
+    const formattedDate = moment(route.params?.clockedDate, 'MMMM DD, YYYY, dddd').format('YYYY-MM-DD');
+
+    if (items[formattedDate]) {
+        const existingData = items[formattedDate]
+
+        if (existingData.length === 1) {
+            existingData.push(newData)
+        } else {
+        }
+    } else {
+        items[formattedDate] = [newData]
+        items[formattedDate].push({ time: null, location: null })
+    }
+
     const currentDate = new Date()
     const currentMonth = currentDate.toLocaleString('default', { month: 'long' })
     const currentYear = currentDate.getFullYear()
 
     useEffect(() => {
-        setIsLoading(false)
+        setTimeout(() => {
+            setIsLoading(false)
+        }, 800)
     }, [])
 
     const dayPress = (day) => {
-        setSelectedDate(day.dateString);
-        setEvents(items[day.dateString] || []);
-    
-        // Convert the selected date string to a JavaScript Date object
-        const selectedDateObj = new Date(day.dateString);
+        setSelectedDate(day.dateString)
+        setEvents(items[day.dateString] || [])
+
+        const selectedDateObj = new Date(day.dateString)
         
-        // Get the month and year
-        const month = selectedDateObj.toLocaleString('default', { month: 'long' });
-        const year = selectedDateObj.getFullYear();
+        const month = selectedDateObj.toLocaleString('default', { month: 'long' })
+        const year = selectedDateObj.getFullYear()
     
         setMonth(month)
         setYear(year)
     }    
     
     return (
-        <View style={styles.container}>
-            { isLoading ? ( <ActivityIndicator size='large' color={COLORS.orange} style={styles.loading}/> ) : (
-                <>
-                    <View style={styles.topHeader}>
-                        <TouchableOpacity 
-                            style={styles.backButton} 
-                            onPress={() => navigation.navigate('Home')}
-                        >
-                            <AntDesign name='arrowleft' size={30} color={COLORS.clearWhite} />
-                        </TouchableOpacity>
+        <>
+            <PageHeader pageName={"TimeSheet"}/>
 
-                        <Text style={styles.textHeader}>Timesheet</Text>
-                    </View>
+            <View style={styles.container}>
+                { isLoading ? ( <ActivityIndicator size='large' color={COLORS.orange} style={styles.loading}/> ) : (
+                    <>
+                        <View style={styles.agendaCalendar}>
+                            <Text style={styles.monthYearText}>{month} {year}</Text>
+                            <Agenda
+                                items={items}
+                                onDayPress={dayPress}
+                                showOnlySelectedDayItem
 
-                    <View style={styles.agendaCalendar}>
-                        <Text style={styles.monthYearText}>{month} {year}</Text>
-                        <Agenda
-                            items={items}
-                            onDayPress={dayPress}
-                            showOnlySelectedDayItem
+                                renderList={() => (
+                                    <View style={styles.agendaItem}>
+                                        {selectedDate == null && (
+                                            <CalendarNote />
+                                        )}
+                                        
+                                        {selectedDate && events && events.length === 0 ? (
+                                            <Text style={styles.noEventsText}>No events to display</Text>
+                                        ) : (
+                                            events && events.map((event, index) => (
+                                                <View
+                                                    key={ index }
+                                                    style={ index === 3 ? { paddingBottom: 500 } : {}}
+                                                >
+                                                    <Text style={styles.clockInOutText}>
+                                                        { index === 0 ? "Clock-in : "
+                                                        : index === 1 ? "Clock-out :" : null}
+                                                    </Text>
 
-                            renderList={() => (
-                                <View style={styles.agendaItem}>
-                                    {selectedDate == null && (
-                                        <CalendarNote />
-                                    )}
-                                    
-                                    {selectedDate && events && events.length === 0 ? (
-                                        <Text style={styles.noEventsText}>No events to display</Text>
-                                    ) : (
-                                        events && events.map((event, index) => (
-                                            <View
-                                                key={ index }
-                                                style={ index === 3 ? { paddingBottom: 500 } : {}}
-                                            >
-                                                <Text style={styles.clockInOutText}>
-                                                    { index === 0 ? "Clock-in : "
-                                                    : index === 1 ? "Clock-out :" : null}
-                                                </Text>
+                                                    <View style={styles.itemContainer}>
+                                                        <FontAwesome 
+                                                            name={ 
+                                                                index === 1 ? "sign-in" : 
+                                                                index === 0 ? "sign-out" : null
+                                                            }
+                                                            size={34} 
+                                                            color={
+                                                                index === 1 ? COLORS.powderBlue : 
+                                                                index === 0 ? COLORS.orange : null
+                                                            }
+                                                            style={{ paddingRight: 20 }}
+                                                        />
 
-                                                <View style={styles.itemContainer}>
-                                                    <FontAwesome 
-                                                        name={ 
-                                                            index === 1 ? "sign-in" : 
-                                                            index === 0 ? "sign-out" : null
-                                                        }
-                                                        size={34} 
-                                                        color={
-                                                            index === 1 ? COLORS.orange : 
-                                                            index === 0 ? COLORS.powderBlue : null
-                                                        }
-                                                        style={{ paddingRight: 20 }}
-                                                    />
-
-                                                    <View style={styles.item}>
-                                                        {!event.time && !event.location ? 
-                                                            ( 
-                                                                <DashedLine 
-                                                                    dashLength={5}
-                                                                    dashColor={COLORS.darkGray}
-                                                                    dashGap={2}
-                                                                    dashThickness={2}
-                                                                    style={{ width: 130, }}
-                                                                />
-                                                            )
-                                                        : (
-                                                            <>
-                                                                <Text style={styles.itemText}>{event.time}</Text>
-                                                                <Text style={styles.itemLoc}>{event.location}</Text>
-                                                            </>
-                                                        )}
+                                                        <View style={styles.item}>
+                                                            {!event.time && !event.location ? 
+                                                                ( 
+                                                                    <DashedLine 
+                                                                        dashLength={5}
+                                                                        dashColor={COLORS.darkGray}
+                                                                        dashGap={2}
+                                                                        dashThickness={2}
+                                                                        style={{ width: 130, paddingVertical: 23 }}
+                                                                    />
+                                                                )
+                                                            : (
+                                                                <>
+                                                                    <Text style={styles.itemText}>{event.time}</Text>
+                                                                    <Text style={styles.itemLoc}>{event.location}</Text>
+                                                                </>
+                                                            )}
+                                                        </View>
                                                     </View>
                                                 </View>
-                                            </View>
-                                        ))
-                                    )}
-                                </View>
-                            )}
+                                            ))
+                                        )}
+                                    </View>
+                                )}
 
-                            renderEmptyData={() => (
-                                <Text style={styles.noDisplayText}>No agenda for this day.</Text>
-                            )}
-                        />
-                    </View>
+                                renderEmptyData={() => (
+                                    <Text style={styles.noDisplayText}>No agenda for this day.</Text>
+                                )}
+                            />
+                        </View>
 
 
-                </>
-            )}
-        </View>
+                    </>
+                )}
+            </View>
+        </>
     )
 }
 
@@ -209,13 +225,15 @@ const styles = StyleSheet.create({
     },
 
     clockInOutText: {
-        padding: 10,
-        fontFamily: 'Inter_500Medium',
+        color: COLORS.darkGray,
+        marginHorizontal: 20,
+        marginVertical: 13,
+        fontFamily: 'Inter_600SemiBold',
     },
 
     itemContainer: {
         backgroundColor: COLORS.clearWhite,
-        marginHorizontal: 16,
+        marginHorizontal: 23,
         flexDirection: 'row',
         alignItems: 'center',
         borderRadius: 10,
@@ -229,9 +247,8 @@ const styles = StyleSheet.create({
     },
     
     itemText: {
-        color: COLORS.darkGray,
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 16,
+        fontFamily: 'Inter_700Bold',
+        fontSize: 19,
     },
 
     itemLoc: {

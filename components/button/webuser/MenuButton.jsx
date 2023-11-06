@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native'
 import { COLORS } from '../../../constant'
 // import HomeButtonLoader from '../loader/HomeButtonLoader'
 
-export default function MenuButton () {
+export default function MenuButton ({ clockedDate, clockedTime, clockedLocation }) {
     const [isLoading, setIsLoading] = useState(false)
 
     const { width, height } = Dimensions.get('window')
@@ -33,7 +33,13 @@ export default function MenuButton () {
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity 
                                 style={[styles.gridButton, { padding: padding }]}
-                                onPress={() => navigation.navigate('TimeSheet')}>
+                                onPress={() => {
+                                    navigation.navigate('TimeSheet', {
+                                        clockedDate: clockedDate,
+                                        clockedTime: clockedTime,
+                                        clockedLocation: clockedLocation
+                                    })
+                                }}>
                                 <Image 
                                     source={require('../../../assets/icons/timesheet.png')}
                                     style={{ width: imageSize ,  height: imageSize }}

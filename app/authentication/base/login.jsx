@@ -142,7 +142,6 @@ const styles = StyleSheet.create({
     },
 
     forgotText: {
-        color: COLORS.darkGray,
         fontFamily: 'Inter_400Regular'
     },
 

@@ -12,16 +12,15 @@ export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, c
     const [time, setTime] = useState(moment())
 
     const navigation = useNavigation()
-
+    const dateToday = moment().format('MMMM DD, YYYY')
 
     useEffect(() => {
-        const timer = setInterval(() => setTime(moment()), 1000);
-        return () => clearInterval(timer);
-      }, []);
+        const timer = setInterval(() => setTime(moment()), 1000)
+        return () => clearInterval(timer)
+    }, [])
 
     const currentDate = moment().format('MMMM D, YYYY, dddd')
-
-    const formattedClocked = moment(clockedDate, 'LL, dddd').format('MMMM DD')
+    const formattedClocked = moment(clockedDate, 'MMMM DD, YYYY, dddd').format('MMMM DD, YYYY')
 
     return (
         <View style={styles.topBox}>
@@ -29,13 +28,13 @@ export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, c
                 <Text style={styles.dateText}>{currentDate}</Text>
                 <Text style={styles.timeText}>{time.format('h:mm:ss A')}</Text>
 
+
                 {/* Clocked Out: September 18 at 6:18:00 PM */}
                 <Text style={styles.clockInOutText}>
-                    {/* { clockedStatus }
-                    { clockedDate != undefined && ( " : " + formattedClocked) }
-                    { clockedTime != undefined && (" at " + clockedTime)} */}
-                    Clocked Out: September 18 at 6:18:00 PM
+                    {clockedStatus ? `${clockedStatus}: ${dateToday === formattedClocked ? "Today" : formattedClocked} at ${clockedTime}` : `Clocked: ${dateToday}`}
                 </Text>
+
+
 
                 { clockedValue == 0 ? (
                     <TouchableOpacity
@@ -86,7 +85,7 @@ const styles = StyleSheet.create({
     topBox: {
         backgroundColor: COLORS.clearWhite,
         paddingVertical: 15,
-        paddingHorizontal: 50,
+        width: '85%',
         marginTop: -45,
         marginBottom: 5,
         borderRadius: 20,
@@ -116,7 +115,6 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         flexDirection: 'row',
         justifyContent: 'center',
-        elevation: 2,
     },
 
     timeInOutText: {
