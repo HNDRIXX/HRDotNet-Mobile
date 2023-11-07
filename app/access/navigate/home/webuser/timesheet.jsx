@@ -4,6 +4,7 @@ import moment from 'moment'
 import { Agenda } from 'react-native-calendars'
 import { Calendar } from 'react-native-big-calendar'
 import { Entypo, FontAwesome } from '@expo/vector-icons'
+import * as Animatable from 'react-native-animatable'
 import DashedLine from 'react-native-dashed-line'
 
 import { COLORS } from '../../../../../constant'
@@ -24,19 +25,19 @@ export default function TimeSheetPage ({ navigation }) {
     const route = useRoute()
 
     const items = {
-        '2023-10-10': [
+        '2023-11-05': [
             { time: '10:10:08 AM', location: '12 Cataduanes St. Quezon City' },
             { time: '06:01:02 PM', location: '12 Cataduanes St. Quezon City' }],
         
-        '2023-10-11': [
+        '2023-11-06': [
             { time: '07:49:01 AM', location: '12 Cataduanes St. Quezon City' },
             { time: '06:20:05 PM', location: '12 Cataduanes St. Quezon City' }],
         
-        '2023-10-12': [
+        '2023-11-12': [
             { time: '07:31:01 AM', location: '12 Cataduanes St. Quezon City' },
             { time: '08:31:01 PM', location: '12 Cataduanes St. Quezon City' }],
         
-        '2023-10-13': [
+        '2023-11-13': [
             { time: '07:21:19 AM', location: '12 Cataduanes St. Quezon City' },
             { time: null, location: null }],
     }
@@ -85,7 +86,7 @@ export default function TimeSheetPage ({ navigation }) {
     
     return (
         <>
-            <PageHeader pageName={"TimeSheet"}/>
+            <PageHeader pageName={"Timesheet"}/>
 
             <View style={styles.container}>
                 { isLoading ? ( <ActivityIndicator size='large' color={COLORS.orange} style={styles.loading}/> ) : (

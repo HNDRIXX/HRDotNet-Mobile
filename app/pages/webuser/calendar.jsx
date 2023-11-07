@@ -43,21 +43,7 @@ export default function CalendarScreen() {
       setTimeout(() => {
         setIsLoading(false)
       }, 800)
-
-      //BackHandler sa Android
-      const backAction = () => { return true }
-      const backHandlerAndroid = BackHandler.addEventListener('hardwareBackPress', backAction)
-    
-      return () => backHandlerAndroid.remove()
   }, [])
-
-  //BackHandler sa IOS
-  useEffect(() => {
-    if (Platform.OS === 'ios') {
-      const backHandlerIOS = navigation.addListener('beforeRemove', (e) => { e.preventDefault() })
-      return () => backHandlerIOS.remove()
-    }
-  }, [navigation])
   
   for (const key in valueEvents) {
     const formattedDate = key.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')

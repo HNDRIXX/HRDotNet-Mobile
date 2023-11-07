@@ -19,7 +19,7 @@ export default function MenuButton ({ clockedDate, clockedTime, clockedLocation 
     // }, [])
 
     const screenWidth = Dimensions.get('window').height
-    const imageSize = Math.max(15, screenWidth / 12.3)
+    const imageSize = Math.max(15, screenWidth / 12.7)
     const padding = screenWidth * 0.010
 
     return (

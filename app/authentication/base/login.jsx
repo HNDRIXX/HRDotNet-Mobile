@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
     textInput: {
         width: '100%',
         fontFamily: 'Inter_400Regular',
+        padding: 10,
         color: COLORS.darkGray
     },
 

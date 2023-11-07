@@ -52,6 +52,7 @@ export default function ForgotPasswordPage ({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: COLORS.clearWhite,
     },
 
     backBtn: {
@@ -86,20 +87,19 @@ const styles = StyleSheet.create({
 
     textInput: {
         width: '100%',
+        padding: 10,
         fontFamily: 'Inter_400Regular'
     },
 
     forgotText: {
         fontFamily: 'Inter_700Bold',
         textAlign: 'center',
-        color: COLORS.darkGray,
         fontSize: 26,
     },
 
     subText: {
         textAlign: 'center',
         fontFamily: 'Inter_400Regular',
-        color: COLORS.darkGray
     },  
 
     sendCodeBtn: {

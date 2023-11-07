@@ -34,7 +34,7 @@ export default function SickLeavePage ({ navigation }) {
             <View style={styles.topHeader}>
                 <TouchableOpacity 
                     style={styles.backButton} 
-                    onPress={() => router.push(`/pages/home/[index]`)}
+                    onPress={() => navigation.goBack()}
                 >
                     <AntDesign name='arrowleft' size={30} color={COLORS.clearWhite} />
                 </TouchableOpacity>
@@ -70,23 +70,24 @@ export default function SickLeavePage ({ navigation }) {
 
                     return (
                         <View style={styles.itemWrapper}>
-                            <View style={styles.itemHeader}>
-                                <Text style={styles.itemHeaderText}>{item.status}</Text>
-                                <Text style={styles.itemHeaderText}>{item.leaveCredit}</Text>
-                            </View>
+                            <Shadow distance={6} style={styles.shadowView}>
+                                <View style={styles.itemHeader}>
+                                    <Text style={styles.itemHeaderText}>{item.status}</Text>
+                                    <Text style={styles.itemHeaderText}>{item.leaveCredit}</Text>
+                                </View>
 
-                            <View style={styles.itemBody}>
-                                <Text style={styles.bodyText}>Date: 
-                                    <Text style={styles.itemText}> {formattedDate}</Text>
-                                </Text>
+                                <View style={styles.itemBody}>
+                                    <Text style={styles.bodyText}>Date: 
+                                        <Text style={styles.itemText}> {formattedDate}</Text>
+                                    </Text>
 
-                                <Text style={styles.bodyText}>Document No: 
-                                    <Text style={styles.itemText}> {item.documentNo}</Text>
-                                </Text>
-                            </View>
+                                    <Text style={styles.bodyText}>Document No: 
+                                        <Text style={styles.itemText}> {item.documentNo}</Text>
+                                    </Text>
+                                </View>
+                            </Shadow>
                         </View>
                     )
-
                 }}
             />
         </View>
@@ -196,7 +197,11 @@ const styles = StyleSheet.create({
         margin: 10,
         borderRadius: 20,
         marginHorizontal: 20,
-        elevation: 2,
+    },
+
+    shadowView: {
+        width: '100%', 
+        borderRadius: 20 
     },
 
     itemHeader: {

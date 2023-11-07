@@ -88,7 +88,11 @@ export default function Home ({ navigation }) {
                     </Shadow>
 
                     <View style={styles.menuView}>
-                        <ScrollView style={styles.scrollView} contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+                        <ScrollView 
+                            style={styles.scrollView}
+                            bounces={false}
+                            contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+                            >
                             <View style={styles.sectionView}>
                                 <Text style={styles.mainTitle}>Menu</Text>
                                 <MenuButton 
@@ -209,16 +213,14 @@ const styles = StyleSheet.create({
     },
 
     scrollView: {
-        marginHorizontal: 10,
     },
 
     sectionView: {
         width: Dimensions.get('window').width, 
-        paddingRight: 25
     },
 
     mainTitle: {
-        marginHorizontal: 15,
+        marginHorizontal: 27,
         fontSize: 15,
         marginVertical: 6,
         color: COLORS.powderBlue,

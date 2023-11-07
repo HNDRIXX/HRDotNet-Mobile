@@ -114,8 +114,9 @@ const styles = StyleSheet.create({
         marginRight: 10,
         fontSize: 18,
         fontFamily: 'Inter_700Bold',
-        paddingHorizontal: 7,
-        borderRadius: 20,
+        paddingHorizontal: 9,
+        borderRadius: 10,
+        overflow: 'hidden',
         display: 'none',
     },
   

@@ -74,6 +74,7 @@ export default function ClockInOut () {
     const { status } = await Location.requestForegroundPermissionsAsync()
   
     if (status != 'granted') {
+      console.log(status)
       const openSettings = () => {
         Linking.openSettings()
       };
@@ -128,7 +129,7 @@ export default function ClockInOut () {
         console.error("Error fetching location and address:", error)
       }
     }
-  
+    permissionLocation()
     fetchData()
   }, [isRestart])  
 
@@ -136,7 +137,7 @@ export default function ClockInOut () {
     const interval = setInterval(async () => {
       try {
         const isLocationEnabled = await Location.getProviderStatusAsync()
-
+  
         if (!isLocationEnabled.locationServicesEnabled) {
           setOnLocation(true)
           setIsDisabled(true)

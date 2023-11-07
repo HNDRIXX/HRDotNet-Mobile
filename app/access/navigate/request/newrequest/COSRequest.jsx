@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, BackHandler, Alert } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from "moment";
-import { FontAwesome } from "@expo/vector-icons";
+import { AntDesign, FontAwesome } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import RadioButtonRN from "radio-buttons-react-native";
 import { useRoute } from "@react-navigation/native";
@@ -10,6 +10,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { router, useGlobalSearchParams } from 'expo-router'
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import SelectDropdown from "react-native-select-dropdown";
 import { Image } from "expo-image";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
@@ -25,10 +27,12 @@ export default function COSRequest ({ navigation }) {
 
     const [imageUpload, setImageUpload] = useState(null)
     const [selectedFile, setSelectedFile] = useState(null)
+    const [shiftSched, setShiftSched] = useState(null)
 
     const [showStartPicker, setShowStartPicker] = useState(false)
     const [showEndPicker, setShowEndDatePicker] = useState(false)
-    const [shiftSched, setShiftSched] = useState(null)
+    const [isInvalidError, setInvalidError] = useState(false)
+    const [isSizeError, setSizeError] = useState(false)
 
     const route = useRoute()
     const imageURL = decodeURIComponent(route.params?.image)
@@ -37,37 +41,38 @@ export default function COSRequest ({ navigation }) {
         imageURL != "undefined" && setSelectedFile(imageURL)
     }, [imageURL])
 
-    const onStartDateChange = (event, selectedDate) => {
-        event.type === 'set'
-            ? (setShowStartPicker(Platform.OS === 'ios'), setStartDate(moment(selectedDate).format('YYYYMMDD')))
-            : setShowStartPicker(false)
+    const onStartDateChange = (date) => {
+        setStartDate(moment(date).format('YYYYMMDD'))
+        setShowStartPicker(false)
     }
 
-    const onEndDateChange = (event, selectedDate) => {
-        event.type === 'set'
-            ? (setShowEndDatePicker(Platform.OS === 'ios'), setEndDate(moment(selectedDate).format('YYYYMMDD')))
-            : setShowEndDatePicker(false)
+    const onEndDateChange = (date) => {
+        setEndDate(moment(date).format('YYYYMMDD'))
+        setShowEndDatePicker(false)
     }
     
     const selectDocument = async () => {
         try {
             const result = await DocumentPicker.getDocumentAsync()
+            setInvalidError(false)
+            setSizeError(false)
 
             if (!result.canceled){
                 const fileInfo = result.assets[0]
                 const uri = fileInfo.uri
 
                 const fileExtension = uri.substring(uri.lastIndexOf('.') + 1).toLowerCase()
-                
                 const fileSizeInMB = fileInfo.size / (1024 * 1024)
 
-                if (fileSizeInMB <= 5 && ['docx', 'pdf', 'jpeg', 'jpg', 'txt'].includes(fileExtension)) {
+                if (fileSizeInMB <= 25 && ['doc', 'docx', 'pdf', 'jpeg', 'jpg', 'txt'].includes(fileExtension)) {
+                    setSizeError(false)
+                    setInvalidError(false)
                     setSelectedFile(fileInfo.uri)
                 } else {
-                    if (fileSizeInMB > 5) {
-                        Alert.alert('File Too Large', 'Please select a file with a size of 5MB or less.')
+                    if (fileSizeInMB > 25) {
+                        setSizeError(true)
                     } else {
-                        Alert.alert('Unsupported File Format', 'Please select a docx, pdf, jpeg, jpg, or txt file.')
+                        setInvalidError(true)
                     }
                 }
             }
@@ -102,7 +107,7 @@ export default function COSRequest ({ navigation }) {
 
                     <View style={[styles.rowView, styles.border]}>
                         <Text>
-                            {startDate == null ? "mm/dd/yyyy" 
+                            {startDate == null ? ( <Text style={styles.placeholder}>mm/dd/yyyy</Text> )
                             : moment(startDate, "YYYYMMDD").format("MMMM DD, YYYY")}
                         </Text>
                         
@@ -120,7 +125,7 @@ export default function COSRequest ({ navigation }) {
 
                     <View style={[styles.rowView, styles.border]}>
                         <Text>
-                            {endDate == null ? "mm/dd/yyyy"
+                            {endDate == null ? ( <Text style={{ color: COLORS.tr_gray}}>mm/dd/yyyy</Text> )
                             : moment(endDate, "YYYYMMDD").format("MMMM DD, YYYY")}
                         </Text>
                         
@@ -137,8 +142,9 @@ export default function COSRequest ({ navigation }) {
                     <Text style={styles.title}>Shift Schedule</Text>
 
                     <View style={[styles.pickerView, styles.border]}>
-                        <Picker
+                        {/* <Picker
                             selectedValue={shiftSched}
+                            mode="dropdown"
                             onValueChange={(itemValue, itemIndex) => setShiftSched(itemValue)}
                         >
                             <Picker.Item 
@@ -150,8 +156,29 @@ export default function COSRequest ({ navigation }) {
                                 label="10:00 AM to 7:00 PM" 
                                 style={styles.itemPicker} 
                                 value="10:00 AM to 7:00 PM" />
-                        </Picker>
+                        </Picker> */}
+
+                       
                     </View>
+
+                    <SelectDropdown 
+                            data={["10:00 AM to 10:00 PM"]}
+                            onSelect={(item, index) => {
+                                setShiftSched(item)
+                            }}
+                            buttonStyle={{
+                                width: '100%',
+                                height: 'auto',
+                                padding: 12,
+                                borderRadius: 15,
+                                marginTop: 10,
+                                borderColor: COLORS.darkGray,
+                                borderWidth: 1,
+                            }}
+                            buttonTextStyle={{
+                                fontSize: 14,
+                            }}
+                        />
 
                     <RadioButtonRN
                         data={radioLabel}
@@ -178,25 +205,43 @@ export default function COSRequest ({ navigation }) {
 
                     <View style={[styles.rowView, styles.border]}>
                         {selectedFile == null ? (
-                            <Text>Camera/Image</Text>
+                            <Text style={styles.placeholder}>Camera/Image</Text>
                         ) : (
-                            typeof selectedFile === 'string' && selectedFile.includes("Camera") ? (
-                                <Text style={{ width: 220 }}>{selectedFile}</Text>
-                            ) : (
-                                <Text style={{ width: 220 }}>{selectedFile.name || selectedFile}</Text>
-                            )
+                            <View style={styles.rowView}>
+                                <AntDesign 
+                                    name="checkcircle"
+                                    size={20}
+                                    color={COLORS.green}
+                                />
+
+                                <Text style={styles.fileSuccess}>File Attached</Text>
+                            </View>
                         )}
 
                         <View style={[styles.rowView, { alignItems: 'center' }]}>
                             <Ionicons 
                                 name="camera" size={26}
-                                onPress={() => navigation.navigate('CameraAccess', { onPanel: 0 })} />
+                                onPress={() => {
+                                    navigation.navigate('CameraAccess', { onPanel: 0 })
+                                    setInvalidError(false)
+                                    setSizeError(false)
+                                }} />
 
                             <FontAwesome 
                                 name="file" size={18} style={{ marginLeft: 15 }}
                                 onPress={selectDocument}
                                 />
                         </View>
+                    </View>
+
+                    <View>
+                        { isInvalidError && (
+                            <Text style={styles.fileError}>Invalid file format. Only files with the following extensions are allowed: .doc, .docx, .jpg, .png, .txt, and .pdf.</Text>
+                        )}
+
+                        { isSizeError && (
+                            <Text style={styles.fileError}>The file exceeds the allowable limit and cannot be uploaded.</Text>
+                        )}
                     </View>
                 </View>
 
@@ -207,27 +252,19 @@ export default function COSRequest ({ navigation }) {
                 </TouchableOpacity>
             </View>
 
-            {showStartPicker && (
-                <DateTimePicker
-                    testID="dateTimePicker"
-                    value={new Date()}
-                    mode="date"
-                    is24Hour={true}
-                    display="default"
-                    onChange={onStartDateChange}
-                />
-            )}
+            <DateTimePickerModal
+                isVisible={showStartPicker}
+                mode="date"
+                onConfirm={onStartDateChange}
+                onCancel={() => setShowStartPicker(false)} 
+            />
 
-            {showEndPicker && (
-                <DateTimePicker
-                    testID="dateTimePicker"
-                    value={new Date()}
-                    mode="date"
-                    is24Hour={true}
-                    display="default"
-                    onChange={onEndDateChange}
-                />
-            )}
+            <DateTimePickerModal
+                isVisible={showEndPicker}
+                mode="date"
+                onConfirm={onEndDateChange}
+                onCancel={() => setShowEndDatePicker(false)} 
+            />
         </>
   )
 }
@@ -253,6 +290,10 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter_600SemiBold'
     },
 
+    placeholder: {
+        color: COLORS.tr_gray
+    },
+
     rowView: {
         padding: 10,
         justifyContent: 'space-between',
@@ -275,6 +316,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.orange,
         width: 170,
         padding: 10,
+        marginTop: 30,
         borderRadius: 20,
     },
 
@@ -283,5 +325,19 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: COLORS.clearWhite,
         textAlign: 'center',
+    },
+
+    fileError: {
+        fontSize: 13,
+        paddingHorizontal: 20,
+        paddingVertical: 5,
+        color: COLORS.red,
+        fontStyle: 'italic',
+    },
+
+    fileSuccess: {
+        color: COLORS.green,
+        marginLeft: 10,
+        fontFamily: 'Inter_600SemiBold'
     }
 })

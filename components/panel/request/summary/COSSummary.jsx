@@ -10,6 +10,8 @@ import { COLORS } from "../../../../constant";
 import { Image } from "expo-image";
 
 export default function COSSummary({ route, openCustomAlert, closeCustomAlert, isSuccessAlertVisible }) {
+
+    console.log(route.params?.attachedFile)
     return (
         <>
             <View style={styles.container}>
@@ -46,13 +48,12 @@ export default function COSSummary({ route, openCustomAlert, closeCustomAlert, i
                         <View style={styles.attachmentView}>
                             <Image 
                                 source={{ uri: route.params?.attachedFile }}
-                                style={{ width: 100, height: 100 }}
+                                style={{ width: 400, height: 400 }}
                                 contentFit="contain"
                             />
 
-                            <Text style={[styles.summaryText, { width: '60%' }]}>
-                                {/* {route.params?.attachedFile} */}
-                                Attachment
+                            <Text style={[styles.summaryText, { width: '60%', fontSize: 11, }]}>
+                                {route.params?.attachedFile}
                             </Text>
                         </View>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
@@ -67,8 +68,8 @@ export default function COSSummary({ route, openCustomAlert, closeCustomAlert, i
             </View>
 
             <SuccessPromptPage
-                title={"Success"}
-                subTitle = {`Your Official Work request for ${moment(route.params?.OBDate, "YYYYMMDD").format("MMM DD, YYYY")} was successfully submitted. We will get back to you soon.`}
+                title={"Success!"}
+                subTitle = {`Your <b><u>COS</u></b> request for <b><u>${moment(route.params?.startDate, "YYYYMMDD").format("MMM DD")}-${moment(route.params?.endDate, "YYYYMMDD").format("DD, YYYY")}</u></b> was successfully submitted. We will get back to you soon.`}
                 buttonText={"OKAY"}
                 visible={isSuccessAlertVisible} 
                 onClose={closeCustomAlert} 

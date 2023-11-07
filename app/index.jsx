@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StatusBar, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet, Text, View, ActivityIndicator, Platform } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -65,10 +65,11 @@ export default function Index() {
             <Tab.Navigator
                 screenOptions={({ route }) => ({
                     headerShown: false,
-                    tabBarStyle: { paddingTop: 8, height: 60 },
+                    tabBarIconStyle: { },
+                    tabBarStyle: { },
                     tabBarLabelStyle: {
                         fontSize: 11,
-                        marginBottom: 8,
+                        // marginBottom: 8,
                         fontFamily: 'Inter_600SemiBold',
                     },
 

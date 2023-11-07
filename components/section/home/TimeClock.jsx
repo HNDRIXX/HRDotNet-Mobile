@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from '@react-navigation/native';
-import { Link } from 'expo-router';
-import { router } from 'expo-router';
+import { Shadow } from 'react-native-shadow-2';
 import moment from 'moment';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../../../constant';
@@ -45,7 +44,7 @@ export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, c
                             })
                         }
                     >
-                        <View style={styles.clockOutButton}>
+                        <Shadow distance={3} style={styles.clockOutButton}>
                             <Ionicons
                                 name='stopwatch'
                                 size={25}
@@ -53,7 +52,7 @@ export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, c
                             />
 
                             <Text style={styles.timeInOutText}>Clock-Out</Text>
-                        </View>
+                        </Shadow>
                     </TouchableOpacity>
                 ) :  (
                     <TouchableOpacity
@@ -64,7 +63,7 @@ export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, c
                             })
                         }
                     >
-                        <View style={styles.clockInButton}>
+                        <Shadow distance={3} style={styles.clockInButton}>
                             <Ionicons
                                 name='stopwatch'
                                 size={23}
@@ -73,7 +72,7 @@ export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, c
                             />
 
                             <Text style={styles.timeInOutText}>Clock-In</Text>
-                        </View>
+                        </Shadow>
                     </TouchableOpacity>
                 )}
             </View>
@@ -105,7 +104,6 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         flexDirection: 'row',
         justifyContent: 'center',
-        elevation: 2,
     },
 
     clockOutButton: {

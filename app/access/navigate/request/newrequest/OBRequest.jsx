@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, BackHandler, Alert } from "react-native";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { FontAwesome } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
+import SelectDropdown from "react-native-select-dropdown";
 import { useRoute } from "@react-navigation/native";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import * as DocumentPicker from 'expo-document-picker';
@@ -13,10 +14,12 @@ import PageHeader from "../../../../../components/header/PagesHeader";
 import { COLORS } from "../../../../../constant";
 import { ScrollView } from "react-native";
 
-const radioLabel = [{ label: 'Rest Day' }]
+const data = [{ timeIn: "10:00 AM", timeOut: "7:00 PM"}, { timeIn: "8:00 AM", timeOut: "6:00 PM" }]
 
 export default function OBRequest ({ navigation }) {
     const [OBDate, setOBDate] = useState(null)
+    const [timeInText, setTimeInText] = useState("Time-in")
+    const [timeOutText, setTimeOutText] = useState("Time-out")
     const [timeIn, setTimeIn] = useState(null)
     const [timeOut, setTimeOut] = useState(null)
     const [reason, setReason] = useState(null)
@@ -36,22 +39,21 @@ export default function OBRequest ({ navigation }) {
         imageURL != "undefined" && setSelectedFile(imageURL)
     }, [imageURL])
 
-    const handleOBDate = (event, date) => {
-        event.type === 'set'
-            ? (setDatePicker(Platform.OS === 'ios'), setOBDate(moment(date).format('YYYYMMDD')))
-            : setDatePicker(false)
+    const newData = data.map(item => `${item.timeIn} to ${item.timeOut}`)
+
+    const handleOBDate = (date) => {
+        setOBDate(moment(date).format('YYYYMMDD'))
+        setDatePicker(false)
     }
 
-    const handleTimeIn = (event, time) => {
-        event.type === 'set'
-            ? (setTimeInPicker(Platform.OS === 'ios'), setTimeIn(moment(time).format('HH:mm')))
-            : setTimeInPicker(false)
+    const handleTimeIn = (time) => {
+        setTimeIn(moment(time).format('HH:mm'))
+        setTimeInPicker(false)
     }
 
-    const handleTimeOut = (event, time) => {
-        event.type === 'set'
-            ? (setTimeOutPicker(Platform.OS === 'ios'), setTimeOut(moment(time).format('HH:mm')))
-            : setTimeOutPicker(false)
+    const handleTimeOut = (time) => {
+        setTimeOut(moment(time).format('HH:mm'))
+        setTimeOutPicker(false)
     }
     
     const selectDocument = async () => {
@@ -129,32 +131,36 @@ export default function OBRequest ({ navigation }) {
                     <View style={styles.wrapper}>
                         <Text style={styles.title}>Shift Schedule</Text>
 
-                        <View style={[styles.pickerView, styles.border]}>
-                            <Picker
-                                selectedValue={shiftSched}
-                                onValueChange={(itemValue, itemIndex) => setShiftSched(itemValue)}
-                            >
-                                <Picker.Item 
-                                    label="Select an option" 
-                                    style={styles.itemPicker} 
-                                    color={COLORS.tr_gray} 
-                                    value={null} enabled={false} /> 
-                                <Picker.Item 
-                                    label="10:00 AM to 7:00 PM (Approved COS)"  
-                                    style={styles.itemPicker} 
-                                    value="10:00 AM to 7:00 PM (Approved COS)" />
-                            </Picker>
-                        </View>
+                        <SelectDropdown 
+                            data={newData}
+                            onSelect={(item, index) => {
+                                setTimeInText(item.split(" to ")[0])
+                                setTimeOutText(item.split(" to ")[1])
+                                setShiftSched(item)
+                            }}
+                            buttonStyle={{
+                                width: '100%',
+                                height: 'auto',
+                                padding: 12,
+                                borderRadius: 15,
+                                marginTop: 10,
+                                borderColor: COLORS.darkGray,
+                                borderWidth: 1,
+                            }}
+                            buttonTextStyle={{
+                                fontSize: 14,
+                            }}
+                        />
 
                         <View style={styles.timeWrapper}>
                             <View style={styles.timeView}>
                                 <Text style={styles.text}>Time-in</Text>
-                                <Text style={styles.timeContent}>00:00 AM</Text>
+                                <Text style={styles.timeContent}>{timeInText}</Text>
                             </View>
 
                             <View style={styles.timeView}>
                                 <Text style={styles.text}>Time-out</Text>
-                                <Text style={styles.timeContent}>00:00 PM</Text>
+                                <Text style={styles.timeContent}>{timeOutText}</Text>
                             </View>
                         </View>
                     </View>
@@ -236,32 +242,26 @@ export default function OBRequest ({ navigation }) {
                 </View>
             </ScrollView>
 
-            { isDatePicker && (
-                <DateTimePicker
-                    value={new Date()}
-                    mode="date"
-                    display="default"
-                    onChange={handleOBDate}
-                />
-            )}
+            <DateTimePickerModal
+                isVisible={isDatePicker}
+                mode="date"
+                onConfirm={handleOBDate}
+                onCancel={() => setDatePicker(false)} 
+            />
 
-            { isTimeInPicker && (
-                <DateTimePicker
-                    value={new Date()}
-                    mode="time"
-                    display="default"
-                    onChange={handleTimeIn}
-                />
-            )}
+            <DateTimePickerModal
+                isVisible={isTimeInPicker}
+                mode="time"
+                onConfirm={handleTimeIn}
+                onCancel={() => setTimeInPicker(false)} 
+            />
 
-            { isTimeOutPicker && (
-                <DateTimePicker
-                    value={new Date()}
-                    mode="time"
-                    display="default"
-                    onChange={handleTimeOut}
-                />
-            )}
+            <DateTimePickerModal
+                isVisible={isTimeOutPicker}
+                mode="time"
+                onConfirm={handleTimeOut}
+                onCancel={() => setTimeOutPicker(false)} 
+            />
         </>
   )
 }
@@ -313,6 +313,8 @@ const styles = StyleSheet.create({
     timeContent: {
         fontFamily: 'Inter_500Medium',
         backgroundColor: COLORS.gray,
+        width: 110,
+        textAlign: 'center',
         paddingVertical: 2,
         paddingHorizontal: 9,
 

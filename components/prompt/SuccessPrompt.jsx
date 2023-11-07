@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
+import StyledText from 'react-native-styled-text'
 
 import { COLORS } from '../../constant'
 
@@ -20,7 +21,10 @@ export default function SuccessPromptPage ({ title, subTitle, buttonText, visibl
                     />
           
                     <Text style={styles.titleText}>{title}</Text>
-                    <Text style={styles.subTitleText}>{subTitle}</Text>
+
+                    <StyledText 
+                      style={styles.subTitleText}
+                      textStyles={textStyles}>{subTitle}</StyledText>
           
                     <TouchableOpacity 
                       onPress={onClose}
@@ -53,9 +57,9 @@ const styles = StyleSheet.create({
       },
     
       titleText: {
-        color: COLORS.darkGray,
         fontFamily: 'Inter_700Bold',
-        fontSize: 22,
+        marginVertical: 10,
+        fontSize: 19,
       },
     
       subTitleText: {
@@ -78,4 +82,10 @@ const styles = StyleSheet.create({
         color: COLORS.clearWhite,
         fontFamily: 'Inter_800ExtraBold',
       }    
+})
+
+const textStyles = StyleSheet.create({
+  b: {
+    fontFamily: 'Inter_600SemiBold'
+  }
 })

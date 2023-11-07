@@ -30,20 +30,6 @@ export default function CameraAccess ({ navigation }) {
         })()
     }, [])
 
-    useEffect(() => {
-        const backAction = () => {
-          navigation.goBack()
-          return true
-        }
-
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction)
-    
-        return () => {
-          backHandler.remove()
-        }
-    }, [])
-
-
     const takePicture = async () => {
         if(cameraRef) {
             const photo = await cameraRef.takePictureAsync()
@@ -80,8 +66,8 @@ export default function CameraAccess ({ navigation }) {
     return (
         <>
             { imgPath !== '' ? (
-                <View style={{ flex: 1 }}>
-                    <PageHeader pageName={"Image Preview"} backStatus="expo" />
+                <View style={styles.previewView}>
+                    <PageHeader pageName={"Image Preview"} />
 
                     {isLoading && (
                         <ActivityIndicator size={'large'} />
@@ -89,7 +75,7 @@ export default function CameraAccess ({ navigation }) {
                     
                     <Image
                         source={{ uri: userImage }}
-                        style={{ height: '65%' }}
+                        style={{ height: '65%', margin: 20 }}
                         contentFit="contain"
                         onLoadEnd={() => setIsLoading(false)}
                     />
@@ -99,22 +85,14 @@ export default function CameraAccess ({ navigation }) {
                             style={styles.doneBtn}
                             onPress={onRequestHandle}
                         >
-                            <FontAwesome 
-                                name={'check'}
-                                size={27}
-                                color={COLORS.clearWhite}
-                            />
+                            <Text style={styles.text}>SUBMIT</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                             style={styles.deleteBtn}
                             onPress={() => setImgPath('')}
                         >
-                            <FontAwesome 
-                                name={'trash'}
-                                size={27}
-                                color={COLORS.clearWhite}
-                            />
+                            <Text style={styles.text}>DELETE</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -213,21 +191,28 @@ const styles = StyleSheet.create({
     },
 
     text: {
-        fontSize: 18,
+        fontSize: 16,
         color: COLORS.clearWhite,
-        margin: 10,
+        fontFamily: 'Inter_600SemiBold',
+        padding: 6,
+    },
+
+    previewView: {
+        flex: 1,
+        backgroundColor: COLORS.clearWhite,
     },
 
     btnWrapper: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        marginBottom: 30,
     },
 
     doneBtn: {
         width: 200,
         margin: 10,
-        backgroundColor: 'green',
+        backgroundColor: COLORS.green,
         alignItems: 'center',
         padding: 17,
         borderRadius: 10,
@@ -236,7 +221,7 @@ const styles = StyleSheet.create({
     deleteBtn: {
         width: 200,
         margin: 10,
-        backgroundColor: 'red',
+        backgroundColor: COLORS.red,
         alignItems: 'center',
         padding: 17,
         borderRadius: 10,

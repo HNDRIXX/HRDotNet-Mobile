@@ -10,7 +10,7 @@ export default function TimeOff () {
     const navigation = useNavigation()
 
     const screenWidth = Dimensions.get('window').height
-    const imageSize = Math.max(15, screenWidth * 0.11 / 1)
+    const imageSize = Math.max(15, screenWidth * 0.13 / 1)
     const padding = screenWidth * 0.008
 
     return (
@@ -22,7 +22,7 @@ export default function TimeOff () {
                 <View style={[styles.alignWrapper, { height: imageSize}]}>
                     <Image 
                         source={require('../../assets/icons/vacation.png')}
-                        style={{ width: 55, height: 55, marginRight: 10 }}
+                        style={{ width: 60, height: 60, marginRight: 10 }}
                         contentFit="contain"
                     />
 
@@ -40,7 +40,7 @@ export default function TimeOff () {
                 <View style={[styles.alignWrapper, { height: imageSize }]}>
                     <Image 
                         source={require('../../assets/icons/health.png')}
-                        style={{ width: 50, height: 50, paddingVertical: 34,  marginRight: 10, }}
+                        style={{ width: 60, height: 60, paddingVertical: 34,  marginRight: 10, }}
                         contentFit="contain"
                     />
 
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'center',
-        marginHorizontal: 11,
+        marginHorizontal: 17.5,
         marginBottom: 10,
     },
 
