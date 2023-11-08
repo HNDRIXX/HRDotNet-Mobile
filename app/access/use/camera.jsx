@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Linking, BackHandler } from "react-native";
 import { Camera } from 'expo-camera';
 import { Image } from 'expo-image';
-import { router, Redirect } from 'expo-router';
+import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import { useRoute } from '@react-navigation/native';
 
@@ -19,6 +19,8 @@ export default function CameraAccess ({ navigation }) {
     const [isBack, setIsBack] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
 
+    const [isBase, setBase] = useState(null)
+
     const route = useRoute()
 
     useEffect(() => {
@@ -33,16 +35,33 @@ export default function CameraAccess ({ navigation }) {
     const takePicture = async () => {
         if(cameraRef) {
             const photo = await cameraRef.takePictureAsync()
-            setUserImage(photo.uri)
 
+            const newUri = `${FileSystem.documentDirectory}${Date.now()}.jpg`;
+            await FileSystem.copyAsync({
+                from: photo.uri,
+                to: newUri,
+            });
+            
+            const base64Image = await convertImageToBase64(newUri)
+            
+            setUserImage(photo.uri)
+            setBase(base64Image)
             setImgPath(photo.uri)
         }
+    }
+
+    const convertImageToBase64 = async (imageUri) => {
+        const imageBase64Data = await FileSystem.readAsStringAsync(imageUri, {
+          encoding: FileSystem.EncodingType.Base64,
+        })
+    
+        return imageBase64Data
     }
 
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
+            // allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
         })
@@ -50,7 +69,7 @@ export default function CameraAccess ({ navigation }) {
         if (!result.canceled) {
             const selectedAsset = result.assets[0]
             setUserImage(selectedAsset.uri)
-        
+            
             const img = selectedAsset.uri.replace(/\//g, '^')
             setImgPath(img)
             setIsLoading(true)
@@ -98,6 +117,8 @@ export default function CameraAccess ({ navigation }) {
                 </View>
             ) : (
                 <>
+                    <PageHeader />
+                    
                     <Camera 
                         style={{ flex: 1 }} 
                         type={type}

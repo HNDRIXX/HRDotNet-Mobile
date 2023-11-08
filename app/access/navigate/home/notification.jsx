@@ -1,26 +1,71 @@
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, FlatList } from "react-native";
 import { AntDesign, FontAwesome, Entypo } from "@expo/vector-icons";
 import { router } from "expo-router";
 import DashedLine from "react-native-dashed-line";
 import { Image } from "react-native-expo-image-cache";
 
 import { COLORS, ICONS } from "../../../../constant";
+import PageHeader from "../../../../components/header/PagesHeader";
+
+const data = [
+    {
+        name: "Request Update",
+        date: "20231020",
+        message: "Your Emergency Leave Doc. No, LV2230922165 has a new status. Please check the Requests pages for more details."
+    },
+    {
+        name: "Advisory",
+        date: "20231018",
+        message: "Intellismart, Stork, Supersam, and Opulence, which were under Intellismart Technology Inc., now have Tiktok accounts!",
+    },
+]
 
 export default function NotificationPage ({ navigation }) {
     return (
         <View style={styles.container}>
-            <View style={styles.topHeader}>
-                <TouchableOpacity 
-                    style={styles.backButton} 
-                    onPress={() => navigation.goBack()}
-                >
-                    <AntDesign name='arrowleft' size={30} color={COLORS.clearWhite} />
-                </TouchableOpacity>
+            <PageHeader pageName="Notifications" />
 
-                <Text style={styles.textHeader}>Notification</Text>
-            </View>
+            <FlatList 
+                data={data}
+                renderItem={({item, index}) => (
+                    <View style={styles.content}>
+                        <View style={styles.innerContent}>
+                            <Image 
+                                style={{height: 25, width: 25 }} 
+                                uri={ ICONS.info }
+                            />
 
-            <ScrollView style={styles.wrapper}>
+                            <View style={styles.contentWrapper}>
+                                <View style={styles.topContentWrapper}>
+                                    <Text style={styles.contentTitle}>{item.name}</Text>
+                                    <Text style={styles.contentDate}>{item.date}</Text>
+                                </View>
+
+                                <View style={styles.bodyContentWrapper}>
+                                    <Text 
+                                        numberOfLines={2}
+                                        style={styles.description}>{item.message}</Text>
+
+                                    <Entypo
+                                        name="dots-three-horizontal" 
+                                        size={24} 
+                                        color="black" 
+                                    />
+                                </View>
+                            </View>
+                        </View>
+
+                        <DashedLine 
+                            dashLength={10}
+                            dashColor={COLORS.tr_gray}
+                            dashGap={5}
+                            dashThickness={1}
+                            style={styles.dashLine}
+                        />
+                    </View>
+                )}
+            />
+            {/* <ScrollView style={styles.wrapper}>
                 <View style={styles.content}>
                     <View style={styles.innerContent}>
                         <Image 
@@ -54,7 +99,7 @@ export default function NotificationPage ({ navigation }) {
                         style={styles.dashLine}
                     />
                 </View>
-            </ScrollView>
+            </ScrollView> */}
         </View>
     )
 }

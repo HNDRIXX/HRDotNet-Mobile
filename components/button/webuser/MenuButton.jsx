@@ -83,7 +83,8 @@ export default function MenuButton ({ clockedDate, clockedTime, clockedLocation 
                     <View style={styles.buttonWrapper}>
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity 
-                                style={[styles.gridButton, { padding: padding }]}>
+                                style={[styles.gridButton, { padding: padding }]}
+                                onPress={() => navigation.navigate('COSRequest')} >
                                 <Image 
                                     source={require('../../../assets/icons/cos.png')}
                                     style={{ width: imageSize ,  height: imageSize }}
@@ -97,7 +98,8 @@ export default function MenuButton ({ clockedDate, clockedTime, clockedLocation 
 
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity 
-                                style={[styles.gridButton, { padding: padding }]}>
+                                style={[styles.gridButton, { padding: padding }]}
+                                onPress={() => navigation.navigate('OBRequest')}>
                                 <Image 
                                     source={require('../../../assets/icons/ob.png')}
                                     style={{ width: imageSize ,  height: imageSize }}

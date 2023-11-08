@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, BackHandler, Alert } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, BackHandler, Alert, ScrollView } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from "moment";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
@@ -15,7 +15,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import { Image } from "expo-image";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
-import { COLORS } from "../../../../../constant";
+import { COLORS, STRINGS } from "../../../../../constant";
 
 const radioLabel = [{ label: 'Rest Day' }]
 
@@ -25,12 +25,12 @@ export default function COSRequest ({ navigation }) {
     const [reason, setReason] = useState(null)
     const [restDay, setRestDay] = useState(null)
 
-    const [imageUpload, setImageUpload] = useState(null)
     const [selectedFile, setSelectedFile] = useState(null)
     const [shiftSched, setShiftSched] = useState(null)
 
     const [showStartPicker, setShowStartPicker] = useState(false)
     const [showEndPicker, setShowEndDatePicker] = useState(false)
+    const [isFileNote, setFileNote] = useState(true)
     const [isInvalidError, setInvalidError] = useState(false)
     const [isSizeError, setSizeError] = useState(false)
 
@@ -65,13 +65,16 @@ export default function COSRequest ({ navigation }) {
                 const fileSizeInMB = fileInfo.size / (1024 * 1024)
 
                 if (fileSizeInMB <= 25 && ['doc', 'docx', 'pdf', 'jpeg', 'jpg', 'txt'].includes(fileExtension)) {
+                    setFileNote(true)
                     setSizeError(false)
                     setInvalidError(false)
                     setSelectedFile(fileInfo.uri)
                 } else {
                     if (fileSizeInMB > 25) {
+                        setFileNote(false)
                         setSizeError(true)
                     } else {
+                        setFileNote(false)
                         setInvalidError(true)
                     }
                 }
@@ -83,7 +86,7 @@ export default function COSRequest ({ navigation }) {
 
     const onNextHandler = () => {
         if(!startDate || !endDate || !reason || !selectedFile){
-            alert("Please complete your request form.")
+            alert(STRINGS.fillFormError)
         } else {
             navigation.navigate('RequestSummary', {
                 onPanel: 0,
@@ -101,12 +104,12 @@ export default function COSRequest ({ navigation }) {
         <>
             <PageHeader pageName={"New Request"} backStatus="react" />
 
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
                 <View style={styles.wrapper}>
                     <Text style={styles.title}>Start Date</Text>
 
                     <View style={[styles.rowView, styles.border]}>
-                        <Text>
+                        <Text style={styles.dateText}>
                             {startDate == null ? ( <Text style={styles.placeholder}>mm/dd/yyyy</Text> )
                             : moment(startDate, "YYYYMMDD").format("MMMM DD, YYYY")}
                         </Text>
@@ -124,7 +127,7 @@ export default function COSRequest ({ navigation }) {
                     <Text style={styles.title}>End Date</Text>
 
                     <View style={[styles.rowView, styles.border]}>
-                        <Text>
+                        <Text style={styles.dateText}>
                             {endDate == null ? ( <Text style={{ color: COLORS.tr_gray}}>mm/dd/yyyy</Text> )
                             : moment(endDate, "YYYYMMDD").format("MMMM DD, YYYY")}
                         </Text>
@@ -140,26 +143,6 @@ export default function COSRequest ({ navigation }) {
 
                 <View style={styles.wrapper}>
                     <Text style={styles.title}>Shift Schedule</Text>
-
-                    <View style={[styles.pickerView, styles.border]}>
-                        {/* <Picker
-                            selectedValue={shiftSched}
-                            mode="dropdown"
-                            onValueChange={(itemValue, itemIndex) => setShiftSched(itemValue)}
-                        >
-                            <Picker.Item 
-                                label="Select an option" 
-                                style={styles.itemPicker} 
-                                color={COLORS.tr_gray} 
-                                value={null} enabled={false} /> 
-                            <Picker.Item 
-                                label="10:00 AM to 7:00 PM" 
-                                style={styles.itemPicker} 
-                                value="10:00 AM to 7:00 PM" />
-                        </Picker> */}
-
-                       
-                    </View>
 
                     <SelectDropdown 
                             data={["10:00 AM to 10:00 PM"]}
@@ -199,13 +182,13 @@ export default function COSRequest ({ navigation }) {
                         placeholderTextColor={COLORS.tr_gray}
                     />
                 </View>
-
+                
                 <View style={styles.wrapper}>
                     <Text style={styles.title}>File</Text>
 
                     <View style={[styles.rowView, styles.border]}>
                         {selectedFile == null ? (
-                            <Text style={styles.placeholder}>Camera/Image</Text>
+                            <Text style={styles.placeholder}>Camera/Upload</Text>
                         ) : (
                             <View style={styles.rowView}>
                                 <AntDesign 
@@ -235,22 +218,26 @@ export default function COSRequest ({ navigation }) {
                     </View>
 
                     <View>
+                        { isFileNote && (
+                            <Text style={styles.fileNote}>{STRINGS.fileNote}</Text>
+                        )}
+
                         { isInvalidError && (
-                            <Text style={styles.fileError}>Invalid file format. Only files with the following extensions are allowed: .doc, .docx, .jpg, .png, .txt, and .pdf.</Text>
+                            <Text style={styles.fileError}>{STRINGS.invalidError}</Text>
                         )}
 
                         { isSizeError && (
-                            <Text style={styles.fileError}>The file exceeds the allowable limit and cannot be uploaded.</Text>
+                            <Text style={styles.fileError}>{STRINGS.sizeError}</Text>
                         )}
                     </View>
                 </View>
+            </ScrollView>
 
-                <TouchableOpacity 
-                    style={styles.button}
-                    onPress={onNextHandler}>
-                    <Text style={styles.textButton}>NEXT</Text>
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity 
+                style={styles.button}
+                onPress={onNextHandler}>
+                <Text style={styles.textButton}>NEXT</Text>
+            </TouchableOpacity>
 
             <DateTimePickerModal
                 isVisible={showStartPicker}
@@ -287,15 +274,22 @@ const styles = StyleSheet.create({
     },
 
     title: {
-        fontFamily: 'Inter_600SemiBold'
+        fontFamily: 'Inter_600SemiBold',
+        marginHorizontal: 12,
+        marginBottom: 5,
     },
 
     placeholder: {
-        color: COLORS.tr_gray
+        color: COLORS.tr_gray,
+    },
+
+    dateText: {
+        paddingVertical: 7,
     },
 
     rowView: {
-        padding: 10,
+        paddingVertical: 5,
+        paddingHorizontal: 15,
         justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',
@@ -307,7 +301,7 @@ const styles = StyleSheet.create({
 
     textInput: {
         paddingLeft: 15,
-        paddingVertical: 13
+        paddingVertical: 9
     },
 
     button: {
@@ -316,7 +310,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.orange,
         width: 170,
         padding: 10,
-        marginTop: 30,
+        marginVertical: 20,
         borderRadius: 20,
     },
 
@@ -325,6 +319,13 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: COLORS.clearWhite,
         textAlign: 'center',
+    },
+
+    fileNote: {
+        fontStyle: 'italic',
+        fontSize: 13,
+        marginHorizontal: 20,
+        marginVertical: 10,
     },
 
     fileError: {

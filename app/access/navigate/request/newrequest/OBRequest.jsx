@@ -3,32 +3,36 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, BackHandler, Alert
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { FontAwesome } from "@expo/vector-icons";
-import { Picker } from "@react-native-picker/picker";
 import SelectDropdown from "react-native-select-dropdown";
 import { useRoute } from "@react-navigation/native";
-import { Ionicons, AntDesign } from "@expo/vector-icons";
+import { Ionicons, AntDesign, Entypo } from "@expo/vector-icons";
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 
 import PageHeader from "../../../../../components/header/PagesHeader";
-import { COLORS } from "../../../../../constant";
+import { COLORS, STRINGS } from "../../../../../constant";
 import { ScrollView } from "react-native";
 
 const data = [{ timeIn: "10:00 AM", timeOut: "7:00 PM"}, { timeIn: "8:00 AM", timeOut: "6:00 PM" }]
 
 export default function OBRequest ({ navigation }) {
     const [OBDate, setOBDate] = useState(null)
-    const [timeInText, setTimeInText] = useState("Time-in")
-    const [timeOutText, setTimeOutText] = useState("Time-out")
+    const [location, setLocation] = useState("Location")
     const [timeIn, setTimeIn] = useState(null)
     const [timeOut, setTimeOut] = useState(null)
     const [reason, setReason] = useState(null)
-
     const [selectedFile, setSelectedFile] = useState(null)
+
+    const [timeInText, setTimeInText] = useState("00:00")
+    const [timeOutText, setTimeOutText] = useState("00:00")
 
     const [isDatePicker, setDatePicker] = useState(false)
     const [isTimeInPicker, setTimeInPicker] = useState(false)
     const [isTimeOutPicker, setTimeOutPicker] = useState(false)
+
+    const [isFileNote, setFileNote] = useState(true)
+    const [isInvalidError, setInvalidError] = useState(false)
+    const [isSizeError, setSizeError] = useState(false)
 
     const [shiftSched, setShiftSched] = useState(null)
 
@@ -84,21 +88,33 @@ export default function OBRequest ({ navigation }) {
     }
 
     const onNextHandler = () => {
-        navigation.navigate('RequestSummary', {
-            onPanel: 1,
-            OBDate:  OBDate,
-            location: '',
-            shiftSchedule: shiftSched,
-            timeIn: timeIn,
-            timeOut: timeOut,
-            reason: reason,
-            attachedFile: selectedFile,
-        })   
+        if ( !OBDate || !location || !shiftSched || !timeIn || !timeOut || !reason || !selectedFile) {
+            alert(STRINGS.fillFormError)
+        } else {
+            console.log(selectedFile)
+
+            // file:///var/mobile/Containers/Data/Application/8ED58F99-C645-4BEF-B8BC-DD3DD70BB7D8/Library/Caches/ExponentExperienceData/%2540hndrx022%252FHRDotNet-Mobile/Camera/1140FBBB-A338-4875-85B8-2AC10AD88A49.jpg
+
+            // file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540hndrx022%252FHRDotNet-Mobile/Camera/cf7772a8-acf3-45b5-9ef4-f64f81296336.jpg
+
+            // file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540hndrx022%252FHRDotNet-Mobile/Camera/1140FBBB-A338-4875-85B8-2AC10AD88A49.jpg
+
+            navigation.navigate('RequestSummary', {
+                onPanel: 1,
+                OBDate:  OBDate,
+                location: '',
+                shiftSchedule: shiftSched,
+                timeIn: timeIn,
+                timeOut: timeOut,
+                reason: reason,
+                attachedFile: selectedFile,
+            })   
+        }
     }
 
     return (
         <>
-            <PageHeader pageName={"New Request"} backStatus="react" />
+            <PageHeader pageName={"New Request"} />
 
             <ScrollView>
                 <View style={styles.container}>
@@ -106,14 +122,14 @@ export default function OBRequest ({ navigation }) {
                         <Text style={styles.title}>OB Date</Text>
 
                         <View style={[styles.rowView, styles.border]}>
-                            <Text>
-                                {OBDate == null ? "mm/dd/yyyy" 
-                                : moment(OBDate, "YYYYMMDD").format("MMMM DD, YYYY")}
+                            <Text style={styles.text}>
+                                { OBDate == null ? (<Text style={styles.placeholder}>mm/dd/yyyy</Text>) 
+                                : (moment(OBDate, "YYYYMMDD").format("MMMM DD, YYYY")) }
                             </Text>
                             
                             <FontAwesome 
                                 name="calendar"
-                                size={20}
+                                size={22}
                                 color={COLORS.darkGray}
                                 onPress={() =>  setDatePicker(true)}
                             />
@@ -124,7 +140,14 @@ export default function OBRequest ({ navigation }) {
                         <Text style={styles.title}>Location</Text>
 
                         <View style={[styles.rowView, styles.border]}>
-                            <Text>Location</Text>
+                            <Text style={styles.text}>
+                                <Text style={styles.placeholder}>Location</Text>
+                            </Text>
+
+                            <Entypo 
+                                name="location" 
+                                size={22} 
+                                color={COLORS.darkGray} />
                         </View>
                     </View>
 
@@ -143,7 +166,6 @@ export default function OBRequest ({ navigation }) {
                                 height: 'auto',
                                 padding: 12,
                                 borderRadius: 15,
-                                marginTop: 10,
                                 borderColor: COLORS.darkGray,
                                 borderWidth: 1,
                             }}
@@ -154,12 +176,12 @@ export default function OBRequest ({ navigation }) {
 
                         <View style={styles.timeWrapper}>
                             <View style={styles.timeView}>
-                                <Text style={styles.text}>Time-in</Text>
+                                <Text style={styles.grayText}>Time-in</Text>
                                 <Text style={styles.timeContent}>{timeInText}</Text>
                             </View>
 
                             <View style={styles.timeView}>
-                                <Text style={styles.text}>Time-out</Text>
+                                <Text style={styles.grayText}>Time-out</Text>
                                 <Text style={styles.timeContent}>{timeOutText}</Text>
                             </View>
                         </View>
@@ -169,11 +191,15 @@ export default function OBRequest ({ navigation }) {
                         <Text style={styles.title}>OB Time-in</Text>
 
                         <View style={[styles.rowView, styles.border]}>
-                            <Text>{timeIn == null ? "Time-In" : timeIn}</Text>
+                            <Text style={styles.text}>
+                                {timeIn == null ? (
+                                    <Text style={styles.placeholder}>Time</Text>
+                                ) : timeIn}
+                            </Text>
 
                             <AntDesign 
                                 name="clockcircle"
-                                size={17}
+                                size={20}
                                 color={COLORS.darkGray}
                                 onPress={() => setTimeInPicker(true)}
                             />
@@ -184,11 +210,15 @@ export default function OBRequest ({ navigation }) {
                         <Text style={styles.title}>OB Time-out</Text>
 
                         <View style={[styles.rowView, styles.border]}>
-                            <Text>{timeOut == null ? "Time-out" : timeOut}</Text>
+                            <Text style={styles.text}>
+                                {timeOut == null ? (
+                                    <Text style={styles.placeholder}>Time</Text>
+                                ) : timeOut}
+                            </Text>
 
                             <AntDesign 
                                 name="clockcircle"
-                                size={17}
+                                size={20}
                                 color={COLORS.darkGray}
                                 onPress={() => setTimeOutPicker(true)}
                             />
@@ -212,7 +242,7 @@ export default function OBRequest ({ navigation }) {
 
                         <View style={[styles.rowView, styles.border]}>
                             {selectedFile == null ? (
-                                <Text>Camera/Image</Text>
+                                <Text style={styles.placeholder}>Camera/Upload</Text>
                             ) : (
                                 typeof selectedFile === 'string' && selectedFile.includes("Camera") ? (
                                     <Text style={{ width: 220 }}>{selectedFile}</Text>
@@ -223,24 +253,36 @@ export default function OBRequest ({ navigation }) {
 
                             <View style={[styles.rowView, { alignItems: 'center' }]}>
                                 <Ionicons 
-                                    name="camera" size={26}
+                                    name="camera" size={26} color={COLORS.darkGray}
                                     onPress={() => navigation.navigate('CameraAccess', { onPanel: 1 })} />
 
                                 <FontAwesome 
-                                    name="file" size={18} style={{ marginLeft: 15 }}
+                                    name="file" size={18} color={COLORS.darkGray} style={{ marginLeft: 15 }}
                                     onPress={selectDocument}
                                     />
                             </View>
                         </View>
-                    </View>
 
-                    <TouchableOpacity 
-                        style={styles.button}
-                        onPress={onNextHandler}>
-                        <Text style={styles.textButton}>NEXT</Text>
-                    </TouchableOpacity>
+                        { isFileNote && (
+                            <Text style={styles.fileNote}>{STRINGS.fileNote}</Text>
+                        )}
+
+                        { isInvalidError && (
+                            <Text style={styles.fileError}>{STRINGS.invalidError}</Text>
+                        )}
+
+                        { isSizeError && (
+                            <Text style={styles.fileError}>{STRINGS.sizeError}</Text>
+                        )}
+                    </View>
                 </View>
             </ScrollView>
+
+            <TouchableOpacity 
+                style={styles.button}
+                onPress={onNextHandler}>
+                <Text style={styles.textButton}>NEXT</Text>
+            </TouchableOpacity>
 
             <DateTimePickerModal
                 isVisible={isDatePicker}
@@ -274,7 +316,7 @@ const styles = StyleSheet.create({
     },
 
     wrapper: {
-        marginVertical: 10,
+        marginTop: 10,
     },
 
     border: {
@@ -284,16 +326,31 @@ const styles = StyleSheet.create({
     },
 
     title: {
-        fontFamily: 'Inter_600SemiBold'
+        fontFamily: 'Inter_600SemiBold',
+        marginHorizontal: 15,
+        marginBottom: 7,
     },
 
-    text: { fontFamily: 'Inter_400Regular' },
+    text: { 
+        fontFamily: 'Inter_400Regular',
+        paddingVertical: 5,
+    },
+
+    grayText: {
+        fontFamily: 'Inter_500Medium',
+        color: COLORS.darkGray
+    },
 
     rowView: {
-        padding: 10,
+        paddingVertical: 7,
+        paddingHorizontal: 15,
         justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',
+    },
+
+    placeholder: {
+        color: COLORS.tr_gray,
     },
 
     itemPicker: {
@@ -302,7 +359,7 @@ const styles = StyleSheet.create({
 
     textInput: {
         paddingLeft: 15,
-        paddingVertical: 6
+        paddingVertical: 9
     },
 
     timeWrapper:{
@@ -313,10 +370,8 @@ const styles = StyleSheet.create({
     timeContent: {
         fontFamily: 'Inter_500Medium',
         backgroundColor: COLORS.gray,
-        width: 110,
+        width: 100,
         textAlign: 'center',
-        paddingVertical: 2,
-        paddingHorizontal: 9,
 
         borderRadius: 5,
         borderWidth: 2,
@@ -335,6 +390,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.orange,
         width: 170,
         padding: 10,
+        marginVertical: 20,
         borderRadius: 20,
     },
 
@@ -343,5 +399,26 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: COLORS.clearWhite,
         textAlign: 'center',
+    },
+
+    fileNote: {
+        fontStyle: 'italic',
+        fontSize: 13,
+        marginHorizontal: 20,
+        marginVertical: 10,
+    },
+
+    fileError: {
+        fontSize: 13,
+        paddingHorizontal: 20,
+        paddingVertical: 5,
+        color: COLORS.red,
+        fontStyle: 'italic',
+    },
+
+    fileSuccess: {
+        color: COLORS.green,
+        marginLeft: 10,
+        fontFamily: 'Inter_600SemiBold'
     }
 })

@@ -4,7 +4,7 @@ import { View, Text } from 'react-native'
 export default function PayslipPanel () {
     return (
         <View>
-            <Text>PAYSLIPPPPPPPPPPP</Text>
+            {/* <Text>PAYSLIPPPPPPPPPPP</Text> */}
         </View>
     )
 }

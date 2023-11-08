@@ -11,6 +11,8 @@ import { Shadow } from 'react-native-shadow-2';
 
 import { COLORS } from '../../../constant';
 import SuccessTimeClock from '../../../components/prompt/SuccessTimeClock';
+import LocationPrompt from '../../../components/prompt/LocationPrompt';
+import RefreshPage from '../../../components/use/RefreshPage';
 
 export default function ClockInOut () {
   const [clockedStatus, setClockedStatus] = useState('')
@@ -70,16 +72,44 @@ export default function ClockInOut () {
   //   setIsLoading(false)
   // }
 
+  const fetchData = async () => {
+    setIsLoading(true)
+
+    try {
+      const location = await Location.getCurrentPositionAsync({})
+      setLocation(location)
+
+      const { coords } = location
+      const address = await Location.reverseGeocodeAsync({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+      })
+
+      setMapRegion({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        latitudeDelta: 0.001,
+        longitudeDelta: 0.005,
+      })
+
+      const fullAddress = `${address[0].name} ${address[0].street}, ${address[0].city}, ${address[0].country}`
+      setIsLoading(false)
+      setCurrAddress(fullAddress)
+    } catch (error) {
+      console.error("Error fetching location and address:", error)
+    }
+  }
+
   const permissionLocation = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync()
   
+    console.log(status)
+    
     if (status != 'granted') {
-      console.log(status)
       const openSettings = () => {
         Linking.openSettings()
-      };
-    
-      // Display the alert and call openSettings when OK is clicked
+      }
+
       Alert.alert(
         'Permission Required',
         'Please allow location permissions',
@@ -90,47 +120,17 @@ export default function ClockInOut () {
           },
         ]
       )
-    }
+    } else { fetchData() } 
   
-    try {
-      const location = await Location.getCurrentPositionAsync({})
-      // fetchData()
-    } catch (error) {
-      console.log(error)
-    }
+    // try {
+    //   const location = await Location.getCurrentPositionAsync({})
+    // } catch (error) {
+    //   console.log(error)
+    // }
   }
-  
+
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true)
-  
-      try {
-        const location = await Location.getCurrentPositionAsync({})
-        setLocation(location)
-  
-        const { coords } = location
-        const address = await Location.reverseGeocodeAsync({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-        })
-  
-        setMapRegion({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-          latitudeDelta: 0.001,
-          longitudeDelta: 0.005,
-        })
-  
-        const fullAddress = `${address[0].name} ${address[0].street}, ${address[0].city}, ${address[0].country}`
-        setIsLoading(false)
-        setCurrAddress(fullAddress)
-        console.log(fullAddress)
-      } catch (error) {
-        console.error("Error fetching location and address:", error)
-      }
-    }
     permissionLocation()
-    fetchData()
   }, [isRestart])  
 
   useEffect(() => {
@@ -186,33 +186,14 @@ export default function ClockInOut () {
           <Text style={styles.textHeader}>Time Clock</Text>
       </View>
 
-      { onLocation ? (
-        <View style={styles.locWrapper}>
-          <View style={styles.locationPrompt}>
-            <View style={styles.locationPromptWrapper}>
-              <Ionicons name="warning" size={24} color="red" />
-              <Text style={styles.promptText}>Prompt</Text>
-            </View>
-
-            <Text style={styles.subPromptText}>Please turn on your location.</Text>
-
-            <TouchableOpacity style={styles.locationPromptBtn} onPress={permissionLocation}>
-              <Text style={styles.locationPromptBtnText}>TURN ON</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      ) : ( null )}
+      { onLocation ? ( 
+        <LocationPrompt 
+          permissionLocation={permissionLocation} 
+          navigation={navigation}
+        /> ) : ( null )}
 
       { isLoading ? (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <ActivityIndicator size={'large'}/>
-
-          <TouchableOpacity
-            onPress={() => setRestart(true)}
-          >
-            <Text>Restart Page</Text>
-          </TouchableOpacity>
-        </View>
+        <RefreshPage setRestart={setRestart} />
       ) : (
         <>
           <View style={styles.container}>
@@ -327,59 +308,6 @@ const styles = StyleSheet.create({
   disabledBtn: {
       backgroundColor: 'gray',
       opacity: 0.3,
-  },
-
-  locWrapper: {
-    flex: 1,
-    zIndex: 1,
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: COLORS.tr_gray,
-  },
-  
-  locationPrompt: {
-    backgroundColor: COLORS.clearWhite,
-    elevation: 9,
-    width: 300,
-    borderRadius: 8, 
-    padding: 20,
-    shadowColor: COLORS.darkGray,
-    shadowOffset: { width: 3, height: 3 },
-    shadowOpacity: 0.4, 
-    shadowRadius: 3, 
-  },
-
-  locationPromptWrapper: {
-    flexDirection: 'row',
-  },
-
-  promptText: {
-    fontFamily: 'Inter_700Bold',
-    fontSize: 20,
-    color: 'red',
-    paddingLeft: 7,
-  },
-
-  subPromptText: {
-    fontSize: 13,
-    fontStyle: 'italic',
-  },  
-  
-  locationPromptBtn: {
-    backgroundColor: COLORS.powderBlue,
-    alignItems: 'center',
-    padding: 15,
-    marginTop: 15,
-    borderRadius: 5,
-  },
-
-  locationPromptBtnText: {
-    fontSize: 15,
-    fontFamily: 'Inter_700Bold',
-    color: COLORS.white,
   },
 
   bottomContainer: {

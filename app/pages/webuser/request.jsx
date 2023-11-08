@@ -131,11 +131,6 @@ const styles = StyleSheet.create({
 
   selectedButton: {
       backgroundColor: COLORS.orange,
-      elevation: 7,
-      shadowColor: COLORS.darkGray,
-      shadowOffset: {width: 1, height: 1},
-      shadowOpacity: .2,
-      shadowRadius: 10,
   },
 
   selectedTextButton: {

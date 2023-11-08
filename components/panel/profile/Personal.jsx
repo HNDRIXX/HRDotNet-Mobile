@@ -24,7 +24,7 @@ export default function PersonalPanel () {
                     <Text style={styles.subText}>#5985</Text>
                 </View>
 
-                <ScrollView 
+                {/* <ScrollView 
                     style={styles.infoView}
                     contentContainerStyle={{ flexGrow: 0 }}>
                     <View style={styles.rowView}>
@@ -61,7 +61,7 @@ export default function PersonalPanel () {
                         <Text style={styles.titleText}>Email Address</Text>
                         <Text style={styles.contentText}>juandelacruz@gmail.com</Text>
                     </View>
-                </ScrollView>
+                </ScrollView> */}
             </Animatable.View>
         </>
     )
