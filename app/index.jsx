@@ -32,6 +32,7 @@ import RequestSummary from './access/navigate/request/RequestSummary';
 import CameraAccess from './access/use/camera';
 import OBRequest from './access/navigate/request/newrequest/OBRequest';
 import OTRequest from './access/navigate/request/newrequest/OTRequest';
+import NotificationDetails from './access/navigate/home/more/NotificationDetails';
 
 export default function Index() {
     const [fontsLoaded] = useFonts()
@@ -145,6 +146,7 @@ export default function Index() {
                     <Stack.Screen name="VacationLeave" component={VacationLeavePage} />
                     <Stack.Screen name="SickLeave" component={SickLeavePage} />
                     <Stack.Screen name="Notification" component={NotificationPage} />
+                    <Stack.Screen name="NotificationDetails" component={NotificationDetails} />
                     <Stack.Screen 
                         name="SideDrawer" 
                         component={DrawerPage} 

@@ -79,20 +79,22 @@ export default function VacationLeavePage ({ navigation }) {
 
                     return (
                         <View style={styles.itemWrapper}>
-                            <View style={styles.itemHeader}>
-                                <Text style={styles.itemHeaderText}>{item.status}</Text>
-                                <Text style={styles.itemHeaderText}>{item.leaveCredit}</Text>
-                            </View>
+                            <Shadow distance={4} style={styles.shadowView}>
+                                <View style={styles.itemHeader}>
+                                    <Text style={styles.itemHeaderText}>{item.status}</Text>
+                                    <Text style={styles.itemHeaderText}>{item.leaveCredit}</Text>
+                                </View>
 
-                            <View style={styles.itemBody}>
-                                <Text style={styles.bodyText}>Date: 
-                                    <Text style={styles.itemText}> {formattedDate}</Text>
-                                </Text>
+                                <View style={styles.itemBody}>
+                                    <Text style={styles.bodyText}>Date: 
+                                        <Text style={styles.itemText}> {formattedDate}</Text>
+                                    </Text>
 
-                                <Text style={styles.bodyText}>Document No: 
-                                    <Text style={styles.itemText}> {item.documentNo}</Text>
-                                </Text>
-                            </View>
+                                    <Text style={styles.bodyText}>Document No: 
+                                        <Text style={styles.itemText}> {item.documentNo}</Text>
+                                    </Text>
+                                </View>
+                            </Shadow>
                         </View>
                     )
 
@@ -150,6 +152,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         margin: 20,
+    },
+
+    shadowView: {
+        width: '100%',
+        borderRadius: 20,
     },
 
     titleText: {

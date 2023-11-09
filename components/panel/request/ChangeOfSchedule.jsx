@@ -11,7 +11,7 @@ import RequestItem from "../../items/request/RequestItem"
 const data = [
     { 
         status: 'Approved',  
-        appliedDate: '20231014',
+        appliedDate: '20231103',
         requestedSched: '7:00 AM - 4:00 PM',
         reason: '----',
         attachedFile: '-----',
@@ -23,12 +23,12 @@ const data = [
         reviewedDate: '20230916',
     },
     { 
-        status: 'Reviewed', 
-        appliedDate: '20230922',
+        status: 'Approved',  
+        appliedDate: '20231014',
         requestedSched: '7:00 AM - 4:00 PM',
         reason: '----',
         attachedFile: '-----',
-        documentNo: 'COS22307240207',
+        documentNo: 'COS22307248376',
         filedDate: '20230916',
         statusBy: 'Mark Sasama',
         statusByDate: '20230913',
@@ -102,6 +102,14 @@ export default function ChangeOfSchedulePanel ( onAnimate ) {
             />
         )
     }
+    
+    // const date = moment().format("YYYYMM")
+    // const dateFiled = "202311" 
+
+    // if (dateFiled < date) {
+    //     console.log("Earlier")
+    // } else {
+    // }
       
     return (
         <>

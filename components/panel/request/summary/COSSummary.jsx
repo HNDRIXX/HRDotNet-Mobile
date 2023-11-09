@@ -48,7 +48,7 @@ export default function COSSummary({ route, openCustomAlert, closeCustomAlert, i
                         <View style={styles.attachmentView}>
                             <Image 
                                 source={{ uri: route.params?.attachedFile }}
-                                style={{ width: 400, height: 400 }}
+                                style={{ width: 120, height: 120 }}
                                 contentFit="contain"
                             />
 

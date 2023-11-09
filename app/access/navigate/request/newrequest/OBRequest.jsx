@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, BackHandler, Alert } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, BackHandler, Alert, KeyboardAvoidingView } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { FontAwesome } from "@expo/vector-icons";
@@ -114,169 +114,175 @@ export default function OBRequest ({ navigation }) {
 
     return (
         <>
-            <PageHeader pageName={"New Request"} />
+            <PageHeader pageName={"OB New Request"} />
 
-            <ScrollView>
-                <View style={styles.container}>
-                    <View style={styles.wrapper}>
-                        <Text style={styles.title}>OB Date</Text>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === 'ios' ? 'padding' : null}
+                enabled
+            >
+                <ScrollView>
+                    <View style={styles.container}>
+                        <View style={styles.wrapper}>
+                            <Text style={styles.title}>OB Date</Text>
 
-                        <View style={[styles.rowView, styles.border]}>
-                            <Text style={styles.text}>
-                                { OBDate == null ? (<Text style={styles.placeholder}>mm/dd/yyyy</Text>) 
-                                : (moment(OBDate, "YYYYMMDD").format("MMMM DD, YYYY")) }
-                            </Text>
-                            
-                            <FontAwesome 
-                                name="calendar"
-                                size={22}
-                                color={COLORS.darkGray}
-                                onPress={() =>  setDatePicker(true)}
-                            />
-                        </View>
-                    </View>
-
-                    <View style={styles.wrapper}>
-                        <Text style={styles.title}>Location</Text>
-
-                        <View style={[styles.rowView, styles.border]}>
-                            <Text style={styles.text}>
-                                <Text style={styles.placeholder}>Location</Text>
-                            </Text>
-
-                            <Entypo 
-                                name="location" 
-                                size={22} 
-                                color={COLORS.darkGray} />
-                        </View>
-                    </View>
-
-                    <View style={styles.wrapper}>
-                        <Text style={styles.title}>Shift Schedule</Text>
-
-                        <SelectDropdown 
-                            data={newData}
-                            onSelect={(item, index) => {
-                                setTimeInText(item.split(" to ")[0])
-                                setTimeOutText(item.split(" to ")[1])
-                                setShiftSched(item)
-                            }}
-                            buttonStyle={{
-                                width: '100%',
-                                height: 'auto',
-                                padding: 12,
-                                borderRadius: 15,
-                                borderColor: COLORS.darkGray,
-                                borderWidth: 1,
-                            }}
-                            buttonTextStyle={{
-                                fontSize: 14,
-                            }}
-                        />
-
-                        <View style={styles.timeWrapper}>
-                            <View style={styles.timeView}>
-                                <Text style={styles.grayText}>Time-in</Text>
-                                <Text style={styles.timeContent}>{timeInText}</Text>
-                            </View>
-
-                            <View style={styles.timeView}>
-                                <Text style={styles.grayText}>Time-out</Text>
-                                <Text style={styles.timeContent}>{timeOutText}</Text>
+                            <View style={[styles.rowView, styles.border]}>
+                                <Text style={styles.text}>
+                                    { OBDate == null ? (<Text style={styles.placeholder}>mm/dd/yyyy</Text>) 
+                                    : (moment(OBDate, "YYYYMMDD").format("MMMM DD, YYYY")) }
+                                </Text>
+                                
+                                <FontAwesome 
+                                    name="calendar"
+                                    size={22}
+                                    color={COLORS.darkGray}
+                                    onPress={() =>  setDatePicker(true)}
+                                />
                             </View>
                         </View>
-                    </View>
 
-                    <View style={styles.wrapper}>
-                        <Text style={styles.title}>OB Time-in</Text>
+                        <View style={styles.wrapper}>
+                            <Text style={styles.title}>Location</Text>
 
-                        <View style={[styles.rowView, styles.border]}>
-                            <Text style={styles.text}>
-                                {timeIn == null ? (
-                                    <Text style={styles.placeholder}>Time</Text>
-                                ) : timeIn}
-                            </Text>
+                            <View style={[styles.rowView, styles.border]}>
+                                <Text style={styles.text}>
+                                    <Text style={styles.placeholder}>Location</Text>
+                                </Text>
 
-                            <AntDesign 
-                                name="clockcircle"
-                                size={20}
-                                color={COLORS.darkGray}
-                                onPress={() => setTimeInPicker(true)}
+                                <Entypo 
+                                    name="location" 
+                                    size={22} 
+                                    color={COLORS.darkGray} />
+                            </View>
+                        </View>
+
+                        <View style={styles.wrapper}>
+                            <Text style={styles.title}>Shift Schedule</Text>
+
+                            <SelectDropdown 
+                                data={newData}
+                                onSelect={(item, index) => {
+                                    setTimeInText(item.split(" to ")[0])
+                                    setTimeOutText(item.split(" to ")[1])
+                                    setShiftSched(item)
+                                }}
+                                buttonStyle={{
+                                    width: '100%',
+                                    height: 'auto',
+                                    padding: 12,
+                                    borderRadius: 15,
+                                    borderColor: COLORS.darkGray,
+                                    borderWidth: 1,
+                                }}
+                                buttonTextStyle={{
+                                    fontSize: 14,
+                                }}
+                            />
+
+                            <View style={styles.timeWrapper}>
+                                <View style={styles.timeView}>
+                                    <Text style={styles.grayText}>Time-in</Text>
+                                    <Text style={styles.timeContent}>{timeInText}</Text>
+                                </View>
+
+                                <View style={styles.timeView}>
+                                    <Text style={styles.grayText}>Time-out</Text>
+                                    <Text style={styles.timeContent}>{timeOutText}</Text>
+                                </View>
+                            </View>
+                        </View>
+
+                        <View style={styles.wrapper}>
+                            <Text style={styles.title}>OB Time-in</Text>
+
+                            <View style={[styles.rowView, styles.border]}>
+                                <Text style={styles.text}>
+                                    {timeIn == null ? (
+                                        <Text style={styles.placeholder}>Time</Text>
+                                    ) : timeIn}
+                                </Text>
+
+                                <AntDesign 
+                                    name="clockcircle"
+                                    size={20}
+                                    color={COLORS.darkGray}
+                                    onPress={() => setTimeInPicker(true)}
+                                />
+                            </View>
+                        </View>
+
+                        <View style={styles.wrapper}>
+                            <Text style={styles.title}>OB Time-out</Text>
+
+                            <View style={[styles.rowView, styles.border]}>
+                                <Text style={styles.text}>
+                                    {timeOut == null ? (
+                                        <Text style={styles.placeholder}>Time</Text>
+                                    ) : timeOut}
+                                </Text>
+
+                                <AntDesign 
+                                    name="clockcircle"
+                                    size={20}
+                                    color={COLORS.darkGray}
+                                    onPress={() => setTimeOutPicker(true)}
+                                />
+                            </View>
+                        </View>
+
+                        <View style={styles.wrapper}>
+                            <Text style={styles.title}>Reason</Text>
+
+                            <TextInput
+                                style={[styles.textInput, styles.border]}
+                                onChangeText={(text) => setReason(text)}
+                                value={reason}
+                                placeholder="Details"
+                                placeholderTextColor={COLORS.tr_gray}
                             />
                         </View>
-                    </View>
 
-                    <View style={styles.wrapper}>
-                        <Text style={styles.title}>OB Time-out</Text>
+                        <View style={styles.wrapper}>
+                            <Text style={styles.title}>File</Text>
 
-                        <View style={[styles.rowView, styles.border]}>
-                            <Text style={styles.text}>
-                                {timeOut == null ? (
-                                    <Text style={styles.placeholder}>Time</Text>
-                                ) : timeOut}
-                            </Text>
-
-                            <AntDesign 
-                                name="clockcircle"
-                                size={20}
-                                color={COLORS.darkGray}
-                                onPress={() => setTimeOutPicker(true)}
-                            />
-                        </View>
-                    </View>
-
-                    <View style={styles.wrapper}>
-                        <Text style={styles.title}>Reason</Text>
-
-                        <TextInput
-                            style={[styles.textInput, styles.border]}
-                            onChangeText={(text) => setReason(text)}
-                            value={reason}
-                            placeholder="Details"
-                            placeholderTextColor={COLORS.tr_gray}
-                        />
-                    </View>
-
-                    <View style={styles.wrapper}>
-                        <Text style={styles.title}>File</Text>
-
-                        <View style={[styles.rowView, styles.border]}>
-                            {selectedFile == null ? (
-                                <Text style={styles.placeholder}>Camera/Upload</Text>
-                            ) : (
-                                typeof selectedFile === 'string' && selectedFile.includes("Camera") ? (
-                                    <Text style={{ width: 220 }}>{selectedFile}</Text>
+                            <View style={[styles.rowView, styles.border]}>
+                                {selectedFile == null ? (
+                                    <Text style={styles.placeholder}>Camera/Upload</Text>
                                 ) : (
-                                    <Text style={{ width: 220 }}>{selectedFile.name || selectedFile}</Text>
-                                )
+                                    typeof selectedFile === 'string' && selectedFile.includes("Camera") ? (
+                                        <Text style={{ width: 220 }}>{selectedFile}</Text>
+                                    ) : (
+                                        <Text style={{ width: 220 }}>{selectedFile.name || selectedFile}</Text>
+                                    )
+                                )}
+
+                                <View style={[styles.rowView, { marginRight: -10 }]}>
+                                    <Ionicons 
+                                        name="camera" size={26} color={COLORS.darkGray}
+                                        onPress={() => navigation.navigate('CameraAccess', { onPanel: 1 })} />
+
+                                    <FontAwesome 
+                                        name="file" size={18} color={COLORS.darkGray} style={{ marginLeft: 15 }}
+                                        // onPress={selectDocument}
+                                        />
+                                </View>
+                            </View>
+
+                            { isFileNote && (
+                                <Text style={styles.fileNote}>{STRINGS.fileNote}</Text>
                             )}
 
-                            <View style={[styles.rowView, { alignItems: 'center' }]}>
-                                <Ionicons 
-                                    name="camera" size={26} color={COLORS.darkGray}
-                                    onPress={() => navigation.navigate('CameraAccess', { onPanel: 1 })} />
+                            { isInvalidError && (
+                                <Text style={styles.fileError}>{STRINGS.invalidError}</Text>
+                            )}
 
-                                <FontAwesome 
-                                    name="file" size={18} color={COLORS.darkGray} style={{ marginLeft: 15 }}
-                                    onPress={selectDocument}
-                                    />
-                            </View>
+                            { isSizeError && (
+                                <Text style={styles.fileError}>{STRINGS.sizeError}</Text>
+                            )}
                         </View>
-
-                        { isFileNote && (
-                            <Text style={styles.fileNote}>{STRINGS.fileNote}</Text>
-                        )}
-
-                        { isInvalidError && (
-                            <Text style={styles.fileError}>{STRINGS.invalidError}</Text>
-                        )}
-
-                        { isSizeError && (
-                            <Text style={styles.fileError}>{STRINGS.sizeError}</Text>
-                        )}
                     </View>
-                </View>
-            </ScrollView>
+                </ScrollView>
+            </KeyboardAvoidingView>
 
             <TouchableOpacity 
                 style={styles.button}
@@ -342,11 +348,11 @@ const styles = StyleSheet.create({
     },
 
     rowView: {
-        paddingVertical: 7,
         paddingHorizontal: 15,
         justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',
+        height: 45
     },
 
     placeholder: {
@@ -359,7 +365,7 @@ const styles = StyleSheet.create({
 
     textInput: {
         paddingLeft: 15,
-        paddingVertical: 9
+        height: 45
     },
 
     timeWrapper:{

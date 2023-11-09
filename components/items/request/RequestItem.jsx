@@ -81,10 +81,10 @@ export default function RequestItem ({onPanel, newItem, index}) {
                     <View style={styles.reasonWrapper}>
                         <View style={styles.rowWrapper}>
                             <Text style={styles.boldText}>{
-                                onPanel == 5 ? "Log Time: " : "Reason: "
+                                onPanel == 5 ? "Log Time: " : "Date Filed: "
                             }</Text>
                             <Text style={styles.valueText}>{
-                                onPanel == 5 ? newItem.logTime : newItem.reason
+                                onPanel == 5 ? newItem.logTime : newItem.formattedFiledDate
                             }</Text>
                         </View>
 

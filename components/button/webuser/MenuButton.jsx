@@ -19,8 +19,8 @@ export default function MenuButton ({ clockedDate, clockedTime, clockedLocation 
     // }, [])
 
     const screenWidth = Dimensions.get('window').height
-    const imageSize = Math.max(15, screenWidth / 12.7)
-    const padding = screenWidth * 0.010
+    const imageSize = Math.max(15, screenWidth / 15)
+    const padding = screenWidth * 0.015
 
     return (
 
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter_500Medium',
         color: COLORS.black,
         paddingTop: 5.5,
-        fontSize: 11,
+        fontSize: 12,
         textAlign: 'center'
     },
 

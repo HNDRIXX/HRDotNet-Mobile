@@ -102,7 +102,7 @@ export default function COSRequest ({ navigation }) {
 
     return (
         <>
-            <PageHeader pageName={"New Request"} backStatus="react" />
+            <PageHeader pageName={"COS New Request"} backStatus="react" />
 
             <ScrollView style={styles.container}>
                 <View style={styles.wrapper}>
@@ -217,19 +217,17 @@ export default function COSRequest ({ navigation }) {
                         </View>
                     </View>
 
-                    <View>
-                        { isFileNote && (
-                            <Text style={styles.fileNote}>{STRINGS.fileNote}</Text>
-                        )}
+                    { isFileNote && (
+                        <Text style={styles.fileNote}>{STRINGS.fileNote}</Text>
+                    )}
 
-                        { isInvalidError && (
-                            <Text style={styles.fileError}>{STRINGS.invalidError}</Text>
-                        )}
+                    { isInvalidError && (
+                        <Text style={styles.fileError}>{STRINGS.invalidError}</Text>
+                    )}
 
-                        { isSizeError && (
-                            <Text style={styles.fileError}>{STRINGS.sizeError}</Text>
-                        )}
-                    </View>
+                    { isSizeError && (
+                        <Text style={styles.fileError}>{STRINGS.sizeError}</Text>
+                    )}
                 </View>
             </ScrollView>
 

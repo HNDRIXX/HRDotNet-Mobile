@@ -10,7 +10,7 @@ export default function TimeOff () {
     const navigation = useNavigation()
 
     const screenWidth = Dimensions.get('window').height
-    const imageSize = Math.max(15, screenWidth * 0.13 / 1)
+    const imageSize = Math.max(15, screenWidth * 0.13 / 1.3)
     const padding = screenWidth * 0.008
 
     return (
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'center',
-        marginHorizontal: 17.5,
+        marginHorizontal: 21,
         marginBottom: 10,
     },
 

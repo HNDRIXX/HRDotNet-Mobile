@@ -20,7 +20,6 @@ const data = [
     { title: 'Offset' },
     { title: 'Leave' },
     { title: 'Missed Logs' },
-    { title: 'CTO' },
 ]
 
 export default function WebUserRequest() {
@@ -51,7 +50,7 @@ export default function WebUserRequest() {
                                     selectedButtonIndex === index && styles.selectedButton,
                                 ]}
                                 onPress={() => handleButtonPress(index)}
-                                disabled={ index == 6 && true }
+                                disabled={ selectedButtonIndex === index ? true : false }
                             >
                                 <Text 
                                     style={[

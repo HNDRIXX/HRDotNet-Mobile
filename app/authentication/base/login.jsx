@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, StyleSheet, ImageBackground, TextInput, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, ImageBackground, TextInput, TouchableOpacity, ActivityIndicator, Platform } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -12,6 +12,10 @@ export default function LogInPage ({ navigation }) {
     const [fontsLoaded] = useFonts()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+
+    const paddingIOS = Platform.OS === "ios" 
+
+    console.log(paddingIOS)
 
     if(!fontsLoaded) {
         return (
@@ -29,12 +33,15 @@ export default function LogInPage ({ navigation }) {
                 <Image
                     source={require('../../../assets/logoword.png')}
                     style={styles.logo}
+                    onLoadStart={() => (
+                        <ActivityIndicator size={'large'} />
+                    )}
                     contentFit="contain"
                 />
 
                 <View style={styles.inputWrapper}>
                     <TextInput
-                        style={styles.textInput}
+                        style={styles.textInput(paddingIOS)}
                         onChangeText={(text) => setUsername(text)}
                         value={username}
                         placeholder="Username"
@@ -44,7 +51,7 @@ export default function LogInPage ({ navigation }) {
 
                 <View style={styles.inputWrapper}>
                     <TextInput
-                        style={styles.textInput}
+                        style={styles.textInput(paddingIOS)}
                         onChangeText={(text) => setPassword(text)}
                         value={password}
                         secureTextEntry
@@ -109,12 +116,12 @@ const styles = StyleSheet.create({
         shadowRadius: 5, 
     },
 
-    textInput: {
+    textInput: (paddingIOS) => ({
         width: '100%',
         fontFamily: 'Inter_400Regular',
-        padding: 0,
+        paddingVertical: paddingIOS ? 10 : 0, 
         color: COLORS.darkGray
-    },
+    }),
 
     loginBtn: {
         backgroundColor: COLORS.orange,

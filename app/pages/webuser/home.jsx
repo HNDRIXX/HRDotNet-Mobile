@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
 
     timeClockText: {
         color: COLORS.clearWhite,
-        fontSize: 15,
+        fontSize: 16,
         paddingHorizontal: 5,
         marginTop: 10,
         fontFamily: 'Inter_700Bold'
@@ -220,8 +220,8 @@ const styles = StyleSheet.create({
     },
 
     mainTitle: {
-        marginHorizontal: 27,
-        fontSize: 15,
+        marginHorizontal: 35,
+        fontSize: 16,
         marginVertical: 6,
         color: COLORS.powderBlue,
         fontFamily: 'Inter_700Bold',

@@ -27,13 +27,10 @@ export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, c
                 <Text style={styles.dateText}>{currentDate}</Text>
                 <Text style={styles.timeText}>{time.format('h:mm:ss A')}</Text>
 
-
                 {/* Clocked Out: September 18 at 6:18:00 PM */}
                 <Text style={styles.clockInOutText}>
                     {clockedStatus ? `${clockedStatus}: ${dateToday === formattedClocked ? "Today" : formattedClocked} at ${clockedTime}` : `Clocked: ${dateToday}`}
                 </Text>
-
-
 
                 { clockedValue == 0 ? (
                     <TouchableOpacity
@@ -83,8 +80,8 @@ export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, c
 const styles = StyleSheet.create({
     topBox: {
         backgroundColor: COLORS.clearWhite,
-        paddingVertical: 15,
-        width: '85%',
+        paddingVertical: 20,
+        width: '90%',
         marginTop: -45,
         marginBottom: 5,
         borderRadius: 20,
@@ -116,7 +113,7 @@ const styles = StyleSheet.create({
     },
 
     timeInOutText: {
-        fontSize: 17,
+        fontSize: 18,
         marginLeft: 5,
         color: COLORS.clearWhite,
         fontFamily: 'Inter_600SemiBold',
@@ -124,7 +121,7 @@ const styles = StyleSheet.create({
 
     timeText: {
         fontFamily: 'Inter_700Bold', 
-        fontSize: 23,
+        fontSize: 25,
         textAlign: 'center',
         color: COLORS.black,
     },
@@ -133,13 +130,13 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter_600SemiBold',
         color: COLORS.black,
         textAlign: 'center',
-        fontSize: 12,
+        fontSize: 14,
     },
 
     clockInOutText: {
         fontFamily: 'Inter_500Medium',
         color: COLORS.darkGray,
-        fontSize: 12,
+        fontSize: 14,
         textAlign: 'center'
     }
 })

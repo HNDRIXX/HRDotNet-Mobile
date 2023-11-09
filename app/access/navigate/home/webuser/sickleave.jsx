@@ -70,7 +70,7 @@ export default function SickLeavePage ({ navigation }) {
 
                     return (
                         <View style={styles.itemWrapper}>
-                            <Shadow distance={6} style={styles.shadowView}>
+                            <Shadow distance={4} style={styles.shadowView}>
                                 <View style={styles.itemHeader}>
                                     <Text style={styles.itemHeaderText}>{item.status}</Text>
                                     <Text style={styles.itemHeaderText}>{item.leaveCredit}</Text>

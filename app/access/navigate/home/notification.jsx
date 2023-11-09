@@ -1,8 +1,9 @@
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, FlatList } from "react-native";
 import { AntDesign, FontAwesome, Entypo } from "@expo/vector-icons";
-import { router } from "expo-router";
+import moment from "moment";
 import DashedLine from "react-native-dashed-line";
-import { Image } from "react-native-expo-image-cache";
+import { Image, CacheManager } from "react-native-expo-image-cache";
+import { useNavigation } from "@react-navigation/native";
 
 import { COLORS, ICONS } from "../../../../constant";
 import PageHeader from "../../../../components/header/PagesHeader";
@@ -11,60 +12,82 @@ const data = [
     {
         name: "Request Update",
         date: "20231020",
-        message: "Your Emergency Leave Doc. No, LV2230922165 has a new status. Please check the Requests pages for more details."
+        message: "Your Emergency Leave Doc. No, LV2230922165 has a new status. Please check the Requests pages for more details.",
+        isReaded: "0"
     },
     {
         name: "Advisory",
         date: "20231018",
         message: "Intellismart, Stork, Supersam, and Opulence, which were under Intellismart Technology Inc., now have Tiktok accounts!",
+        isReaded: "0"
     },
 ]
 
-export default function NotificationPage ({ navigation }) {
+export default function NotificationPage () {
+    const navigation = useNavigation()
+
+    const formattedDate = (date) => {
+        return moment(date, "YYYYMMDD").format("MMM DD YYYY")
+    }
+
     return (
         <View style={styles.container}>
             <PageHeader pageName="Notifications" />
 
-            <FlatList 
-                data={data}
-                renderItem={({item, index}) => (
-                    <View style={styles.content}>
-                        <View style={styles.innerContent}>
-                            <Image 
-                                style={{height: 25, width: 25 }} 
-                                uri={ ICONS.info }
-                            />
+            <View style={styles.wrapper}> 
+                <FlatList 
+                    data={data}
+                    renderItem={({item, index}) => (
+                        <View style={styles.content}>
+                            <View style={styles.innerContent}>
+                                <Image 
+                                    style={{ height: 30, width: 30 }} 
+                                    uri={ 
+                                        item.name === "Request Update" ? ICONS.calendarBadge 
+                                        : item.name === "Advisory" ? ICONS.megaphone 
+                                        : ICONS.info
+                                    }
+                                    transitionDuration={100}
+                                />
 
-                            <View style={styles.contentWrapper}>
-                                <View style={styles.topContentWrapper}>
-                                    <Text style={styles.contentTitle}>{item.name}</Text>
-                                    <Text style={styles.contentDate}>{item.date}</Text>
-                                </View>
+                                <View style={styles.contentWrapper}>
+                                    <View style={styles.topContentWrapper}>
+                                        <Text style={styles.contentTitle}>{item.name}</Text>
+                                        <Text style={styles.contentDate}>{formattedDate(item.date)}</Text>
+                                    </View>
 
-                                <View style={styles.bodyContentWrapper}>
-                                    <Text 
-                                        numberOfLines={2}
-                                        style={styles.description}>{item.message}</Text>
+                                    <View style={styles.bodyContentWrapper}>
+                                        <Text 
+                                            numberOfLines={2}
+                                            style={styles.description}>{item.message}</Text>
 
-                                    <Entypo
-                                        name="dots-three-horizontal" 
-                                        size={24} 
-                                        color="black" 
-                                    />
+                                        <Entypo
+                                            name="dots-three-horizontal" 
+                                            size={24} 
+                                            color={COLORS.darkGray}
+                                            onPress={() => navigation.navigate(
+                                                'NotificationDetails', {
+                                                    name: item.name,
+                                                    date: formattedDate(item.date),
+                                                    message: item.message,
+                                                    isReaded: item.isReaded,
+                                                })}
+                                        />
+                                    </View>
                                 </View>
                             </View>
-                        </View>
 
-                        <DashedLine 
-                            dashLength={10}
-                            dashColor={COLORS.tr_gray}
-                            dashGap={5}
-                            dashThickness={1}
-                            style={styles.dashLine}
-                        />
-                    </View>
-                )}
-            />
+                            <DashedLine 
+                                dashLength={10}
+                                dashColor={COLORS.tr_gray}
+                                dashGap={5}
+                                dashThickness={1}
+                                style={styles.dashLine}
+                            />
+                        </View>
+                    )}
+                />
+            </View>
             {/* <ScrollView style={styles.wrapper}>
                 <View style={styles.content}>
                     <View style={styles.innerContent}>
@@ -109,31 +132,9 @@ const styles = StyleSheet.create({
         flex: 1
     },
 
-    backButton: {
-        paddingHorizontal: 10,
-    },
-
-    topHeader: {
-        padding: 1,
-        paddingBottom: 10,
-        paddingVertical: 50,
-        alignItems: 'center',
-        flexDirection: 'row',
-        backgroundColor: COLORS.powderBlue,
-    },
-    
-    textHeader: {
-        color: COLORS.clearWhite,
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 18,
-        flex: 1,
-        textAlign: 'center',
-        marginRight: 50,
-    },
-
     contentTitle: {
         fontFamily: 'Inter_600SemiBold',
-        fontSize: 17,
+        fontSize: 14,
     },
 
     contentDate: {
@@ -174,7 +175,6 @@ const styles = StyleSheet.create({
     bodyContentWrapper: {
         justifyContent: 'space-between',
         flexDirection: 'row',
-        alignItems: 'baseline',
     },
 
     description: {

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TextInput, TouchableOpacity, StyleSheet, Text } from "react-native";
+import { View, TextInput, TouchableOpacity, StyleSheet, Text, Platform } from "react-native";
 import { FontAwesome, Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
@@ -8,6 +8,7 @@ import { COLORS } from "../../constant";
 export const SearchAndNew = ({ filterText, setFilterText, onPanel }) => {
 
   const navigation = useNavigation()
+  const platformIOS = Platform.OS === 'ios'
 
   const onNewRequestHandle = () => {
     switch(onPanel) {
@@ -46,9 +47,9 @@ export const SearchAndNew = ({ filterText, setFilterText, onPanel }) => {
         <FontAwesome name="search" size={20} color={COLORS.orange} />
 
         <TextInput
-          style={styles.searchValueText}
+          style={styles.searchValueText(platformIOS)}
           placeholder="Search"
-          editable={false}
+          placeholderTextColor={COLORS.tr_gray}
           onChangeText={(text) => setFilterText(text)}
           value={filterText}
         />
@@ -68,7 +69,9 @@ export const SearchAndNew = ({ filterText, setFilterText, onPanel }) => {
 const styles = StyleSheet.create({
   topContainer: {
     width: "100%",
-    padding: 20,
+    // padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -76,21 +79,27 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
+    marginLeft: 4,
   },
 
-  searchValueText: {
+  searchValueText: (platformIOS) => ({
     fontFamily: "Inter_500Medium",
-    marginLeft: 10,
-    width: "50%",
-  },
+    fontSize: 16,
+    borderRadius: 15,
+    width: 130,
+    paddingHorizontal: 10,
+    paddingVertical: platformIOS ? 5 : 0
+  }),
 
   newRequestButton: {
     flexDirection: "row",
     alignItems: "center",
+    marginRight: 5 
   },
 
   newRequestText: {
     fontFamily: "Inter_500Medium",
+    fontSize: 15,
     marginStart: 5,
     color: COLORS.darkGray,
   },
