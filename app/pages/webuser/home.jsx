@@ -37,78 +37,77 @@ export default function Home ({ navigation }) {
                 >
                     <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: COLORS.powderBlue }}>
 
-                    <StatusBar backgroundColor={COLORS.powderBlue} barStyle={'light-content'} />
+                        <StatusBar backgroundColor={COLORS.powderBlue} barStyle={'light-content'} />
 
-                    <View style={styles.headerView}>
-                        <View style={styles.headerNavigation}>
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate('SideDrawer')}>
-                                <FontAwesome name={'bars'} size={25} color={COLORS.clearWhite} />
-                            </TouchableOpacity>
+                        <View style={styles.headerView}>
+                            <View style={styles.headerNavigation}>
+                                <TouchableOpacity
+                                    onPress={() => navigation.navigate('SideDrawer')}>
+                                    <FontAwesome name={'bars'} size={25} color={COLORS.clearWhite} />
+                                </TouchableOpacity>
 
-                            <TouchableOpacity
-                                onPress={() => navigation.navigate('Notification')}
-                            >
-                                <FontAwesome name={'bell'} size={25} color={COLORS.clearWhite} />
-                            </TouchableOpacity>
-                        </View>
+                                <TouchableOpacity
+                                    onPress={() => navigation.navigate('Notification')}
+                                >
+                                    <FontAwesome name={'bell'} size={25} color={COLORS.clearWhite} />
+                                </TouchableOpacity>
+                            </View>
 
-                        <View style={styles.welcomeView}>
-                            <Image 
-                                style={styles.userIcon} 
-                                source={require('../../../assets/user/juan.jpg')}
-                                contentFit="contain" />
+                            <View style={styles.welcomeView}>
+                                <Image 
+                                    style={styles.userIcon} 
+                                    source={require('../../../assets/user/juan.jpg')}
+                                    contentFit="contain" />
 
-                            <View>
-                                <Text style={styles.helloText}>Hello,</Text>
-                                <Text style={styles.nameText}>Juan Dela Cruz!</Text>
+                                <View>
+                                    <Text style={styles.helloText}>Hello,</Text>
+                                    <Text style={styles.nameText}>Juan Dela Cruz!</Text>
 
-                                <View style={styles.statusView}>
-                                    <Entypo name={'briefcase'} size={17} color={COLORS.clearWhite} />
+                                    <View style={styles.statusView}>
+                                        <Entypo name={'briefcase'} size={17} color={COLORS.clearWhite} />
 
-                                    <Text style={styles.statusText}>Work Day</Text>
+                                        <Text style={styles.statusText}>Work Day</Text>
+                                    </View>
                                 </View>
                             </View>
+
+                            <Text style={styles.timeClockText}>Time Clock</Text>
                         </View>
 
-                        <Text style={styles.timeClockText}>Time Clock</Text>
+                        <Shadow
+                            distance={20}
+                            style={styles.timeClockView}
+                        >
+                            <TimeClock
+                                clockedValue={route.params?.clockedValue}
+                                clockedStatus={route.params?.clockedStatus}
+                                clockedDate={route.params?.clockedDate}
+                                clockedTime={route.params?.clockedTime}
+                            />
+                        </Shadow>
+
+                        <View style={styles.menuView}>
+                            <ScrollView 
+                                style={styles.scrollView}
+                                bounces={false}
+                                contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
+                                >
+                                <View style={[styles.sectionView, { marginBottom: 20 }]}>
+                                    <Text style={styles.mainTitle}>Menu</Text>
+                                    <MenuButton 
+                                        clockedDate={route.params?.clockedDate}
+                                        clockedTime={route.params?.clockedTime}
+                                        clockedLocation={"Location Location"}
+                                    />
+                                </View>
+
+                                <View style={styles.sectionView}>
+                                    <Text style={styles.mainTitle}>Time Off</Text>
+                                    <TimeOff />
+                                </View>
+                            </ScrollView>
+                        </View>
                     </View>
-
-                    <Shadow
-                        distance={20}
-                        style={styles.timeClockView}
-                    >
-                        <TimeClock
-                            clockedValue={route.params?.clockedValue}
-                            clockedStatus={route.params?.clockedStatus}
-                            clockedDate={route.params?.clockedDate}
-                            clockedTime={route.params?.clockedTime}
-                        />
-
-                    </Shadow>
-
-                    <View style={styles.menuView}>
-                        <ScrollView 
-                            style={styles.scrollView}
-                            bounces={false}
-                            contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
-                            >
-                            <View style={styles.sectionView}>
-                                <Text style={styles.mainTitle}>Menu</Text>
-                                <MenuButton 
-                                    clockedDate={route.params?.clockedDate}
-                                    clockedTime={route.params?.clockedTime}
-                                    clockedLocation={"Location Location"}
-                                />
-                            </View>
-
-                            <View style={styles.sectionView}>
-                                <Text style={styles.mainTitle}>Time Off</Text>
-                                <TimeOff />
-                            </View>
-                        </ScrollView>
-                    </View>
-                </View>
                 </Animatable.View>
             )}
         </>
@@ -200,8 +199,8 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         alignItems: 'center',
         justifyContent: 'center',
-        borderTopLeftRadius: 80,
-        borderTopEndRadius: 80,
+        borderTopLeftRadius: 70,
+        borderTopEndRadius: 70,
         width: '100%',
     },
    
@@ -217,6 +216,7 @@ const styles = StyleSheet.create({
 
     sectionView: {
         width: Dimensions.get('window').width, 
+
     },
 
     mainTitle: {

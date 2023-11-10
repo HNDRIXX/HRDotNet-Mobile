@@ -105,7 +105,7 @@ export default function OTRequest ({ navigation }) {
 
     return (
         <>
-            <PageHeader pageName={"New Request"} backStatus="react" />
+            {/* <PageHeader pageName={"New Request"} backStatus="react" />
 
             <OverTimePrompt 
                 isVisible={isVisible}
@@ -244,7 +244,7 @@ export default function OTRequest ({ navigation }) {
                     display="default"
                     onChange={onEndDateChange}
                 />
-            )}
+            )} */}
         </>
   )
 }

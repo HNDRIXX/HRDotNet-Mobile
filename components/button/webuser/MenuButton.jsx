@@ -134,6 +134,7 @@ export default function MenuButton ({ clockedDate, clockedTime, clockedLocation 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        marginHorizontal: 15
     },
 
     buttonWrapper: {

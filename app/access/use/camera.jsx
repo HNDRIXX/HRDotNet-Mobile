@@ -61,7 +61,7 @@ export default function CameraAccess ({ navigation }) {
     const pickImage = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            // allowsEditing: true,
+            allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
         })

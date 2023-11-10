@@ -41,6 +41,7 @@ export default function WebUserRequest() {
             >
                 <View style={styles.container}>
                     <View style={styles.wrapper}>
+                    
                     <FlatList
                         data={data}
                         renderItem={({ item, index }) => (
@@ -76,7 +77,6 @@ export default function WebUserRequest() {
                     : selectedButtonIndex == 5 ? ( <MissedLogsPanel /> )
                     : ( null )
                 }
-                
                 </View>
             </Animatable.View>
         </>

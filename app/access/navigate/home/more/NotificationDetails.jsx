@@ -8,8 +8,7 @@ import { COLORS, ICONS } from '../../../../../constant'
 
 export default function NotificationDetails({ navigation }) {
     const route = useRoute()
-
-    console.log(route.params)
+    
     return (
         <View style={styles.container}>
             <PageHeader pageName="Notification Details" />

@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     topBox: {
         backgroundColor: COLORS.clearWhite,
         paddingVertical: 20,
-        width: '90%',
+        width: '87%',
         marginTop: -45,
         marginBottom: 5,
         borderRadius: 20,

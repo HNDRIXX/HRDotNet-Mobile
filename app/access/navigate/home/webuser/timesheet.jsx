@@ -128,7 +128,7 @@ export default function TimeSheetPage ({ navigation }) {
                                                                 index === 1 ? COLORS.powderBlue : 
                                                                 index === 0 ? COLORS.orange : null
                                                             }
-                                                            style={{ paddingRight: 20 }}
+                                                            style={{ paddingRight: 20, marginLeft: 10 }}
                                                         />
 
                                                         <View style={styles.item}>
@@ -241,10 +241,7 @@ const styles = StyleSheet.create({
         padding: 10,
         shadowColor: '#000',
     
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
+        elevation: 1.5,
     },
     
     itemText: {

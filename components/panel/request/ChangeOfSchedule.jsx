@@ -16,7 +16,7 @@ const data = [
         reason: '----',
         attachedFile: '-----',
         documentNo: 'COS22307248376',
-        filedDate: '20230916',
+        filedDate: '20231101',
         statusBy: 'Mark Sasama',
         statusByDate: '20230913',
         reviewedBy: 'Benjamin Peralta',
@@ -35,14 +35,28 @@ const data = [
         reviewedBy: 'Benjamin Peralta',
         reviewedDate: '20230916',
     },
+    { 
+        status: 'Cancelled',  
+        appliedDate: '20231014',
+        requestedSched: '7:00 AM - 4:00 PM',
+        reason: '----',
+        attachedFile: '-----',
+        documentNo: 'COS22307248376',
+        filedDate: '20231116',
+        statusBy: 'Mark Sasama',
+        statusByDate: '20230913',
+        reviewedBy: 'Benjamin Peralta',
+        reviewedDate: '20230916',
+    },
 ]
 
 export default function ChangeOfSchedulePanel ( onAnimate ) {
     const [isLoading, setIsLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
 
-    const momentDate = moment()
-    const dateThreshold = momentDate.clone().subtract(7, 'days')
+    const dateToday =  moment("2023-11-16").format("YYYYMM")
+
+    const dateThreshold = moment().clone().subtract(7, 'days')
 
     const [newCount1, setNewCount1] = useState(0)
     const [newCount2, setNewCount2] = useState(0)
@@ -58,21 +72,32 @@ export default function ChangeOfSchedulePanel ( onAnimate ) {
         }
     )
 
+
     useEffect(() => {
         let count1 = 0
         let count2 = 0
+
     
         filteredData.forEach((item) => {
-          const formattedDate = formattedDateString(item.appliedDate)
-          const itemAppliedDate = moment(formattedDate, 'MMMM DD YYYY')
+        //   const formattedDate = formattedDateString(item.appliedDate)
+        //   const itemAppliedDate = moment(formattedDate, 'MMMM DD YYYY')
     
-          if (!itemAppliedDate.isBefore(dateThreshold)) {
-            count1++
-          }
+        //   if (!itemAppliedDate.isBefore(dateThreshold)) {
+        //     count1++
+        //   }
     
-          if (itemAppliedDate.isBefore(dateThreshold)) {
-            count2++
-          }
+        //   if (itemAppliedDate.isBefore(dateThreshold)) {
+        //     count2++
+        //   }
+        
+            if(moment(item.filedDate, "YYYYMMDD").format("YYYYMM") == dateToday){
+                if (moment(item.filedDate, "YYYYMMDD").format("DD") <= 15){
+                    count1++ 
+                } else { count2++ }
+                
+            } else if (moment(item.filedDate, "YYYYMMDD").format("YYYYMM") > dateToday) {
+                count2++
+            } else { count2++ }        
         })
     
         setNewCount1(count1)
@@ -104,13 +129,27 @@ export default function ChangeOfSchedulePanel ( onAnimate ) {
     }
     
     // const date = moment().format("YYYYMM")
-    // const dateFiled = "202311" 
 
-    // if (dateFiled < date) {
-    //     console.log("Earlier")
-    // } else {
-    // }
-      
+    // const dateFiled = "20231115"
+
+    // const year = moment().format("YYYY")
+    // const month = moment().format("MM")
+
+    // const yearMonth = "202311"
+
+    // if(moment(dateFiled, "YYYYMMDD").format("YYYYMM") == yearMonth){
+    //     if (moment(dateFiled, "YYYYMMDD").format("DD") <= 15){
+    //         console.log("FIRST HALF")
+    //     } else ( console.log("SECOND HALF") )
+        
+    // } else if (moment(dateFiled, "YYYYMMDD").format("YYYYMM") > yearMonth) {
+    //     console.log("WALANG GANUN TOL")
+    // } else { console.log("LUMA")}
+
+    useEffect(() => {
+
+    })
+
     return (
         <>
             {isLoading ? (
@@ -132,25 +171,40 @@ export default function ChangeOfSchedulePanel ( onAnimate ) {
                             { newCount1 > 0 && (<Text style={styles.itemStatusText}>New</Text>) }
 
                             { filteredData.map((item, index) => {
-                                const itemAppliedDate = moment(formattedDateString(item.appliedDate), 'MMMM DD YYYY')
+                                {/* const itemDateFiled = moment(formattedDateString(item.itemDateFiled), 'MMMM DD YYYY') */}
 
-                                if (!itemAppliedDate.isBefore(dateThreshold)) {
+                                {/* if (!itemAppliedDate.isBefore(dateThreshold)) {
                                     return (
                                         requestItemDisplay({ item, index })
                                     )
+                                } */}
+
+                                if (moment(item.filedDate, "YYYYMMDD").format("YYYYMM") == dateToday) {
+                                    if (moment(item.filedDate, "YYYYMMDD").format("DD") <= 15) {
+                                        return (requestItemDisplay({ item, index }))
+                                    } 
                                 }
                             })}
 
                             { newCount2 > 0 && (<Text style={styles.itemStatusText}>Earlier</Text>) }
 
                             { filteredData.map((item, index) => {
-                                const itemAppliedDate = moment(formattedDateString(item.appliedDate), 'MMMM DD YYYY')
+                                {/* const itemAppliedDate = moment(formattedDateString(item.appliedDate), 'MMMM DD YYYY') */}
 
-                                if (itemAppliedDate.isBefore(dateThreshold)) {
+                                if(moment(item.filedDate, "YYYYMMDD").format("YYYYMM") == dateToday){
+                                    if (moment(item.filedDate, "YYYYMMDD").format("DD") <= 15){
+                                        
+                                    } else if (moment(item.filedDate, "YYYYMMDD").format("DD") >= 16) { return (requestItemDisplay({ item, index })) }
+                                    
+                                } else if (moment(item.filedDate, "YYYYMMDD").format("YYYYMM") > dateToday) {
+                                    return (requestItemDisplay({ item, index }))
+                                } else { return (requestItemDisplay({ item, index })) }  
+
+                                {/* if (itemAppliedDate.isBefore(dateThreshold)) {
                                     return (
                                         requestItemDisplay({ item, index })
                                     )
-                                }
+                                } */}
                             })}
                         </ScrollView>
                     ) : ( 
