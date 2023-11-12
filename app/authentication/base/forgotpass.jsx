@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Platform } from "react-native";
 import { StatusBar } from 'expo-status-bar';
 import { router } from 'expo-router';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons/build/Icons';
@@ -8,6 +8,8 @@ import { COLORS } from '../../../constant';
 
 export default function ForgotPasswordPage ({ navigation }) {
     const [email, setEmail] = useState('')
+
+    const paddingIOS = Platform.OS === "ios" 
 
     return (
         <View style={styles.container}>
@@ -30,7 +32,7 @@ export default function ForgotPasswordPage ({ navigation }) {
 
                 <View style={styles.inputWrapper}>
                     <TextInput
-                        style={styles.textInput}
+                        style={styles.textInput(paddingIOS)}
                         onChangeText={(text) => setEmail(text)}
                         value={email}
                         placeholder="Email"
@@ -85,11 +87,12 @@ const styles = StyleSheet.create({
         shadowRadius: 5, 
     },
 
-    textInput: {
+    textInput:  (paddingIOS) => ({
         width: '100%',
         padding: 10,
+        paddingVertical: paddingIOS ? 10 : 0, 
         fontFamily: 'Inter_400Regular'
-    },
+    }),
 
     forgotText: {
         fontFamily: 'Inter_700Bold',

@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { View, Text, StyleSheet, ImageBackground, TextInput, TouchableOpacity, ActivityIndicator, Platform } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Platform } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { AntDesign } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 
 import { COLORS, useFonts } from "../../../constant";
 import { Image } from "expo-image";
@@ -12,10 +10,9 @@ export default function LogInPage ({ navigation }) {
     const [fontsLoaded] = useFonts()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [isShowPassword, setShowPassword] = useState(false)
 
     const paddingIOS = Platform.OS === "ios" 
-
-    console.log(paddingIOS)
 
     if(!fontsLoaded) {
         return (
@@ -23,6 +20,10 @@ export default function LogInPage ({ navigation }) {
                 <ActivityIndicator size={'large'} color={COLORS.baseOrange} />                
             </View> 
         )
+    }
+
+    const toggleShowPassword = () => { 
+        setShowPassword(!isShowPassword)
     }
 
     return (
@@ -49,15 +50,21 @@ export default function LogInPage ({ navigation }) {
                     />
                 </View>
 
-                <View style={styles.inputWrapper}>
+                <View style={[styles.inputWrapper, { marginHorizontal: 10 }]}>
                     <TextInput
                         style={styles.textInput(paddingIOS)}
                         onChangeText={(text) => setPassword(text)}
                         value={password}
-                        secureTextEntry
+                        secureTextEntry={!isShowPassword}
                         placeholder="Password"
                         placeholderTextColor={COLORS.tr_gray}
                     />
+
+                    <Entypo 
+                        name={isShowPassword ? 'eye-with-line' : 'eye'} 
+                        size={24} color={COLORS.darkGray} 
+                        onPress={toggleShowPassword}
+                        />
                 </View>
 
                 <TouchableOpacity
@@ -131,6 +138,7 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 50,
         marginTop: 100,
+        marginBottom: 10,
 
         elevation: 5,
         shadowColor: COLORS.darkGray,
@@ -155,10 +163,12 @@ const styles = StyleSheet.create({
 
     textFooter: {
         textAlign: 'center',
-        position: 'absolute',
         color: COLORS.darkGray,
         fontFamily: 'Inter_400Regular',
         fontSize: 13,
-        bottom: 30
+        marginTop: 30,
+        position: 'absolute',
+        left: 0, right: 0, bottom: 0,
+        marginBottom: 10,
     }
 })

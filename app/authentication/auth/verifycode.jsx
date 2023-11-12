@@ -11,16 +11,36 @@ export default function VerifyCodePage({ navigation }) {
   const [code, setCode] = useState(['', '', '', '']);
   const codeRefs = [useRef(null), useRef(null), useRef(null), useRef(null)]
   const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false)
+  const [countdown, setCountdown] = useState(99999)
+  const [isEnabled, setEnabled] = useState(false)
+
+  useEffect(() => {
+    if (countdown > 0) {
+      const interval = setInterval(() => {
+        setCountdown(countdown - 1)
+      }, 1000)
+
+      return () => clearInterval(interval)
+    } else {
+      setEnabled(true)
+    }
+  }, [countdown])
+
+  useEffect(() => {
+    codeRefs[0].current.focus()
+  }, [])
 
   const handleCodeChange = (text, index) => {
-    const newCode = [...code]
-    newCode[index] = text
-    setCode(newCode)
-
-    if (text.length === 0 && index > 0) {
-      codeRefs[index - 1].current.focus()
-    } else if (text.length === 1 && index < 3) {
-      codeRefs[index + 1].current.focus()
+    if (text === '' || /^[0-9]$/.test(text)) {
+      const newCode = [...code]
+      newCode[index] = text
+      setCode(newCode)
+  
+      if (text === '' && index > 0) {
+        codeRefs[index - 1].current.focus()
+      } else if (text.length === 1 && index < 3) {
+        codeRefs[index + 1].current.focus()
+      }
     }
   }
 
@@ -28,12 +48,12 @@ export default function VerifyCodePage({ navigation }) {
   const isSubmitDisabled = code.some((value) => value.length !== 1);
 
   const openCustomAlert = () => {
-    setIsSuccessAlertVisible(true);
+    setIsSuccessAlertVisible(true)
+    console.log(codeResult)
   }
 
   const closeCustomAlert = () => {
     setIsSuccessAlertVisible(false)
-
     navigation.navigate('ResetPassword')
   }
 
@@ -62,14 +82,19 @@ export default function VerifyCodePage({ navigation }) {
               keyboardType="numeric"
               maxLength={1}
               ref={codeRefs[index]}
+              autoFocus={index === 0} 
             />
           ))}
         </View>
 
         <View style={styles.resendWrapper}>
           <Text>Didn't receive a code?</Text>
-          <TouchableOpacity style={styles.resendButton}>
-            <Text style={styles.resendText}>Resend</Text>
+          <Text style={{ fontSize: 20 }}>{countdown > 0 ? countdown : null }</Text>
+          <TouchableOpacity 
+            style={styles.resendButton}
+            disabled={!isEnabled}
+          >
+            <Text style={[styles.resendText, !isEnabled && { color: COLORS.lightGray2 }]}>Resend</Text>
           </TouchableOpacity>
         </View>
 
@@ -96,6 +121,7 @@ export default function VerifyCodePage({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: COLORS.clearWhite,
   },
   
   backBtn: {

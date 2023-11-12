@@ -5,7 +5,7 @@ import { router } from 'expo-router'
 import { COLORS } from "../../../constant";
 import SuccessPromptPage from "../../../components/prompt/SuccessPrompt";
 
-export default function ResetPasswordPage () {
+export default function ResetPasswordPage ({ navigation }) {
     const [newPassword, setNewPassword] = useState(null)
     const [confirmPassword, setConfirmPassword] = useState(null)
     const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false)
@@ -16,8 +16,7 @@ export default function ResetPasswordPage () {
 
     const closeCustomAlert = () => {
         setIsSuccessAlertVisible(false)
-
-        router.push(`/authentication/base/login`)
+        navigation.navigate('LogIn')
     }
 
     return (
@@ -70,6 +69,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: COLORS.clearWhite,
     },
 
     wrapper: {

@@ -16,7 +16,7 @@ const data = [
         reason: '----',
         attachedFile: '-----',
         documentNo: 'COS22307248376',
-        filedDate: '20231101',
+        filedDate: '20231102',
         statusBy: 'Mark Sasama',
         statusByDate: '20230913',
         reviewedBy: 'Benjamin Peralta',
@@ -29,7 +29,7 @@ const data = [
         reason: '----',
         attachedFile: '-----',
         documentNo: 'COS22307248376',
-        filedDate: '20230916',
+        filedDate: '20231115',
         statusBy: 'Mark Sasama',
         statusByDate: '20230913',
         reviewedBy: 'Benjamin Peralta',
@@ -54,12 +54,19 @@ export default function ChangeOfSchedulePanel ( onAnimate ) {
     const [isLoading, setIsLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
 
-    const dateToday =  moment("2023-11-16").format("YYYYMM")
-
-    const dateThreshold = moment().clone().subtract(7, 'days')
-
     const [newCount1, setNewCount1] = useState(0)
     const [newCount2, setNewCount2] = useState(0)
+
+    const [isFirstHalf, setFirstHalf] = useState(null)
+    const [isSecondHalf, setSecondHalf] = useState(null)
+
+    const currentDate = moment()
+    const firstDayOfMonth = moment().startOf('month')
+    const fifteenthDayOfMonth = moment().date(15)
+
+    const lastDayOfMonth = moment().endOf('month')
+    const sixteenthDayOfMonth = moment().date(16)
+
 
     const filteredData = data.filter((newItem) => {
             const formattedDate = formattedDateString(newItem.appliedDate)
@@ -71,44 +78,42 @@ export default function ChangeOfSchedulePanel ( onAnimate ) {
             )
         }
     )
+ 
+    useEffect(() => {
+        setTimeout(() => {
+            setIsLoading(false)
+        }, 800)
 
+        if (currentDate.isBetween(firstDayOfMonth, fifteenthDayOfMonth, null, '[]')) {
+            setFirstHalf(true)
+            setSecondHalf(false)    
+        } else if (currentDate.isBetween(sixteenthDayOfMonth, lastDayOfMonth, null, '[]')) {
+            setFirstHalf(false)
+            setSecondHalf(true)
+        }
+    }, [])
 
     useEffect(() => {
         let count1 = 0
         let count2 = 0
 
-    
         filteredData.forEach((item) => {
-        //   const formattedDate = formattedDateString(item.appliedDate)
-        //   const itemAppliedDate = moment(formattedDate, 'MMMM DD YYYY')
-    
-        //   if (!itemAppliedDate.isBefore(dateThreshold)) {
-        //     count1++
-        //   }
-    
-        //   if (itemAppliedDate.isBefore(dateThreshold)) {
-        //     count2++
-        //   }
-        
-            if(moment(item.filedDate, "YYYYMMDD").format("YYYYMM") == dateToday){
-                if (moment(item.filedDate, "YYYYMMDD").format("DD") <= 15){
-                    count1++ 
-                } else { count2++ }
-                
-            } else if (moment(item.filedDate, "YYYYMMDD").format("YYYYMM") > dateToday) {
-                count2++
-            } else { count2++ }        
-        })
+            if (isFirstHalf) {
+                const isBetweenFirstHalf = moment(item.filedDate, 'YYYYMMDD').isBetween(firstDayOfMonth, fifteenthDayOfMonth, null, '[]')
+                count1 += isBetweenFirstHalf ? 1 : 0
+                count2 += isBetweenFirstHalf ? 0 : 1
+            }
+              
+            if (isSecondHalf) {
+                const isBetweenSecondHalf = moment(item.filedDate, 'YYYYMMDD').isBetween(sixteenthDayOfMonth, lastDayOfMonth, null, '[]')
+                count1 += isBetweenSecondHalf ? 1 : 0
+                count2 += isBetweenSecondHalf ? 0 : 1
+            }              
+        })  
     
         setNewCount1(count1)
         setNewCount2(count2)
-    }, [filteredData, dateThreshold])
-
-    useEffect(() => {
-        setTimeout(() => {
-          setIsLoading(false)
-        }, 800)
-    }, [])
+    }, [filteredData])
 
     const requestItemDisplay = ({ item, index }) => {
         return (
@@ -127,29 +132,8 @@ export default function ChangeOfSchedulePanel ( onAnimate ) {
             />
         )
     }
-    
-    // const date = moment().format("YYYYMM")
 
-    // const dateFiled = "20231115"
-
-    // const year = moment().format("YYYY")
-    // const month = moment().format("MM")
-
-    // const yearMonth = "202311"
-
-    // if(moment(dateFiled, "YYYYMMDD").format("YYYYMM") == yearMonth){
-    //     if (moment(dateFiled, "YYYYMMDD").format("DD") <= 15){
-    //         console.log("FIRST HALF")
-    //     } else ( console.log("SECOND HALF") )
-        
-    // } else if (moment(dateFiled, "YYYYMMDD").format("YYYYMM") > yearMonth) {
-    //     console.log("WALANG GANUN TOL")
-    // } else { console.log("LUMA")}
-
-    useEffect(() => {
-
-    })
-
+ 
     return (
         <>
             {isLoading ? (
@@ -171,41 +155,25 @@ export default function ChangeOfSchedulePanel ( onAnimate ) {
                             { newCount1 > 0 && (<Text style={styles.itemStatusText}>New</Text>) }
 
                             { filteredData.map((item, index) => {
-                                {/* const itemDateFiled = moment(formattedDateString(item.itemDateFiled), 'MMMM DD YYYY') */}
+                                const withinFirst = isFirstHalf && moment(item.filedDate, 'YYYYMMDD').isBetween(firstDayOfMonth, fifteenthDayOfMonth, null, '[]')
+                                const withinSecond = isSecondHalf && moment(item.filedDate, 'YYYYMMDD').isBetween(sixteenthDayOfMonth, lastDayOfMonth, null, '[]')
 
-                                {/* if (!itemAppliedDate.isBefore(dateThreshold)) {
-                                    return (
-                                        requestItemDisplay({ item, index })
-                                    )
-                                } */}
-
-                                if (moment(item.filedDate, "YYYYMMDD").format("YYYYMM") == dateToday) {
-                                    if (moment(item.filedDate, "YYYYMMDD").format("DD") <= 15) {
-                                        return (requestItemDisplay({ item, index }))
-                                    } 
+                                if (withinFirst || withinSecond) {
+                                    return requestItemDisplay({ item, index })
                                 }
                             })}
 
                             { newCount2 > 0 && (<Text style={styles.itemStatusText}>Earlier</Text>) }
 
                             { filteredData.map((item, index) => {
-                                {/* const itemAppliedDate = moment(formattedDateString(item.appliedDate), 'MMMM DD YYYY') */}
+                                const withinFirst = isFirstHalf && !moment(item.filedDate, 'YYYYMMDD').isBetween(firstDayOfMonth, fifteenthDayOfMonth, null, '[]')
+                                const withinSecond = isSecondHalf && !moment(item.filedDate, 'YYYYMMDD').isBetween(sixteenthDayOfMonth, lastDayOfMonth, null, '[]')
 
-                                if(moment(item.filedDate, "YYYYMMDD").format("YYYYMM") == dateToday){
-                                    if (moment(item.filedDate, "YYYYMMDD").format("DD") <= 15){
-                                        
-                                    } else if (moment(item.filedDate, "YYYYMMDD").format("DD") >= 16) { return (requestItemDisplay({ item, index })) }
-                                    
-                                } else if (moment(item.filedDate, "YYYYMMDD").format("YYYYMM") > dateToday) {
-                                    return (requestItemDisplay({ item, index }))
-                                } else { return (requestItemDisplay({ item, index })) }  
-
-                                {/* if (itemAppliedDate.isBefore(dateThreshold)) {
-                                    return (
-                                        requestItemDisplay({ item, index })
-                                    )
-                                } */}
+                                if (withinFirst || withinSecond) {
+                                    return requestItemDisplay({ item, index })
+                                }
                             })}
+
                         </ScrollView>
                     ) : ( 
                         <View style={styles.noSearchWrapper}>
@@ -225,12 +193,13 @@ export default function ChangeOfSchedulePanel ( onAnimate ) {
 }
 
 const formattedDateString = (dateString) => {
-    const year = dateString.substring(0, 4);
-    const month = dateString.substring(4, 6);
-    const day = dateString.substring(6);
+    const year = dateString.substring(0, 4)
+    const month = dateString.substring(4, 6)
+    const day = dateString.substring(6)
 
-    return moment(`${month}-${day}-${year}`, 'MM-DD-YYYY').format('MMMM DD YYYY');
+    return moment(`${month}-${day}-${year}`, 'MM-DD-YYYY').format('MMMM DD YYYY')
 }
+
 
 const styles = StyleSheet.create({
     loader: {
