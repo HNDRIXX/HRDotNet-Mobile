@@ -121,6 +121,8 @@ export default function OTRequest ({ navigation }) {
     const handleCheck = (index) => {
         setCheckSelect(index)
         setCheckItem(data[index])
+
+        console.log(checkItem)
     }
 
     return (
@@ -129,7 +131,7 @@ export default function OTRequest ({ navigation }) {
 
             <OverTimePrompt 
                 isVisible={isVisible}
-                checkedItems={checkedItems}
+                checkItem={checkItem}
                 data={data}
                 checkSelect={checkSelect}
                 handleCheck={handleCheck}

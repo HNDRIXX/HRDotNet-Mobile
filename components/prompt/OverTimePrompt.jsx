@@ -5,7 +5,7 @@ import StyledText from 'react-native-styled-text'
 import { COLORS } from '../../constant'
 import { Image } from 'expo-image'
 
-export default function OverTimePrompt ({ isVisible, data, onCancel, onSelect, checkedItems, handleCheck, checkSelect}) {
+export default function OverTimePrompt ({ isVisible, data, onCancel, onSelect, checkItem, handleCheck, checkSelect}) {
     return (
         <>
             <Modal
