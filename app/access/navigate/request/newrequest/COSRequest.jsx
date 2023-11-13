@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, BackHandler, Alert, ScrollView } from "react-native";
-import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from "moment";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
-import { Picker } from "@react-native-picker/picker";
 import RadioButtonRN from "radio-buttons-react-native";
 import { useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { router, useGlobalSearchParams } from 'expo-router'
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SelectDropdown from "react-native-select-dropdown";
-import { Image } from "expo-image";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
 import { COLORS, STRINGS } from "../../../../../constant";
@@ -114,12 +110,12 @@ export default function COSRequest ({ navigation }) {
                             : moment(startDate, "YYYYMMDD").format("MMMM DD, YYYY")}
                         </Text>
                         
-                        <FontAwesome 
-                            name="calendar"
-                            size={20}
-                            color={COLORS.darkGray}
-                            onPress={() =>  setShowStartPicker(true)}
-                        />
+                        <Ionicons 
+                            name="calendar" 
+                            size={24} 
+                            color={COLORS.darkGray} 
+                            onPress={() => setShowStartPicker(true)}   
+                            />
                     </View>
                 </View>
 
@@ -132,12 +128,12 @@ export default function COSRequest ({ navigation }) {
                             : moment(endDate, "YYYYMMDD").format("MMMM DD, YYYY")}
                         </Text>
                         
-                        <FontAwesome 
-                            name="calendar"
-                            size={20}
-                            color={COLORS.darkGray}
-                            onPress={() => setShowEndDatePicker(true)}
-                        />
+                        <Ionicons 
+                            name="calendar" 
+                            size={24} 
+                            color={COLORS.darkGray} 
+                            onPress={() => setShowEndDatePicker(true)}   
+                            />
                     </View>
                 </View>
 
@@ -201,9 +197,9 @@ export default function COSRequest ({ navigation }) {
                             </View>
                         )}
 
-                        <View style={[styles.rowView, { alignItems: 'center' }]}>
+                        <View style={[styles.rowView, { paddingHorizontal: 0 }]}>
                             <Ionicons 
-                                name="camera" size={26}
+                                name="camera" size={26} color={COLORS.darkGray}
                                 onPress={() => {
                                     navigation.navigate('CameraAccess', { onPanel: 0 })
                                     setInvalidError(false)
@@ -212,7 +208,8 @@ export default function COSRequest ({ navigation }) {
 
                             <FontAwesome 
                                 name="file" size={18} style={{ marginLeft: 15 }}
-                                onPress={selectDocument}
+                                color={COLORS.darkGray}
+                                // onPress={selectDocument}
                                 />
                         </View>
                     </View>

@@ -39,8 +39,8 @@ export default function TimeOff () {
             >
                 <View style={[styles.alignWrapper, { height: imageSize }]}>
                     <Image 
-                        source={require('../../assets/icons/health.png')}
-                        style={{ width: 50, height: 50, paddingVertical: 34,  marginRight: 10, }}
+                        source={require('../../assets/icons/meds.png')}
+                        style={{ width: 47, height: 47, paddingVertical: 34,  marginRight: 10, }}
                         contentFit="contain"
                     />
 

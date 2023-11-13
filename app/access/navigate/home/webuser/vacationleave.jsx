@@ -1,11 +1,10 @@
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
-import { Image } from "expo-image";
+import { Image } from "react-native-expo-image-cache";
 import { AntDesign } from "@expo/vector-icons";
 import { Shadow } from "react-native-shadow-2";
-import { router } from "expo-router";
 import moment from 'moment';
 
-import { COLORS } from "../../../../../constant";
+import { COLORS, ICONS } from "../../../../../constant";
 
 const data = [
     {
@@ -53,9 +52,8 @@ export default function VacationLeavePage ({ navigation }) {
 
             <View style={styles.topContainer}>
                 <Image 
-                    source={require('../../../../../assets/icons/vacation.png')}
                     style={{ width: 70, height: 70, marginRight: 10 }}
-                    contentFit="contain"
+                    uri={ICONS.vacation}
                 />
 
                 <View>
@@ -194,6 +192,7 @@ const styles = StyleSheet.create({
     },
 
     detailsTitle: {
+        fontSize: 15,
         marginHorizontal: 20,
         marginTop: 20,
         fontFamily: 'Inter_600SemiBold',

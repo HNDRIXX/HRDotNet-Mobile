@@ -1,10 +1,11 @@
-import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Modal, TouchableOpacity, FlatList } from 'react-native'
+import Checkbox from 'expo-checkbox';
 import StyledText from 'react-native-styled-text'
 
 import { COLORS } from '../../constant'
 import { Image } from 'expo-image'
 
-export default function OverTimePrompt ({ isVisible, onCancel, onSelect }) {
+export default function OverTimePrompt ({ isVisible, data, onCancel, onSelect, checkedItems, handleCheck, checkSelect}) {
     return (
         <>
             <Modal
@@ -29,6 +30,23 @@ export default function OverTimePrompt ({ isVisible, onCancel, onSelect }) {
                     <StyledText 
                         style={[styles.subTitleText, { marginTop: 10 }]}
                         textStyles={textStyles}>{"<b>Select the date</b> for which you want to submit an overtime request. "}</StyledText>
+                      
+                      <FlatList
+                        data={data}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item, index }) => (
+                          <View style={styles.itemContainer}>
+                            <Checkbox
+                              value={checkSelect === index}
+                              onValueChange={() => handleCheck(index)}
+                            />
+
+                            <Text>{`OT Date: ${item.OTDate}`}</Text>
+                            <Text>{`Actual OT In: ${item.actualOTIn}`}</Text>
+                            <Text>{`Actual OT Out: ${item.actualOTOut}`}</Text>
+                          </View>
+                        )}
+                      />
 
                     <View style={styles.rowView}>
                         <TouchableOpacity 

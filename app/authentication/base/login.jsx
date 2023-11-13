@@ -27,70 +27,72 @@ export default function LogInPage ({ navigation }) {
     }
 
     return (
-        <View style={styles.container}>
-            <StatusBar style='dark' />
+        <View style={{ flex: 1, backgroundColor: COLORS.clearWhite }}>
+            <View style={styles.container}>
+                <StatusBar style='dark' />
 
-            <View style={styles.inputContainer}>
-                <Image
-                    source={require('../../../assets/logoword.png')}
-                    style={styles.logo}
-                    onLoadStart={() => (
-                        <ActivityIndicator size={'large'} />
-                    )}
-                    contentFit="contain"
-                />
-
-                <View style={styles.inputWrapper}>
-                    <TextInput
-                        style={styles.textInput(paddingIOS)}
-                        onChangeText={(text) => setUsername(text)}
-                        value={username}
-                        placeholder="Username"
-                        placeholderTextColor={COLORS.tr_gray}
-                    />
-                </View>
-
-                <View style={[styles.inputWrapper, { marginHorizontal: 10 }]}>
-                    <TextInput
-                        style={styles.textInput(paddingIOS)}
-                        onChangeText={(text) => setPassword(text)}
-                        value={password}
-                        secureTextEntry={!isShowPassword}
-                        placeholder="Password"
-                        placeholderTextColor={COLORS.tr_gray}
+                <View style={styles.inputContainer}>
+                    <Image
+                        source={require('../../../assets/logoword.png')}
+                        style={styles.logo}
+                        onLoadStart={() => (
+                            <ActivityIndicator size={'large'} />
+                        )}
+                        contentFit="contain"
                     />
 
-                    <Entypo 
-                        name={isShowPassword ? 'eye-with-line' : 'eye'} 
-                        size={24} color={COLORS.darkGray} 
-                        onPress={toggleShowPassword}
+                    <View style={styles.inputWrapper}>
+                        <TextInput
+                            style={styles.textInput(paddingIOS)}
+                            onChangeText={(text) => setUsername(text)}
+                            value={username}
+                            placeholder="Username"
+                            placeholderTextColor={COLORS.tr_gray}
                         />
+                    </View>
+
+                    <View style={[styles.inputWrapper, { marginHorizontal: 10 }]}>
+                        <TextInput
+                            style={styles.textInput(paddingIOS)}
+                            onChangeText={(text) => setPassword(text)}
+                            value={password}
+                            secureTextEntry={!isShowPassword}
+                            placeholder="Password"
+                            placeholderTextColor={COLORS.tr_gray}
+                        />
+
+                        <Entypo 
+                            name={isShowPassword ? 'eye-with-line' : 'eye'} 
+                            size={24} color={COLORS.darkGray} 
+                            onPress={toggleShowPassword}
+                            />
+                    </View>
+
+                    <TouchableOpacity
+                        style={styles.forgotBtn}
+                        onPress={() => navigation.navigate('ForgotPassword')}
+                    >
+                        <Text style={styles.forgotText}>Forgot Password?</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity 
+                        style={styles.loginBtn}
+                        onPress={() => navigation.navigate('TabStack', { screen: 'Home' })}
+                    >
+                        <Text style={styles.loginText}>LOG IN</Text>
+                    </TouchableOpacity>
                 </View>
-
-                <TouchableOpacity
-                    style={styles.forgotBtn}
-                    onPress={() => navigation.navigate('ForgotPassword')}
-                >
-                    <Text style={styles.forgotText}>Forgot Password?</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity 
-                    style={styles.loginBtn}
-                    onPress={() => navigation.navigate('TabStack', { screen: 'Home' })}
-                >
-                    <Text style={styles.loginText}>LOG IN</Text>
-                </TouchableOpacity>
-
-                <Text style={styles.textFooter}>Powered by{'\n'}Intellismart Technology Inc.</Text>
             </View>
+
+            <Text style={styles.textFooter}>Powered by{'\n'}Intellismart Technology Inc.</Text>
         </View>
+
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.clearWhite,
     },
     
     logo: {
@@ -137,8 +139,7 @@ const styles = StyleSheet.create({
         width: 160,
         padding: 15,
         borderRadius: 50,
-        marginTop: 100,
-        marginBottom: 10,
+        marginTop: 70,
 
         elevation: 5,
         shadowColor: COLORS.darkGray,
@@ -167,8 +168,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter_400Regular',
         fontSize: 13,
         marginTop: 30,
-        position: 'absolute',
-        left: 0, right: 0, bottom: 0,
         marginBottom: 10,
     }
 })

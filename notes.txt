@@ -224,3 +224,40 @@ tChangeSchedule
 tOverTime
 
 file:///var/mobile/Containers/Data/Application/8ED58F99-C645-4BEF-B8BC-DD3DD70BB7D8/Library/Caches/ExponentExperienceData/%2540hndrx022%252FHRDotNet-Mobile/Camera/1140FBBB-A338-4875-85B8-2AC10AD88A49.jpg
+
+November 13, 2023
+Accomplished
+- Time Clock Page Functions
+- Time Off Page (Individual Page Interface)
+- Change of Schedule - New Request Page (Interface)
+- Menu Page Button Functions
+
+- Camera Feature Interface (Some Adjustments)
+
+- Adjustment IOS Interface 
+- Adjustment Interface
+
+Ongoing 
+- Notification Page (Notification Details Interface)
+- Notification Page (Notification Details Functions)
+- Official Work - New Request Page (Interface)
+- Personal Interface (Profile)
+- Profile Page Main Interface
+- Profile Page Main Functions
+- File Attachment Feature
+
+- Camera Feature Functions
+
+
+To Do
+- Notification Page (Notification Details Functions)
+- Notification Page (Notification Details Interface)
+- Official Work - New Request Page (Interface)
+- Personal Interface
+- Profile Page Main Interface
+- Profile Page Main Functions
+- File Attachment Feature
+
+- Reset Password Process
+
+- Camera Feature Functions

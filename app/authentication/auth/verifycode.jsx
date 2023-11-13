@@ -11,7 +11,7 @@ export default function VerifyCodePage({ navigation }) {
   const [code, setCode] = useState(['', '', '', '']);
   const codeRefs = [useRef(null), useRef(null), useRef(null), useRef(null)]
   const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false)
-  const [countdown, setCountdown] = useState(99999)
+  const [countdown, setCountdown] = useState(10)
   const [isEnabled, setEnabled] = useState(false)
 
   useEffect(() => {

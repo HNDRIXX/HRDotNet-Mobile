@@ -1,11 +1,10 @@
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
-import { Image } from "expo-image";
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Shadow } from "react-native-shadow-2";
-import { router } from "expo-router";
+import { Image } from "react-native-expo-image-cache";
 import moment from 'moment';
 
-import { COLORS } from "../../../../../constant";
+import { COLORS, ICONS } from "../../../../../constant";
 
 const data = [
     {
@@ -44,9 +43,8 @@ export default function SickLeavePage ({ navigation }) {
 
             <View style={styles.topContainer}>
                 <Image 
-                    source={require('../../../../../assets/icons/health.png')}
-                    style={{ width: 70, height: 70, marginRight: 10 }}
-                    contentFit="contain"
+                    style={{ width: 60, height: 60, marginRight: 15 }}
+                    uri={ICONS.medicine}
                 />
 
                 <View>
@@ -105,7 +103,7 @@ const formattedDateString = (date) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.clearWhite
+        backgroundColor: COLORS.clearWhite,
     },
 
     backButton: {
@@ -187,6 +185,7 @@ const styles = StyleSheet.create({
     },
 
     detailsTitle: {
+        fontSize: 15,
         marginHorizontal: 20,
         marginTop: 20,
         fontFamily: 'Inter_600SemiBold',
@@ -195,8 +194,8 @@ const styles = StyleSheet.create({
     itemWrapper: {
         backgroundColor: COLORS.clearWhite,
         margin: 10,
-        borderRadius: 20,
         marginHorizontal: 20,
+        borderRadius: 20,
     },
 
     shadowView: {

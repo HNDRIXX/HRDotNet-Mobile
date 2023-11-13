@@ -6,7 +6,7 @@ import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import { useRoute } from '@react-navigation/native';
 
-import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { COLORS } from '../../../constant';
 import PageHeader from '../../../components/header/PagesHeader';
@@ -16,7 +16,6 @@ export default function CameraAccess ({ navigation }) {
     const [type, setType] = useState(Camera.Constants.Type.back)
     const [userImage, setUserImage] = useState("")
     const [imgPath, setImgPath] = useState("")
-    const [isBack, setIsBack] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
 
     const [isBase, setBase] = useState(null)
@@ -117,7 +116,7 @@ export default function CameraAccess ({ navigation }) {
                 </View>
             ) : (
                 <>
-                    <PageHeader />
+                    <PageHeader pageName="Camera" />
                     
                     <Camera 
                         style={{ flex: 1 }} 
@@ -130,39 +129,40 @@ export default function CameraAccess ({ navigation }) {
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity
                                 style={styles.button}
-                                onPress={() => {
-                                    setType(
-                                        type === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back
-                                    )
-                                }}
+                                onPress={pickImage}
                             >
-                                <MaterialCommunityIcons 
-                                    name="axis-z-rotate-clockwise" 
+                                <Ionicons 
+                                    name="ios-images" 
                                     size={40} 
-                                    color={COLORS.clearWhite} 
-                                />
+                                    color={COLORS.clearWhite}
+                                />   
                             </TouchableOpacity>
 
                             <TouchableOpacity 
                                 style={styles.button}
                                 onPress={takePicture}
                             >
-                                <FontAwesome 
-                                    name={'circle'}
-                                    size={140}
-                                    color={COLORS.clearWhite}
+                                <Image
+                                    source={require('../../../assets/icons/shutter.png')}
+                                    style={{ width: 110, height: 110 }}
+                                    contentFit="contain"
+                                    onLoadEnd={() => setIsLoading(false)}
                                 />
                             </TouchableOpacity>
 
                             <TouchableOpacity
                                 style={styles.button}
-                                onPress={pickImage}
+                                onPress={() => {
+                                    setType(
+                                        type === Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back
+                                    )
+                                }}
                             >
-                                <MaterialCommunityIcons 
-                                    name={'image'}
-                                    size={40}
+                                <Ionicons 
+                                    name="ios-camera-reverse" 
+                                    size={40} 
                                     color={COLORS.clearWhite}
-                                />    
+                                />   
                             </TouchableOpacity>
                         </View>
                     </Camera>
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        backgroundColor: COLORS.darkGray,
+        backgroundColor: COLORS.black,
         width: '100%',
         position: 'absolute',
         bottom: 0,

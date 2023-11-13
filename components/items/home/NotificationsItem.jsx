@@ -1,11 +1,41 @@
-import { View, Text, StyleSheet, TouchableOpacity, } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { Octicons, Entypo } from '@expo/vector-icons'
 import { Image } from 'react-native-expo-image-cache'
 import DashedLine from 'react-native-dashed-line'
+import CachedImage from 'expo-cached-image'
 
 import { ICONS, COLORS } from '../../../constant'
 
 export default function NotificationsItem ({ item, index, formattedDate, onPress }) {
+    const getSourceUri = (name) => {
+        if (name === "Request Update") {
+            return (
+                <CachedImage
+                    source={{  uri: ICONS.calendarBadge }}
+                    cacheKey={`reqIcon`}
+                    placeholderContent={( 
+                        <ActivityIndicator size={'small'} />
+                    )} 
+                    style={{ height: 30, width: 30 }} 
+                />
+
+            )
+        } else if (name === "Advisory") {
+            return (
+                <CachedImage
+                    source={{  uri: ICONS.megaphone }}
+                    cacheKey={`advisory`}
+                    placeholderContent={( 
+                        <ActivityIndicator size={'small'} />
+                    )} 
+                    style={{ height: 30, width: 30 }} 
+                />
+            )
+        } else {
+          return ICONS.info;
+        }
+    }
+
     return (
         <>
             <TouchableOpacity style={styles.innerContent} onPress={() => onPress(index, item)}>
@@ -17,17 +47,9 @@ export default function NotificationsItem ({ item, index, formattedDate, onPress
                         style={{ marginRight: 10 }}
                     />) : null }
  
-                <Image 
-                    style={{ height: 30, width: 30 }} 
-                    uri={ 
-                        item.name === "Request Update" ? ICONS.calendarBadge 
-                        : item.name === "Advisory" ? ICONS.megaphone 
-                        : ICONS.info
-                    }
-                    transitionDuration={100}
-                />
+                { getSourceUri(item.name) }
 
-                <View style={styles.contentWrapper}>
+                <View style={styles.contentWrapper(item)}>
                     <View style={styles.topContentWrapper}>
                         <Text style={styles.contentTitle}>{item.name}</Text>
                         <Text style={styles.contentDate}>{formattedDate(item.date)}</Text>
@@ -73,15 +95,16 @@ const styles = StyleSheet.create({
 
     innerContent: {
         flexDirection: 'row',
-        alignItems: 'center',   
+        alignItems: 'center', 
+        marginLeft: 5,   
     },
 
-    contentWrapper: {
-        width: '97%',
+    contentWrapper: (item) => ({
+        width: item.isReaded ? '100%' : '95%',
         paddingHorizontal: 20,
         paddingRight: 40,
         flexDirection: 'column'
-    },
+    }),
 
     topContentWrapper: {
         justifyContent: 'space-between',
@@ -94,7 +117,7 @@ const styles = StyleSheet.create({
     },
 
     description: {
-        width: '90%',
+        width: '80%',
         color: COLORS.darkGray,
         fontSize: 13,
     },

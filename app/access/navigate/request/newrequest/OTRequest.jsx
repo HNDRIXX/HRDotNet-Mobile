@@ -7,7 +7,6 @@ import { Picker } from "@react-native-picker/picker";
 import RadioButtonRN from "radio-buttons-react-native";
 import { useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { router, useGlobalSearchParams } from 'expo-router'
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { Image } from "expo-image";
@@ -17,6 +16,19 @@ import { COLORS } from "../../../../../constant";
 import OverTimePrompt from "../../../../../components/prompt/OverTimePrompt";
 
 const radioLabel = [{ label: 'Rest Day' }]
+
+const data = [
+    { 
+        OTDate: '20230914',
+        actualOTIn: '18:15',
+        actualOTOut: '21:15'
+    },
+    { 
+        OTDate: '20230915',
+        actualOTIn: '18:38',
+        actualOTOut: '21:45'
+    },
+]
 
 export default function OTRequest ({ navigation }) {
     const [startDate, setStartDate] = useState(null)
@@ -34,6 +46,9 @@ export default function OTRequest ({ navigation }) {
 
     const route = useRoute()
     const imageURL = decodeURIComponent(route.params?.image)
+
+    const [checkItem, setCheckItem] = useState(null)
+    const [checkSelect, setCheckSelect] = useState(null)
 
     useEffect(() => {
         imageURL != "undefined" && setSelectedFile(imageURL)
@@ -103,12 +118,21 @@ export default function OTRequest ({ navigation }) {
         setVisible(false)
     }
 
+    const handleCheck = (index) => {
+        setCheckSelect(index)
+        setCheckItem(data[index])
+    }
+
     return (
         <>
-            {/* <PageHeader pageName={"New Request"} backStatus="react" />
+            <PageHeader pageName={"New Request"} backStatus="react" />
 
             <OverTimePrompt 
                 isVisible={isVisible}
+                checkedItems={checkedItems}
+                data={data}
+                checkSelect={checkSelect}
+                handleCheck={handleCheck}
                 onCancel={onCancel}
                 onSelect={onSelect}
             />
@@ -244,7 +268,7 @@ export default function OTRequest ({ navigation }) {
                     display="default"
                     onChange={onEndDateChange}
                 />
-            )} */}
+            )}
         </>
   )
 }

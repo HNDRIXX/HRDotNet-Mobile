@@ -7,8 +7,10 @@ const ICONS = {
     
     calendarBadge: "https://i.ibb.co/5j1gLSR/11.png",
     megaphone: "https://i.ibb.co/4JPdmMH/2.png",
-    
-
+    medicine: "https://i.postimg.cc/8z9BjS6L/meds.png",
+    vacation: "https://i.postimg.cc/XJ35C77B/vacation.png",
+    hat: "https://i.postimg.cc/br4tZFfv/hat.png",
+    alpine: "https://i.postimg.cc/wBKYw5gs/alpine.png",
 }
 
 export { ICONS }

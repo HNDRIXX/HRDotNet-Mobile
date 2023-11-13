@@ -114,7 +114,7 @@ export default function OBRequest ({ navigation }) {
 
     return (
         <>
-            {/* <PageHeader pageName={"OB New Request"} />
+            <PageHeader pageName={"OB New Request"} />
 
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
@@ -132,11 +132,11 @@ export default function OBRequest ({ navigation }) {
                                     : (moment(OBDate, "YYYYMMDD").format("MMMM DD, YYYY")) }
                                 </Text>
                                 
-                                <FontAwesome 
-                                    name="calendar"
-                                    size={22}
-                                    color={COLORS.darkGray}
-                                    onPress={() =>  setDatePicker(true)}
+                                <Ionicons 
+                                    name="calendar" 
+                                    size={24} 
+                                    color={COLORS.darkGray} 
+                                    onPress={() => setDatePicker(true)}   
                                 />
                             </View>
                         </View>
@@ -309,7 +309,7 @@ export default function OBRequest ({ navigation }) {
                 mode="time"
                 onConfirm={handleTimeOut}
                 onCancel={() => setTimeOutPicker(false)} 
-            /> */}
+            />
         </>
   )
 }

@@ -42,7 +42,21 @@ const data = [
         reason: '----',
         attachedFile: '-----',
         documentNo: 'COS22307248376',
-        filedDate: '20231116',
+        filedDate: '20231117',
+        statusBy: 'Mark Sasama',
+        statusByDate: '20230913',
+        reviewedBy: 'Benjamin Peralta',
+        reviewedDate: '20230916',
+    },
+
+    { 
+        status: 'Reviewed',  
+        appliedDate: '20231014',
+        requestedSched: '7:00 AM - 4:00 PM',
+        reason: '----',
+        attachedFile: '-----',
+        documentNo: 'COS22307248376',
+        filedDate: '20240101',
         statusBy: 'Mark Sasama',
         statusByDate: '20230913',
         reviewedBy: 'Benjamin Peralta',
@@ -65,7 +79,7 @@ export default function ChangeOfSchedulePanel ( onAnimate ) {
     const fifteenthDayOfMonth = moment().date(15)
 
     const lastDayOfMonth = moment().endOf('month')
-    const sixteenthDayOfMonth = moment().date(16)
+    const sixteenthDayOfMonth = moment().date(15)
 
 
     const filteredData = data.filter((newItem) => {

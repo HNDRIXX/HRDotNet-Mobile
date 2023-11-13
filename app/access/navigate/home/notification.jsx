@@ -18,6 +18,12 @@ const data = [
         isReaded: 0
     },
     {
+        name: "Request Update",
+        date: "20231020",
+        message: "Your Emergency Leave Doc. No, LV2230922165 has a new status. Please check the Requests pages for more details.",
+        isReaded: 0
+    },
+    {
         name: "Advisory",
         date: "20231018",
         message: "Intellismart, Stork, Supersam, and Opulence, which were under Intellismart Technology Inc., now have Tiktok accounts!",
@@ -52,6 +58,7 @@ export default function NotificationPage () {
 
             <View style={styles.wrapper}> 
                 <FlatList 
+                    style={styles.listView}
                     data={listData}
                     renderItem={({item, index}) => (
                         <NotificationsItem 
@@ -72,10 +79,13 @@ const styles = StyleSheet.create({
         flex: 1
     },
 
+    listView: {
+        padding: 20,
+    },
+
     wrapper: {
         flex: 1,
         margin: 20,
-        padding: 30,
         borderRadius: 20,
         backgroundColor: COLORS.clearWhite,
         elevation: 6,
