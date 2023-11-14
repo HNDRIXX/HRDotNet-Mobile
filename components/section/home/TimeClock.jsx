@@ -25,7 +25,7 @@ export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, c
 
     return (
         <View style={styles.topBox}>
-            <Image 
+            {/* <Image 
                 source={require('../../../assets/icons/hat.png')}
                 style={{ width: 67, height: 60, position: 'absolute', right: -22, top: -25, 
                     transform: [{ rotate: '30deg'}],
@@ -36,7 +36,7 @@ export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, c
                 source={require('../../../assets/icons/alpine.png')}
                 contentFit='fill'
                 style={{ width: 100, height: 25, position: 'absolute', top: -8, left: 5 }}
-            />
+            /> */}
             
             <View style={styles.wrapperBox}>
                 <Text style={styles.dateText}>{currentDate}</Text>

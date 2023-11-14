@@ -1,108 +1,129 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, BackHandler, Alert } from "react-native";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator, KeyboardAvoidingView } from "react-native";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
-import { FontAwesome } from "@expo/vector-icons";
-import { Picker } from "@react-native-picker/picker";
-import RadioButtonRN from "radio-buttons-react-native";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
-import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
-import { Image } from "expo-image";
+import { Ionicons, Entypo, AntDesign } from "@expo/vector-icons";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
-import { COLORS } from "../../../../../constant";
-import OverTimePrompt from "../../../../../components/prompt/OverTimePrompt";
+import Loader from "../../../../../components/prompt/loader/Loader";
+import { COLORS, STRINGS, DateTimeUtils, Utils} from "../../../../../constant";
 
-const radioLabel = [{ label: 'Rest Day' }]
+import OverTimePrompt from "../../../../../components/prompt/OverTimePrompt";
 
 const data = [
     { 
-        OTDate: '20230914',
-        actualOTIn: '18:15',
-        actualOTOut: '21:15'
+        OTDate: '20231114',
+        actualOTIn: '18:15:00',
+        actualOTOut: '21:15:00',
+        shiftSchedule: '08:00 AM to 06:00 PM (Default Schedule)',
     },
     { 
-        OTDate: '20230915',
-        actualOTIn: '18:38',
-        actualOTOut: '21:45'
+        OTDate: '20231115',
+        actualOTIn: '18:38:00',
+        actualOTOut: '21:45:00',
+        shiftSchedule: '06:30 AM to 05:30 PM (Default Schedule)',
+    },
+    { 
+        OTDate: '20231111',
+        actualOTIn: '18:38:00',
+        actualOTOut: '21:45:00',
+        shiftSchedule: '06:30 AM to 05:30 PM (Default Schedule)',
     },
 ]
 
-export default function OTRequest ({ navigation }) {
-    const [startDate, setStartDate] = useState(null)
-    const [endDate, setEndDate] = useState(null)
-    const [reason, setReason] = useState(null)
-    const [restDay, setRestDay] = useState(null)
+const sortedData = [...data].sort((a, b) => a.OTDate.localeCompare(b.OTDate))
 
-    const [imageUpload, setImageUpload] = useState(null)
+export default function OTRequest ({ navigation }) {
+    const [filteredData, setFilteredData] = useState([])
+    const [OTDate, setOTDate] = useState(null)
+    const [shiftSched, setShiftSched] = useState(null)
+    const [actualOTIn, setActualOTIn] = useState(null)
+    const [actualOTOut, setActualOTOut] = useState(null)
+    const [OvertimeFrom, setOvertimeFrom] = useState(null)
+    const [OvertimeTo, setOvertimeTo] = useState(null)
+    const [reason, setReason] = useState(null)
     const [selectedFile, setSelectedFile] = useState(null)
 
     const [isVisible, setVisible] = useState(true)
-    const [showStartPicker, setShowStartPicker] = useState(false)
-    const [showEndPicker, setShowEndDatePicker] = useState(false)
-    const [shiftSched, setShiftSched] = useState(null)
+    const [OvertimeFromPicker, setOvertimeFromPicker] = useState(false)
+    const [OvertimeToPicker, setOvertimeToPicker] = useState(false)
+
+    const [checkItem, setCheckItem] = useState(null)
+    const [checkSelect, setCheckSelect] = useState(null)
+
+    const [isFileNote, setFileNote] = useState(true)
+    const [isInvalidError, setInvalidError] = useState(false)
+    const [isSizeError, setSizeError] = useState(false)
+    const [isPromptLoad, setPromptLoad] = useState(true)
+
+    const [isHalf, setHalf] = useState(null)
+    const [isFirstHalf, setFirstHalf] = useState(null)
+    const [isSecondHalf, setSecondHalf] = useState(null)
 
     const route = useRoute()
     const imageURL = decodeURIComponent(route.params?.image)
 
-    const [checkItem, setCheckItem] = useState(null)
-    const [checkSelect, setCheckSelect] = useState(null)
+    const currentDate = moment()
+    const firstDayOfMonth = moment().startOf('month')
+    const fifteenthDayOfMonth = moment().date(15)
+    const lastDayOfMonth = moment().endOf('month')
+    const sixteenthDayOfMonth = moment().date(15)
 
     useEffect(() => {
         imageURL != "undefined" && setSelectedFile(imageURL)
     }, [imageURL])
 
-    const onStartDateChange = (event, selectedDate) => {
-        event.type === 'set'
-            ? (setShowStartPicker(Platform.OS === 'ios'), setStartDate(moment(selectedDate).format('YYYYMMDD')))
-            : setShowStartPicker(false)
-    }
-
-    const onEndDateChange = (event, selectedDate) => {
-        event.type === 'set'
-            ? (setShowEndDatePicker(Platform.OS === 'ios'), setEndDate(moment(selectedDate).format('YYYYMMDD')))
-            : setShowEndDatePicker(false)
-    }
-    
-    const selectDocument = async () => {
-        try {
-            const result = await DocumentPicker.getDocumentAsync()
-
-            if (!result.canceled){
-                const fileInfo = result.assets[0]
-                const uri = fileInfo.uri
-
-                const fileExtension = uri.substring(uri.lastIndexOf('.') + 1).toLowerCase()
-                
-                const fileSizeInMB = fileInfo.size / (1024 * 1024)
-
-                if (fileSizeInMB <= 5 && ['docx', 'pdf', 'jpeg', 'jpg', 'txt'].includes(fileExtension)) {
-                    setSelectedFile(fileInfo.uri)
-                } else {
-                    if (fileSizeInMB > 5) {
-                        Alert.alert('File Too Large', 'Please select a file with a size of 5MB or less.')
-                    } else {
-                        Alert.alert('Unsupported File Format', 'Please select a docx, pdf, jpeg, jpg, or txt file.')
-                    }
-                }
-            }
-        } catch (error) {
-            console.error('Error picking document:', error)
+    useEffect(() => {
+        if (moment(currentDate, 'YYYYMMDD').isBetween(firstDayOfMonth, fifteenthDayOfMonth, null, '[]')) {
+            setHalf('first')
+            setFirstHalf(true)
+            setSecondHalf(false)
+        } else if (moment(currentDate, 'YYYYMMDD').isBetween(sixteenthDayOfMonth, lastDayOfMonth, null, '[]')) {
+            setHalf('second')
+            setFirstHalf(false)
+            setSecondHalf(true)
         }
-    }
+    }) 
 
+    useEffect(() => {
+        let newFilteredData = []
+        const fetchData = async () => {
+            if (isFirstHalf) {
+                newFilteredData = data.filter(item =>
+                    moment(item.OTDate, 'YYYYMMDD').isBetween(firstDayOfMonth, fifteenthDayOfMonth, null, '[]')
+                )
+            } else if (isSecondHalf) {
+                newFilteredData = data.filter(item =>
+                    moment(item.OTDate, 'YYYYMMDD').isBetween(sixteenthDayOfMonth, lastDayOfMonth, null, '[]')
+                )
+            }
+
+            if (newFilteredData.length > 0) {
+                const sortedData = [...newFilteredData].sort((a, b) => a.OTDate.localeCompare(b.OTDate));
+                setFilteredData(sortedData)
+            } 
+
+            setPromptLoad(false)
+        }
+
+        fetchData()
+    }, [data, isFirstHalf, isSecondHalf])
+    
     const onNextHandler = () => {
-        if(!startDate || !endDate || !reason || !selectedFile){
+        if(!OTDate || !shiftSched || !actualOTIn || !actualOTOut ||
+            !OvertimeFrom || !OvertimeTo || !reason || !selectedFile ){
             alert("Please complete your request form.")
         } else {
             navigation.navigate('RequestSummary', {
-                onPanel: 0,
-                startDate: startDate,
-                endDate: endDate,
-                restDay: restDay,
+                onPanel: 2,
+                OTDate: OTDate,
                 shiftSchedule: shiftSched,
+                actualOTIn: actualOTIn,
+                actualOTOut: actualOTOut,
+                OvertimeFrom: OvertimeFrom,
+                OvertimeTo: OvertimeTo,
                 reason: reason,
                 attachedFile: selectedFile,
             })    
@@ -115,162 +136,208 @@ export default function OTRequest ({ navigation }) {
     }
 
     const onSelect = () => {
-        setVisible(false)
+        checkSelect != null ? setVisible(false) : alert('Please select a date.')
     }
 
     const handleCheck = (index) => {
         setCheckSelect(index)
-        setCheckItem(data[index])
+        setOTDate(data[index].OTDate)
+        setShiftSched(data[index].shiftSchedule)
+        setActualOTIn(data[index].actualOTIn)
+        setActualOTOut(data[index].actualOTOut)
+    }
 
-        console.log(checkItem)
+    const handleOvertimeFrom = (time) => {
+        setOvertimeFrom(moment(time).format('HH:mm:ss'))
+        setOvertimeFromPicker(false)
+    }
+
+    const handleOvertimeTo = (time) => {
+        setOvertimeTo(moment(time).format('HH:mm:ss'))
+        setOvertimeToPicker(false)
     }
 
     return (
         <>
             <PageHeader pageName={"New Request"} backStatus="react" />
 
-            <OverTimePrompt 
-                isVisible={isVisible}
-                checkItem={checkItem}
-                data={data}
-                checkSelect={checkSelect}
-                handleCheck={handleCheck}
-                onCancel={onCancel}
-                onSelect={onSelect}
-            />
+            { isPromptLoad ? (
+                <Loader />
+            ) : (
+                <OverTimePrompt 
+                    isVisible={isVisible}
+                    checkItem={checkItem}
+                    isHalf={isHalf}
+                    isPromptLoad={isPromptLoad}
+                    data={filteredData}
+                    checkSelect={checkSelect}
+                    handleCheck={handleCheck}
+                    onCancel={onCancel}
+                    onSelect={onSelect}
+                />
+            )}
+            
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === 'ios' ? 'padding' : null}
+                enabled
+            >
+                <ScrollView>
+                    <View style={styles.container}>
+                        <View style={styles.wrapper}>
+                            <Text style={styles.title}>OT Date</Text>
 
-            <View style={styles.container}>
-                <View style={styles.wrapper}>
-                    <Text style={styles.title}>Start Date</Text>
+                            <View style={[styles.rowView, styles.border, styles.disabledInput]}>
+                                <Text style={styles.text}>
+                                    {OTDate && DateTimeUtils.dateFullConvert(OTDate)}
+                                </Text>
+                            </View>
+                        </View>
 
-                    <View style={[styles.rowView, styles.border]}>
-                        <Text>
-                            {startDate == null ? "mm/dd/yyyy" 
-                            : moment(startDate, "YYYYMMDD").format("MMMM DD, YYYY")}
-                        </Text>
-                        
-                        <FontAwesome 
-                            name="calendar"
-                            size={20}
-                            color={COLORS.darkGray}
-                            onPress={() =>  setShowStartPicker(true)}
-                        />
-                    </View>
-                </View>
+                        <View style={styles.wrapper}>
+                            <Text style={styles.title}>Shift</Text>
 
-                <View style={styles.wrapper}>
-                    <Text style={styles.title}>End Date</Text>
+                            <View style={[styles.rowView, styles.border, styles.disabledInput]}>
+                                <Text style={styles.text}>{shiftSched}</Text>
+                            </View>
+                        </View>
 
-                    <View style={[styles.rowView, styles.border]}>
-                        <Text>
-                            {endDate == null ? "mm/dd/yyyy"
-                            : moment(endDate, "YYYYMMDD").format("MMMM DD, YYYY")}
-                        </Text>
-                        
-                        <FontAwesome 
-                            name="calendar"
-                            size={20}
-                            color={COLORS.darkGray}
-                            onPress={() => setShowEndDatePicker(true)}
-                        />
-                    </View>
-                </View>
+                        <View style={styles.wrapper}>
+                            <Text style={styles.title}>Actual OT In</Text>
 
-                <View style={styles.wrapper}>
-                    <Text style={styles.title}>Shift Schedule</Text>
+                            <View style={[styles.rowView, styles.border, styles.disabledInput]}>
+                                <Text style={styles.text}>
+                                    {DateTimeUtils.timeConvert(actualOTIn)}
+                                </Text>
+                            </View>
+                        </View>
 
-                    <View style={[styles.pickerView, styles.border]}>
-                        <Picker
-                            selectedValue={shiftSched}
-                            onValueChange={(itemValue, itemIndex) => setShiftSched(itemValue)}
-                        >
-                            <Picker.Item 
-                                label="Select an option" 
-                                style={styles.itemPicker} 
-                                color={COLORS.tr_gray} 
-                                value={null} enabled={false} /> 
-                            <Picker.Item 
-                                label="10:00 AM to 7:00 PM" 
-                                style={styles.itemPicker} 
-                                value="10:00 AM to 7:00 PM" />
-                        </Picker>
-                    </View>
+                        <View style={styles.wrapper}>
+                            <Text style={styles.title}>Actual OT Out</Text>
 
-                    <RadioButtonRN
-                        data={radioLabel}
-                        box={false}
-                        animationTypes={['pulse']}
-                        selectedBtn={(e) => setRestDay(e.label)}
-                    />
-                </View>
+                            <View style={[styles.rowView, styles.border, styles.disabledInput]}>
+                                <Text style={styles.text}>
+                                    {DateTimeUtils.timeConvert(actualOTOut)}
+                                </Text>
+                            </View>
+                        </View>
 
-                <View style={styles.wrapper}>
-                    <Text style={styles.title}>Reason</Text>
+                        <View style={styles.wrapper}>
+                            <Text style={styles.title}>OT From</Text>
 
-                    <TextInput
-                        style={[styles.textInput, styles.border]}
-                        onChangeText={(text) => setReason(text)}
-                        value={reason}
-                        placeholder="Details"
-                        placeholderTextColor={COLORS.tr_gray}
-                    />
-                </View>
+                            <View style={[styles.rowView, styles.border]}>
+                                <Text style={styles.text}>
+                                    {!OvertimeFrom ? (
+                                        <Text style={styles.placeholder}>Time</Text>
+                                    ) : DateTimeUtils.timeConvert(OvertimeFrom)}
+                                </Text>
 
-                <View style={styles.wrapper}>
-                    <Text style={styles.title}>File</Text>
-
-                    <View style={[styles.rowView, styles.border]}>
-                        {selectedFile == null ? (
-                            <Text>Camera/Image</Text>
-                        ) : (
-                            typeof selectedFile === 'string' && selectedFile.includes("Camera") ? (
-                                <Text style={{ width: 220 }}>{selectedFile}</Text>
-                            ) : (
-                                <Text style={{ width: 220 }}>{selectedFile.name || selectedFile}</Text>
-                            )
-                        )}
-
-                        <View style={[styles.rowView, { alignItems: 'center' }]}>
-                            <Ionicons 
-                                name="camera" size={26}
-                                onPress={() => navigation.navigate('CameraAccess', { onPanel: 0 })} />
-
-                            <FontAwesome 
-                                name="file" size={18} style={{ marginLeft: 15 }}
-                                onPress={selectDocument}
+                                <AntDesign 
+                                    name="clockcircle"
+                                    size={20}
+                                    color={COLORS.darkGray}
+                                    onPress={() => setOvertimeFromPicker(true)}
                                 />
+                            </View>
+                        </View>
+
+                        <View style={styles.wrapper}>
+                            <Text style={styles.title}>OT To</Text>
+
+                            <View style={[styles.rowView, styles.border]}>
+                                <Text style={styles.text}>
+                                    {!OvertimeTo ? (
+                                        <Text style={styles.placeholder}>Time</Text>
+                                    ) : DateTimeUtils.timeConvert(OvertimeTo)}
+                                </Text>
+
+                                <AntDesign 
+                                    name="clockcircle"
+                                    size={20}
+                                    color={COLORS.darkGray}
+                                    onPress={() => setOvertimeToPicker(true)}
+                                />
+                            </View>
+                        </View>
+
+                        <View style={styles.wrapper}>
+                            <Text style={styles.title}>Reason</Text>
+
+                            <TextInput
+                                style={[styles.textInput, styles.border]}
+                                onChangeText={(text) => setReason(text)}
+                                value={reason}
+                                placeholder="Details"
+                                placeholderTextColor={COLORS.tr_gray}
+                            />
+                        </View>
+
+                        <View style={styles.wrapper}>
+                            <Text style={styles.title}>File</Text>
+
+                            <View style={[styles.rowView, styles.border]}>
+                                {selectedFile == null ? (
+                                <Text style={styles.placeholder}>Camera/Upload</Text>
+                            ) : (
+                                <View style={styles.rowView}>
+                                    <AntDesign 
+                                        name="checkcircle"
+                                        size={20}
+                                        color={COLORS.green}
+                                    />
+
+                                    <Text style={styles.fileSuccess}>File Attached</Text>
+                                </View>
+                            )}
+
+                                <View style={[styles.rowView, { marginRight: -10 }]}>
+                                    <Ionicons 
+                                        name="camera" size={26} color={COLORS.darkGray}
+                                        onPress={() => navigation.navigate('CameraAccess', { onPanel: 2 })} />
+
+                                    <FontAwesome5
+                                        name="file-upload" size={18} color={COLORS.darkGray} style={{ marginLeft: 15 }}
+                                        onPress={() => Utils.fileAttach(setSelectedFile)}
+                                        />
+                                </View>
+                            </View>
+
+                            { isFileNote && (
+                                <Text style={styles.fileNote}>{STRINGS.fileNote}</Text>
+                            )}
+
+                            { isInvalidError && (
+                                <Text style={styles.fileError}>{STRINGS.invalidError}</Text>
+                            )}
+
+                            { isSizeError && (
+                                <Text style={styles.fileError}>{STRINGS.sizeError}</Text>
+                            )}
                         </View>
                     </View>
-                </View>
+                </ScrollView>
+            </KeyboardAvoidingView>
 
-                <TouchableOpacity 
-                    style={styles.button}
-                    onPress={onNextHandler}>
-                    <Text style={styles.textButton}>NEXT</Text>
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity 
+                style={styles.button}
+                onPress={onNextHandler}>
+                <Text style={styles.textButton}>NEXT</Text>
+            </TouchableOpacity>
 
-            {showStartPicker && (
-                <DateTimePicker
-                    testID="dateTimePicker"
-                    value={new Date()}
-                    mode="date"
-                    is24Hour={true}
-                    display="default"
-                    onChange={onStartDateChange}
-                />
-            )}
 
-            {showEndPicker && (
-                <DateTimePicker
-                    testID="dateTimePicker"
-                    value={new Date()}
-                    mode="date"
-                    is24Hour={true}
-                    display="default"
-                    onChange={onEndDateChange}
-                />
-            )}
+            <DateTimePickerModal
+                isVisible={OvertimeFromPicker}
+                mode="time"
+                onConfirm={handleOvertimeFrom}
+                onCancel={() => setOvertimeFrom(false)} 
+            />
+
+            <DateTimePickerModal
+                isVisible={OvertimeToPicker}
+                mode="time"
+                onConfirm={handleOvertimeTo}
+                onCancel={() => setOvertimeFrom(false)} 
+            />
         </>
   )
 }
@@ -283,7 +350,7 @@ const styles = StyleSheet.create({
     },
 
     wrapper: {
-        marginVertical: 10,
+        marginTop: 10,
     },
 
     border: {
@@ -293,14 +360,31 @@ const styles = StyleSheet.create({
     },
 
     title: {
-        fontFamily: 'Inter_600SemiBold'
+        fontFamily: 'Inter_600SemiBold',
+        marginHorizontal: 15,
+        marginBottom: 7,
+    },
+
+    text: { 
+        fontFamily: 'Inter_400Regular',
+        paddingVertical: 5,
+    },
+
+    grayText: {
+        fontFamily: 'Inter_500Medium',
+        color: COLORS.darkGray
     },
 
     rowView: {
-        padding: 10,
+        paddingHorizontal: 15,
         justifyContent: 'space-between',
         flexDirection: 'row',
         alignItems: 'center',
+        height: 45
+    },
+
+    placeholder: {
+        color: COLORS.tr_gray,
     },
 
     itemPicker: {
@@ -308,8 +392,31 @@ const styles = StyleSheet.create({
     },
 
     textInput: {
+        fontFamily: 'Inter_500Medium',
         paddingLeft: 15,
-        paddingVertical: 13
+        height: 45
+    },
+
+    timeWrapper:{
+        marginVertical: 15,
+        marginHorizontal: 20,
+    },
+
+    timeContent: {
+        fontFamily: 'Inter_500Medium',
+        backgroundColor: COLORS.gray,
+        width: 100,
+        textAlign: 'center',
+
+        borderRadius: 5,
+        borderWidth: 2,
+        borderColor: COLORS.tr_gray
+    },
+
+    timeView: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        margin: 5
     },
 
     button: {
@@ -318,6 +425,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.orange,
         width: 170,
         padding: 10,
+        marginVertical: 20,
         borderRadius: 20,
     },
 
@@ -326,5 +434,30 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: COLORS.clearWhite,
         textAlign: 'center',
+    },
+
+    disabledInput: {
+        backgroundColor: COLORS.lightGray3,
+    },
+
+    fileNote: {
+        fontStyle: 'italic',
+        fontSize: 13,
+        marginHorizontal: 20,
+        marginVertical: 10,
+    },
+
+    fileError: {
+        fontSize: 13,
+        paddingHorizontal: 20,
+        paddingVertical: 5,
+        color: COLORS.red,
+        fontStyle: 'italic',
+    },
+
+    fileSuccess: {
+        color: COLORS.green,
+        marginLeft: 10,
+        fontFamily: 'Inter_600SemiBold'
     }
 })

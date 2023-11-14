@@ -76,9 +76,24 @@ export default function CameraAccess ({ navigation }) {
     }
 
     const onRequestHandle = () => {
-        route.params?.onPanel == 0 ?
-            navigation.navigate('COSRequest', { image: encodeURIComponent(imgPath) })
-        : navigation.navigate('OBRequest', { image: encodeURIComponent(imgPath) }) 
+
+        switch ( route.params?.onPanel ) {
+            case 0:
+                navigation.navigate('COSRequest', { image: encodeURIComponent(imgPath) })
+                break
+            
+            case 1:
+                navigation.navigate('OBRequest', { image: encodeURIComponent(imgPath) })
+                break
+            
+            case 2: 
+                navigation.navigate('OTRequest', { image: encodeURIComponent(imgPath) }) 
+                break
+            
+            default:
+                alert("No onPanel found")
+                break
+        }
     }
 
     return (

@@ -15,7 +15,7 @@ const data = [
         requestedSched: '7:00 AM - 4:00 PM',
         reason: '----',
         attachedFile: '-----',
-        documentNo: 'COS22307248376',
+        documentNo: 'COS0001',
         filedDate: '20231102',
         statusBy: 'Mark Sasama',
         statusByDate: '20230913',
@@ -28,7 +28,7 @@ const data = [
         requestedSched: '7:00 AM - 4:00 PM',
         reason: '----',
         attachedFile: '-----',
-        documentNo: 'COS22307248376',
+        documentNo: 'COS0002',
         filedDate: '20231115',
         statusBy: 'Mark Sasama',
         statusByDate: '20230913',
@@ -168,14 +168,22 @@ export default function ChangeOfSchedulePanel ( onAnimate ) {
                         <ScrollView>
                             { newCount1 > 0 && (<Text style={styles.itemStatusText}>New</Text>) }
 
-                            { filteredData.map((item, index) => {
-                                const withinFirst = isFirstHalf && moment(item.filedDate, 'YYYYMMDD').isBetween(firstDayOfMonth, fifteenthDayOfMonth, null, '[]')
-                                const withinSecond = isSecondHalf && moment(item.filedDate, 'YYYYMMDD').isBetween(sixteenthDayOfMonth, lastDayOfMonth, null, '[]')
+                            {filteredData
+  .filter((item) => {
+    const withinFirst =
+      isFirstHalf &&
+      moment(item.filedDate, 'YYYYMMDD').isBetween(firstDayOfMonth, fifteenthDayOfMonth, null, '[]');
+    const withinSecond =
+      isSecondHalf &&
+      moment(item.filedDate, 'YYYYMMDD').isBetween(sixteenthDayOfMonth, lastDayOfMonth, null, '[]');
 
-                                if (withinFirst || withinSecond) {
-                                    return requestItemDisplay({ item, index })
-                                }
-                            })}
+    return withinFirst || withinSecond;
+  })
+  .sort((a, b) => b.documentNo.localeCompare(a.documentNo)) // Note the inversion here
+  .map((item, index) => requestItemDisplay({ item, index }))
+}
+
+
 
                             { newCount2 > 0 && (<Text style={styles.itemStatusText}>Earlier</Text>) }
 

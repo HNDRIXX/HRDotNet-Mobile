@@ -116,7 +116,7 @@ export default function OBRequest ({ navigation }) {
         <>
             <PageHeader pageName={"OB New Request"} />
 
-            <KeyboardAvoidingView
+            {/* <KeyboardAvoidingView
                 style={{ flex: 1 }}
                 behavior={Platform.OS === 'ios' ? 'padding' : null}
                 enabled
@@ -309,7 +309,7 @@ export default function OBRequest ({ navigation }) {
                 mode="time"
                 onConfirm={handleTimeOut}
                 onCancel={() => setTimeOutPicker(false)} 
-            />
+            /> */}
         </>
   )
 }

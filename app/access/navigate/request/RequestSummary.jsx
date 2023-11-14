@@ -6,6 +6,7 @@ import PageHeader from "../../../../components/header/PagesHeader";
 import { COLORS } from "../../../../constant";
 import OBSummary from "../../../../components/panel/request/summary/OBSummary";
 import COSSummary from "../../../../components/panel/request/summary/COSSummary";
+import OTSummary from "../../../../components/panel/request/summary/OTSummary";
 
 export default function RequestSummary({ navigation }) {
     const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false)
@@ -35,6 +36,12 @@ export default function RequestSummary({ navigation }) {
                     isSuccessAlertVisible={isSuccessAlertVisible} />
             ) : route.params?.onPanel == 1 ? (
                 <OBSummary 
+                    route={route}
+                    openCustomAlert={openCustomAlert}
+                    closeCustomAlert={closeCustomAlert}
+                    isSuccessAlertVisible={isSuccessAlertVisible} />
+            ) : route.params?.onPanel == 2 ? (
+                <OTSummary 
                     route={route}
                     openCustomAlert={openCustomAlert}
                     closeCustomAlert={closeCustomAlert}

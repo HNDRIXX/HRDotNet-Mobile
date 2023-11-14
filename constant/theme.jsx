@@ -31,6 +31,7 @@ const COLORS = {
     tr_gray: '#2A2A2A73',
     lightGray: '#EAEAEA',
     lightGray2: '#D1D1D1',
+    lightGray3: '#D3D3D3',
     gray: '#DDDD',
     darkGray: '#575757',
     shadowGray: 'rgba(119, 119, 119, 0.06)',
