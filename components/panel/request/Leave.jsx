@@ -4,7 +4,7 @@ import * as Animatable from 'react-native-animatable';
 import { AntDesign } from "@expo/vector-icons";
 import moment from "moment/moment";
 
-import { COLORS } from "../../../constant";
+import { COLORS, Utils, DateTimeUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
 import RequestItem from "../../items/request/RequestItem"
 
@@ -43,15 +43,14 @@ export default function LeavePanel ( onAnimate ) {
     const [isLoading, setIsLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
 
-    const momentDate = moment()
-    const dateThreshold = momentDate.clone().subtract(7, 'days')
+    const [newCount, setNewCount] = useState(0)
+    const [earlierCount, setEarlierCount] = useState(0)
 
-    const [newCount1, setNewCount1] = useState(0)
-    const [newCount2, setNewCount2] = useState(0)
+    const [isFirstHalf, setFirstHalf] = useState(null)
+    const [isSecondHalf, setSecondHalf] = useState(null)
 
     const filteredData = data.filter((newItem) => {
-            const formattedDate = formattedDateString(newItem.appliedDate)
-            const itemAppliedDate = moment(formattedDate, 'MMMM DD YYYY')
+            const formattedDate = DateTimeUtils.dateFullConvert(newItem.appliedDate)
             
             return (
                 newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
@@ -61,31 +60,13 @@ export default function LeavePanel ( onAnimate ) {
     )
 
     useEffect(() => {
-        let count1 = 0
-        let count2 = 0
-    
-        filteredData.forEach((item) => {
-          const formattedDate = formattedDateString(item.appliedDate)
-          const itemAppliedDate = moment(formattedDate, 'MMMM DD YYYY')
-    
-          if (!itemAppliedDate.isBefore(dateThreshold)) {
-            count1++
-          }
-    
-          if (itemAppliedDate.isBefore(dateThreshold)) {
-            count2++
-          }
-        })
-    
-        setNewCount1(count1)
-        setNewCount2(count2)
-    }, [filteredData, dateThreshold])
+        setTimeout(() => { setIsLoading(false) }, 800)
+        Utils.getHalf(setFirstHalf, setSecondHalf)
+    }, [])
 
     useEffect(() => {
-        setTimeout(() => {
-          setIsLoading(false)
-        }, 800)
-    }, [])
+        Utils.dataItemCount(filteredData, setNewCount, setEarlierCount, isFirstHalf, isSecondHalf)
+    }, [filteredData])
 
     const requestItemDisplay = ({ item, index }) => {
         return (
@@ -104,6 +85,7 @@ export default function LeavePanel ( onAnimate ) {
             />
         )
     }
+    
       
     return (
         <>
@@ -115,36 +97,38 @@ export default function LeavePanel ( onAnimate ) {
                     duration={500}
                     style={{ opacity: 1, flex: 1 }}
                 >
-                   <SearchAndNew 
+                    <SearchAndNew 
                         filterText={filterText}
                         setFilterText={setFilterText}
                     />
 
                     { filteredData.length > 0 ? (
                         <ScrollView>
-                            { newCount1 > 0 && (<Text style={styles.itemStatusText}>New</Text>) }
+                            { newCount > 0 && (<Text style={styles.itemStatusText}>New</Text>) }
 
-                            { filteredData.map((item, index) => {
-                                const itemAppliedDate = moment(formattedDateString(item.appliedDate), 'MMMM DD YYYY')
+                            {filteredData
+                                .filter((item) => {
+                                    const withinFirst = isFirstHalf && Utils.withinFirst(item.filedDate)
+                                    const withinSecond = isSecondHalf && Utils.withinSecond(item.filedDate)
 
-                                if (!itemAppliedDate.isBefore(dateThreshold)) {
-                                    return (
-                                        requestItemDisplay({ item, index })
-                                    )
-                                }
-                            })}
+                                    return withinFirst || withinSecond
+                                })
+                                .sort((a, b) => b.documentNo.localeCompare(a.documentNo))
+                                .map((item, index) => requestItemDisplay({ item, index }))
+                            }
+                            
+                            { earlierCount > 0 && (<Text style={styles.itemStatusText}>Earlier</Text>) }
 
-                            { newCount2 > 0 && (<Text style={styles.itemStatusText}>Earlier</Text>) }
+                            {filteredData
+                                .filter((item) => {
+                                    const withinFirst = isFirstHalf && !Utils.withinFirst(item.filedDate)
+                                    const withinSecond = isSecondHalf && !Utils.withinSecond(item.filedDate)
 
-                            { filteredData.map((item, index) => {
-                                const itemAppliedDate = moment(formattedDateString(item.appliedDate), 'MMMM DD YYYY')
-
-                                if (itemAppliedDate.isBefore(dateThreshold)) {
-                                    return (
-                                        requestItemDisplay({ item, index })
-                                    )
-                                }
-                            })}
+                                    return withinFirst || withinSecond
+                                })
+                                .sort((a, b) => b.documentNo.localeCompare(a.documentNo))
+                                .map((item, index) => requestItemDisplay({ item, index }))
+                            }
                         </ScrollView>
                     ) : ( 
                         <View style={styles.noSearchWrapper}>

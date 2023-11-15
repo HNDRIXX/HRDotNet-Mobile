@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, BackHandler, ScrollView, ActivityIndicator, Alert, Linking } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, StyleSheet, Text, TouchableOpacity, Alert, Linking } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { Ionicons } from '@expo/vector-icons';
 import * as Location from 'expo-location';
-import { Image } from 'expo-image';
 import moment from 'moment';
 import { AntDesign } from '@expo/vector-icons';
-import { useNavigation, useIsFocused, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Shadow } from 'react-native-shadow-2';
 
-import { COLORS } from '../../../constant';
+import { COLORS, Utils } from '../../../constant';
 import SuccessTimeClock from '../../../components/prompt/SuccessTimeClock';
 import LocationPrompt from '../../../components/prompt/LocationPrompt';
 import RefreshPage from '../../../components/use/RefreshPage';
@@ -28,109 +27,26 @@ export default function ClockInOut () {
   const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isRestart, setRestart] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
 
   const [time, setTime] = useState(moment())
-  const route = useRoute()
-
-  useEffect(() => {
-    const timer = setInterval(() => setTime(moment()), 1000)  
-    return () => clearInterval(timer)
-  }, [])
   const currentDate = moment().format('MMMM D, YYYY, dddd')
+
+  const route = useRoute()
+  const navigation = useNavigation()
 
   const [markerCoordinate, setMarkerCoordinate] = useState({
     latitude: 14.643779,
     longitude: 121.026478,
   })
 
-  const navigation = useNavigation()
-  const isFocused = useIsFocused()
-
-//   console.log(paramsClockedValue)
-  
-  // const fetchLocationAndAddress = async () => {
-  //   setIsLoading(true)
-  //   const location = await Location.getCurrentPositionAsync({})
-  //   setLocation(location);
-  
-  //   const { coords } = location
-  //   const address = await Location.reverseGeocodeAsync({
-  //     latitude: coords.latitude,
-  //     longitude: coords.longitude,
-  //   });
-  
-  //   setMapRegion({
-  //     latitude: coords.latitude,
-  //     longitude: coords.longitude,
-  //     latitudeDelta: 0.001,
-  //     longitudeDelta: 0.005,
-  //   });
-  
-  //   const fullAddress = `${address[0].name} ${address[0].street}, ${address[0].city}, ${address[0].country}`
-  //   setCurrAddress(fullAddress)
-  
-  //   setIsLoading(false)
-  // }
-
-  const fetchData = async () => {
-    setIsLoading(true)
-
-    try {
-      const location = await Location.getCurrentPositionAsync({})
-      setLocation(location)
-
-      const { coords } = location
-      const address = await Location.reverseGeocodeAsync({
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-      })
-
-      setMapRegion({
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-        latitudeDelta: 0.001,
-        longitudeDelta: 0.005,
-      })
-
-      const fullAddress = `${address[0].name} ${address[0].street}, ${address[0].city}, ${address[0].country}`
-      setIsLoading(false)
-      setCurrAddress(fullAddress)
-    } catch (error) {
-      console.error("Error fetching location and address:", error)
-    }
-  }
-
-  const permissionLocation = async () => {
-    const { status } = await Location.requestForegroundPermissionsAsync()
-  
-    console.log(status)
-    
-    if (status != 'granted') {
-      const openSettings = () => {
-        Linking.openSettings()
-      }
-
-      Alert.alert(
-        'Permission Required',
-        'Please allow location permissions',
-        [
-          {
-            text: 'OK',
-            onPress: openSettings,
-          },
-        ]
-      )
-    } else { fetchData() } 
-  
-    // try {
-    //   const location = await Location.getCurrentPositionAsync({})
-    // } catch (error) {
-    //   console.log(error)
-    // }
-  }
+  useEffect(() => {
+    const timer = setInterval(() => setTime(moment()), 1000)  
+    return () => clearInterval(timer)
+  }, [])
 
   useEffect(() => {
-    permissionLocation()
+    Utils.permissionLocation(setIsLoading, setLocation, setMapRegion, setCurrAddress)
   }, [isRestart])  
 
   useEffect(() => {
@@ -173,6 +89,14 @@ export default function ClockInOut () {
       })  
   }
 
+  const onRefresh = useCallback(() => {
+    setRestart(true)
+
+    setTimeout(() => {
+      setRefreshing(false)
+    }, 3000)
+  }, []) 
+
   return (
     <>
       <View style={styles.topHeader}>
@@ -188,12 +112,12 @@ export default function ClockInOut () {
 
       { onLocation ? ( 
         <LocationPrompt 
-          permissionLocation={permissionLocation} 
+          permissionLocation={Utils.permissionLocation(setIsLoading, setLocation, setMapRegion, setCurrAddress)} 
           navigation={navigation}
         /> ) : ( null )}
 
       { isLoading ? (
-        <RefreshPage setRestart={setRestart} />
+        <RefreshPage setRestart={setRestart} onRefresh={onRefresh} refreshing={refreshing} />
       ) : (
         <>
           <View style={styles.container}>

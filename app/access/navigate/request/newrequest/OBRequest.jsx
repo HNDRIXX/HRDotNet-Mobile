@@ -6,11 +6,9 @@ import { FontAwesome } from "@expo/vector-icons";
 import SelectDropdown from "react-native-select-dropdown";
 import { useRoute } from "@react-navigation/native";
 import { Ionicons, AntDesign, Entypo } from "@expo/vector-icons";
-import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
 
 import PageHeader from "../../../../../components/header/PagesHeader";
-import { COLORS, STRINGS } from "../../../../../constant";
+import { COLORS, STRINGS, Utils } from "../../../../../constant";
 import { ScrollView } from "react-native";
 
 const data = [{ timeIn: "10:00 AM", timeOut: "7:00 PM"}, { timeIn: "8:00 AM", timeOut: "6:00 PM" }]
@@ -59,46 +57,11 @@ export default function OBRequest ({ navigation }) {
         setTimeOut(moment(time).format('HH:mm'))
         setTimeOutPicker(false)
     }
-    
-    const selectDocument = async () => {
-        try {
-            const result = await DocumentPicker.getDocumentAsync()
-
-            if (!result.canceled){
-                const fileInfo = result.assets[0]
-                const uri = fileInfo.uri
-
-                const fileExtension = uri.substring(uri.lastIndexOf('.') + 1).toLowerCase()
-                
-                const fileSizeInMB = fileInfo.size / (1024 * 1024)
-
-                if (fileSizeInMB <= 5 && ['docx', 'pdf', 'jpeg', 'jpg', 'txt'].includes(fileExtension)) {
-                    setSelectedFile(fileInfo.uri)
-                } else {
-                    if (fileSizeInMB > 5) {
-                        Alert.alert('File Too Large', 'Please select a file with a size of 5MB or less.')
-                    } else {
-                        Alert.alert('Unsupported File Format', 'Please select a docx, pdf, jpeg, jpg, or txt file.')
-                    }
-                }
-            }
-        } catch (error) {
-            console.error('Error picking document:', error)
-        }
-    }
 
     const onNextHandler = () => {
         if ( !OBDate || !location || !shiftSched || !timeIn || !timeOut || !reason || !selectedFile) {
             alert(STRINGS.fillFormError)
         } else {
-            console.log(selectedFile)
-
-            // file:///var/mobile/Containers/Data/Application/8ED58F99-C645-4BEF-B8BC-DD3DD70BB7D8/Library/Caches/ExponentExperienceData/%2540hndrx022%252FHRDotNet-Mobile/Camera/1140FBBB-A338-4875-85B8-2AC10AD88A49.jpg
-
-            // file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540hndrx022%252FHRDotNet-Mobile/Camera/cf7772a8-acf3-45b5-9ef4-f64f81296336.jpg
-
-            // file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540hndrx022%252FHRDotNet-Mobile/Camera/1140FBBB-A338-4875-85B8-2AC10AD88A49.jpg
-
             navigation.navigate('RequestSummary', {
                 onPanel: 1,
                 OBDate:  OBDate,
@@ -116,12 +79,12 @@ export default function OBRequest ({ navigation }) {
         <>
             <PageHeader pageName={"OB New Request"} />
 
-            {/* <KeyboardAvoidingView
+            <KeyboardAvoidingView
                 style={{ flex: 1 }}
                 behavior={Platform.OS === 'ios' ? 'padding' : null}
                 enabled
             >
-                <ScrollView>
+                <ScrollView bounces={false}>
                     <View style={styles.container}>
                         <View style={styles.wrapper}>
                             <Text style={styles.title}>OB Date</Text>
@@ -249,11 +212,15 @@ export default function OBRequest ({ navigation }) {
                                 {selectedFile == null ? (
                                     <Text style={styles.placeholder}>Camera/Upload</Text>
                                 ) : (
-                                    typeof selectedFile === 'string' && selectedFile.includes("Camera") ? (
-                                        <Text style={{ width: 220 }}>{selectedFile}</Text>
-                                    ) : (
-                                        <Text style={{ width: 220 }}>{selectedFile.name || selectedFile}</Text>
-                                    )
+                                    <View style={[styles.rowView, { paddingHorizontal: 0 }]}>
+                                        <AntDesign 
+                                            name="checkcircle"
+                                            size={20}
+                                            color={COLORS.green}
+                                        />
+
+                                        <Text style={styles.fileSuccess}>File Attached</Text>
+                                    </View>
                                 )}
 
                                 <View style={[styles.rowView, { marginRight: -10 }]}>
@@ -263,8 +230,8 @@ export default function OBRequest ({ navigation }) {
 
                                     <FontAwesome 
                                         name="file" size={18} color={COLORS.darkGray} style={{ marginLeft: 15 }}
-                                        // onPress={selectDocument}
-                                        />
+                                        onPress={() => Utils.fileAttach(setSelectedFile)}
+                                    />
                                 </View>
                             </View>
 
@@ -309,7 +276,7 @@ export default function OBRequest ({ navigation }) {
                 mode="time"
                 onConfirm={handleTimeOut}
                 onCancel={() => setTimeOutPicker(false)} 
-            /> */}
+            />
         </>
   )
 }

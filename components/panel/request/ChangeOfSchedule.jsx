@@ -4,7 +4,7 @@ import * as Animatable from 'react-native-animatable';
 import { AntDesign } from "@expo/vector-icons";
 import moment from "moment/moment";
 
-import { COLORS } from "../../../constant";
+import { COLORS, Utils, DateTimeUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
 import RequestItem from "../../items/request/RequestItem"
 
@@ -41,7 +41,7 @@ const data = [
         requestedSched: '7:00 AM - 4:00 PM',
         reason: '----',
         attachedFile: '-----',
-        documentNo: 'COS22307248376',
+        documentNo: 'COS0003',
         filedDate: '20231117',
         statusBy: 'Mark Sasama',
         statusByDate: '20230913',
@@ -55,7 +55,7 @@ const data = [
         requestedSched: '7:00 AM - 4:00 PM',
         reason: '----',
         attachedFile: '-----',
-        documentNo: 'COS22307248376',
+        documentNo: 'COS0004',
         filedDate: '20240101',
         statusBy: 'Mark Sasama',
         statusByDate: '20230913',
@@ -68,65 +68,31 @@ export default function ChangeOfSchedulePanel ( onAnimate ) {
     const [isLoading, setIsLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
 
-    const [newCount1, setNewCount1] = useState(0)
-    const [newCount2, setNewCount2] = useState(0)
+    const [newCount, setNewCount] = useState(0)
+    const [earlierCount, setEarlierCount] = useState(0)
 
     const [isFirstHalf, setFirstHalf] = useState(null)
     const [isSecondHalf, setSecondHalf] = useState(null)
 
-    const currentDate = moment()
-    const firstDayOfMonth = moment().startOf('month')
-    const fifteenthDayOfMonth = moment().date(15)
-
-    const lastDayOfMonth = moment().endOf('month')
-    const sixteenthDayOfMonth = moment().date(15)
-
-
     const filteredData = data.filter((newItem) => {
-            const formattedDate = formattedDateString(newItem.appliedDate)
-            const itemAppliedDate = moment(formattedDate, 'MMMM DD YYYY')
-            
-            return (
-                newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
-                formattedDate.toLowerCase().includes(filterText.toLowerCase())
-            )
-        }
-    )
+        const formattedDate = DateTimeUtils.dateFullConvert(newItem.appliedDate)
+
+        return (
+            newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
+            formattedDate.toLowerCase().includes(filterText.toLowerCase())
+        )
+    })
  
     useEffect(() => {
         setTimeout(() => {
             setIsLoading(false)
         }, 800)
 
-        if (currentDate.isBetween(firstDayOfMonth, fifteenthDayOfMonth, null, '[]')) {
-            setFirstHalf(true)
-            setSecondHalf(false)    
-        } else if (currentDate.isBetween(sixteenthDayOfMonth, lastDayOfMonth, null, '[]')) {
-            setFirstHalf(false)
-            setSecondHalf(true)
-        }
+        Utils.getHalf(setFirstHalf, setSecondHalf)
     }, [])
 
     useEffect(() => {
-        let count1 = 0
-        let count2 = 0
-
-        filteredData.forEach((item) => {
-            if (isFirstHalf) {
-                const isBetweenFirstHalf = moment(item.filedDate, 'YYYYMMDD').isBetween(firstDayOfMonth, fifteenthDayOfMonth, null, '[]')
-                count1 += isBetweenFirstHalf ? 1 : 0
-                count2 += isBetweenFirstHalf ? 0 : 1
-            }
-              
-            if (isSecondHalf) {
-                const isBetweenSecondHalf = moment(item.filedDate, 'YYYYMMDD').isBetween(sixteenthDayOfMonth, lastDayOfMonth, null, '[]')
-                count1 += isBetweenSecondHalf ? 1 : 0
-                count2 += isBetweenSecondHalf ? 0 : 1
-            }              
-        })  
-    
-        setNewCount1(count1)
-        setNewCount2(count2)
+        Utils.dataItemCount(filteredData, setNewCount, setEarlierCount, isFirstHalf, isSecondHalf)
     }, [filteredData])
 
     const requestItemDisplay = ({ item, index }) => {
@@ -166,36 +132,31 @@ export default function ChangeOfSchedulePanel ( onAnimate ) {
 
                     { filteredData.length > 0 ? (
                         <ScrollView>
-                            { newCount1 > 0 && (<Text style={styles.itemStatusText}>New</Text>) }
+                            { newCount > 0 && (<Text style={styles.itemStatusText}>New</Text>) }
 
                             {filteredData
-  .filter((item) => {
-    const withinFirst =
-      isFirstHalf &&
-      moment(item.filedDate, 'YYYYMMDD').isBetween(firstDayOfMonth, fifteenthDayOfMonth, null, '[]');
-    const withinSecond =
-      isSecondHalf &&
-      moment(item.filedDate, 'YYYYMMDD').isBetween(sixteenthDayOfMonth, lastDayOfMonth, null, '[]');
+                                .filter((item) => {
+                                    const withinFirst = isFirstHalf && Utils.withinFirst(item.filedDate)
+                                    const withinSecond = isSecondHalf && Utils.withinSecond(item.filedDate)
 
-    return withinFirst || withinSecond;
-  })
-  .sort((a, b) => b.documentNo.localeCompare(a.documentNo)) // Note the inversion here
-  .map((item, index) => requestItemDisplay({ item, index }))
-}
+                                    return withinFirst || withinSecond
+                                })
+                                .sort((a, b) => b.documentNo.localeCompare(a.documentNo))
+                                .map((item, index) => requestItemDisplay({ item, index }))
+                            }
+                            
+                            { earlierCount > 0 && (<Text style={styles.itemStatusText}>Earlier</Text>) }
 
+                            {filteredData
+                                .filter((item) => {
+                                    const withinFirst = isFirstHalf && !Utils.withinFirst(item.filedDate)
+                                    const withinSecond = isSecondHalf && !Utils.withinSecond(item.filedDate)
 
-
-                            { newCount2 > 0 && (<Text style={styles.itemStatusText}>Earlier</Text>) }
-
-                            { filteredData.map((item, index) => {
-                                const withinFirst = isFirstHalf && !moment(item.filedDate, 'YYYYMMDD').isBetween(firstDayOfMonth, fifteenthDayOfMonth, null, '[]')
-                                const withinSecond = isSecondHalf && !moment(item.filedDate, 'YYYYMMDD').isBetween(sixteenthDayOfMonth, lastDayOfMonth, null, '[]')
-
-                                if (withinFirst || withinSecond) {
-                                    return requestItemDisplay({ item, index })
-                                }
-                            })}
-
+                                    return withinFirst || withinSecond
+                                })
+                                .sort((a, b) => b.documentNo.localeCompare(a.documentNo))
+                                .map((item, index) => requestItemDisplay({ item, index }))
+                            }
                         </ScrollView>
                     ) : ( 
                         <View style={styles.noSearchWrapper}>

@@ -5,6 +5,7 @@ import { Shadow } from 'react-native-shadow-2';
 import moment from 'moment';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
+// import { Image } from 'react-native-expo-image-cache';
 
 import { COLORS } from '../../../constant';
 

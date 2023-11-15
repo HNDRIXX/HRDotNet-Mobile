@@ -9,6 +9,7 @@ import { COLORS } from "../../../constant";
 import CalendarNote from "../../../components/note/CalendarNote";
 import NavigationHeader from "../../../components/header/NavigationHeader";
 import CalendarEvent from "../../../components/section/calendar/CalendarEvent";
+import { ScrollView } from "react-native-gesture-handler";
 
 const valueEvents = {
   '20231001': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day', }, ],
@@ -164,10 +165,10 @@ export default function CalendarScreen() {
           <Animatable.View
               animation={'fadeIn'}
               duration={500}
-              style={{ opacity: 1, flex: 1 }}
+              style={{ opacity: 1, flex: 1, backgroundColor: COLORS.clearWhite }}
           >
               <View style={styles.container}>
-                  <View
+                  <ScrollView
                     ref={scrollViewRef}
                     refreshControl={
                       <RefreshControl
@@ -189,25 +190,27 @@ export default function CalendarScreen() {
                         }}
                         markedDates={addMarkedDates()}
                     />
-
-                  {selectedDate ? (
-                      <CalendarEvent 
-                        events={events}
-                        formatDate={formatDate}
-                        selectedDate={selectedDate}
-                        yesterday={yesterday}
-                        tomorrow={tomorrow}
-                        checkColor={checkColor}
-                        previousDate={previousDate}
-                        updatedValueEvents={updatedValueEvents}
-                        defaultDate={defaultDate}
-                        nextDate={nextDate}
-                      />
-                  ) : (
-                      <View style={styles.promptView}><CalendarNote /></View>
-                  )}
-                  </View>
+                  </ScrollView>
               </View>
+
+              {selectedDate ? (
+                  <CalendarEvent 
+                    events={events}
+                    formatDate={formatDate}
+                    selectedDate={selectedDate}
+                    yesterday={yesterday}
+                    tomorrow={tomorrow}
+                    checkColor={checkColor}
+                    previousDate={previousDate}
+                    updatedValueEvents={updatedValueEvents}
+                    defaultDate={defaultDate}
+                    nextDate={nextDate}
+                  />
+              ) : (
+                  <View style={styles.promptView}>
+                    <CalendarNote />
+                  </View>
+              )}
           </Animatable.View>
       )}
     </>
@@ -227,8 +230,11 @@ const styles = StyleSheet.create({
   },
 
   calendarView: {
-    paddingTop: 5,
-    paddingBottom: 50,
+    paddingTop: 10,
     height: 'auto',
   },
+
+  promptView: {
+    marginBottom: 70,
+  }
 })

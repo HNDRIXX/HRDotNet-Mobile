@@ -113,7 +113,8 @@ export default function MenuButton ({ clockedDate, clockedTime, clockedLocation 
 
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity 
-                                style={[styles.gridButton, { padding: padding }]}>
+                                style={[styles.gridButton, { padding: padding }]}
+                                onPress={() => navigation.navigate('OTRequest')}>
                                 <Image 
                                     source={require('../../../assets/icons/ot.png')}
                                     style={{ width: imageSize ,  height: imageSize }}

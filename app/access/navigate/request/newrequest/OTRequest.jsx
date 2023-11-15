@@ -141,10 +141,10 @@ export default function OTRequest ({ navigation }) {
 
     const handleCheck = (index) => {
         setCheckSelect(index)
-        setOTDate(data[index].OTDate)
-        setShiftSched(data[index].shiftSchedule)
-        setActualOTIn(data[index].actualOTIn)
-        setActualOTOut(data[index].actualOTOut)
+        setOTDate(sortedData[index].OTDate)
+        setShiftSched(sortedData[index].shiftSchedule)
+        setActualOTIn(sortedData[index].actualOTIn)
+        setActualOTOut(sortedData[index].actualOTOut)   
     }
 
     const handleOvertimeFrom = (time) => {
@@ -159,7 +159,7 @@ export default function OTRequest ({ navigation }) {
 
     return (
         <>
-            <PageHeader pageName={"New Request"} backStatus="react" />
+            <PageHeader pageName={"OT New Request"} backStatus="react" />
 
             { isPromptLoad ? (
                 <Loader />
@@ -182,7 +182,7 @@ export default function OTRequest ({ navigation }) {
                 behavior={Platform.OS === 'ios' ? 'padding' : null}
                 enabled
             >
-                <ScrollView>
+                <ScrollView bounces={false} >
                     <View style={styles.container}>
                         <View style={styles.wrapper}>
                             <Text style={styles.title}>OT Date</Text>
@@ -277,18 +277,18 @@ export default function OTRequest ({ navigation }) {
 
                             <View style={[styles.rowView, styles.border]}>
                                 {selectedFile == null ? (
-                                <Text style={styles.placeholder}>Camera/Upload</Text>
-                            ) : (
-                                <View style={styles.rowView}>
-                                    <AntDesign 
-                                        name="checkcircle"
-                                        size={20}
-                                        color={COLORS.green}
-                                    />
+                                    <Text style={styles.placeholder}>Camera/Upload</Text>
+                                ) : (
+                                    <View style={[styles.rowView, { paddingHorizontal: 0 }]}>
+                                        <AntDesign 
+                                            name="checkcircle"
+                                            size={20}
+                                            color={COLORS.green}
+                                        />
 
-                                    <Text style={styles.fileSuccess}>File Attached</Text>
-                                </View>
-                            )}
+                                        <Text style={styles.fileSuccess}>File Attached</Text>
+                                    </View>
+                                )}
 
                                 <View style={[styles.rowView, { marginRight: -10 }]}>
                                     <Ionicons 
@@ -297,7 +297,7 @@ export default function OTRequest ({ navigation }) {
 
                                     <FontAwesome5
                                         name="file-upload" size={18} color={COLORS.darkGray} style={{ marginLeft: 15 }}
-                                        onPress={() => Utils.fileAttach(setSelectedFile)}
+                                        // onPress={() => Utils.fileAttach(setSelectedFile)}
                                         />
                                 </View>
                             </View>

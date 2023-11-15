@@ -14,17 +14,19 @@ export default function PersonalPanel () {
                 style={{ opacity: 1, flex: 1 }}
             >
                 <View style={styles.topView}>
-                    <Image 
-                        source={require('../../../assets/user/juan.jpg')}
-                        style={styles.profilePic}
-                    />
+                    <View style={styles.imageView}>
+                        <Image 
+                            source={require('../../../assets/user/juan.jpg')}
+                            style={styles.profilePic}
+                        />
+                    </View>
 
                     <Text style={styles.nameText}>Juan dela Cruz</Text>
                     <Text style={styles.subText}>Quality Assurance Specialist</Text>
                     <Text style={styles.subText}>#5985</Text>
                 </View>
 
-                {/* <ScrollView 
+                <ScrollView 
                     style={styles.infoView}
                     contentContainerStyle={{ flexGrow: 0 }}>
                     <View style={styles.rowView}>
@@ -61,7 +63,7 @@ export default function PersonalPanel () {
                         <Text style={styles.titleText}>Email Address</Text>
                         <Text style={styles.contentText}>juandelacruz@gmail.com</Text>
                     </View>
-                </ScrollView> */}
+                </ScrollView>
             </Animatable.View>
         </>
     )
@@ -74,10 +76,16 @@ const styles = StyleSheet.create({
         margin: 20,
     },
 
+    imageView: {
+        borderRadius: 90,
+        borderWidth: 7,
+        marginBottom: 10,
+        borderColor: COLORS.lightGray2,
+    },
+
     profilePic: {
         width: 160, 
         height: 160,
-        marginBottom: 10,
         borderRadius: 80,
     },
 
@@ -93,7 +101,7 @@ const styles = StyleSheet.create({
     },
 
     infoView: {
-        marginHorizontal: 30,
+        marginHorizontal: 20,
         marginBottom: 30,
         flexGrow: 0,
     },
@@ -106,11 +114,11 @@ const styles = StyleSheet.create({
 
     contentText: {
         fontFamily: 'Inter_500Medium',
-        fontSize: 15,
+        fontSize: 13,
         borderColor: COLORS.darkGray,
         borderWidth: 2,
         padding: 10,
         borderRadius: 13,
-        paddingLeft: 25,
+        paddingLeft: 20,
     }
 })

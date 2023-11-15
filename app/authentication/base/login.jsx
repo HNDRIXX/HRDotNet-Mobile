@@ -62,7 +62,7 @@ export default function LogInPage ({ navigation }) {
                         />
 
                         <Entypo 
-                            name={isShowPassword ? 'eye-with-line' : 'eye'} 
+                            name={isShowPassword ? 'eye' : 'eye-with-line'} 
                             size={24} color={COLORS.darkGray} 
                             onPress={toggleShowPassword}
                             />
@@ -84,7 +84,7 @@ export default function LogInPage ({ navigation }) {
                 </View>
             </View>
 
-            <Text style={styles.textFooter}>Powered by{'\n'}Intellismart Technology Inc.</Text>
+            <Text style={styles.textFooter(paddingIOS)}>Powered by{'\n'}Intellismart Technology Inc.</Text>
         </View>
 
     )
@@ -162,12 +162,12 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter_400Regular'
     },
 
-    textFooter: {
+    textFooter: (paddingIOS) => ({
         textAlign: 'center',
         color: COLORS.darkGray,
         fontFamily: 'Inter_400Regular',
         fontSize: 13,
         marginTop: 30,
-        marginBottom: 10,
-    }
+        marginBottom: paddingIOS ? 30 : 10,
+    })
 })

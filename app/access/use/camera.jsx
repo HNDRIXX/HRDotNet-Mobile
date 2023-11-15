@@ -115,17 +115,17 @@ export default function CameraAccess ({ navigation }) {
 
                     <View style={styles.btnWrapper}>
                         <TouchableOpacity
+                            style={styles.deleteBtn}
+                            onPress={() => setImgPath('')}
+                        >
+                            <Text style={[styles.text, { color: COLORS.red }]}>DELETE</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
                             style={styles.doneBtn}
                             onPress={onRequestHandle}
                         >
                             <Text style={styles.text}>SUBMIT</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                            style={styles.deleteBtn}
-                            onPress={() => setImgPath('')}
-                        >
-                            <Text style={styles.text}>DELETE</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -240,27 +240,31 @@ const styles = StyleSheet.create({
 
     btnWrapper: {
         flex: 1,
+        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: 30,
     },
 
     doneBtn: {
-        width: 200,
+        width: 170,
         margin: 10,
         backgroundColor: COLORS.green,
         alignItems: 'center',
-        padding: 17,
-        borderRadius: 10,
+        paddingHorizontal: 17,
+        paddingVertical: 10,
+        borderRadius: 50,
     },
 
     deleteBtn: {
-        width: 200,
+        width: 170,
         margin: 10,
-        backgroundColor: COLORS.red,
+        borderColor: COLORS.red,
+        borderWidth: 2,
         alignItems: 'center',
-        padding: 17,
-        borderRadius: 10,
+        paddingHorizontal: 17,
+        paddingVertical: 10,
+        borderRadius: 50,
     },
 
     textBtn: {

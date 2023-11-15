@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 40,
         width: '100%',
-        height: '100%',
+        height: 300,
         shadowColor: COLORS.darkGray,
         shadowOpacity: 0.1,
         shadowRadius: 2,

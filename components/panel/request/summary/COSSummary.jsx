@@ -31,8 +31,8 @@ export default function COSSummary({ route, openCustomAlert, closeCustomAlert, i
                     </View>
 
                     <View style={styles.rowView}>
-                        <Text style={styles.boldText}>Shift Schedule</Text>
-                        <Text style={styles.summaryText}>{route.params?.shiftSchedule}</Text>
+                        <Text style={styles.boldText}>Schedule</Text>
+                        <Text style={styles.summaryText}>{route.params?.schedule}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
@@ -45,7 +45,7 @@ export default function COSSummary({ route, openCustomAlert, closeCustomAlert, i
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>File Attachment</Text>
 
-                        <View style={styles.attachmentView}>
+                        {/* <View style={styles.attachmentView}>
                             <Image 
                                 source={{ uri: route.params?.attachedFile }}
                                 style={{ width: 120, height: 120 }}
@@ -55,7 +55,11 @@ export default function COSSummary({ route, openCustomAlert, closeCustomAlert, i
                             <Text style={[styles.summaryText, { width: '60%', fontSize: 11, }]}>
                                 {route.params?.attachedFile}
                             </Text>
-                        </View>
+                        </View> */}
+
+                        { route.params?.attachedFile && (
+                            <Text style={styles.summaryText}>File Attached</Text>
+                        )}
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
                 </ScrollView>

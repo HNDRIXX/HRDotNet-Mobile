@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, BackHandler, Alert, ScrollView } from "react-native";
-import moment from "moment";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
-import RadioButtonRN from "radio-buttons-react-native";
 import { useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
+import Checkbox from "expo-checkbox";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SelectDropdown from "react-native-select-dropdown";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
-import { COLORS, STRINGS } from "../../../../../constant";
+import { COLORS, STRINGS, DateTimeUtils, Utils} from "../../../../../constant";
 
-const radioLabel = [{ label: 'Rest Day' }]
+const checkboxData = ['Work Shift', 'Rest Day']
 
 export default function COSRequest ({ navigation }) {
     const [startDate, setStartDate] = useState(null)
@@ -22,8 +19,12 @@ export default function COSRequest ({ navigation }) {
     const [restDay, setRestDay] = useState(null)
 
     const [selectedFile, setSelectedFile] = useState(null)
-    const [shiftSched, setShiftSched] = useState(null)
+    const [schedule, setSchedule] = useState(null)
 
+    const [isDropdown, setDropdown] = useState(false)
+    const [isRadio, setRadio] = useState(false)
+    const [checkSelect, setCheckSelect] = useState(null)
+    
     const [showStartPicker, setShowStartPicker] = useState(false)
     const [showEndPicker, setShowEndDatePicker] = useState(false)
     const [isFileNote, setFileNote] = useState(true)
@@ -38,50 +39,24 @@ export default function COSRequest ({ navigation }) {
     }, [imageURL])
 
     const onStartDateChange = (date) => {
-        setStartDate(moment(date).format('YYYYMMDD'))
+        setStartDate(DateTimeUtils.defaultDateFormat(date))
         setShowStartPicker(false)
     }
 
     const onEndDateChange = (date) => {
-        setEndDate(moment(date).format('YYYYMMDD'))
+        setEndDate(DateTimeUtils.defaultDateFormat(date))
         setShowEndDatePicker(false)
     }
     
-    const selectDocument = async () => {
-        try {
-            const result = await DocumentPicker.getDocumentAsync()
-            setInvalidError(false)
-            setSizeError(false)
+    const handleCheck = (index) => {
+        setCheckSelect(index)
 
-            if (!result.canceled){
-                const fileInfo = result.assets[0]
-                const uri = fileInfo.uri
-
-                const fileExtension = uri.substring(uri.lastIndexOf('.') + 1).toLowerCase()
-                const fileSizeInMB = fileInfo.size / (1024 * 1024)
-
-                if (fileSizeInMB <= 25 && ['doc', 'docx', 'pdf', 'jpeg', 'jpg', 'txt'].includes(fileExtension)) {
-                    setFileNote(true)
-                    setSizeError(false)
-                    setInvalidError(false)
-                    setSelectedFile(fileInfo.uri)
-                } else {
-                    if (fileSizeInMB > 25) {
-                        setFileNote(false)
-                        setSizeError(true)
-                    } else {
-                        setFileNote(false)
-                        setInvalidError(true)
-                    }
-                }
-            }
-        } catch (error) {
-            console.error('Error picking document:', error)
-        }
+        index === 0 ? (setDropdown(true), setRadio(false), setSchedule(null)) :
+        index === 1 ? (setDropdown(false), setRadio(true), setSchedule('Rest Day')) : null
     }
-
+    
     const onNextHandler = () => {
-        if(!startDate || !endDate || !reason || !selectedFile){
+        if(!startDate || !endDate || !schedule || !reason || !selectedFile){
             alert(STRINGS.fillFormError)
         } else {
             navigation.navigate('RequestSummary', {
@@ -89,7 +64,7 @@ export default function COSRequest ({ navigation }) {
                 startDate: startDate,
                 endDate: endDate,
                 restDay: restDay,
-                shiftSchedule: shiftSched,
+                schedule: schedule,
                 reason: reason,
                 attachedFile: selectedFile,
             })    
@@ -98,7 +73,7 @@ export default function COSRequest ({ navigation }) {
 
     return (
         <>
-            <PageHeader pageName={"COS New Request"} backStatus="react" />
+            <PageHeader pageName={"COS New Request"} />
 
             <ScrollView style={styles.container}>
                 <View style={styles.wrapper}>
@@ -107,7 +82,7 @@ export default function COSRequest ({ navigation }) {
                     <View style={[styles.rowView, styles.border]}>
                         <Text style={styles.dateText}>
                             {startDate == null ? ( <Text style={styles.placeholder}>mm/dd/yyyy</Text> )
-                            : moment(startDate, "YYYYMMDD").format("MMMM DD, YYYY")}
+                            : DateTimeUtils.dateFullConvert(startDate)}
                         </Text>
                         
                         <Ionicons 
@@ -125,7 +100,7 @@ export default function COSRequest ({ navigation }) {
                     <View style={[styles.rowView, styles.border]}>
                         <Text style={styles.dateText}>
                             {endDate == null ? ( <Text style={{ color: COLORS.tr_gray}}>mm/dd/yyyy</Text> )
-                            : moment(endDate, "YYYYMMDD").format("MMMM DD, YYYY")}
+                            : DateTimeUtils.dateFullConvert(endDate)}
                         </Text>
                         
                         <Ionicons 
@@ -138,12 +113,28 @@ export default function COSRequest ({ navigation }) {
                 </View>
 
                 <View style={styles.wrapper}>
-                    <Text style={styles.title}>Shift Schedule</Text>
+                    <Text style={styles.title}>Schedule</Text>
 
-                    <SelectDropdown 
+                    <View style={styles.checkboxView}>
+                        { checkboxData.map(( item, index ) => (
+                            <View style={styles.checkboxItem} key={index}>
+                                <Checkbox
+                                    key={index}
+                                    value={checkSelect === index}
+                                    onValueChange={() => handleCheck(index)}
+                                />
+
+                                <Text style={styles.checkboxText}>{item}</Text>
+                            </View>
+                        ))}
+                    </View>
+
+                    { isDropdown && (
+                        <SelectDropdown 
                             data={["10:00 AM to 10:00 PM"]}
                             onSelect={(item, index) => {
-                                setShiftSched(item)
+                                setSchedule(item)
+                                setRadio(false)
                             }}
                             buttonStyle={{
                                 width: '100%',
@@ -156,15 +147,11 @@ export default function COSRequest ({ navigation }) {
                             }}
                             buttonTextStyle={{
                                 fontSize: 14,
+                                textAlign: 'left',
                             }}
+                            defaultButtonText="Select Schedule"
                         />
-
-                    <RadioButtonRN
-                        data={radioLabel}
-                        box={false}
-                        animationTypes={['pulse']}
-                        selectedBtn={(e) => setRestDay(e.label)}
-                    />
+                    )}
                 </View>
 
                 <View style={styles.wrapper}>
@@ -186,7 +173,7 @@ export default function COSRequest ({ navigation }) {
                         {selectedFile == null ? (
                             <Text style={styles.placeholder}>Camera/Upload</Text>
                         ) : (
-                            <View style={styles.rowView}>
+                            <View style={[styles.rowView, { paddingHorizontal: 0 }]}>
                                 <AntDesign 
                                     name="checkcircle"
                                     size={20}
@@ -209,8 +196,8 @@ export default function COSRequest ({ navigation }) {
                             <FontAwesome 
                                 name="file" size={18} style={{ marginLeft: 15 }}
                                 color={COLORS.darkGray}
-                                // onPress={selectDocument}
-                                />
+                                onPress={() => Utils.fileAttach(setSelectedFile)}
+                            />
                         </View>
                     </View>
 
@@ -296,7 +283,7 @@ const styles = StyleSheet.create({
 
     textInput: {
         paddingLeft: 15,
-        paddingVertical: 9
+        paddingVertical: 12
     },
 
     button: {
@@ -314,6 +301,21 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: COLORS.clearWhite,
         textAlign: 'center',
+    },
+
+    checkboxView: {
+        flexDirection: 'row',
+        paddingVertical: 8, 
+    },
+
+    checkboxItem: {
+        flexDirection: 'row', 
+        paddingHorizontal: 15
+    },
+
+    checkboxText: {
+        fontFamily: 'Inter_400Regular',
+        paddingLeft: 10,
     },
 
     fileNote: {

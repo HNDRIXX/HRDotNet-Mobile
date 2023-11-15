@@ -65,7 +65,7 @@ export default function OTSummary({ route, openCustomAlert, closeCustomAlert, is
                         <Text style={styles.boldText}>File Attachment</Text>
 
                         <View style={styles.attachmentView}>
-                            <Image 
+                            {/* <Image 
                                 source={{ uri: route.params?.attachedFile }}
                                 style={{ width: 100, height: 100 }}
                                 contentFit="contain"
@@ -73,7 +73,11 @@ export default function OTSummary({ route, openCustomAlert, closeCustomAlert, is
 
                             <Text style={[styles.summaryText, { width: '60%' }]}>
                                 {route.params?.attachedFile}
-                            </Text>
+                            </Text> */}
+
+                            { route.params?.attachedFile && (
+                                <Text style={styles.summaryText}>File Attached</Text>
+                            )}
                         </View>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>

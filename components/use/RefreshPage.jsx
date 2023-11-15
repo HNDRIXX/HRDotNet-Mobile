@@ -1,22 +1,24 @@
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView, RefreshControl } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 
 import { COLORS } from '../../constant'
 
-export default function RefreshPage ({ setRestart }) {
+export default function RefreshPage ({ setRestart, refreshing, onRefresh }) {
     return (
+      <ScrollView
+        style={{ flex: 1 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#007AFF']}
+          />
+        }
+      >
         <View style={styles.container}>
           <ActivityIndicator size={'large'} color={COLORS.powderBlue}/>
-
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => setRestart(true)}
-          >
-            <FontAwesome name="refresh" size={24} color={COLORS.clearWhite} />
-
-            <Text style={styles.textButton}>Refresh</Text>
-          </TouchableOpacity>
         </View>
+      </ScrollView>
     )
 }
 

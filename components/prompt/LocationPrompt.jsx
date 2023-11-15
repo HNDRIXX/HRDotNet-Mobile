@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import StyledText from 'react-native-styled-text';
 
-import { COLORS } from '../../constant';
+import { COLORS, Utils} from '../../constant';
 
 export default function LocationPrompt ({ permissionLocation, navigation }) {
     return (
@@ -32,7 +32,7 @@ export default function LocationPrompt ({ permissionLocation, navigation }) {
 
                     <TouchableOpacity 
                         style={[styles.locationPromptBtn, styles.allowButton]} 
-                        onPress={permissionLocation}>
+                        onPress={() => permissionLocation}>
                         <Text style={styles.locationPromptBtnText}>ALLOW</Text>
                     </TouchableOpacity>
                </View>
