@@ -4,7 +4,7 @@ import { Shadow } from "react-native-shadow-2";
 import { Image } from "react-native-expo-image-cache";
 import moment from 'moment';
 
-import { COLORS, ICONS } from "../../../../../constant";
+import { COLORS, ICONS, DateTimeUtils } from "../../../../../constant";
 
 const data = [
     {
@@ -49,7 +49,7 @@ export default function SickLeavePage ({ navigation }) {
 
                 <View>
                     <Text style={styles.titleText}>Available Credits</Text>
-                    <Text style={styles.yearText}>for <Text style={styles.yearValue}>2023</Text></Text>
+                    <Text style={styles.yearText}>for <Text style={styles.yearValue}>{DateTimeUtils.getCurrYear()}</Text></Text>
                 </View>
             </View>
 
@@ -64,8 +64,6 @@ export default function SickLeavePage ({ navigation }) {
             <FlatList 
                 data={data}
                 renderItem={({item, index}) => {
-                    const formattedDate = formattedDateString(item.date)
-
                     return (
                         <View style={styles.itemWrapper}>
                             <Shadow distance={4} style={styles.shadowView}>
@@ -76,7 +74,7 @@ export default function SickLeavePage ({ navigation }) {
 
                                 <View style={styles.itemBody}>
                                     <Text style={styles.bodyText}>Date: 
-                                        <Text style={styles.itemText}> {formattedDate}</Text>
+                                        <Text style={styles.itemText}> {DateTimeUtils.dateFullConvert(item.date)}</Text>
                                     </Text>
 
                                     <Text style={styles.bodyText}>Document No: 
@@ -90,14 +88,6 @@ export default function SickLeavePage ({ navigation }) {
             />
         </View>
     )
-}
-
-const formattedDateString = (date) => {
-    const year = date.substring(0, 4)
-    const month = date.substring(4, 6)
-    const day = date.substring(6)
-
-    return moment(`${month}-${day}-${year}`, 'MM-DD-YYYY').format('MMMM DD YYYY')
 }
 
 const styles = StyleSheet.create({

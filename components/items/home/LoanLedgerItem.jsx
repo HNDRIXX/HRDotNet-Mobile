@@ -1,46 +1,21 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Link } from 'react-native';
-import { FontAwesome5, MaterialCommunityIcons, AntDesign, Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { router } from 'expo-router';
+import { Shadow } from 'react-native-shadow-2';
 
-import { COLORS } from '../../../constant';
+import { COLORS, Utils} from '../../../constant';
 
-export default function LoanLedgerItem ({ newItem, details, index}) {
+export default function LoanLedgerItem ({ newItem, details, index }) {
     const navigation = useNavigation()
 
     return (
         <View style={styles.itemContainer} key={index}>
-            <View style={styles.itemWrapper}>
+            <Shadow distance={5} style={styles.itemWrapper}>
                 <View style={styles.dateRowWrapper(newItem)}>
                     <Text style={styles.currDateText}>{newItem.loanTitle}</Text>
 
                     <View style={styles.rowWrapper}>
-                        { newItem.status == "Filed" ? (
-                            <FontAwesome5 
-                                name="file-import" 
-                                size={17} 
-                                color={COLORS.clearWhite}
-                            />
-                        ) : newItem.status == "Reviewed" ? (
-                            <MaterialCommunityIcons 
-                                name="file-find" 
-                                size={20} 
-                                color={COLORS.clearWhite} 
-                            />
-                        ) : newItem.status == "Approved" ? (
-                            <AntDesign
-                                name="checkcircle"
-                                size={17}
-                                color={COLORS.clearWhite}
-                            />
-                        ) : newItem.status == "Cancelled" ? (
-                            <Entypo
-                                name="circle-with-cross"
-                                size={19}
-                                color={COLORS.clearWhite}
-                            /> 
-                        ) : ( null )}
+                        {Utils.statusIcon(newItem.status)}
 
                         <Text style={styles.statusText}>{newItem.status}</Text>
                     </View>
@@ -60,16 +35,15 @@ export default function LoanLedgerItem ({ newItem, details, index}) {
                         </View>
 
                         <TouchableOpacity
-                            onPress={() => router.push({ 
-                                pathname: 'access/navigate/home/more/LoanDetails', 
-                                params: { newItem: encodeURIComponent(JSON.stringify(newItem)) }
-                            })}
+                            onPress={() => 
+                                navigation.navigate('LoanDetails', newItem )
+                            }
                         >
                             <Text style={styles.moreText}>More {'>'}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
-            </View>
+            </Shadow>
         </View>
     )
 }
@@ -81,6 +55,11 @@ const styles = StyleSheet.create({
         marginBottom: 25,
         borderRadius: 20,
         elevation: 2,
+    },
+
+    itemWrapper: {
+        width: '100%',
+        borderRadius: 20,
     },
 
     dateRowWrapper: (newItem)  => ({
@@ -111,7 +90,6 @@ const styles = StyleSheet.create({
 
     statusText: {
         fontFamily: 'Inter_600SemiBold',
-        paddingLeft: 10,
         color: COLORS.clearWhite,
     },
 

@@ -25,7 +25,7 @@ export const SearchAndNew = ({ filterText, setFilterText, onPanel }) => {
         break
       
       case 3:
-        navigation.navigate('OSRequest')
+        navigation.navigate('OFFRequest')
         break
       
       case 4:

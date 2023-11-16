@@ -8,7 +8,8 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SelectDropdown from "react-native-select-dropdown";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
-import { COLORS, STRINGS, DateTimeUtils, Utils} from "../../../../../constant";
+import { COLORS, STRINGS, DateTimeUtils, Utils, ErrorUtils } from "../../../../../constant";
+import TitleInput from "../../../../../components/section/request/TitleInput";
 
 const checkboxData = ['Work Shift', 'Rest Day']
 
@@ -24,7 +25,8 @@ export default function COSRequest ({ navigation }) {
     const [isDropdown, setDropdown] = useState(false)
     const [isRadio, setRadio] = useState(false)
     const [checkSelect, setCheckSelect] = useState(null)
-    
+    const [isInputCheck, setInputCheck] = useState(false)
+
     const [showStartPicker, setShowStartPicker] = useState(false)
     const [showEndPicker, setShowEndDatePicker] = useState(false)
     const [isFileNote, setFileNote] = useState(true)
@@ -39,12 +41,12 @@ export default function COSRequest ({ navigation }) {
     }, [imageURL])
 
     const onStartDateChange = (date) => {
-        setStartDate(DateTimeUtils.defaultDateFormat(date))
+        setStartDate(DateTimeUtils.converDateFormat(date))
         setShowStartPicker(false)
     }
 
     const onEndDateChange = (date) => {
-        setEndDate(DateTimeUtils.defaultDateFormat(date))
+        setEndDate(DateTimeUtils.converDateFormat(date))
         setShowEndDatePicker(false)
     }
     
@@ -57,6 +59,7 @@ export default function COSRequest ({ navigation }) {
     
     const onNextHandler = () => {
         if(!startDate || !endDate || !schedule || !reason || !selectedFile){
+            setInputCheck(true)
             alert(STRINGS.fillFormError)
         } else {
             navigation.navigate('RequestSummary', {
@@ -77,8 +80,12 @@ export default function COSRequest ({ navigation }) {
 
             <ScrollView style={styles.container}>
                 <View style={styles.wrapper}>
-                    <Text style={styles.title}>Start Date</Text>
-
+                    <TitleInput 
+                        title="Start Date"
+                        inputValue={startDate} 
+                        isInputCheck={isInputCheck}
+                    />      
+                
                     <View style={[styles.rowView, styles.border]}>
                         <Text style={styles.dateText}>
                             {startDate == null ? ( <Text style={styles.placeholder}>mm/dd/yyyy</Text> )
@@ -95,7 +102,11 @@ export default function COSRequest ({ navigation }) {
                 </View>
 
                 <View style={styles.wrapper}>
-                    <Text style={styles.title}>End Date</Text>
+                    <TitleInput 
+                        title="End Date"
+                        inputValue={endDate} 
+                        isInputCheck={isInputCheck}
+                    /> 
 
                     <View style={[styles.rowView, styles.border]}>
                         <Text style={styles.dateText}>
@@ -113,7 +124,11 @@ export default function COSRequest ({ navigation }) {
                 </View>
 
                 <View style={styles.wrapper}>
-                    <Text style={styles.title}>Schedule</Text>
+                    <TitleInput 
+                        title="Schedule"
+                        inputValue={schedule} 
+                        isInputCheck={isInputCheck}
+                    /> 
 
                     <View style={styles.checkboxView}>
                         { checkboxData.map(( item, index ) => (
@@ -155,7 +170,11 @@ export default function COSRequest ({ navigation }) {
                 </View>
 
                 <View style={styles.wrapper}>
-                    <Text style={styles.title}>Reason</Text>
+                    <TitleInput 
+                        title="Reason"
+                        inputValue={reason} 
+                        isInputCheck={isInputCheck}
+                    /> 
 
                     <TextInput
                         style={[styles.textInput, styles.border]}
@@ -167,7 +186,11 @@ export default function COSRequest ({ navigation }) {
                 </View>
                 
                 <View style={styles.wrapper}>
-                    <Text style={styles.title}>File</Text>
+                    <TitleInput 
+                        title="File"
+                        inputValue={selectedFile} 
+                        isInputCheck={isInputCheck}
+                    /> 
 
                     <View style={[styles.rowView, styles.border]}>
                         {selectedFile == null ? (
@@ -196,7 +219,7 @@ export default function COSRequest ({ navigation }) {
                             <FontAwesome 
                                 name="file" size={18} style={{ marginLeft: 15 }}
                                 color={COLORS.darkGray}
-                                onPress={() => Utils.fileAttach(setSelectedFile)}
+                                // onPress={() => Utils.fileAttach(setSelectedFile)}
                             />
                         </View>
                     </View>
@@ -253,12 +276,6 @@ const styles = StyleSheet.create({
         borderColor: COLORS.darkGray,
         borderWidth: 1,
         borderRadius: 12,
-    },
-
-    title: {
-        fontFamily: 'Inter_600SemiBold',
-        marginHorizontal: 12,
-        marginBottom: 5,
     },
 
     placeholder: {

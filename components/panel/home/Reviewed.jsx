@@ -4,7 +4,7 @@ import * as Animatable from 'react-native-animatable';
 import { AntDesign, Entypo, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import moment from "moment/moment";
 
-import { COLORS } from "../../../constant";
+import { COLORS, DateTimeUtils, Utils } from "../../../constant";
 import PendingItem from "../../items/home/PendingItem";
 
 const data = [
@@ -38,13 +38,12 @@ export default function ReviewedPanel ({ onAnimate, setReviewedCount } ) {
     })
 
     const filteredData = data.filter((newItem) => {
-            const formattedDate = formattedDateString(newItem.date)
+        const formattedDate = DateTimeUtils.dateFullConvert(newItem.date)
 
-            return (
-                formattedDate.toLowerCase().includes(filterText.toLowerCase())
-            )
-        }
-    )
+        return (
+            formattedDate.toLowerCase().includes(filterText.toLowerCase())
+        )
+    })
 
     const toggleModal = () => {
         setIsModalVisible(!isModalVisible)
@@ -67,15 +66,15 @@ export default function ReviewedPanel ({ onAnimate, setReviewedCount } ) {
                     data={filteredData}
                     style={{ marginTop: 20 }}
                     renderItem={({item, index}) => {
-                        const formattedDate = formattedDateString(item.date)
-                        const appliedDate = formattedDateString(item.appliedDate)
-                        const itemDate = moment(formattedDate, 'MMMM DD YYYY')
+                        const formattedDate = DateTimeUtils.dateHalfMonthConvert(item.date)
+                        const appliedDate = DateTimeUtils.dateFullConvert(item.appliedDate)
 
                         return (
                             <PendingItem 
                                 onPanel={0}
                                 item={item}
-                                key={index}
+                                index={index}
+                                lastIndex={data.length - 1}
                                 newItem={{ ...item, formattedDate: formattedDate, appliedDate: appliedDate }}
                             />
                         )

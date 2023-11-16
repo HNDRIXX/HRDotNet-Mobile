@@ -16,7 +16,7 @@ const data = [
         reason: 'Biometrics Issue',
         attachedFile: '------',
         documentNo: 'ML22307248376',
-        missedLogsDate: '20230925',
+        missedLogDate: '20230925',
         filedDate: '20230916',
         statusBy: 'Kenneth Parungao',
         statusByDate: '20230913',
@@ -30,7 +30,7 @@ const data = [
         reason: 'Biometrics Issue',
         attachedFile: '-----',
         documentNo: 'ML22307248376',
-        missedLogsDate: '20230925',
+        missedLogDate: '20230925',
         filedDate: '20230916',
         statusBy: 'Kenneth Parungao',
         statusByDate: '20230913',
@@ -40,6 +40,7 @@ const data = [
 ]
 
 export default function MissedLogsPanel ( onAnimate ) {
+    const [localData, setLocalData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
 
@@ -48,16 +49,19 @@ export default function MissedLogsPanel ( onAnimate ) {
 
     const [isFirstHalf, setFirstHalf] = useState(null)
     const [isSecondHalf, setSecondHalf] = useState(null)
+    
+    let filteredData = []
 
-    const filteredData = data.filter((newItem) => {
-        const formattedDate = DateTimeUtils.dateFullConvert(newItem.filedDate)
-        
-        return (
-            newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
-            formattedDate.toLowerCase().includes(filterText.toLowerCase())
-        )
+    if (localData) {
+        filteredData = data.filter((newItem) => {
+            const formattedDate = DateTimeUtils.dateFullConvert(newItem.missedLogDate)
+            
+            return (
+                newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
+                formattedDate.toLowerCase().includes(filterText.toLowerCase())
+            )
+        })
     }
-)
 
     useEffect(() => {
         setTimeout(() => { setIsLoading(false) }, 800)
@@ -76,16 +80,15 @@ export default function MissedLogsPanel ( onAnimate ) {
                 item={item}
                 index={index}
                 newItem={{ ...item, 
-                    formattedMissedLogDate: formattedDateString(item.missedLogsDate), 
-                    formattedFiledDate: formattedDateString(item.filedDate), 
-                    formattedStatusByDate: formattedDateString(item.statusByDate),
-                    formattedReviewedDate: formattedDateString(item.reviewedDate),
+                    formattedMissedLogDate: DateTimeUtils.dateFullConvert(item.missedLogDate), 
+                    formattedFiledDate: DateTimeUtils.dateFullConvert(item.filedDate), 
+                    formattedStatusByDate: DateTimeUtils.dateFullConvert(item.statusByDate),
+                    formattedReviewedDate: DateTimeUtils.dateFullConvert(item.reviewedDate),
                     requestType: "Missed Logs"
                 }}
                 key={index}
             />
-        )
-    }
+    )}
       
     return (
         <>
@@ -132,12 +135,6 @@ export default function MissedLogsPanel ( onAnimate ) {
                         </ScrollView>
                     ) : ( 
                         <View style={styles.noSearchWrapper}>
-                            <AntDesign
-                                name="search1"
-                                size={55}
-                                color={COLORS.darkGray}
-                                style={{ padding: 20 }}
-                            />
                             <Text>No Search Found.</Text>
                         </View>
                     )}
@@ -145,14 +142,6 @@ export default function MissedLogsPanel ( onAnimate ) {
             )}
         </>
     )
-}
-
-const formattedDateString = (dateString) => {
-    const year = dateString.substring(0, 4);
-    const month = dateString.substring(4, 6);
-    const day = dateString.substring(6);
-
-    return moment(`${month}-${day}-${year}`, 'MM-DD-YYYY').format('MMMM DD YYYY');
 }
 
 const styles = StyleSheet.create({

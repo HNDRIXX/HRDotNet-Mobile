@@ -33,6 +33,8 @@ import CameraAccess from './access/use/camera';
 import OBRequest from './access/navigate/request/newrequest/OBRequest';
 import OTRequest from './access/navigate/request/newrequest/OTRequest';
 import NotificationDetails from './access/navigate/home/more/NotificationDetails';
+import LoanDetails from './access/navigate/home/more/LoanDetails';
+import OFFRequest from './access/navigate/request/newrequest/OFFRequest';
 
 export default function Index() {
     const [fontsLoaded] = useFonts()
@@ -140,7 +142,16 @@ export default function Index() {
                     <Stack.Screen name="TabStack" component={TabStack} />
 
                     <Stack.Screen name="ClockInOut" component={ClockInOut} />
+
                     <Stack.Screen name="LoanLedger" component={LoanLedgerPage} />
+                    <Stack.Screen 
+                        name="LoanDetails" 
+                        component={LoanDetails}
+                        options={{
+                            cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
+                        }}/>
+
+
                     <Stack.Screen name="TimeSheet" component={TimeSheetPage} />
                     <Stack.Screen name="Pending" component={PendingPage} />
                     <Stack.Screen name="VacationLeave" component={VacationLeavePage} />
@@ -155,9 +166,17 @@ export default function Index() {
                         }}
                     />
 
+                    <Stack.Screen 
+                        name="MorePage" 
+                        component={MorePage}
+                        options={{
+                            cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
+                        }} />                    
+
                     <Stack.Screen name="COSRequest" component={COSRequest} />
                     <Stack.Screen name="OBRequest" component={OBRequest} />
                     <Stack.Screen name="OTRequest" component={OTRequest} />
+                    <Stack.Screen name="OFFRequest" component={OFFRequest} />
 
                     <Stack.Screen 
                         name="RequestSummary" 

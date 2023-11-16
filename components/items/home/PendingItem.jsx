@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity,  } from 'react-native';
-import { FontAwesome5, MaterialCommunityIcons, AntDesign, Entypo } from '@expo/vector-icons';
-import { router } from 'expo-router';
 
 import { COLORS } from '../../../constant';
 import { Shadow } from 'react-native-shadow-2';
 
-export default function PendingItem ({onPanel, item, index, newItem}) {
+export default function PendingItem ({onPanel, item, lastIndex, index, newItem}) {
     return (
-        <View style={styles.itemContainer} key={index}>
-            <Shadow distance={1} startColor={COLORS.shadowGray} style={styles.itemWrapper}>
+        <View style={styles.itemContainer(index, lastIndex)} key={index}>
+            <Shadow distance={5} startColor={COLORS.shadowGray} style={styles.itemWrapper(index, lastIndex)}>
                 <View style={styles.dateRowWrapper}>
                     <Text style={styles.statusText}>{item.status}</Text>
                     <Text style={styles.currDateText}>{newItem.formattedDate}</Text>    
@@ -21,26 +19,38 @@ export default function PendingItem ({onPanel, item, index, newItem}) {
                         <Text style={styles.valueText}>{newItem.appliedDate}</Text>
                     </View>
                 </View>
+
             </Shadow>
         </View>
     )
 }
 
 const styles = StyleSheet.create({ 
-    itemContainer: {
+    itemContainer: (index, lastIndex) => ({
         backgroundColor: COLORS.clearWhite,
         justifyContent: 'center',
         alignSelf: 'center',
-        marginVertical: 5,
-        borderRadius: 20,
         width: '90%',
-        // elevation: 10,
-    },
 
-    itemWrapper: {
+        borderTopLeftRadius: index == 0 && 20,
+        borderTopRightRadius: index == 0 && 20,
+        borderBottomLeftRadius : lastIndex == index && 20,
+        borderBottomRightRadius : lastIndex == index && 20,
+
+        borderBottomColor: COLORS.darkGray,
+        borderBottomWidth: lastIndex != index ? 1 : 0,
+    }),
+
+    itemWrapper: (index, lastIndex) => ({
         width: '100%',
-        borderRadius: 20,
-    },
+        padding: 7,
+
+        borderTopLeftRadius: index == 0 && 20,
+        borderTopRightRadius: index == 0 && 20,
+        borderBottomLeftRadius : lastIndex == index && 20,
+        borderBottomRightRadius : lastIndex == index && 20,
+    }),
+
 
     dateRowWrapper: {
         flexDirection: 'row',
@@ -60,13 +70,12 @@ const styles = StyleSheet.create({
 
     currDateText: {
         fontFamily: 'Inter_500Medium',
-        fontSize: 11,
-        color: COLORS.black,
+        fontSize: 13,
     },
 
     statusText: {
         fontFamily: 'Inter_700Bold',
-        fontSize: 16,
+        fontSize: 17,
         color: COLORS.black,
     },
 
@@ -82,11 +91,13 @@ const styles = StyleSheet.create({
 
     boldText: {
         fontFamily: 'Inter_500Medium',
+        fontSize: 13,
         color: COLORS.darkGray,
     },
 
     valueText: {
         fontFamily: 'Inter_400Regular',
+        fontSize: 13,
         color: COLORS.darkGray,
     },
 

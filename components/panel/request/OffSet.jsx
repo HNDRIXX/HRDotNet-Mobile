@@ -12,7 +12,7 @@ const data = [
     { 
         status: 'Cancelled',  
         overTimeDate: '20231014',
-        offSetHours: '7:00 AM - 4:00 PM',
+        overTimeHours: '7:00 AM - 4:00 PM',
         reason: '------',
         attachedFile: '-----',
         documentNo: 'OFF22307248376',
@@ -24,7 +24,8 @@ const data = [
     },
 ]
 
-export default function OffSetPanel ( onAnimate ) {
+export default function OffSetPanel () {
+    const [localData, setLocalData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
 
@@ -34,14 +35,18 @@ export default function OffSetPanel ( onAnimate ) {
     const [isFirstHalf, setFirstHalf] = useState(null)
     const [isSecondHalf, setSecondHalf] = useState(null)
 
-    const filteredData = data.filter((newItem) => {
-        const formattedDate = DateTimeUtils.dateFullConvert(newItem.appliedDate)
-        
-        return (
-            newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
-            formattedDate.toLowerCase().includes(filterText.toLowerCase())
-        )
-    })
+    let filteredData = []
+
+    if (localData) {
+        filteredData = data.filter((newItem) => {
+            const formattedDate = DateTimeUtils.dateFullConvert(newItem.overTimeDate)
+            
+            return (
+                newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
+                formattedDate.toLowerCase().includes(filterText.toLowerCase())
+            )
+        })
+    }
 
     useEffect(() => {
         setTimeout(() => {
@@ -62,10 +67,10 @@ export default function OffSetPanel ( onAnimate ) {
                 item={item}
                 index={index}
                 newItem={{ ...item, 
-                    formattedOverTimeDate: formattedDateString(item.overTimeDate), 
-                    formattedFiledDate: formattedDateString(item.filedDate), 
-                    formattedStatusByDate: formattedDateString(item.statusByDate),
-                    formattedReviewedDate: formattedDateString(item.reviewedDate),
+                    formattedOverTimeDate: DateTimeUtils.dateFullConvert(item.overTimeDate), 
+                    formattedFiledDate: DateTimeUtils.dateFullConvert(item.filedDate), 
+                    formattedStatusByDate: DateTimeUtils.dateFullConvert(item.statusByDate),
+                    formattedReviewedDate: DateTimeUtils.dateFullConvert(item.reviewedDate),
                     requestType: "Offset"
                 }}
                 key={index}
@@ -84,6 +89,7 @@ export default function OffSetPanel ( onAnimate ) {
                     style={{ opacity: 1, flex: 1 }}
                 >
                     <SearchAndNew 
+                        onPanel={3}
                         filterText={filterText}
                         setFilterText={setFilterText}
                     />
@@ -118,12 +124,6 @@ export default function OffSetPanel ( onAnimate ) {
                         </ScrollView>
                     ) : ( 
                         <View style={styles.noSearchWrapper}>
-                            <AntDesign
-                                name="search1"
-                                size={55}
-                                color={COLORS.darkGray}
-                                style={{ padding: 20 }}
-                            />
                             <Text>No Search Found.</Text>
                         </View>
                     )}
@@ -131,14 +131,6 @@ export default function OffSetPanel ( onAnimate ) {
             )}
         </>
     )
-}
-
-const formattedDateString = (dateString) => {
-    const year = dateString.substring(0, 4);
-    const month = dateString.substring(4, 6);
-    const day = dateString.substring(6);
-
-    return moment(`${month}-${day}-${year}`, 'MM-DD-YYYY').format('MMMM DD YYYY');
 }
 
 const styles = StyleSheet.create({

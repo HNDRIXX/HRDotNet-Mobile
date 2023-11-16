@@ -2,9 +2,8 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native
 import { Image } from "react-native-expo-image-cache";
 import { AntDesign } from "@expo/vector-icons";
 import { Shadow } from "react-native-shadow-2";
-import moment from 'moment';
 
-import { COLORS, ICONS } from "../../../../../constant";
+import { COLORS, ICONS, DateTimeUtils } from "../../../../../constant";
 
 const data = [
     {
@@ -28,15 +27,6 @@ const data = [
 ]
 
 export default function VacationLeavePage ({ navigation }) {
-
-    const formattedDateString = (date) => {
-        const year = date.substring(0, 4)
-        const month = date.substring(4, 6)
-        const day = date.substring(6)
-
-        return moment(`${month}-${day}-${year}`, 'MM-DD-YYYY').format('MMMM DD YYYY')
-    }
-    
     return (
         <View style={styles.container}>
             <View style={styles.topHeader}>
@@ -58,7 +48,7 @@ export default function VacationLeavePage ({ navigation }) {
 
                 <View>
                     <Text style={styles.titleText}>Available Credits</Text>
-                    <Text style={styles.yearText}>for <Text style={styles.yearValue}>2023</Text></Text>
+                    <Text style={styles.yearText}>for <Text style={styles.yearValue}>{DateTimeUtils.getCurrYear()}</Text></Text>
                 </View>
             </View>
 
@@ -73,8 +63,6 @@ export default function VacationLeavePage ({ navigation }) {
             <FlatList 
                 data={data}
                 renderItem={({item, index}) => {
-                    const formattedDate = formattedDateString(item.date)
-
                     return (
                         <View style={styles.itemWrapper}>
                             <Shadow distance={4} style={styles.shadowView}>
@@ -85,7 +73,7 @@ export default function VacationLeavePage ({ navigation }) {
 
                                 <View style={styles.itemBody}>
                                     <Text style={styles.bodyText}>Date: 
-                                        <Text style={styles.itemText}> {formattedDate}</Text>
+                                        <Text style={styles.itemText}> {DateTimeUtils.dateFullConvert(item.date)}</Text>
                                     </Text>
 
                                     <Text style={styles.bodyText}>Document No: 

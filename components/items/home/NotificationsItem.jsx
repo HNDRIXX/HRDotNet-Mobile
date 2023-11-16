@@ -52,7 +52,7 @@ export default function NotificationsItem ({ item, index, formattedDate, onPress
                 <View style={styles.contentWrapper(item)}>
                     <View style={styles.topContentWrapper}>
                         <Text style={styles.contentTitle}>{item.name}</Text>
-                        <Text style={styles.contentDate}>{formattedDate(item.date)}</Text>
+                        <Text style={styles.contentDate}>{formattedDate}</Text>
                     </View>
 
                     <View style={styles.bodyContentWrapper}>

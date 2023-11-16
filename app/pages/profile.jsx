@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import PageHeader from "../../components/header/PagesHeader";
 
 import { COLORS } from "../../constant";
+import NavigationHeader from "../../components/header/NavigationHeader";
 import PersonalPanel from "../../components/panel/profile/Personal";
 import PayslipPanel from "../../components/panel/profile/Payslip";
 
@@ -11,7 +11,7 @@ export default function Profile () {
 
     return (
         <>
-            <PageHeader pageName="Profile" />
+            <NavigationHeader headerName="Profile" />
 
                 <View style={styles.container}>
                     <View

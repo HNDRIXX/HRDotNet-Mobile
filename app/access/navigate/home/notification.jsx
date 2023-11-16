@@ -6,7 +6,7 @@ import DashedLine from "react-native-dashed-line";
 import { Image, CacheManager } from "react-native-expo-image-cache";
 import { useNavigation } from "@react-navigation/native";
 
-import { COLORS, ICONS } from "../../../../constant";
+import { COLORS, ICONS, DateTimeUtils } from "../../../../constant";
 import PageHeader from "../../../../components/header/PagesHeader";
 import NotificationsItem from "../../../../components/items/home/NotificationsItem";
 
@@ -35,10 +35,6 @@ export default function NotificationPage () {
     const navigation = useNavigation()
     const [listData, setListData] = useState(data)
 
-    const formattedDate = (date) => {
-        return moment(date, "YYYYMMDD").format("MMM DD YYYY")
-    }
-
     const handleNotificationPress = (index, item) => {
         const newData = [...listData]
         newData[index].isReaded = 9999
@@ -47,7 +43,6 @@ export default function NotificationPage () {
         navigation.navigate(
             'NotificationDetails', {
                 name: item.name,
-                date: formattedDate(item.date),
                 message: item.message,
         })
     }
@@ -64,7 +59,7 @@ export default function NotificationPage () {
                         <NotificationsItem 
                             item={item}
                             index={index}
-                            formattedDate={formattedDate}
+                            formattedDate={DateTimeUtils.dateHalfMonthConvert(item.date)}
                             onPress={handleNotificationPress}
                         />
                     )}

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
 import * as Animatable from 'react-native-animatable';
-import { AntDesign } from "@expo/vector-icons";
-import moment from "moment/moment";
 
 import { COLORS, Utils, DateTimeUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
@@ -17,10 +15,10 @@ const data = [
         attachedFile: '-----',
         documentNo: 'OTS22307248376',
         filedDate: '20230911',
-        statusBy: 'Kenneth Parungao',
-        statusByDate: '20230913',
-        reviewedBy: 'Benjamin Peralta',
-        reviewedDate: '20230916',
+        statusBy: '',
+        statusByDate: '',
+        reviewedBy: '',
+        reviewedDate: '',
     },
     { 
         status: 'Filed', 
@@ -31,14 +29,15 @@ const data = [
         attachedFile: '-----',
         documentNo: 'OTS22307240207',
         filedDate: '20230911',
-        statusBy: 'Kenneth Parungao',
-        statusByDate: '20230913',
-        reviewedBy: 'Benjamin Peralta',
-        reviewedDate: '20230916',
+        statusBy: '',
+        statusByDate: '',
+        reviewedBy: '',
+        reviewedDate: '',
     },
 ]
 
-export default function OverTimePanel ( onAnimate ) {
+export default function OverTimePanel () {
+    const [localData, setLocalData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
 
@@ -48,15 +47,18 @@ export default function OverTimePanel ( onAnimate ) {
     const [isFirstHalf, setFirstHalf] = useState(null)
     const [isSecondHalf, setSecondHalf] = useState(null)
 
-    const filteredData = data.filter((newItem) => {
-            const formattedDate = DateTimeUtils.dateFullConvert(newItem.appliedDate)
+    let filteredData = []
+
+    if (localData) {
+        filteredData = data.filter((newItem) => {
+            const formattedDate = DateTimeUtils.dateFullConvert(newItem.overTimeDate)
             
             return (
                 newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
                 formattedDate.toLowerCase().includes(filterText.toLowerCase())
             )
-        }
-    )
+        })
+    }
 
     useEffect(() => {
         setTimeout(() => {
@@ -77,10 +79,10 @@ export default function OverTimePanel ( onAnimate ) {
                 item={item}
                 index={index}
                 newItem={{ ...item, 
-                    formattedOverTimeDate: formattedDateString(item.overTimeDate), 
-                    formattedFiledDate: formattedDateString(item.filedDate), 
-                    formattedStatusByDate: formattedDateString(item.statusByDate),
-                    formattedReviewedDate: formattedDateString(item.reviewedDate),
+                    formattedOverTimeDate: DateTimeUtils.dateFullConvert(item.overTimeDate), 
+                    formattedFiledDate: DateTimeUtils.dateFullConvert(item.filedDate), 
+                    formattedStatusByDate: DateTimeUtils.dateFullConvert(item.statusByDate),
+                    formattedReviewedDate: DateTimeUtils.dateFullConvert(item.reviewedDate),
                     requestType: "Overtime"
                 }}
                 key={index}
@@ -134,27 +136,13 @@ export default function OverTimePanel ( onAnimate ) {
                         </ScrollView>
                     ) : ( 
                         <View style={styles.noSearchWrapper}>
-                            <AntDesign
-                                name="search1"
-                                size={55}
-                                color={COLORS.darkGray}
-                                style={{ padding: 20 }}
-                            />
-                            <Text>No Search Found.</Text>
+                            <Text>Nothing Found.</Text>
                         </View>
                     )}
                 </Animatable.View>
             )}
         </>
     )
-}
-
-const formattedDateString = (dateString) => {
-    const year = dateString.substring(0, 4);
-    const month = dateString.substring(4, 6);
-    const day = dateString.substring(6);
-
-    return moment(`${month}-${day}-${year}`, 'MM-DD-YYYY').format('MMMM DD YYYY');
 }
 
 const styles = StyleSheet.create({

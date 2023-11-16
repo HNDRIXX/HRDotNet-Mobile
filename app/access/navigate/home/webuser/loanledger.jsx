@@ -3,7 +3,7 @@ import { AntDesign } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import moment from 'moment'
 
-import { COLORS } from '../../../../../constant'
+import { COLORS, DateTimeUtils, Utils } from '../../../../../constant'
 import LoanLedgerItem from '../../../../../components/items/home/LoanLedgerItem'
 
 const data = [
@@ -62,14 +62,6 @@ const details = [
     },
 ]
 export default function LoanLedgerPage ({ navigation }) {
-    const formattedDateString = (date) => {
-        const year = date.substring(0, 4)
-        const month = date.substring(4, 6)
-        const day = date.substring(6)
-
-        return moment(`${month}-${day}-${year}`, 'MM-DD-YYYY').format('MMMM DD YYYY')
-    }
-
     return (
         <View>
              <View style={styles.topHeader}>
@@ -94,10 +86,10 @@ export default function LoanLedgerPage ({ navigation }) {
                             newItem={{ 
                                 ...item,
                                 details: details,
-                                formattedTransactionDate: formattedDateString(item.transactionDate), 
-                                formattedApprovedDate: formattedDateString(item.approvedDate),
-                                formattedGrantedDate: formattedDateString(item.grantedDate),
-                                formattedFirstDueDate: formattedDateString(item.firstDueDate),
+                                formattedTransactionDate: DateTimeUtils.dateFullConvert(item.transactionDate), 
+                                formattedApprovedDate:  DateTimeUtils.dateFullConvert(item.approvedDate),
+                                formattedGrantedDate: DateTimeUtils.dateFullConvert(item.grantedDate),
+                                formattedFirstDueDate: DateTimeUtils.dateFullConvert(item.firstDueDate),
                             }}
                         />
                     )

@@ -2,16 +2,18 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
 import * as Animatable from 'react-native-animatable';
 import { AntDesign } from "@expo/vector-icons";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from "moment/moment";
 
-import { COLORS, Utils, DateTimeUtils } from "../../../constant";
+import { COLORS, Utils, DateTimeUtils, RequestUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
 import RequestItem from "../../items/request/RequestItem"
 
 const data = [
     { 
         status: 'Approved',  
-        appliedDate: '20231103',
+        startDate: '20231103',
+        endDate: '20231103',
         requestedSched: '7:00 AM - 4:00 PM',
         reason: '----',
         attachedFile: '-----',
@@ -24,7 +26,8 @@ const data = [
     },
     { 
         status: 'Approved',  
-        appliedDate: '20231014',
+        startDate: '20231014',
+        endDate: '20231014',
         requestedSched: '7:00 AM - 4:00 PM',
         reason: '----',
         attachedFile: '-----',
@@ -35,36 +38,10 @@ const data = [
         reviewedBy: 'Benjamin Peralta',
         reviewedDate: '20230916',
     },
-    { 
-        status: 'Cancelled',  
-        appliedDate: '20231014',
-        requestedSched: '7:00 AM - 4:00 PM',
-        reason: '----',
-        attachedFile: '-----',
-        documentNo: 'COS0003',
-        filedDate: '20231117',
-        statusBy: 'Mark Sasama',
-        statusByDate: '20230913',
-        reviewedBy: 'Benjamin Peralta',
-        reviewedDate: '20230916',
-    },
-
-    { 
-        status: 'Reviewed',  
-        appliedDate: '20231014',
-        requestedSched: '7:00 AM - 4:00 PM',
-        reason: '----',
-        attachedFile: '-----',
-        documentNo: 'COS0004',
-        filedDate: '20240101',
-        statusBy: 'Mark Sasama',
-        statusByDate: '20230913',
-        reviewedBy: 'Benjamin Peralta',
-        reviewedDate: '20230916',
-    },
 ]
 
-export default function ChangeOfSchedulePanel ( onAnimate ) {
+export default function ChangeOfSchedulePanel () {
+    const [localData, setLocalData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
 
@@ -74,22 +51,38 @@ export default function ChangeOfSchedulePanel ( onAnimate ) {
     const [isFirstHalf, setFirstHalf] = useState(null)
     const [isSecondHalf, setSecondHalf] = useState(null)
 
-    const filteredData = data.filter((newItem) => {
-        const formattedDate = DateTimeUtils.dateFullConvert(newItem.appliedDate)
+    let filteredData = []
 
-        return (
-            newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
-            formattedDate.toLowerCase().includes(filterText.toLowerCase())
-        )
-    })
- 
     useEffect(() => {
         setTimeout(() => {
             setIsLoading(false)
         }, 800)
 
+        // AsyncStorage.getItem('COSData')
+        //     .then((storedData) => {
+        //         const retrievedData = JSON.parse(storedData)
+        //         setLocalData(retrievedData)
+        //     })
+        //     .catch((error) => {
+        //         console.error('Error retrieving data:', error)
+        // })
+
         Utils.getHalf(setFirstHalf, setSecondHalf)
     }, [])
+
+
+    if (localData) {
+        filteredData = data.filter((newItem) => {
+            const formattedStartDate = DateTimeUtils.dateFullConvert(newItem.startDate)
+            const formattedEndDate = DateTimeUtils.dateFullConvert(newItem.endDate)
+
+            return (
+                formattedStartDate.toLowerCase().includes(filterText.toLowerCase()) ||
+                formattedEndDate.toLowerCase().includes(filterText.toLowerCase()) ||
+                newItem.status.toLowerCase().includes(filterText.toLowerCase())
+            )
+        })
+    }
 
     useEffect(() => {
         Utils.dataItemCount(filteredData, setNewCount, setEarlierCount, isFirstHalf, isSecondHalf)
@@ -102,10 +95,10 @@ export default function ChangeOfSchedulePanel ( onAnimate ) {
                 item={item}
                 index={index}
                 newItem={{ ...item, 
-                    formattedAppliedDate: formattedDateString(item.appliedDate), 
-                    formattedFiledDate: formattedDateString(item.filedDate), 
-                    formattedStatusByDate: formattedDateString(item.statusByDate),
-                    formattedReviewedDate: formattedDateString(item.reviewedDate),
+                    formattedAppliedDate: RequestUtils.requestDateApplied(item), 
+                    formattedFiledDate:  DateTimeUtils.dateFullConvert(item.filedDate), 
+                    formattedStatusByDate:  DateTimeUtils.dateFullConvert(item.statusByDate),
+                    formattedReviewedDate:  DateTimeUtils.dateFullConvert(item.reviewedDate),
                     requestType: "Change of Schedule"
                 }}
                 key={index}
@@ -113,7 +106,6 @@ export default function ChangeOfSchedulePanel ( onAnimate ) {
         )
     }
 
- 
     return (
         <>
             {isLoading ? (
@@ -160,13 +152,7 @@ export default function ChangeOfSchedulePanel ( onAnimate ) {
                         </ScrollView>
                     ) : ( 
                         <View style={styles.noSearchWrapper}>
-                            <AntDesign
-                                name="search1"
-                                size={55}
-                                color={COLORS.darkGray}
-                                style={{ padding: 20 }}
-                            />
-                            <Text>No Search Found.</Text>
+                            <Text>Nothing Found.</Text>
                         </View>
                     )}
                 </Animatable.View>

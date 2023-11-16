@@ -1,8 +1,12 @@
+import { Linking } from 'react-native';
 import { Alert } from 'react-native';
+import { FontAwesome5, MaterialCommunityIcons, AntDesign, Entypo } from '@expo/vector-icons';
 import moment from 'moment';
 import * as DocumentPicker from 'expo-document-picker';
 import * as Location from 'expo-location';
 import * as FileSystem from 'expo-file-system';
+
+import { COLORS } from '../theme';
 
 const currentDate = moment()
 const firstDayOfMonth = moment().startOf('month')
@@ -12,6 +16,38 @@ const lastDayOfMonth = moment().endOf('month')
 const sixteenthDayOfMonth = moment().date(15)
 
 export const Utils = {
+    statusIcon: (status) => {
+        return status === "Filed" ? (
+            <FontAwesome5 
+                name="file-import" 
+                size={17} 
+                color={COLORS.clearWhite}
+                style={{ marginRight: 10 }}
+            />
+        ) : status == "Reviewed" ? (
+            <MaterialCommunityIcons 
+                name="file-find" 
+                size={20} 
+                color={COLORS.clearWhite} 
+                style={{ marginRight: 10 }}
+            />
+        ) : status == "Approved" ? (
+            <AntDesign
+                name="checkcircle"
+                size={17}
+                color={COLORS.clearWhite}
+                style={{ marginRight: 10 }}
+            />
+        ) : status == "Cancelled" ? (
+            <Entypo
+                name="circle-with-cross"
+                size={19}
+                color={COLORS.clearWhite}
+                style={{ marginRight: 10 }}
+            /> 
+        ) : null
+    },
+
     withinFirst: (filedDate) => {
         return moment(filedDate, 'YYYYMMDD').isBetween(firstDayOfMonth, fifteenthDayOfMonth, null, '[]');
     },
@@ -112,20 +148,22 @@ export const Utils = {
         const { status } = await Location.requestForegroundPermissionsAsync()
 
         if (status != 'granted') {
-            const openSettings = () => {
-                Linking.openSettings()
-            }
+            Linking.openSettings()
+            
+            // const openSettings = () => {
+            //     Linking.openSettings()
+            // }
 
-            Alert.alert(
-                'Permission Required',
-                'Please allow location permissions',
-                [
-                {
-                    text: 'OK',
-                    onPress: openSettings,
-                },
-                ]
-            )
+            // Alert.alert(
+            //     'Permission Required',
+            //     'Please allow location permissions',
+            //     [
+            //     {
+            //         text: 'OK',
+            //         onPress: openSettings,
+            //     },
+            //     ]
+            // )
         } else { Utils.fetchDataLoc(setIsLoading, setLocation, setMapRegion, setCurrAddress) } 
     
         // try {

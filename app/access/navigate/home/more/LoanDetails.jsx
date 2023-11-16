@@ -2,76 +2,33 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native
 import * as Animatable from 'react-native-animatable';
 import { AntDesign, Entypo, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useGlobalSearchParams } from "expo-router";
+import { useRoute } from "@react-navigation/native";
 import { router } from "expo-router";
 import { Shadow } from "react-native-shadow-2";
 
-import { COLORS } from "../../../../../constant";
+import { COLORS, Utils} from "../../../../../constant";
+import PageHeader from "../../../../../components/header/PagesHeader";
 
-export default function LoanDetails () {
-    const params = useGlobalSearchParams()
-    const loanItem = JSON.parse(params.newItem || '{}')
-    // const detailsItem = JSON.parse(params.details || '{}')
-    const details = loanItem.details
+export default function LoanDetails ({ navigation }) {
+    const loanItem = useRoute().params
+    const detailsData = loanItem.details
 
     return (
         <View style={{ flex: 1 }}>
-            <View style={styles.topHeader}>
-                <TouchableOpacity 
-                    style={styles.backButton} 
-                    onPress={() => router.back()}
-                >
-                    <AntDesign name='arrowleft' size={30} color={COLORS.clearWhite} />
-                </TouchableOpacity>
+            <PageHeader pageName={'Loan Details'} />
 
-                <Text style={styles.textHeader}>Loan Details</Text>
-            </View>
-
-            <Animatable.View
-                animation={'fadeIn'}
-                duration={800}
-                easing={'ease-in-out'}
-                style={{ opacity: 1, flex: 1 }}
-            >
-                <View style={styles.topContent(loanItem)}>
+            <View style={styles.topContent(loanItem)}>
                     <Text style={styles.topText}>{loanItem.loanTitle}</Text>
                     
                     <View style={styles.rowWrapper}>
-                        { loanItem.status == "Filed" ? (
-                            <FontAwesome5 
-                                name="file-import" 
-                                size={17} 
-                                color={COLORS.clearWhite}
-                                style={{ marginRight: 10 }}
-                            />
-                        ) : loanItem.status == "Reviewed" ? (
-                            <MaterialCommunityIcons 
-                                name="file-find" 
-                                size={20} 
-                                color={COLORS.clearWhite} 
-                                style={{ marginRight: 10 }}
-                            />
-                        ) : loanItem.status == "Approved" ? (
-                            <AntDesign
-                                name="checkcircle"
-                                size={17}
-                                color={COLORS.clearWhite}
-                                style={{ marginRight: 10 }}
-                            />
-                        ) : loanItem.status == "Cancelled" ? (
-                            <Entypo
-                                name="circle-with-cross"
-                                size={19}
-                                color={COLORS.clearWhite}
-                                style={{ marginRight: 10 }}
-                            /> 
-                        ) : ( null )}
+                        {Utils.statusIcon(loanItem.status)}
 
                         <Text style={styles.topText}>{loanItem.status}</Text>
                     </View>
                 </View>
 
                 <View style={styles.container}>
-                    <Shadow style={styles.content}>
+                    <Shadow distance={3} style={styles.content}>
                         <View style={styles.rowWrapper}>
                             <Text style={styles.titleText}>Source:</Text>
                             <Text style={styles.valueText}>{loanItem.source}</Text>
@@ -147,34 +104,34 @@ export default function LoanDetails () {
                 <Text style={styles.detailsTitle}>Details</Text>
 
                 <FlatList 
-                    data={details}
+                    data={detailsData}
                     style={{ marginHorizontal: 20 }}
                     renderItem={({ item, index }) => {
                         if (item.documentNo === loanItem.documentNo) {
                             return (
                                 <View style={styles.detailView}>
-                                    <View style={styles.topDetail}>
-                                        <Text style={styles.topText}>{loanItem.loanTitle}</Text>
-                                        
-                                        <View style={styles.topLeftDetail}>
-                                            <Text style={styles.topText}>{loanItem.balance}</Text>
-                                            <Text style={[styles.topText, { fontSize: 10, fontFamily: 'Inter_500Medium' }]}>Remaining Balance</Text>
+                                    <Shadow distance={3} style={styles.shadowView}>
+                                        <View style={styles.topDetail}>
+                                            <Text style={styles.topText}>{loanItem.loanTitle}</Text>
+                                            
+                                            <View style={styles.topLeftDetail}>
+                                                <Text style={styles.topText}>{loanItem.balance}</Text>
+                                                <Text style={[styles.topText, { fontSize: 10, fontFamily: 'Inter_500Medium' }]}>Remaining Balance</Text>
+                                            </View>
                                         </View>
-                                    </View>
 
-                                    <View style={styles.bodyDetail}>
-                                        <Text style={styles.boldText}>Payment Date:
-                                        <Text style={styles.bodyText}> {item.paymentDate}</Text></Text>
-                                        <Text style={styles.boldText}>Payment Amount:
-                                        <Text style={styles.bodyText}> {item.paymentAmount}</Text></Text>
-                                    </View>
+                                        <View style={styles.bodyDetail}>
+                                            <Text style={styles.boldText}>Payment Date:
+                                            <Text style={styles.bodyText}> {item.paymentDate}</Text></Text>
+                                            <Text style={styles.boldText}>Payment Amount:
+                                            <Text style={styles.bodyText}> {item.paymentAmount}</Text></Text>
+                                        </View>
+                                    </Shadow>
                                 </View>
                             )
                         }
                     }}
                 />
-
-            </Animatable.View>
         </View>
     )
 }
@@ -265,7 +222,11 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.clearWhite,
         borderRadius: 20,
         margin: 10,
-        // elevation: 2
+    },
+
+    shadowView: {
+        width: '100%',
+        borderRadius: 20,
     },
 
     topDetail: {

@@ -5,7 +5,7 @@ import { router } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
 import { Shadow } from 'react-native-shadow-2';
 
-import { COLORS } from '../../../constant';
+import { COLORS, Utils, DateTimeUtils } from '../../../constant';
 
 export default function RequestItem ({onPanel, newItem, index}) {
     const navigation = useNavigation()
@@ -25,31 +25,7 @@ export default function RequestItem ({onPanel, newItem, index}) {
                     }</Text>
 
                     <View style={styles.rowWrapper}>
-                        { newItem.status == "Filed" ? (
-                            <FontAwesome5 
-                                name="file-import" 
-                                size={17} 
-                                color={COLORS.clearWhite}
-                            />
-                        ) : newItem.status == "Reviewed" ? (
-                            <MaterialCommunityIcons 
-                                name="file-find" 
-                                size={20} 
-                                color={COLORS.clearWhite} 
-                            />
-                        ) : newItem.status == "Approved" ? (
-                            <AntDesign
-                                name="checkcircle"
-                                size={17}
-                                color={COLORS.clearWhite}
-                            />
-                        ) : newItem.status == "Cancelled" ? (
-                            <Entypo
-                                name="circle-with-cross"
-                                size={19}
-                                color={COLORS.clearWhite}
-                            /> 
-                        ) : ( null )}
+                        {Utils.statusIcon(newItem.status)}
 
                         <Text style={styles.statusText}>{newItem.status}</Text>
                     </View>
@@ -71,7 +47,7 @@ export default function RequestItem ({onPanel, newItem, index}) {
                             { onPanel == 0 ? newItem.requestedSched
                                 : onPanel == 1 ? newItem.location
                                 : onPanel == 2 ? newItem.overTimeHours
-                                : onPanel == 3 ? newItem.offSetHours
+                                : onPanel == 3 ? newItem.overTimeHours
                                 : onPanel == 4 ? newItem.leaveType
                                 : onPanel == 5 ? newItem.logType
                                 : null }
@@ -89,11 +65,7 @@ export default function RequestItem ({onPanel, newItem, index}) {
                         </View>
 
                         <TouchableOpacity
-                            onPress={() => router.push({ 
-                                pathname: 'access/navigate/request/MorePage', 
-                                params: newItem 
-                            })}
-                        >
+                            onPress={() => navigation.navigate('MorePage', newItem)}>
                             <Text style={styles.moreText}>More {'>'}</Text>
                         </TouchableOpacity>
                     </View>
@@ -144,7 +116,6 @@ const styles = StyleSheet.create({
 
     statusText: {
         fontFamily: 'Inter_600SemiBold',
-        paddingLeft: 10,
         color: COLORS.clearWhite,
     },
 

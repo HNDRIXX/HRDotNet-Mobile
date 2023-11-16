@@ -14,7 +14,7 @@ export default function NotificationDetails({ navigation }) {
             <PageHeader pageName="Notification Details" />
 
             <View style={styles.wrapper}>
-                <Shadow style={styles.shadowView}>
+                <Shadow distance={7} style={styles.shadowView}>
                     <Image 
                         style={styles.icon} 
                         uri={ 

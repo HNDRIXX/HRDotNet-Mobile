@@ -1,18 +1,14 @@
 import { useEffect } from 'react'
 import { View, Text, StyleSheet, BackHandler, TouchableOpacity } from 'react-native'
-import { router } from 'expo-router';
 import * as Animatable from 'react-native-animatable';
-import { useGlobalSearchParams } from 'expo-router';
 import { Shadow } from 'react-native-shadow-2';
-import { AntDesign, FontAwesome5, Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useRoute } from '@react-navigation/native';
 
-import { COLORS } from '../../../../constant';
+import { COLORS, Utils } from '../../../../constant';
 import PageHeader from '../../../../components/header/PagesHeader';
 
 export default function MorePage () {
-
-    const params = useGlobalSearchParams()
-    
+    const params = useRoute().params
     let topDate
 
     switch (params.requestType) {
@@ -52,42 +48,14 @@ export default function MorePage () {
                     <Text style={styles.topDate}>{topDate}</Text>
                     
                     <View style={styles.rowWrapper}>
-                        { params.status == "Filed" ? (
-                            <FontAwesome5 
-                                name="file-import" 
-                                size={17} 
-                                color={COLORS.clearWhite}
-                                style={{ marginRight: 10 }}
-                            />
-                        ) : params.status == "Reviewed" ? (
-                            <MaterialCommunityIcons 
-                                name="file-find" 
-                                size={20} 
-                                color={COLORS.clearWhite} 
-                                style={{ marginRight: 10 }}
-                            />
-                        ) : params.status == "Approved" ? (
-                            <AntDesign
-                                name="checkcircle"
-                                size={17}
-                                color={COLORS.clearWhite}
-                                style={{ marginRight: 10 }}
-                            />
-                        ) : params.status == "Cancelled" ? (
-                            <Entypo
-                                name="circle-with-cross"
-                                size={19}
-                                color={COLORS.clearWhite}
-                                style={{ marginRight: 10 }}
-                            /> 
-                        ) : ( null )}
+                        { Utils.statusIcon(params.status) }
 
                         <Text style={styles.topDate}>{params.status}</Text>
                     </View>
                 </View>
 
                 <View style={styles.container}>
-                    <Shadow style={styles.content}>
+                    <Shadow distance={5} style={styles.content}>
                         <View style={styles.rowWrapper}>
                             <Text style={styles.titleText}>Type:</Text>
                             <Text style={styles.valueText}>{params.requestType}</Text>
@@ -107,7 +75,7 @@ export default function MorePage () {
                             <>
                                 <View style={[ styles.rowWrapper, { marginTop: 20 } ]}>
                                     <Text style={styles.titleText}>Applied Date/s Filed:</Text>
-                                    <Text style={styles.valueText}>{params.formattedApplied}</Text>
+                                    <Text style={styles.valueText}>{params.formattedAppliedDate}</Text>
                                 </View>
 
                                 <View style={styles.rowWrapper}>
@@ -130,6 +98,23 @@ export default function MorePage () {
                                 <View style={styles.rowWrapper}>
                                     <Text style={styles.titleText}>Location:</Text>
                                     <Text style={styles.valueText}>{params.location}</Text>
+                                </View>
+
+                                <View style={styles.rowWrapper}>
+                                    <Text style={styles.titleText}>Reason:</Text>
+                                    <Text style={styles.valueText}>{params.reason}</Text>
+                                </View>
+                            </>
+                        ) : params.requestType == "Overtime" || params.requestType == "Offset" ? ( 
+                            <>
+                                <View style={[ styles.rowWrapper, { marginTop: 20 } ]}>
+                                    <Text style={styles.titleText}>Overtime Date:</Text>
+                                    <Text style={styles.valueText}>{params.formattedOverTimeDate}</Text>
+                                </View>
+
+                                <View style={styles.rowWrapper}>
+                                    <Text style={styles.titleText}>Overtime Hours:</Text>
+                                    <Text style={styles.valueText}>{params.overTimeHours}</Text>
                                 </View>
 
                                 <View style={styles.rowWrapper}>
@@ -183,13 +168,15 @@ export default function MorePage () {
                         <View style={[styles.rowWrapper, { marginTop: 20 }]}>
                             <Text style={styles.titleText}>Status:</Text>
 
-                            <View style={styles.statusWrapper}>
-                                {params.status != "Reviewed" && (
-                                    <Text style={[styles.valueText, { marginBottom: 10 }]}>{params.status} by {params.statusBy} on {params.formattedStatusByDate}</Text>
-                                )}
-                                
-                                <Text stye={styles.valueText}>Reviewed by {params.reviewedBy} on {params.formattedReviewedDate}</Text>
-                            </View>
+                            { params.statusBy || params.reviewedBy ? (
+                                <View style={styles.statusWrapper}>
+                                    {params.status != "Reviewed" && (
+                                        <Text style={[styles.valueText, { marginBottom: 10 }]}>{params.status} by {params.statusBy} on {params.formattedStatusByDate}</Text>
+                                    )}
+                                    
+                                    <Text stye={styles.valueText}>Reviewed by {params.reviewedBy} on {params.formattedReviewedDate}</Text>
+                                </View>
+                            ) : (<Text>Filed</Text>)}
                         </View>
                     </Shadow>
                 </View>
@@ -223,13 +210,14 @@ const styles = StyleSheet.create({
     },
 
     container: {
-        marginHorizontal: 30,
+        marginHorizontal: 20,
         marginVertical: 20,
     },
 
     content: {
         padding: 20,
         borderRadius: 20,
+        width: '100%'
     },
 
     rowWrapper: {

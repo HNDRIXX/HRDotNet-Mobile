@@ -4,20 +4,20 @@ import * as Animatable from 'react-native-animatable';
 import { AntDesign } from "@expo/vector-icons";
 import moment from "moment/moment";
 
-import { COLORS, Utils, DateTimeUtils } from "../../../constant";
+import { COLORS, Utils, DateTimeUtils, RequestUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
 import RequestItem from "../../items/request/RequestItem"
 
 const data = [
     { 
         status: 'Reviewed',  
-        overTimeDate: '20231014',
+        filedDate: '20231014',
         leaveType: 'Vacation Leave',
         reason: 'Family Vacation',
         attachedFile: '-----',
         documentNo: 'LV22307248376',
-        appliedDate: '20230925',
-        filedDate: '20230916',
+        startDate: '20230925',
+        endDate: '20230925',
         statusBy: 'Kenneth Parungao',
         statusByDate: '20230913',
         reviewedBy: 'Benjamin Peralta',
@@ -25,12 +25,13 @@ const data = [
     },
     { 
         status: 'Approved',  
-        overTimeDate: '20231014',
+        filedDate: '20231014',
         leaveType: 'Sick Leave',
         reason: 'Flu',
         attachedFile: '-----',
         documentNo: 'LV22307248376',
-        appliedDate: '20230925',
+        startDate: '20230925',
+        endDate: '20230927',
         filedDate: '20230916',
         statusBy: 'Kenneth Parungao',
         statusByDate: '20230913',
@@ -39,7 +40,8 @@ const data = [
     },
 ]
 
-export default function LeavePanel ( onAnimate ) {
+export default function LeavePanel () {
+    const [localData, setLocalData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
 
@@ -49,15 +51,18 @@ export default function LeavePanel ( onAnimate ) {
     const [isFirstHalf, setFirstHalf] = useState(null)
     const [isSecondHalf, setSecondHalf] = useState(null)
 
-    const filteredData = data.filter((newItem) => {
-            const formattedDate = DateTimeUtils.dateFullConvert(newItem.appliedDate)
+    let filteredData = []
+
+    if (localData) {
+        filteredData = data.filter((newItem) => {
+            const formattedDate = DateTimeUtils.dateFullConvert(newItem.startDate)
             
             return (
                 newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
                 formattedDate.toLowerCase().includes(filterText.toLowerCase())
             )
-        }
-    )
+        })
+    }
 
     useEffect(() => {
         setTimeout(() => { setIsLoading(false) }, 800)
@@ -75,17 +80,16 @@ export default function LeavePanel ( onAnimate ) {
                 item={item}
                 index={index}
                 newItem={{ ...item, 
-                    formattedAppliedDate: formattedDateString(item.appliedDate), 
-                    formattedFiledDate: formattedDateString(item.filedDate), 
-                    formattedStatusByDate: formattedDateString(item.statusByDate),
-                    formattedReviewedDate: formattedDateString(item.reviewedDate),
+                    formattedAppliedDate: RequestUtils.requestDateApplied(item), 
+                    formattedFiledDate: DateTimeUtils.dateFullConvert(item.filedDate), 
+                    formattedStatusByDate: DateTimeUtils.dateFullConvert(item.statusByDate),
+                    formattedReviewedDate: DateTimeUtils.dateFullConvert(item.reviewedDate),
                     requestType: "Leave"
                 }}
                 key={index}
             />
         )
     }
-    
       
     return (
         <>
@@ -132,12 +136,6 @@ export default function LeavePanel ( onAnimate ) {
                         </ScrollView>
                     ) : ( 
                         <View style={styles.noSearchWrapper}>
-                            <AntDesign
-                                name="search1"
-                                size={55}
-                                color={COLORS.darkGray}
-                                style={{ padding: 20 }}
-                            />
                             <Text>No Search Found.</Text>
                         </View>
                     )}

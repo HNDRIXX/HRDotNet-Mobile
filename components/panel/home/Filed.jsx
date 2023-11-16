@@ -4,7 +4,7 @@ import * as Animatable from 'react-native-animatable';
 import { AntDesign, Entypo, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import moment from "moment/moment";
 
-import { COLORS } from "../../../constant";
+import { COLORS, DateTimeUtils, Utils } from "../../../constant";
 import PendingItem from "../../items/home/PendingItem";
 
 const data = [
@@ -72,15 +72,16 @@ export default function FiledPanel ({ onAnimate, setFiledCount} ) {
                     data={filteredData}
                     style={{ marginTop: 20 }}
                     renderItem={({item, index}) => {
-                        const formattedDate = formattedDateString(item.date)
-                        const appliedDate = formattedDateString(item.appliedDate)
+                        const formattedDate = DateTimeUtils.dateHalfMonthConvert(item.date)
+                        const appliedDate = DateTimeUtils.dateFullConvert(item.appliedDate)
                         const itemDate = moment(formattedDate, 'MMMM DD YYYY')
 
                         return (
                             <PendingItem 
                                 onPanel={0}
                                 item={item}
-                                key={index}
+                                index={index}
+                                lastIndex={data.length - 1}
                                 newItem={{ ...item, formattedDate: formattedDate, appliedDate: appliedDate }}
                             />
                         )

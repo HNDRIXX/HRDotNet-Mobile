@@ -12,10 +12,10 @@ import TitleInput from "../../../../../components/section/request/TitleInput";
 import { COLORS, STRINGS, Utils, DateTimeUtils } from "../../../../../constant";
 import { ScrollView } from "react-native";
 
-const data = [{ timeIn: "10:00 AM", timeOut: "7:00 PM"}, { timeIn: "8:00 AM", timeOut: "6:00 PM" }]
+const data = ["8:00 AM to 5:00 PM"]
 
-export default function OBRequest ({ navigation }) {
-    const [OBDate, setOBDate] = useState(null)
+export default function OFFRequest ({ navigation }) {
+    const [offsetDate, setOffsetDate] = useState(null)
     const [location, setLocation] = useState("Location")
     const [timeIn, setTimeIn] = useState(null)
     const [timeOut, setTimeOut] = useState(null)
@@ -43,10 +43,8 @@ export default function OBRequest ({ navigation }) {
         imageURL != "undefined" && setSelectedFile(imageURL)
     }, [imageURL])
 
-    const newData = data.map(item => `${item.timeIn} to ${item.timeOut}`)
-
-    const handleOBDate = (date) => {
-        setOBDate(moment(date).format('YYYYMMDD'))
+    const handleOFFDate = (date) => {
+        setOffsetDate(moment(date).format('YYYYMMDD'))
         setDatePicker(false)
     }
 
@@ -66,7 +64,7 @@ export default function OBRequest ({ navigation }) {
             alert(STRINGS.fillFormError)
         } else {
             navigation.navigate('RequestSummary', {
-                onPanel: 1,
+                onPanel: 3,
                 OBDate:  OBDate,
                 location: '',
                 shiftSchedule: shiftSched,
@@ -80,7 +78,7 @@ export default function OBRequest ({ navigation }) {
 
     return (
         <>
-            <PageHeader pageName={"OB New Request"} />
+            <PageHeader pageName={"OFF New Request"} />
 
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
@@ -91,15 +89,15 @@ export default function OBRequest ({ navigation }) {
                     <View style={styles.container}>
                         <View style={styles.wrapper}>
                             <TitleInput 
-                                title="OB Date"
-                                inputValue={OBDate} 
+                                title="Offset Date"
+                                inputValue={offsetDate} 
                                 isInputCheck={isInputCheck}
                             />   
 
                             <View style={[styles.rowView, styles.border]}>
                                 <Text style={styles.text}>
-                                    { OBDate == null ? ( <Text style={styles.placeholder}>mm/dd/yyyy</Text> ) 
-                                    : (DateTimeUtils.dateFullConvert(OBDate)) }
+                                    { offsetDate == null ? ( <Text style={styles.placeholder}>mm/dd/yyyy</Text> ) 
+                                    : (DateTimeUtils.dateFullConvert(offsetDate)) }
                                 </Text>
                                 
                                 <Ionicons 
@@ -113,37 +111,14 @@ export default function OBRequest ({ navigation }) {
 
                         <View style={styles.wrapper}>
                             <TitleInput 
-                                title="Location"
-                                inputValue={location} 
-                                isInputCheck={isInputCheck}
-                            />   
-
-                            <View style={[styles.rowView, styles.border]}>
-                                <Text style={styles.text}>
-                                    <Text style={styles.placeholder}>Location</Text>
-                                </Text>
-
-                                <Entypo 
-                                    name="location" 
-                                    size={22} 
-                                    color={COLORS.darkGray} />
-                            </View>
-                        </View>
-
-                        <View style={styles.wrapper}>
-                            <TitleInput 
-                                title="Shift Schedule"
+                                title="Shift"
                                 inputValue={shiftSched} 
                                 isInputCheck={isInputCheck}
                             />  
 
                             <SelectDropdown 
-                                data={newData}
-                                onSelect={(item, index) => {
-                                    setTimeInText(item.split(" to ")[0])
-                                    setTimeOutText(item.split(" to ")[1])
-                                    setShiftSched(item)
-                                }}
+                                data={data}
+                                onSelect={ (item, index) => { setShiftSched(item)} }
                                 buttonStyle={{
                                     width: '100%',
                                     height: 'auto',
@@ -158,18 +133,6 @@ export default function OBRequest ({ navigation }) {
                                 }}
                                 defaultButtonText="Select schedule"
                             />
-
-                            <View style={styles.timeWrapper}>
-                                <View style={styles.timeView}>
-                                    <Text style={styles.grayText}>Time-in</Text>
-                                    <Text style={styles.timeContent}>{timeInText}</Text>
-                                </View>
-
-                                <View style={styles.timeView}>
-                                    <Text style={styles.grayText}>Time-out</Text>
-                                    <Text style={styles.timeContent}>{timeOutText}</Text>
-                                </View>
-                            </View>
                         </View>
 
                         <View style={styles.wrapper}>
@@ -293,7 +256,7 @@ export default function OBRequest ({ navigation }) {
             <DateTimePickerModal
                 isVisible={isDatePicker}
                 mode="date"
-                onConfirm={handleOBDate}
+                onConfirm={handleOFFDate}
                 onCancel={() => setDatePicker(false)} 
             />
 

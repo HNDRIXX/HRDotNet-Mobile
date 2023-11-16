@@ -2,18 +2,20 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { COLORS } from "../../constant";
 
 export default function PageHeader ({ pageName, backStatus }) {
     const navigation = useNavigation()
+    const insets = useSafeAreaInsets()
 
     const onBackHandler = () => {
         backStatus == "expo" ? router.back() : navigation.goBack()
     }
 
     return (
-        <View style={styles.topHeader}>
+        <View style={[styles.topHeader, { paddingTop: insets.top }]}>
             <TouchableOpacity 
                 style={styles.backButton} 
                 onPress={onBackHandler}
@@ -29,12 +31,11 @@ export default function PageHeader ({ pageName, backStatus }) {
 const styles = StyleSheet.create({
     backButton: {
         paddingHorizontal: 10,
+        paddingVertical: 3,
     },
 
     topHeader: {
-        padding: 1,
         paddingBottom: 10,
-        paddingVertical: 40,
         alignItems: 'center',
         flexDirection: 'row',
         backgroundColor: COLORS.powderBlue,

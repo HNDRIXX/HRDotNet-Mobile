@@ -39,7 +39,8 @@ const data = [
     },
 ]
 
-export default function OfficialWorkPanel ( onAnimate ) {
+export default function OfficialWorkPanel () {
+    const [localData, setLocalData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
 
@@ -48,15 +49,19 @@ export default function OfficialWorkPanel ( onAnimate ) {
 
     const [isFirstHalf, setFirstHalf] = useState(null)
     const [isSecondHalf, setSecondHalf] = useState(null)
+    
+    let filteredData = []
 
-    const filteredData = data.filter((newItem) => {
-        const formattedDate = DateTimeUtils.dateFullConvert(newItem.appliedDate)
-        
-        return (
-            newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
-            formattedDate.toLowerCase().includes(filterText.toLowerCase())
-        )
-    })
+    if (localData) {
+        filteredData = data.filter((newItem) => {
+            const formattedDate = DateTimeUtils.dateFullConvert(newItem.officialWorkDate)
+            
+            return (
+                newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
+                formattedDate.toLowerCase().includes(filterText.toLowerCase())
+            )
+        })
+    }
 
     useEffect(() => {
         setTimeout(() => {
@@ -77,16 +82,15 @@ export default function OfficialWorkPanel ( onAnimate ) {
                 item={item}
                 index={index}
                 newItem={{ ...item, 
-                    formattedOfficialWorkDate: formattedDateString(item.officialWorkDate), 
-                    formattedFiledDate: formattedDateString(item.filedDate), 
-                    formattedStatusByDate: formattedDateString(item.statusByDate),
-                    formattedReviewedDate: formattedDateString(item.reviewedDate),
+                    formattedOfficialWorkDate: DateTimeUtils.dateFullConvert(item.officialWorkDate), 
+                    formattedFiledDate: DateTimeUtils.dateFullConvert(item.filedDate), 
+                    formattedStatusByDate: DateTimeUtils.dateFullConvert(item.statusByDate),
+                    formattedReviewedDate: DateTimeUtils.dateFullConvert(item.reviewedDate),
                     requestType: "Official Work"
                 }}
                 key={index}
             />
-        )
-    }
+    )}
       
     return (
         <>
@@ -134,12 +138,6 @@ export default function OfficialWorkPanel ( onAnimate ) {
                         </ScrollView>
                     ) : ( 
                         <View style={styles.noSearchWrapper}>
-                            <AntDesign
-                                name="search1"
-                                size={55}
-                                color={COLORS.darkGray}
-                                style={{ padding: 20 }}
-                            />
                             <Text>No Search Found.</Text>
                         </View>
                     )}
@@ -147,14 +145,6 @@ export default function OfficialWorkPanel ( onAnimate ) {
             )}
         </>
     )
-}
-
-const formattedDateString = (dateString) => {
-    const year = dateString.substring(0, 4);
-    const month = dateString.substring(4, 6);
-    const day = dateString.substring(6);
-
-    return moment(`${month}-${day}-${year}`, 'MM-DD-YYYY').format('MMMM DD YYYY');
 }
 
 const styles = StyleSheet.create({
