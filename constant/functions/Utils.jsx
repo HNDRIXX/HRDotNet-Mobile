@@ -7,6 +7,7 @@ import * as Location from 'expo-location';
 import * as FileSystem from 'expo-file-system';
 
 import { COLORS } from '../theme';
+import { STRINGS } from '../strings';
 
 const currentDate = moment()
 const firstDayOfMonth = moment().startOf('month')
@@ -16,11 +17,26 @@ const lastDayOfMonth = moment().endOf('month')
 const sixteenthDayOfMonth = moment().date(15)
 
 export const Utils = {
+    
+    leaveTypes: [
+        'Bereavement Leave', 
+        'Birthday Leave',
+        'Emergency Leave',
+        'Leave without Pay',
+        'Magna Carta',
+        'Maternity Leave',
+        'Paternity Leave',
+        'Sick Leave',
+        'Single Parent Leave',
+        'SSS Allocation Leave',
+        'Vacation Leave'
+    ],
+
     statusIcon: (status) => {
         return status === "Filed" ? (
             <FontAwesome5 
                 name="file-import" 
-                size={17} 
+                size={17}
                 color={COLORS.clearWhite}
                 style={{ marginRight: 10 }}
             />
@@ -97,23 +113,22 @@ export const Utils = {
                 const uri = fileInfo.uri
 
                 const fileExtension = uri.substring(uri.lastIndexOf('.') + 1).toLowerCase()
-                
                 const fileSizeInMB = fileInfo.size / (1024 * 1024)
 
                 if (fileSizeInMB <= 25 && ['docx', 'pdf', 'jpeg', 'jpg', 'txt'].includes(fileExtension)) {
                     setSelectedFile(fileInfo.uri)
                 } else {
                     if (fileSizeInMB > 25) {
-                        Alert.alert('File Too Large', 'Please select a file with a size of 5MB or less.')
+                        Alert.alert(STRINGS.fileSizeError)
                     } else {
-                        Alert.alert('Unsupported File Format', 'Please select a docx, pdf, jpeg, jpg, or txt file.')
+                        Alert.alert(STRINGS.fileFormatError)
                     }
                 }
             }
         } catch (error) {
             console.error('Error picking document:', error)
         }
-    }, 
+    },
 
     fetchDataLoc: async ( setIsLoading, setLocation, setMapRegion, setCurrAddress ) => {
         

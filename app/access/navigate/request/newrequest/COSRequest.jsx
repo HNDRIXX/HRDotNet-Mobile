@@ -180,6 +180,7 @@ export default function COSRequest ({ navigation }) {
                         style={[styles.textInput, styles.border]}
                         onChangeText={(text) => setReason(text)}
                         value={reason}
+                        maxLength={500}
                         placeholder="Details"
                         placeholderTextColor={COLORS.tr_gray}
                     />
@@ -248,6 +249,7 @@ export default function COSRequest ({ navigation }) {
                 isVisible={showStartPicker}
                 mode="date"
                 onConfirm={onStartDateChange}
+                minimumDate={DateTimeUtils.currDate()}
                 onCancel={() => setShowStartPicker(false)} 
             />
 
@@ -255,6 +257,7 @@ export default function COSRequest ({ navigation }) {
                 isVisible={showEndPicker}
                 mode="date"
                 onConfirm={onEndDateChange}
+                minimumDate={DateTimeUtils.currDate()}
                 onCancel={() => setShowEndDatePicker(false)} 
             />
         </>

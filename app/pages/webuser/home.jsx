@@ -7,6 +7,7 @@ import { Shadow } from "react-native-shadow-2";
 import * as Animatable from 'react-native-animatable';
 import { FontAwesome, Entypo } from "@expo/vector-icons";
 import { useGlobalSearchParams } from "expo-router";
+import Falling from "../../../components/use/Falling";
 
 import { COLORS } from "../../../constant";
 import TimeClock from "../../../components/section/home/TimeClock";
@@ -36,7 +37,6 @@ export default function Home ({ navigation }) {
                     style={{ opacity: 1, flex: 1 }}
                 >
                     <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: COLORS.powderBlue }}>
-
                         <StatusBar backgroundColor={COLORS.powderBlue} barStyle={'light-content'} />
 
                         <View style={styles.headerView}>

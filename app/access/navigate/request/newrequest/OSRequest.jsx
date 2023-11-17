@@ -12,13 +12,15 @@ import TitleInput from "../../../../../components/section/request/TitleInput";
 import { COLORS, STRINGS, Utils, DateTimeUtils } from "../../../../../constant";
 import { ScrollView } from "react-native";
 
-const data = [{ timeIn: "10:00 AM", timeOut: "7:00 PM"}, { timeIn: "8:00 AM", timeOut: "6:00 PM" }]
+const data = ["8:00 AM to 5:00 PM"]
 
-export default function OBRequest ({ navigation }) {
-    const [OBDate, setOBDate] = useState(null)
-    const [location, setLocation] = useState(null)
-    const [timeIn, setTimeIn] = useState(null)
-    const [timeOut, setTimeOut] = useState(null)
+export default function OSRequest ({ navigation }) {
+    const [offsetDate, setOffsetDate] = useState(null)
+    const [location, setLocation] = useState("Location")
+    const [actualOSIn, setActualOSIn] = useState(null)
+    const [actualOSOut, setActualOSOut] = useState(null)
+    const [OSStart, setOSStart] = useState(null)
+    const [OSEnd, setOSEnd] = useState(null)
     const [reason, setReason] = useState(null)
     const [selectedFile, setSelectedFile] = useState(null)
 
@@ -26,8 +28,10 @@ export default function OBRequest ({ navigation }) {
     const [timeOutText, setTimeOutText] = useState("00:00")
 
     const [isDatePicker, setDatePicker] = useState(false)
-    const [isTimeInPicker, setTimeInPicker] = useState(false)
-    const [isTimeOutPicker, setTimeOutPicker] = useState(false)
+    const [isActualInPicker, setActualInPicker] = useState(false)
+    const [isActualOutPicker, setActualOutPicker] = useState(false)
+    const [isOSStartPicker, setOSStartPicker] = useState(false)
+    const [isOSEndPicker, setOSEndPicker] = useState(false)
 
     const [isFileNote, setFileNote] = useState(true)
     const [isInvalidError, setInvalidError] = useState(false)
@@ -43,35 +47,44 @@ export default function OBRequest ({ navigation }) {
         imageURL != "undefined" && setSelectedFile(imageURL)
     }, [imageURL])
 
-    const newData = data.map(item => `${item.timeIn} to ${item.timeOut}`)
-
-    const handleOBDate = (date) => {
-        setOBDate(moment(date).format('YYYYMMDD'))
+    const handleOFFDate = (date) => {
+        setOffsetDate(DateTimeUtils.defaultDateFormat(date))
         setDatePicker(false)
     }
 
     const handleTimeIn = (time) => {
-        setTimeIn(DateTimeUtils.timeDefaultConvert(time))
-        setTimeInPicker(false)
+        setActualOSIn(DateTimeUtils.timeDefaultConvert(time))
+        setActualInPicker(false)
     }
 
     const handleTimeOut = (time) => {
-        setTimeOut(DateTimeUtils.timeDefaultConvert(time))
-        setTimeOutPicker(false)
+        setActualOSOut(DateTimeUtils.timeDefaultConvert(time))
+        setActualOutPicker(false)
+    }
+
+    const handleOffsetStart = (time) => {
+        setOSStart(DateTimeUtils.timeDefaultConvert(time))
+        setOSStartPicker(false)
+    }
+
+    const handleOffsetEnd = (time) => {
+        setOSEnd(DateTimeUtils.timeDefaultConvert(time))
+        setOSEndPicker(false)
     }
 
     const onNextHandler = () => {
-        if ( !OBDate || !location || !shiftSched || !timeIn || !timeOut || !reason || !selectedFile) {
+        if ( !offsetDate || !shiftSched || !actualOSIn || !actualOSOut || !OSStart || !OSEnd || !reason || !selectedFile) {
             setInputCheck(true)
             alert(STRINGS.fillFormError)
         } else {
             navigation.navigate('RequestSummary', {
-                onPanel: 1,
-                OBDate:  OBDate,
-                location: location,
+                onPanel: 3,
+                offsetDate:  offsetDate,
                 shiftSchedule: shiftSched,
-                timeIn: timeIn,
-                timeOut: timeOut,
+                actualOSIn: actualOSIn,
+                actualOSOut: actualOSOut,
+                OSStart: OSStart,
+                OSEnd: OSEnd,
                 reason: reason,
                 attachedFile: selectedFile,
             })   
@@ -80,7 +93,7 @@ export default function OBRequest ({ navigation }) {
 
     return (
         <>
-            <PageHeader pageName={"OB New Request"} />
+            <PageHeader pageName={"OS New Request"} />
 
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
@@ -91,15 +104,15 @@ export default function OBRequest ({ navigation }) {
                     <View style={styles.container}>
                         <View style={styles.wrapper}>
                             <TitleInput 
-                                title="OB Date"
-                                inputValue={OBDate} 
+                                title="Offset Date"
+                                inputValue={offsetDate} 
                                 isInputCheck={isInputCheck}
                             />   
 
                             <View style={[styles.rowView, styles.border]}>
                                 <Text style={styles.text}>
-                                    { OBDate == null ? ( <Text style={styles.placeholder}>mm/dd/yyyy</Text> ) 
-                                    : (DateTimeUtils.dateFullConvert(OBDate)) }
+                                    { offsetDate == null ? ( <Text style={styles.placeholder}>mm/dd/yyyy</Text> ) 
+                                    : (DateTimeUtils.dateFullConvert(offsetDate)) }
                                 </Text>
                                 
                                 <Ionicons 
@@ -113,34 +126,14 @@ export default function OBRequest ({ navigation }) {
 
                         <View style={styles.wrapper}>
                             <TitleInput 
-                                title="Location"
-                                inputValue={location} 
-                                isInputCheck={isInputCheck}
-                            /> 
-
-                            <TextInput
-                                style={[styles.textInput, styles.border]}
-                                onChangeText={(text) => setLocation(text)}
-                                value={location}
-                                placeholder="Location"
-                                placeholderTextColor={COLORS.tr_gray}
-                            />
-                        </View>
-
-                        <View style={styles.wrapper}>
-                            <TitleInput 
-                                title="Shift Schedule"
+                                title="Shift"
                                 inputValue={shiftSched} 
                                 isInputCheck={isInputCheck}
                             />  
 
                             <SelectDropdown 
-                                data={newData}
-                                onSelect={(item, index) => {
-                                    setTimeInText(item.split(" to ")[0])
-                                    setTimeOutText(item.split(" to ")[1])
-                                    setShiftSched(item)
-                                }}
+                                data={data}
+                                onSelect={ (item, index) => { setShiftSched(item)} }
                                 buttonStyle={{
                                     width: '100%',
                                     height: 'auto',
@@ -155,62 +148,96 @@ export default function OBRequest ({ navigation }) {
                                 }}
                                 defaultButtonText="Select schedule"
                             />
-
-                            <View style={styles.timeWrapper}>
-                                <View style={styles.timeView}>
-                                    <Text style={styles.grayText}>Time-in</Text>
-                                    <Text style={styles.timeContent}>{timeInText}</Text>
-                                </View>
-
-                                <View style={styles.timeView}>
-                                    <Text style={styles.grayText}>Time-out</Text>
-                                    <Text style={styles.timeContent}>{timeOutText}</Text>
-                                </View>
-                            </View>
                         </View>
 
                         <View style={styles.wrapper}>
                             <TitleInput 
-                                title="OB Time-in"
-                                inputValue={timeIn} 
+                                title="Actual OS In"
+                                inputValue={actualOSIn} 
                                 isInputCheck={isInputCheck}
                             /> 
 
                             <View style={[styles.rowView, styles.border]}>
                                 <Text style={styles.text}>
-                                    {timeIn == null ? (
+                                    {actualOSIn == null ? (
                                         <Text style={styles.placeholder}>Time</Text>
-                                    ) : DateTimeUtils.timeConvert(timeIn)}
+                                    ) : DateTimeUtils.timeConvert(actualOSIn)}
                                 </Text>
 
                                 <AntDesign 
                                     name="clockcircle"
                                     size={20}
                                     color={COLORS.darkGray}
-                                    onPress={() => setTimeInPicker(true)}
+                                    onPress={() => setActualInPicker(true)}
                                 />
                             </View>
                         </View>
 
                         <View style={styles.wrapper}>
                             <TitleInput 
-                                title="OB Time-out"
-                                inputValue={timeOut} 
+                                title="Actual OS Out"
+                                inputValue={actualOSOut} 
                                 isInputCheck={isInputCheck}
                             /> 
 
                             <View style={[styles.rowView, styles.border]}>
                                 <Text style={styles.text}>
-                                    {timeOut == null ? (
+                                    {actualOSOut == null ? (
                                         <Text style={styles.placeholder}>Time</Text>
-                                    ) : DateTimeUtils.timeConvert(timeOut)}
+                                    ) : DateTimeUtils.timeConvert(actualOSOut)}
                                 </Text>
 
                                 <AntDesign 
                                     name="clockcircle"
                                     size={20}
                                     color={COLORS.darkGray}
-                                    onPress={() => setTimeOutPicker(true)}
+                                    onPress={() => setActualOutPicker(true)}
+                                />
+                            </View>
+                        </View>
+
+                        <View style={styles.wrapper}>
+                            <TitleInput 
+                                title="OS Start"
+                                inputValue={OSStart} 
+                                isInputCheck={isInputCheck}
+                            /> 
+
+                            <View style={[styles.rowView, styles.border]}>
+                                <Text style={styles.text}>
+                                    {OSStart == null ? (
+                                        <Text style={styles.placeholder}>Time</Text>
+                                    ) : DateTimeUtils.timeConvert(OSStart)}
+                                </Text>
+
+                                <AntDesign 
+                                    name="clockcircle"
+                                    size={20}
+                                    color={COLORS.darkGray}
+                                    onPress={() => setOSStartPicker(true)}
+                                />
+                            </View>
+                        </View>
+
+                        <View style={styles.wrapper}>
+                            <TitleInput 
+                                title="OS End"
+                                inputValue={OSEnd} 
+                                isInputCheck={isInputCheck}
+                            /> 
+
+                            <View style={[styles.rowView, styles.border]}>
+                                <Text style={styles.text}>
+                                    {OSEnd == null ? (
+                                        <Text style={styles.placeholder}>Time</Text>
+                                    ) : DateTimeUtils.timeConvert(OSEnd)}
+                                </Text>
+
+                                <AntDesign 
+                                    name="clockcircle"
+                                    size={20}
+                                    color={COLORS.darkGray}
+                                    onPress={() => setOSEndPicker(true)}
                                 />
                             </View>
                         </View>
@@ -256,7 +283,7 @@ export default function OBRequest ({ navigation }) {
                                 <View style={[styles.rowView, { marginRight: -10 }]}>
                                     <Ionicons 
                                         name="camera" size={26} color={COLORS.darkGray}
-                                        onPress={() => navigation.navigate('CameraAccess', { onPanel: 1 })} />
+                                        onPress={() => navigation.navigate('CameraAccess', { onPanel: 3 })} />
 
                                     <FontAwesome 
                                         name="file" size={18} color={COLORS.darkGray} style={{ marginLeft: 15 }}
@@ -283,30 +310,45 @@ export default function OBRequest ({ navigation }) {
 
             <TouchableOpacity 
                 style={styles.button}
-                onPress={onNextHandler}>
+                // onPress={onNextHandler}
+            >
                 <Text style={styles.textButton}>NEXT</Text>
             </TouchableOpacity>
 
             <DateTimePickerModal
                 isVisible={isDatePicker}
                 mode="date"
-                onConfirm={handleOBDate}
+                onConfirm={handleOFFDate}
                 minimumDate={DateTimeUtils.currDate()}
                 onCancel={() => setDatePicker(false)} 
             />
 
             <DateTimePickerModal
-                isVisible={isTimeInPicker}
+                isVisible={isActualInPicker}
                 mode="time"
                 onConfirm={handleTimeIn}
-                onCancel={() => setTimeInPicker(false)} 
+                onCancel={() => setActualInPicker(false)} 
             />
 
             <DateTimePickerModal
-                isVisible={isTimeOutPicker}
+                isVisible={isActualOutPicker}
                 mode="time"
                 onConfirm={handleTimeOut}
-                onCancel={() => setTimeOutPicker(false)} 
+                onCancel={() => setActualOutPicker(false)} 
+            />
+
+            <DateTimePickerModal
+                isVisible={isOSStartPicker}
+                mode="time"
+                onConfirm={handleOffsetStart}
+                onCancel={() => setOSStartPicker(false)} 
+            />
+
+            <DateTimePickerModal
+                isVisible={isOSEndPicker}
+                mode="time"
+                onConfirm={handleOffsetEnd}
+                onCancel={() => setOSEndPicker(false)} 
             />
         </>
   )

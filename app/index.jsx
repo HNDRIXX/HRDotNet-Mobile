@@ -12,7 +12,6 @@ import Request from './pages/webuser/request';
 import Profile from './pages/profile';
 import MorePage from './access/navigate/request/MorePage';
 import ClockInOut from './access/home/ClockInOut';
-import BottomNavigation from '../components/navigation/BottomNavigation';
 
 import { useFonts } from '../constant/fonts';
 import LoanLedgerPage from './access/navigate/home/webuser/loanledger';
@@ -34,7 +33,9 @@ import OBRequest from './access/navigate/request/newrequest/OBRequest';
 import OTRequest from './access/navigate/request/newrequest/OTRequest';
 import NotificationDetails from './access/navigate/home/more/NotificationDetails';
 import LoanDetails from './access/navigate/home/more/LoanDetails';
-import OFFRequest from './access/navigate/request/newrequest/OFFRequest';
+import OSRequest from './access/navigate/request/newrequest/OSRequest';
+import LVRequest from './access/navigate/request/newrequest/LVRequest';
+import MLRequest from './access/navigate/request/newrequest/MLRequest';
 
 export default function Index() {
     const [fontsLoaded] = useFonts()
@@ -176,7 +177,9 @@ export default function Index() {
                     <Stack.Screen name="COSRequest" component={COSRequest} />
                     <Stack.Screen name="OBRequest" component={OBRequest} />
                     <Stack.Screen name="OTRequest" component={OTRequest} />
-                    <Stack.Screen name="OFFRequest" component={OFFRequest} />
+                    <Stack.Screen name="OSRequest" component={OSRequest} />
+                    <Stack.Screen name="LVRequest" component={LVRequest} />
+                    <Stack.Screen name="MLRequest" component={MLRequest} />
 
                     <Stack.Screen 
                         name="RequestSummary" 

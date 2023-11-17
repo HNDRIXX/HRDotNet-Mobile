@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
 import * as Animatable from 'react-native-animatable';
-import { AntDesign } from "@expo/vector-icons";
-import moment from "moment/moment";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { COLORS, Utils, DateTimeUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
@@ -53,7 +52,7 @@ export default function OfficialWorkPanel () {
     let filteredData = []
 
     if (localData) {
-        filteredData = data.filter((newItem) => {
+        filteredData = localData.filter((newItem) => {
             const formattedDate = DateTimeUtils.dateFullConvert(newItem.officialWorkDate)
             
             return (
@@ -67,6 +66,15 @@ export default function OfficialWorkPanel () {
         setTimeout(() => {
           setIsLoading(false)
         }, 800)
+
+        AsyncStorage.getItem('OBData')
+            .then((storedData) => {
+                const retrievedData = JSON.parse(storedData)
+                setLocalData(retrievedData)
+            })
+            .catch((error) => {
+                console.error('Error retrieving data:', error)
+        })
 
         Utils.getHalf(setFirstHalf, setSecondHalf)
     }, [])

@@ -4,10 +4,13 @@ import { useRoute } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import PageHeader from "../../../../components/header/PagesHeader";
-import { COLORS, DateTimeUtils } from "../../../../constant";
+import { COLORS, DateTimeUtils, LocalData } from "../../../../constant";
 import OBSummary from "../../../../components/panel/request/summary/OBSummary";
 import COSSummary from "../../../../components/panel/request/summary/COSSummary";
 import OTSummary from "../../../../components/panel/request/summary/OTSummary";
+import OSSummary from "../../../../components/panel/request/summary/OSSummary";
+import LVSummary from "../../../../components/panel/request/summary/LVSummary";
+import MLSummary from "../../../../components/panel/request/summary/MLSummary";
 
 export default function RequestSummary({ navigation }) {
     const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false)
@@ -41,35 +44,20 @@ export default function RequestSummary({ navigation }) {
     // reviewedBy: '',
     // reviewedDate: '',
     const openCustomAlert = () => {
-        AsyncStorage.getItem('COSData')
-            .then((storedData) => {
-                const existingData = JSON.parse(storedData) || [];
+        const onPanel = route.params.onPanel
 
-                const itemCount = existingData.length
+        switch (onPanel) {
+            case 0:
+                LocalData.insertCOS(route)
+                break;
 
-                const newItem = {
-                    status: 'Filed',
-                    startDate: route.params.startDate,
-                    endDate: route.params.endDate,
-                    requestedSched: route.params.schedule,
-                    reason: route.params.reason,
-                    attachedFile: '-----',
-                    documentNo: `COS${itemCount + 1}`,
-                    filedDate: DateTimeUtils.defaultDateFormat(),
-                    statusBy: '',
-                    statusByDate: '',
-                    reviewedBy: '',
-                    reviewedDate: '',
-                }
-
-                existingData.push(newItem)
-                const updatedDataString = JSON.stringify(existingData);
-
-                return AsyncStorage.setItem('COSData', updatedDataString);
-            })
-            .then(() => {})
-            .catch((error) => {})
-
+            case 1:
+                LocalData.insertOB(route)
+                break;
+        
+            default:
+                break;
+        }
         setIsSuccessAlertVisible(true)
     }
 
@@ -79,29 +67,52 @@ export default function RequestSummary({ navigation }) {
         navigation.navigate('TabStack', { screen: 'Home' })
     }
 
+    const currPanel = route.params?.onPanel
+
     return (
         <>
             <PageHeader pageName={"Request Summary"} />
             
-            {route.params?.onPanel == 0 ? (
+            {currPanel == 0 ? (
                 <COSSummary 
-                    route={route}
+                    route={route.params}
                     openCustomAlert={openCustomAlert}
                     closeCustomAlert={closeCustomAlert}
                     isSuccessAlertVisible={isSuccessAlertVisible} />
-            ) : route.params?.onPanel == 1 ? (
+            ) : currPanel == 1 ? (
                 <OBSummary 
-                    route={route}
+                    route={route.params}
                     openCustomAlert={openCustomAlert}
                     closeCustomAlert={closeCustomAlert}
                     isSuccessAlertVisible={isSuccessAlertVisible} />
-            ) : route.params?.onPanel == 2 ? (
+            ) : currPanel == 2 ? (
                 <OTSummary 
-                    route={route}
+                    route={route.params}
                     openCustomAlert={openCustomAlert}
                     closeCustomAlert={closeCustomAlert}
                     isSuccessAlertVisible={isSuccessAlertVisible} />
-            ) : null }
+            ) : currPanel == 3 ? ( 
+                <OSSummary 
+                    route={route}
+                    openCustomAlert={openCustomAlert}
+                    closeCustomAlert={closeCustomAlert}
+                    isSuccessAlertVisible={isSuccessAlertVisible}
+                />
+            ) : currPanel == 4 ? ( 
+                <LVSummary 
+                    route={route.params}
+                    openCustomAlert={openCustomAlert}
+                    closeCustomAlert={closeCustomAlert}
+                    isSuccessAlertVisible={isSuccessAlertVisible}
+                />
+            ) : currPanel == 5 ? ( 
+                <MLSummary 
+                    route={route.params}
+                    openCustomAlert={openCustomAlert}
+                    closeCustomAlert={closeCustomAlert}
+                    isSuccessAlertVisible={isSuccessAlertVisible}
+                />
+            ): null }
             
         </>
     )

@@ -9,8 +9,8 @@ import RequestItem from "../../items/request/RequestItem"
 const data = [
     { 
         status: 'Filed',  
-        overTimeDate: '20231014',
-        overTimeHours: '7:00 AM - 4:00 PM',
+        overtimeDate: '20231014',
+        overtimeHours: '7:00 AM - 4:00 PM',
         reason: 'QA Testing',
         attachedFile: '-----',
         documentNo: 'OTS22307248376',
@@ -22,8 +22,8 @@ const data = [
     },
     { 
         status: 'Filed', 
-        overTimeDate: '20230922',
-        overTimeHours: '7:00 AM - 4:00 PM',
+        overtimeDate: '20230922',
+        overtimeHours: '7:00 AM - 4:00 PM',
         location: '2138 Roxas Blvd., Manila',   
         reason: 'QA Testing',
         attachedFile: '-----',
@@ -51,7 +51,7 @@ export default function OverTimePanel () {
 
     if (localData) {
         filteredData = data.filter((newItem) => {
-            const formattedDate = DateTimeUtils.dateFullConvert(newItem.overTimeDate)
+            const formattedDate = DateTimeUtils.dateFullConvert(newItem.overtimeDate)
             
             return (
                 newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
@@ -79,7 +79,7 @@ export default function OverTimePanel () {
                 item={item}
                 index={index}
                 newItem={{ ...item, 
-                    formattedOverTimeDate: DateTimeUtils.dateFullConvert(item.overTimeDate), 
+                    formattedOvertimeDate: DateTimeUtils.dateFullConvert(item.overtimeDate), 
                     formattedFiledDate: DateTimeUtils.dateFullConvert(item.filedDate), 
                     formattedStatusByDate: DateTimeUtils.dateFullConvert(item.statusByDate),
                     formattedReviewedDate: DateTimeUtils.dateFullConvert(item.reviewedDate),

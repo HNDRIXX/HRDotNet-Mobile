@@ -17,8 +17,8 @@ export default function RequestItem ({onPanel, newItem, index}) {
                     <Text style={styles.currDateText}>{
                         onPanel == 0 ? newItem.formattedAppliedDate :
                         onPanel == 1 ? newItem.formattedOfficialWorkDate :
-                        onPanel == 2 ? newItem.formattedOverTimeDate :
-                        onPanel == 3 ? newItem.formattedOverTimeDate :
+                        onPanel == 2 ? newItem.formattedOvertimeDate :
+                        onPanel == 3 ? newItem.formattedOvertimeDate :
                         onPanel == 4 ? newItem.formattedAppliedDate :
                         onPanel == 5 ? newItem.formattedMissedLogDate
                         : null
@@ -46,8 +46,8 @@ export default function RequestItem ({onPanel, newItem, index}) {
                         <Text style={styles.valueText}>
                             { onPanel == 0 ? newItem.requestedSched
                                 : onPanel == 1 ? newItem.location
-                                : onPanel == 2 ? newItem.overTimeHours
-                                : onPanel == 3 ? newItem.overTimeHours
+                                : onPanel == 2 ? newItem.overtimeHours
+                                : onPanel == 3 ? newItem.overtimeHours
                                 : onPanel == 4 ? newItem.leaveType
                                 : onPanel == 5 ? newItem.logType
                                 : null }

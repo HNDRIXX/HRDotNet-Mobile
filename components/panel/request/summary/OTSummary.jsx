@@ -6,7 +6,7 @@ import DashedLine from "react-native-dashed-line";
 
 import PageHeader from "../../../../components/header/PagesHeader";
 import SuccessPromptPage from "../../../../components/prompt/SuccessPrompt";
-import { COLORS, DateTimeUtils } from "../../../../constant";
+import { COLORS, STRINGS, DateTimeUtils } from "../../../../constant";
 import { Image } from "expo-image";
 
 export default function OTSummary({ route, openCustomAlert, closeCustomAlert, isSuccessAlertVisible }) {
@@ -16,48 +16,48 @@ export default function OTSummary({ route, openCustomAlert, closeCustomAlert, is
     return (
         <>
             <View style={styles.container}>
-                <Text style={styles.text}>Please review your details below before submitting.</Text>
+                <Text style={styles.text}>{STRINGS.requestSummary}</Text>
 
                 <ScrollView style={styles.summaryView}> 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>OT Date</Text>
-                        <Text style={styles.summaryText}>{DateTimeUtils.dateFullConvert(params?.OTDate)}</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.dateFullConvert(route?.OTDate)}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>Shift Schedule</Text>
-                        <Text style={styles.summaryText}>{params?.shiftSchedule}</Text>
+                        <Text style={styles.summaryText}>{route?.shiftSchedule}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>Actual OT In</Text>
-                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(params?.actualOTIn)}</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(route?.actualOTIn)}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>Actual OT Out</Text>
-                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(params?.actualOTOut)}</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(route?.actualOTOut)}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>OT From</Text>
-                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(params?.OvertimeFrom)}</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(route?.OvertimeFrom)}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>OT To</Text>
-                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(params?.OvertimeTo)}</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(route?.OvertimeTo)}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>Reason</Text>
-                        <Text style={styles.summaryText}>{route.params?.reason}</Text>
+                        <Text style={styles.summaryText}>{route.route?.reason}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
@@ -66,16 +66,16 @@ export default function OTSummary({ route, openCustomAlert, closeCustomAlert, is
 
                         <View style={styles.attachmentView}>
                             {/* <Image 
-                                source={{ uri: route.params?.attachedFile }}
+                                source={{ uri: route.route?.attachedFile }}
                                 style={{ width: 100, height: 100 }}
                                 contentFit="contain"
                             />
 
                             <Text style={[styles.summaryText, { width: '60%' }]}>
-                                {route.params?.attachedFile}
+                                {route.route?.attachedFile}
                             </Text> */}
 
-                            { route.params?.attachedFile && (
+                            { route.route?.attachedFile && (
                                 <Text style={styles.summaryText}>File Attached</Text>
                             )}
                         </View>
@@ -92,7 +92,7 @@ export default function OTSummary({ route, openCustomAlert, closeCustomAlert, is
 
             <SuccessPromptPage
                 title={"Success!"}
-                subTitle = {`Your <b><u>Overtime</u></b> request for <b><u>${DateTimeUtils.dateFullConvert(params?.OTDate)}</u></b> was successfully submitted. We will get back to you soon.`}
+                subTitle = {`Your <b><u>Overtime</u></b> request for <b><u>${DateTimeUtils.dateFullConvert(route?.OTDate)}</u></b> was successfully submitted. We will get back to you soon.`}
                 buttonText={"OKAY"}
                 visible={isSuccessAlertVisible} 
                 onClose={closeCustomAlert} 

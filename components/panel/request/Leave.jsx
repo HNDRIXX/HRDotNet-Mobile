@@ -102,6 +102,7 @@ export default function LeavePanel () {
                     style={{ opacity: 1, flex: 1 }}
                 >
                     <SearchAndNew 
+                        onPanel={4}
                         filterText={filterText}
                         setFilterText={setFilterText}
                     />

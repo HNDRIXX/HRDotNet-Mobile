@@ -15,7 +15,7 @@ const data = [
         startDate: '20231103',
         endDate: '20231103',
         requestedSched: '7:00 AM - 4:00 PM',
-        reason: '----',
+        reason: '',
         attachedFile: '-----',
         documentNo: 'COS0001',
         filedDate: '20231102',
@@ -27,9 +27,9 @@ const data = [
     { 
         status: 'Approved',  
         startDate: '20231014',
-        endDate: '20231014',
+        endDate: '20231018',
         requestedSched: '7:00 AM - 4:00 PM',
-        reason: '----',
+        reason: '',
         attachedFile: '-----',
         documentNo: 'COS0002',
         filedDate: '20231115',
@@ -58,14 +58,14 @@ export default function ChangeOfSchedulePanel () {
             setIsLoading(false)
         }, 800)
 
-        // AsyncStorage.getItem('COSData')
-        //     .then((storedData) => {
-        //         const retrievedData = JSON.parse(storedData)
-        //         setLocalData(retrievedData)
-        //     })
-        //     .catch((error) => {
-        //         console.error('Error retrieving data:', error)
-        // })
+        AsyncStorage.getItem('COSData')
+            .then((storedData) => {
+                const retrievedData = JSON.parse(storedData)
+                setLocalData(retrievedData)
+            })
+            .catch((error) => {
+                console.error('Error retrieving data:', error)
+        })
 
         Utils.getHalf(setFirstHalf, setSecondHalf)
     }, [])
@@ -116,7 +116,7 @@ export default function ChangeOfSchedulePanel () {
                     duration={500}
                     style={{ opacity: 1, flex: 1 }}
                 >
-                   <SearchAndNew 
+                    <SearchAndNew 
                         filterText={filterText}
                         setFilterText={setFilterText}
                         onPanel={0}

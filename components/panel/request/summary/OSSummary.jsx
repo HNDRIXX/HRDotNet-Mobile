@@ -6,10 +6,13 @@ import DashedLine from "react-native-dashed-line";
 
 import PageHeader from "../../../../components/header/PagesHeader";
 import SuccessPromptPage from "../../../../components/prompt/SuccessPrompt";
-import { COLORS, STRINGS, DateTimeUtils, RequestUtils } from "../../../../constant";
+import { COLORS, STRINGS, DateTimeUtils } from "../../../../constant";
 import { Image } from "expo-image";
 
-export default function COSSummary({ route, openCustomAlert, closeCustomAlert, isSuccessAlertVisible }) {
+export default function OSSummary({ route, openCustomAlert, closeCustomAlert, isSuccessAlertVisible }) {
+
+    const params = route.params
+
     return (
         <>
             <View style={styles.container}>
@@ -17,48 +20,61 @@ export default function COSSummary({ route, openCustomAlert, closeCustomAlert, i
 
                 <ScrollView style={styles.summaryView}> 
                     <View style={styles.rowView}>
-                        <Text style={styles.boldText}>Start Date</Text>
-                        <Text style={styles.summaryText}>{moment(route?.startDate, "YYYYMMDD").format("MMMM DD, YYYY")}</Text>
+                        <Text style={styles.boldText}>Offset Date</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.dateFullConvert(params?.offsetDate)}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
-                        <Text style={styles.boldText}>End Date</Text>
-                        <Text style={styles.summaryText}>{moment(route?.endDate, "YYYYMMDD").format("MMMM DD, YYYY")}</Text>
+                        <Text style={styles.boldText}>Shift</Text>
+                        <Text style={styles.summaryText}>{params?.shiftSchedule}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
-                        <Text style={styles.boldText}>Schedule</Text>
-                        <Text style={styles.summaryText}>{route?.schedule}</Text>
+                        <Text style={styles.boldText}>Actual OS In</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(params?.actualOSIn)}</Text>
+                        <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
+                    </View>
+
+                    <View style={styles.rowView}>
+                        <Text style={styles.boldText}>Actual OS Out</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(params?.actualOSOut)}</Text>
+                        <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
+                    </View>
+
+                    <View style={styles.rowView}>
+                        <Text style={styles.boldText}>OT Start</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(params?.OSStart)}</Text>
+                        <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
+                    </View>
+
+                    <View style={styles.rowView}>
+                        <Text style={styles.boldText}>OT End</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(params?.OSEnd)}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>Reason</Text>
-                        <Text style={styles.summaryText}>{route?.reason}</Text>
+                        <Text style={styles.summaryText}>{route.params?.reason}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>File Attachment</Text>
 
-                        {/* <Text style={[styles.summaryText, { width: '60%', fontSize: 11, }]}>
-                            {route?.attachedFile}
-                        </Text> */}
-
                         <View style={styles.attachmentView}>
                             <Image 
-                                source={{ uri: route?.attachedFile }}
+                                source={{ uri: route.params?.attachedFile }}
                                 style={{ width: 130, height: 150 }}
                                 contentFit="contain"
                             />
 
-                            { route?.attachedFile && (
+                            { route.params?.attachedFile && (
                                 <Text style={styles.summaryText}>File Attached</Text>
                             )}
                         </View>
-
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
                 </ScrollView>
@@ -72,7 +88,7 @@ export default function COSSummary({ route, openCustomAlert, closeCustomAlert, i
 
             <SuccessPromptPage
                 title={"Success!"}
-                subTitle = {`Your <b><u>COS</u></b> request for <b><u>${RequestUtils.requestDateApplied(route)}</u></b> was successfully submitted. We will get back to you soon.`}
+                subTitle = {`Your <b><u>Offset</u></b> request for <b><u>${DateTimeUtils.dateFullConvert(params?.offsetDate)}</u></b> was successfully submitted. We will get back to you soon.`}
                 buttonText={"OKAY"}
                 visible={isSuccessAlertVisible} 
                 onClose={closeCustomAlert} 

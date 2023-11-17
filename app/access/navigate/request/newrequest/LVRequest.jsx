@@ -1,40 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, BackHandler, Alert, KeyboardAvoidingView } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
-import { FontAwesome } from "@expo/vector-icons";
 import SelectDropdown from "react-native-select-dropdown";
 import { useRoute } from "@react-navigation/native";
-import { Ionicons, AntDesign, Entypo } from "@expo/vector-icons";
+import Checkbox from "expo-checkbox";
+import { Ionicons, AntDesign, FontAwesome } from "@expo/vector-icons";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
 import TitleInput from "../../../../../components/section/request/TitleInput";
 import { COLORS, STRINGS, Utils, DateTimeUtils } from "../../../../../constant";
 import { ScrollView } from "react-native";
 
-const data = ["8:00 AM to 5:00 PM"]
+const dropdownData = ["Vacation Leave"]
+const checkboxData = ['Whole Day', '1st Half', '2nd Half']
 
-export default function OFFRequest ({ navigation }) {
-    const [offsetDate, setOffsetDate] = useState(null)
-    const [location, setLocation] = useState("Location")
-    const [timeIn, setTimeIn] = useState(null)
-    const [timeOut, setTimeOut] = useState(null)
+export default function LVRequest ({ navigation }) {
+    const [leaveType, setLeaveType] = useState(null)
+    const [availableCredits, setAvailableCredits] = useState("0:00")
+    const [leaveOption, setLeaveOption] = useState(null)
+    const [startDate, setStartDate] = useState(null)
+    const [endDate, setEndDate] = useState(null)
     const [reason, setReason] = useState(null)
     const [selectedFile, setSelectedFile] = useState(null)
 
-    const [timeInText, setTimeInText] = useState("00:00")
-    const [timeOutText, setTimeOutText] = useState("00:00")
+    const [checkSelect, setCheckSelect] = useState(null)
 
-    const [isDatePicker, setDatePicker] = useState(false)
-    const [isTimeInPicker, setTimeInPicker] = useState(false)
-    const [isTimeOutPicker, setTimeOutPicker] = useState(false)
+    const [isStartDatePicker, setStartDatePicker] = useState(false)
+    const [isEndDatePicker, setEndDatePicker] = useState(false)
 
     const [isFileNote, setFileNote] = useState(true)
     const [isInvalidError, setInvalidError] = useState(false)
     const [isSizeError, setSizeError] = useState(false)
     const [isInputCheck, setInputCheck] = useState(false)
-
-    const [shiftSched, setShiftSched] = useState(null)
 
     const route = useRoute()
     const imageURL = decodeURIComponent(route.params?.image)
@@ -43,33 +41,33 @@ export default function OFFRequest ({ navigation }) {
         imageURL != "undefined" && setSelectedFile(imageURL)
     }, [imageURL])
 
-    const handleOFFDate = (date) => {
-        setOffsetDate(moment(date).format('YYYYMMDD'))
-        setDatePicker(false)
+    const handleStartDate = (date) => {
+        setStartDate(DateTimeUtils.converDateFormat(date))
+        setStartDatePicker(false)
     }
 
-    const handleTimeIn = (time) => {
-        setTimeIn(DateTimeUtils.timeDefaultConvert(time))
-        setTimeInPicker(false)
+    const handleEndDate = (date) => {
+        setEndDate(DateTimeUtils.converDateFormat(date))
+        setEndDatePicker(false)
     }
 
-    const handleTimeOut = (time) => {
-        setTimeOut(DateTimeUtils.timeDefaultConvert(time))
-        setTimeOutPicker(false)
+    const handleCheck = (index) => {
+        setCheckSelect(index)
+
+        index == 0 ? setLeaveOption("Whole Day") : index == 1 ? setLeaveOption("1st Half") : index == 2 ? setLeaveOption("2nd Half") : null
     }
 
     const onNextHandler = () => {
-        if ( !OBDate || !location || !shiftSched || !timeIn || !timeOut || !reason || !selectedFile) {
+        if ( !leaveType || !leaveOption || !startDate || !endDate || !reason || !selectedFile) {
             setInputCheck(true)
             alert(STRINGS.fillFormError)
         } else {
             navigation.navigate('RequestSummary', {
-                onPanel: 3,
-                OBDate:  OBDate,
-                location: '',
-                shiftSchedule: shiftSched,
-                timeIn: timeIn,
-                timeOut: timeOut,
+                onPanel: 4,
+                leaveType:  leaveType,
+                leaveOption: leaveOption,
+                startDate: startDate,
+                endDate: endDate,
                 reason: reason,
                 attachedFile: selectedFile,
             })   
@@ -78,7 +76,7 @@ export default function OFFRequest ({ navigation }) {
 
     return (
         <>
-            <PageHeader pageName={"OFF New Request"} />
+            <PageHeader pageName={"LV New Request"} />
 
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
@@ -89,36 +87,14 @@ export default function OFFRequest ({ navigation }) {
                     <View style={styles.container}>
                         <View style={styles.wrapper}>
                             <TitleInput 
-                                title="Offset Date"
-                                inputValue={offsetDate} 
-                                isInputCheck={isInputCheck}
-                            />   
-
-                            <View style={[styles.rowView, styles.border]}>
-                                <Text style={styles.text}>
-                                    { offsetDate == null ? ( <Text style={styles.placeholder}>mm/dd/yyyy</Text> ) 
-                                    : (DateTimeUtils.dateFullConvert(offsetDate)) }
-                                </Text>
-                                
-                                <Ionicons 
-                                    name="calendar" 
-                                    size={24} 
-                                    color={COLORS.darkGray} 
-                                    onPress={() => setDatePicker(true)}   
-                                />
-                            </View>
-                        </View>
-
-                        <View style={styles.wrapper}>
-                            <TitleInput 
-                                title="Shift"
-                                inputValue={shiftSched} 
+                                title="Leave Type"
+                                inputValue={leaveType} 
                                 isInputCheck={isInputCheck}
                             />  
 
                             <SelectDropdown 
-                                data={data}
-                                onSelect={ (item, index) => { setShiftSched(item)} }
+                                data={Utils.leaveTypes}
+                                onSelect={(item, index) => { setLeaveType(item) }}
                                 buttonStyle={{
                                     width: '100%',
                                     height: 'auto',
@@ -131,53 +107,81 @@ export default function OFFRequest ({ navigation }) {
                                     fontSize: 14,
                                     textAlign: 'left'
                                 }}
-                                defaultButtonText="Select schedule"
+                                defaultButtonText="(Select Leave Type)"
                             />
+
+                            <View style={styles.timeWrapper}>
+                                <View style={styles.timeView}>
+                                    <Text style={styles.mediumText}>Available Credits</Text>
+                                    <Text style={styles.timeContent}>{availableCredits}</Text>
+                                </View>
+                            </View>
+
+                            <View>
+                                <TitleInput 
+                                    title="Leave Option"
+                                    inputValue={leaveType} 
+                                    isInputCheck={isInputCheck}
+                                />  
+
+                                <View style={styles.checkboxView}>
+                                    { checkboxData.map(( item, index ) => (
+                                        <View style={styles.checkboxItem} key={index}>
+                                            <Checkbox
+                                                key={index}
+                                                style={{ borderRadius: 10 }}
+                                                value={checkSelect === index}
+                                                onValueChange={() => handleCheck(index)}
+                                            />
+
+                                            <Text style={styles.checkboxText}>{item}</Text>
+                                        </View>
+                                    ))}
+                                </View>
+                           </View>
                         </View>
 
                         <View style={styles.wrapper}>
                             <TitleInput 
-                                title="OB Time-in"
-                                inputValue={timeIn} 
+                                title="Start Date"
+                                inputValue={startDate} 
                                 isInputCheck={isInputCheck}
-                            /> 
-
+                            />      
+                        
                             <View style={[styles.rowView, styles.border]}>
-                                <Text style={styles.text}>
-                                    {timeIn == null ? (
-                                        <Text style={styles.placeholder}>Time</Text>
-                                    ) : DateTimeUtils.timeConvert(timeIn)}
+                                <Text style={styles.dateText}>
+                                    {startDate == null ? ( <Text style={styles.placeholder}>mm/dd/yyyy</Text> )
+                                    : DateTimeUtils.dateFullConvert(startDate)}
                                 </Text>
-
-                                <AntDesign 
-                                    name="clockcircle"
-                                    size={20}
-                                    color={COLORS.darkGray}
-                                    onPress={() => setTimeInPicker(true)}
-                                />
+                                
+                                <Ionicons 
+                                    name="calendar" 
+                                    size={24} 
+                                    color={COLORS.darkGray} 
+                                    onPress={() => setStartDatePicker(true)}   
+                                    />
                             </View>
                         </View>
 
                         <View style={styles.wrapper}>
                             <TitleInput 
-                                title="OB Time-out"
-                                inputValue={timeOut} 
+                                title="End Date"
+                                inputValue={endDate} 
                                 isInputCheck={isInputCheck}
-                            /> 
-
+                            />      
+                        
                             <View style={[styles.rowView, styles.border]}>
-                                <Text style={styles.text}>
-                                    {timeOut == null ? (
-                                        <Text style={styles.placeholder}>Time</Text>
-                                    ) : DateTimeUtils.timeConvert(timeOut)}
+                                <Text style={styles.dateText}>
+                                    {endDate == null ? ( <Text style={styles.placeholder}>mm/dd/yyyy</Text> )
+                                    : DateTimeUtils.dateFullConvert(endDate)}
                                 </Text>
-
-                                <AntDesign 
-                                    name="clockcircle"
-                                    size={20}
-                                    color={COLORS.darkGray}
-                                    onPress={() => setTimeOutPicker(true)}
-                                />
+                                
+                                <Ionicons 
+                                    name="calendar" 
+                                    size={24} 
+                                    color={COLORS.darkGray} 
+                                    onPress={() => setEndDatePicker(true)}   
+                                    />
                             </View>
                         </View>
 
@@ -222,7 +226,7 @@ export default function OFFRequest ({ navigation }) {
                                 <View style={[styles.rowView, { marginRight: -10 }]}>
                                     <Ionicons 
                                         name="camera" size={26} color={COLORS.darkGray}
-                                        onPress={() => navigation.navigate('CameraAccess', { onPanel: 1 })} />
+                                        onPress={() => navigation.navigate('CameraAccess', { onPanel: 4 })} />
 
                                     <FontAwesome 
                                         name="file" size={18} color={COLORS.darkGray} style={{ marginLeft: 15 }}
@@ -249,30 +253,27 @@ export default function OFFRequest ({ navigation }) {
 
             <TouchableOpacity 
                 style={styles.button}
-                onPress={onNextHandler}>
+                // onPress={onNextHandler}
+            >
                 <Text style={styles.textButton}>NEXT</Text>
             </TouchableOpacity>
 
             <DateTimePickerModal
-                isVisible={isDatePicker}
+                isVisible={isStartDatePicker}
                 mode="date"
-                onConfirm={handleOFFDate}
-                onCancel={() => setDatePicker(false)} 
+                onConfirm={handleStartDate}
+                minimumDate={DateTimeUtils.currDate()}
+                onCancel={() => setStartDatePicker(false)} 
             />
 
             <DateTimePickerModal
-                isVisible={isTimeInPicker}
-                mode="time"
-                onConfirm={handleTimeIn}
-                onCancel={() => setTimeInPicker(false)} 
+                isVisible={isEndDatePicker}
+                mode="date"
+                onConfirm={handleEndDate}
+                minimumDate={DateTimeUtils.currDate()}
+                onCancel={() => setEndDatePicker(false)} 
             />
 
-            <DateTimePickerModal
-                isVisible={isTimeOutPicker}
-                mode="time"
-                onConfirm={handleTimeOut}
-                onCancel={() => setTimeOutPicker(false)} 
-            />
         </>
   )
 }
@@ -305,9 +306,8 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
     },
 
-    grayText: {
+    mediumText: {
         fontFamily: 'Inter_500Medium',
-        color: COLORS.darkGray
     },
 
     rowView: {
@@ -332,14 +332,15 @@ const styles = StyleSheet.create({
     },
 
     timeWrapper:{
-        marginVertical: 15,
-        marginHorizontal: 20,
+        marginVertical: 10,
+        marginHorizontal: 18,
     },
 
     timeContent: {
         fontFamily: 'Inter_500Medium',
         backgroundColor: COLORS.gray,
-        width: 100,
+        width: 60,
+        paddingTop: 3,
         textAlign: 'center',
 
         borderRadius: 5,
@@ -350,7 +351,6 @@ const styles = StyleSheet.create({
     timeView: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        margin: 5
     },
 
     button: {
@@ -368,6 +368,21 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: COLORS.clearWhite,
         textAlign: 'center',
+    },
+
+    checkboxView: {
+        flexDirection: 'row',
+        paddingVertical: 8,
+    },
+
+    checkboxItem: {
+        flexDirection: 'row', 
+        paddingHorizontal: 14,
+    },
+
+    checkboxText: {
+        fontFamily: 'Inter_500Medium',
+        paddingLeft: 8,
     },
 
     fileNote: {

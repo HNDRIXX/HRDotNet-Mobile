@@ -2,6 +2,8 @@ import moment from "moment";
 
 
 export const DateTimeUtils = {
+    currDate: () => new Date(),
+    momentCurrDate: () => moment(),
     getCurrMonth: () => moment().format('MMMM'),
     getCurrYear: () => moment().format('YYYY'),
     defaultDateFormat: () => moment().format('YYYYMMDD'),

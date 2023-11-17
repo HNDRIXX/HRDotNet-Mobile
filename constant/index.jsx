@@ -6,5 +6,6 @@ import { DateTimeUtils } from './functions/DateTimeUtils'
 import { Utils } from './functions/Utils'
 import { ErrorUtils } from './functions/ErrorUtils'
 import { RequestUtils } from './functions/RequestUtils'
+import { LocalData } from './functions/LocalData'
 
-export { COLORS, useFonts, ICONS, STRINGS, DateTimeUtils, Utils, ErrorUtils, RequestUtils }
+export { COLORS, useFonts, ICONS, STRINGS, DateTimeUtils, Utils, ErrorUtils, RequestUtils, LocalData }

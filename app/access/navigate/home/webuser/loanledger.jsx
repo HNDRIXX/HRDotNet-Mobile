@@ -1,10 +1,11 @@
+import { useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
-import { router } from 'expo-router'
-import moment from 'moment'
 
-import { COLORS, DateTimeUtils, Utils } from '../../../../../constant'
+import { Search } from '../../../../../components/use/Search'
+import { DateTimeUtils } from '../../../../../constant'
 import LoanLedgerItem from '../../../../../components/items/home/LoanLedgerItem'
+import PageHeader from '../../../../../components/header/PagesHeader'
 
 const data = [
     {
@@ -61,25 +62,33 @@ const details = [
         paymentAmount: "458.91",
     },
 ]
-export default function LoanLedgerPage ({ navigation }) {
+export default function LoanLedgerPage () {
+    const [filterText, setFilterText] = useState('')
+
+    let filteredData = []
+
+    filteredData = data.filter((newItem) => {
+        const formattedDate = DateTimeUtils.dateFullConvert(newItem.overtimeDate)
+        
+        return (
+            newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
+            formattedDate.toLowerCase().includes(filterText.toLowerCase())
+        )
+    })
+
     return (
         <View>
-             <View style={styles.topHeader}>
-                <TouchableOpacity 
-                    style={styles.backButton} 
-                    onPress={() => navigation.goBack()}
-                >
-                    <AntDesign name='arrowleft' size={30} color={COLORS.clearWhite} />
-                </TouchableOpacity>
+            <PageHeader pageName={"Loan Ledger"} />
 
-                <Text style={styles.textHeader}>Loan Ledger</Text>
-            </View>
+            <Search 
+                filterText={filterText}
+                setFilterText={setFilterText}
+            />
 
             <FlatList 
                 data={data}
                 style={styles.loanLedgerList}
                 renderItem={({item, index}) => {
-
                     return (
                         <LoanLedgerItem 
                             key={index}
@@ -105,30 +114,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
-    backButton: {
-        paddingHorizontal: 10,
-    },
-
-    topHeader: {
-        padding: 1,
-        paddingBottom: 10,
-        paddingVertical: 50,
-        alignItems: 'center',
-        flexDirection: 'row',
-        backgroundColor: COLORS.powderBlue,
-    },
-    
-    textHeader: {
-        color: COLORS.clearWhite,
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 18,
-        flex: 1,
-        textAlign: 'center',
-        marginRight: 40,
-    },
-
     loanLedgerList: {
-        marginHorizontal: 10,
         marginTop: 20,
     }
 })

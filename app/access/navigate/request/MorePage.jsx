@@ -19,10 +19,10 @@ export default function MorePage () {
             topDate = params.formattedOfficialWorkDate
             break
         case 'Overtime' :
-            topDate = params.formattedOverTimeDate
+            topDate = params.formattedOvertimeDate
             break
         case 'Offset' :
-            topDate = params.formattedOverTimeDate
+            topDate = params.formattedOvertimeDate
             break
         case 'Leave' :
             topDate = params.formattedAppliedDate
@@ -80,7 +80,9 @@ export default function MorePage () {
 
                                 <View style={styles.rowWrapper}>
                                     <Text style={styles.titleText}>Reason:</Text>
-                                    <Text style={styles.valueText}>{params.reason}</Text>
+                                    <Text style={styles.valueText}>
+                                        { params.reason == "" ? "-----" : params.reason }
+                                    </Text>
                                 </View>
                             </>
                         ) : params.requestType == "Official Work" ? ( 
@@ -102,19 +104,23 @@ export default function MorePage () {
 
                                 <View style={styles.rowWrapper}>
                                     <Text style={styles.titleText}>Reason:</Text>
-                                    <Text style={styles.valueText}>{params.reason}</Text>
+                                    <Text style={styles.valueText}>
+                                        { params.reason == "" ? "-----" : params.reason }
+                                    </Text>
                                 </View>
                             </>
                         ) : params.requestType == "Overtime" || params.requestType == "Offset" ? ( 
                             <>
                                 <View style={[ styles.rowWrapper, { marginTop: 20 } ]}>
                                     <Text style={styles.titleText}>Overtime Date:</Text>
-                                    <Text style={styles.valueText}>{params.formattedOverTimeDate}</Text>
+                                    <Text style={styles.valueText}>{params.formattedOvertimeDate}</Text>
                                 </View>
 
                                 <View style={styles.rowWrapper}>
                                     <Text style={styles.titleText}>Overtime Hours:</Text>
-                                    <Text style={styles.valueText}>{params.overTimeHours}</Text>
+                                    <Text style={styles.valueText}>
+                                        { params.reason == "" ? "-----" : params.reason }
+                                    </Text>
                                 </View>
 
                                 <View style={styles.rowWrapper}>
@@ -131,7 +137,9 @@ export default function MorePage () {
 
                                 <View style={styles.rowWrapper}>
                                     <Text style={styles.titleText}>Reason:</Text>
-                                    <Text style={styles.valueText}>{params.reason}</Text>
+                                    <Text style={styles.valueText}>
+                                        { params.reason == "" ? "-----" : params.reason }
+                                    </Text>
                                 </View>
                             </>
                         ) : params.requestType == "Missed Logs" ? ( 
@@ -153,7 +161,9 @@ export default function MorePage () {
 
                                 <View style={styles.rowWrapper}>
                                     <Text style={styles.titleText}>Reason:</Text>
-                                    <Text style={styles.valueText}>{params.reason}</Text>
+                                    <Text style={styles.valueText}>
+                                        { params.reason == "" ? "-----" : params.reason }
+                                    </Text>
                                 </View>
                             </>
                         )

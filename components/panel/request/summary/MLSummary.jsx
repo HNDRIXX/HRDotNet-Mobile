@@ -9,7 +9,7 @@ import SuccessPromptPage from "../../../../components/prompt/SuccessPrompt";
 import { COLORS, STRINGS, DateTimeUtils, RequestUtils } from "../../../../constant";
 import { Image } from "expo-image";
 
-export default function COSSummary({ route, openCustomAlert, closeCustomAlert, isSuccessAlertVisible }) {
+export default function MLSummary({ route, openCustomAlert, closeCustomAlert, isSuccessAlertVisible }) {
     return (
         <>
             <View style={styles.container}>
@@ -17,20 +17,20 @@ export default function COSSummary({ route, openCustomAlert, closeCustomAlert, i
 
                 <ScrollView style={styles.summaryView}> 
                     <View style={styles.rowView}>
-                        <Text style={styles.boldText}>Start Date</Text>
-                        <Text style={styles.summaryText}>{moment(route?.startDate, "YYYYMMDD").format("MMMM DD, YYYY")}</Text>
+                        <Text style={styles.boldText}>Missed Log Date</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.dateFullConvert(route?.missedLogDate)}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
-                        <Text style={styles.boldText}>End Date</Text>
-                        <Text style={styles.summaryText}>{moment(route?.endDate, "YYYYMMDD").format("MMMM DD, YYYY")}</Text>
+                        <Text style={styles.boldText}>Log Type</Text>
+                        <Text style={styles.summaryText}>{route?.logType}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
-                        <Text style={styles.boldText}>Schedule</Text>
-                        <Text style={styles.summaryText}>{route?.schedule}</Text>
+                        <Text style={styles.boldText}>Log Time</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(route?.logTime)}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
@@ -43,10 +43,6 @@ export default function COSSummary({ route, openCustomAlert, closeCustomAlert, i
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>File Attachment</Text>
 
-                        {/* <Text style={[styles.summaryText, { width: '60%', fontSize: 11, }]}>
-                            {route?.attachedFile}
-                        </Text> */}
-
                         <View style={styles.attachmentView}>
                             <Image 
                                 source={{ uri: route?.attachedFile }}
@@ -58,7 +54,6 @@ export default function COSSummary({ route, openCustomAlert, closeCustomAlert, i
                                 <Text style={styles.summaryText}>File Attached</Text>
                             )}
                         </View>
-
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
                 </ScrollView>
@@ -72,7 +67,7 @@ export default function COSSummary({ route, openCustomAlert, closeCustomAlert, i
 
             <SuccessPromptPage
                 title={"Success!"}
-                subTitle = {`Your <b><u>COS</u></b> request for <b><u>${RequestUtils.requestDateApplied(route)}</u></b> was successfully submitted. We will get back to you soon.`}
+                subTitle = {`Your <b><u>Missed Logs</u></b> request for <b><u>${DateTimeUtils.dateFullConvert(route?.missedLogDate)}</u></b> was successfully submitted. We will get back to you soon.`}
                 buttonText={"OKAY"}
                 visible={isSuccessAlertVisible} 
                 onClose={closeCustomAlert} 
