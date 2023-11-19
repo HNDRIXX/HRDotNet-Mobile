@@ -38,12 +38,7 @@ export default function MorePage () {
         <View style={{ flex: 1 }}>
             <PageHeader pageName={"Request Details"}/>
 
-            <Animatable.View
-                animation={'fadeIn'}
-                duration={800}
-                easing={'ease-in-out'}
-                style={{ opacity: 1, flex: 1 }}
-            >
+            <View>
                 <View style={styles.topContent(params)}>
                     <Text style={styles.topDate}>{topDate}</Text>
                     
@@ -190,7 +185,7 @@ export default function MorePage () {
                         </View>
                     </Shadow>
                 </View>
-            </Animatable.View>
+            </View>
         </View>
     )
 }

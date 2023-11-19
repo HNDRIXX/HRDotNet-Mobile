@@ -140,15 +140,15 @@ export const Utils = {
     
             const { coords } = location
             const address = await Location.reverseGeocodeAsync({
-            latitude: coords.latitude,
-            longitude: coords.longitude,
+                latitude: coords.latitude,
+                longitude: coords.longitude,
             })
     
             setMapRegion({
-            latitude: coords.latitude,
-            longitude: coords.longitude,
-            latitudeDelta: 0.001,
-            longitudeDelta: 0.005,
+                latitude: coords.latitude,
+                longitude: coords.longitude,
+                latitudeDelta: 0.001,
+                longitudeDelta: 0.005,
             })
     
             const fullAddress = `${address[0].name} ${address[0].street}, ${address[0].city}, ${address[0].country}`
@@ -179,7 +179,9 @@ export const Utils = {
             //     },
             //     ]
             // )
-        } else { Utils.fetchDataLoc(setIsLoading, setLocation, setMapRegion, setCurrAddress) } 
+        } else { 
+            // Utils.fetchDataLoc(setIsLoading, setLocation, setMapRegion, setCurrAddress) 
+        } 
     
         // try {
         //   const location = await Location.getCurrentPositionAsync({})

@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl } from "react-native";
 import * as Animatable from 'react-native-animatable';
 import { AntDesign } from "@expo/vector-icons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from "moment/moment";
+import axios from "axios";
 
 import { COLORS, Utils, DateTimeUtils, RequestUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
 import RequestItem from "../../items/request/RequestItem"
+// DESKTOP-2VPR9IB\SQLEXPRESS
 
 const data = [
-    { 
+    {
         status: 'Approved',  
         startDate: '20231103',
         endDate: '20231103',
@@ -42,7 +44,7 @@ const data = [
 
 export default function ChangeOfSchedulePanel () {
     const [localData, setLocalData] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
 
     const [newCount, setNewCount] = useState(0)
@@ -51,12 +53,25 @@ export default function ChangeOfSchedulePanel () {
     const [isFirstHalf, setFirstHalf] = useState(null)
     const [isSecondHalf, setSecondHalf] = useState(null)
 
+    const [refreshing, setRefreshing] = useState(false)
+    const scrollViewRef = useRef(null)
+
     let filteredData = []
 
+    // const fetchData = async () => {
+    //     try {
+    //         const response = await axios.get(`http://192.168.1.4:3000/api/tChangeOfSchedule`);
+    //         setLocalData(response.data)
+    //     } catch (error) {
+    //         console.error('Error fetching data:', error)
+    //     } finally {
+    //         setRefreshing(false)
+    //         setLoading(false)
+    //     }
+    // }
+
     useEffect(() => {
-        setTimeout(() => {
-            setIsLoading(false)
-        }, 800)
+        setLoading(false)
 
         AsyncStorage.getItem('COSData')
             .then((storedData) => {
@@ -67,11 +82,12 @@ export default function ChangeOfSchedulePanel () {
                 console.error('Error retrieving data:', error)
         })
 
+        // fetchData()
         Utils.getHalf(setFirstHalf, setSecondHalf)
     }, [])
 
 
-    if (localData) {
+    if (!localData) {
         filteredData = data.filter((newItem) => {
             const formattedStartDate = DateTimeUtils.dateFullConvert(newItem.startDate)
             const formattedEndDate = DateTimeUtils.dateFullConvert(newItem.endDate)
@@ -88,6 +104,12 @@ export default function ChangeOfSchedulePanel () {
         Utils.dataItemCount(filteredData, setNewCount, setEarlierCount, isFirstHalf, isSecondHalf)
     }, [filteredData])
 
+    const refresh = () => {
+        setRefreshing(true)
+        setLoading(true)
+        // fetchData()
+    }
+    
     const requestItemDisplay = ({ item, index }) => {
         return (
             <RequestItem 
@@ -123,7 +145,14 @@ export default function ChangeOfSchedulePanel () {
                     />
 
                     { filteredData.length > 0 ? (
-                        <ScrollView>
+                        <ScrollView
+                            ref={scrollViewRef}
+                            refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={refresh} />
+                            }
+                        >
                             { newCount > 0 && (<Text style={styles.itemStatusText}>New</Text>) }
 
                             {filteredData

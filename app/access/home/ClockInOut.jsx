@@ -18,9 +18,14 @@ export default function ClockInOut () {
   const [clockedValue, setClockedValue] = useState(1)
   const [clockedTime, setClockedTime] = useState('')
   const [clockedDate, setClockedDate] = useState('')
-  const [location, setLocation] = useState(null)
+  const [location, setLocation] = useState('')
   const [currAddress, setCurrAddress] = useState("")
-  const [mapRegion, setMapRegion] = useState({})
+  const [mapRegion, setMapRegion] = useState({
+    latitude: '',
+    longitude: '',
+    latitudeDelta: 0.001,
+    longitudeDelta: 0.005,
+  })
 
   const [onLocation, setOnLocation] = useState(false)
   const [isDisabled, setIsDisabled] = useState(true)

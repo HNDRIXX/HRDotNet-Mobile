@@ -11,12 +11,18 @@
     "name": "HRDotNet-Mobile",
     "slug": "HRDotNet-Mobile",
     "icon": "./assets/icon.png",
+    "platforms": ["ios", "android", "web"],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "android": {
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyC1YDKCTkx-ib9y0iAX_B-wSQc0Hf2AqSo"
+        }
+      },
       "permissions": [
         "READ_EXTERNAL_STORAGE"
       ],
