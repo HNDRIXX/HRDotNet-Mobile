@@ -104,6 +104,13 @@ export const Utils = {
         }
     },
 
+    amountFormat: (amount) => {
+        return amount.toLocaleString(undefined, {
+            minimumFractionDigits: 4,
+            maximumFractionDigits: 4,
+        })
+    },
+
     fileAttach: async ( setSelectedFile ) => {
         try {
             const result = await DocumentPicker.getDocumentAsync()

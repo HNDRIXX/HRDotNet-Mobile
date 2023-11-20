@@ -261,3 +261,55 @@ To Do
 - Reset Password Process
 
 - Camera Feature Functions
+
+
+NOVEMBER 20, 2023
+Goals Accomplished
+* Adjustment
+- Timesheet Module (Functions)
+- Loan Ledger Module (UI and Functions)
+- Pending Module (UI Functions and Functions)
+
+- Time Off Page (Individual Pages Route)
+- Notification Page (Notification Details Interface)
+- Notification Page (Notification Details Functions)
+(Some Adjustment for Images Icons)
+
+- Official Work - New Request Page (Interface)
+- Official Work - New Request Page (Functions)
+- Overtime - New Request Page (Interface)
+- Offset - New Request Page (Interface)
+- Camera Feature Interface
+
+- Personal Interface (Profile)
+- Profile Page Main Interface
+- Profile Page Main Functions
+
+Ongoing
+- Overtime - New Request Page (Functions and Location Functions)
+- Offset - New Request Page (Functions)
+- Leave - New Request Page (Interface)
+- Leave - New Request Pafe (Functions)
+- Missed Logs - New Request Page (Interface)
+- Missed Logs - New Request Page (Functions)
+
+- New and Earlier Functions (Request Sorting Item)
+
+- Reset Password Process
+- Camera Feature Functions
+
+
+To Do
+- Overtime - New Request Page (Functions and Location Functions)
+- Offset - New Request Page (Functions)
+- Leave - New Request Page (Interface)
+- Leave - New Request Pafe (Functions)
+- Missed Logs - New Request Page (Interface)
+- Missed Logs - New Request Page (Functions)
+
+- New and Earlier Functions (Request Sorting Item)
+
+- Reset Password Process
+- Camera Feature Functions
+- Payslip Profile Module
+

@@ -5,6 +5,7 @@ import { Image } from "react-native-expo-image-cache";
 import moment from 'moment';
 
 import { COLORS, ICONS, DateTimeUtils } from "../../../../../constant";
+import PageHeader from "../../../../../components/header/PagesHeader";
 
 const data = [
     {
@@ -30,16 +31,7 @@ const data = [
 export default function SickLeavePage ({ navigation }) {
     return (
         <View style={styles.container}>
-            <View style={styles.topHeader}>
-                <TouchableOpacity 
-                    style={styles.backButton} 
-                    onPress={() => navigation.goBack()}
-                >
-                    <AntDesign name='arrowleft' size={30} color={COLORS.clearWhite} />
-                </TouchableOpacity>
-
-                <Text style={styles.textHeader}>Sick Leave</Text>
-            </View>
+            <PageHeader pageName={'Sick Leave'}/>
 
             <View style={styles.topContainer}>
                 <Image 
@@ -54,7 +46,7 @@ export default function SickLeavePage ({ navigation }) {
             </View>
 
             <View style={styles.creditContainer}>
-                <Shadow distance={5} style={styles.creditShadow}>
+                <Shadow distance={3} style={styles.creditShadow}>
                     <Text style={styles.creditsValue}>1.50</Text>
                 </Shadow>
             </View>
@@ -94,43 +86,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.clearWhite,
-    },
-
-    backButton: {
-        paddingHorizontal: 10,
-    },
-
-    topHeader: {
-        padding: 1,
-        paddingBottom: 10,
-        paddingVertical: 50,
-        alignItems: 'center',
-        flexDirection: 'row',
-        backgroundColor: COLORS.powderBlue,
-    },
-    
-    textHeader: {
-        color: COLORS.clearWhite,
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 18,
-        flex: 1,
-        textAlign: 'center',
-        marginRight: 40,
-    },
-
-    button: {
-        padding: 20,
-        backgroundColor: COLORS.clearWhite,
-        marginHorizontal: 20,
-        marginVertical: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderRadius: 20,
-        elevation: 5,
-        shadowColor: COLORS.darkGray,
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        shadowOffset : { width: 1, height: 5},
     },
 
     topContainer: {

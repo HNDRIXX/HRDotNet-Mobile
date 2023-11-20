@@ -89,7 +89,7 @@ export default function TimeSheetPage ({ navigation }) {
             <PageHeader pageName={"Timesheet"}/>
 
             <View style={styles.container}>
-                { isLoading ? ( <ActivityIndicator size='large' color={COLORS.orange} style={styles.loading}/> ) : (
+                { isLoading ? ( <ActivityIndicator size='large' color={COLORS.powderBlue} style={styles.loading}/> ) : (
                     <>
                         <View style={styles.agendaCalendar}>
                             <Text style={styles.monthYearText}>{month} {year}</Text>
@@ -185,19 +185,6 @@ const styles = StyleSheet.create({
     line: {
         borderBottomColor: 'black',
         borderBottomWidth: StyleSheet.hairlineWidth,
-    },
-
-    backButton: {
-        paddingHorizontal: 10,
-    },
-
-    topHeader: {
-        padding: 1,
-        paddingBottom: 10,
-        paddingVertical: 50,
-        alignItems: 'center',
-        flexDirection: 'row',
-        backgroundColor: COLORS.powderBlue,
     },
     
     textHeader: {

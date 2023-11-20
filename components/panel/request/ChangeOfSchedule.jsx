@@ -87,7 +87,7 @@ export default function ChangeOfSchedulePanel () {
     }, [])
 
 
-    if (!localData) {
+    if (localData) {
         filteredData = data.filter((newItem) => {
             const formattedStartDate = DateTimeUtils.dateFullConvert(newItem.startDate)
             const formattedEndDate = DateTimeUtils.dateFullConvert(newItem.endDate)
@@ -189,15 +189,6 @@ export default function ChangeOfSchedulePanel () {
         </>
     )
 }
-
-const formattedDateString = (dateString) => {
-    const year = dateString.substring(0, 4)
-    const month = dateString.substring(4, 6)
-    const day = dateString.substring(6)
-
-    return moment(`${month}-${day}-${year}`, 'MM-DD-YYYY').format('MMMM DD YYYY')
-}
-
 
 const styles = StyleSheet.create({
     loader: {

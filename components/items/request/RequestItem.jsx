@@ -29,7 +29,6 @@ export default function RequestItem ({onPanel, newItem, index}) {
 
                         <Text style={styles.statusText}>{newItem.status}</Text>
                     </View>
-
                 </View>
 
                 <View style={styles.bodyWrapper}>

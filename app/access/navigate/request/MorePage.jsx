@@ -113,9 +113,7 @@ export default function MorePage () {
 
                                 <View style={styles.rowWrapper}>
                                     <Text style={styles.titleText}>Overtime Hours:</Text>
-                                    <Text style={styles.valueText}>
-                                        { params.reason == "" ? "-----" : params.reason }
-                                    </Text>
+                                    <Text style={styles.valueText}>{params.overtimeHours}</Text>
                                 </View>
 
                                 <View style={styles.rowWrapper}>

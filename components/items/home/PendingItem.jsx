@@ -32,10 +32,10 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: '90%',
 
-        borderTopLeftRadius: index == 0 && 20,
-        borderTopRightRadius: index == 0 && 20,
-        borderBottomLeftRadius : lastIndex == index && 20,
-        borderBottomRightRadius : lastIndex == index && 20,
+        borderTopLeftRadius: index == 0 ? 20 : 0,
+        borderTopRightRadius: index == 0 ? 20 : 0,
+        borderBottomLeftRadius : lastIndex == index ? 20 : 0,
+        borderBottomRightRadius : lastIndex == index ? 20 : 0, 
 
         borderBottomColor: COLORS.darkGray,
         borderBottomWidth: lastIndex != index ? 1 : 0,
@@ -45,10 +45,10 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 7,
 
-        borderTopLeftRadius: index == 0 && 20,
-        borderTopRightRadius: index == 0 && 20,
-        borderBottomLeftRadius : lastIndex == index && 20,
-        borderBottomRightRadius : lastIndex == index && 20,
+        borderTopLeftRadius: index == 0 ? 20 : 0,
+        borderTopRightRadius: index == 0 ? 20 : 0,
+        borderBottomLeftRadius : lastIndex == index ? 20 : 0,
+        borderBottomRightRadius : lastIndex == index ? 20 : 0,
     }),
 
 

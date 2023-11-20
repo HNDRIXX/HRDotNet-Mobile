@@ -11,8 +11,8 @@ import RequestItem from "../../items/request/RequestItem"
 const data = [
     { 
         status: 'Cancelled',  
-        overTimeDate: '20231014',
-        overTimeHours: '7:00 AM - 4:00 PM',
+        overtimeDate: '20231014',
+        overtimeHours: '7:00 AM - 4:00 PM',
         reason: '------',
         attachedFile: '-----',
         documentNo: 'OFF22307248376',
@@ -67,7 +67,7 @@ export default function OffSetPanel () {
                 item={item}
                 index={index}
                 newItem={{ ...item, 
-                    formattedOverTimeDate: DateTimeUtils.dateFullConvert(item.overTimeDate), 
+                    formattedOvertimeDate: DateTimeUtils.dateFullConvert(item.overtimeDate), 
                     formattedFiledDate: DateTimeUtils.dateFullConvert(item.filedDate), 
                     formattedStatusByDate: DateTimeUtils.dateFullConvert(item.statusByDate),
                     formattedReviewedDate: DateTimeUtils.dateFullConvert(item.reviewedDate),

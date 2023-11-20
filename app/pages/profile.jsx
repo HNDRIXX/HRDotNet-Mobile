@@ -6,7 +6,7 @@ import NavigationHeader from "../../components/header/NavigationHeader";
 import PersonalPanel from "../../components/panel/profile/Personal";
 import PayslipPanel from "../../components/panel/profile/Payslip";
 
-export default function Profile () {
+export default function Profile ({ navigation }) {
     const [isPanel, setPanel] = useState(0)
 
     return (

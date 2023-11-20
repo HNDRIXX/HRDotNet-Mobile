@@ -11,7 +11,7 @@ export default function PersonalPanel () {
             <Animatable.View
                 animation={'fadeIn'}
                 duration={900}
-                style={{ opacity: 1, flex: 1, backgroundColor: COLORS.clearWhite }}
+                style={{ opacity: 1, flex: 1, backgroundColor: COLORS.white }}
             >
                 <View style={styles.topView}>
                     <View style={styles.imageView}>
@@ -26,17 +26,7 @@ export default function PersonalPanel () {
                     <Text style={styles.subText}>#5985</Text>
                 </View>
                 
-                <View style={{
-                    backgroundColor: COLORS.white,
-                    width: '100%',
-                    height: '85%',
-                    position: 'absolute',
-                    bottom: 0,
-                    zIndex: -1,
-                    borderTopLeftRadius: 30,
-                    borderTopRightRadius: 30,
-                }}>
-                </View>
+                <View style={styles.bodyView}></View>
 
                 <ScrollView 
                     style={styles.infoView}
@@ -92,7 +82,18 @@ const styles = StyleSheet.create({
         borderRadius: 90,
         borderWidth: 7,
         marginBottom: 10,
-        borderColor: COLORS.clearWhite,
+        borderColor: COLORS.white,
+    },
+    
+    bodyView: {
+        backgroundColor: COLORS.clearWhite,
+        width: '100%',
+        height: '85%',
+        position: 'absolute',
+        bottom: 0,
+        zIndex: -1,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
     },
 
     profilePic: {

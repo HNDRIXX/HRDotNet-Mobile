@@ -1,11 +1,12 @@
-import { useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native'
+import { useState, useRef } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, RefreshControl } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 
 import { Search } from '../../../../../components/use/Search'
 import { DateTimeUtils } from '../../../../../constant'
 import LoanLedgerItem from '../../../../../components/items/home/LoanLedgerItem'
 import PageHeader from '../../../../../components/header/PagesHeader'
+import NothingFoundNote from '../../../../../components/note/NothingFoundNote'
 
 const data = [
     {
@@ -65,16 +66,23 @@ const details = [
 export default function LoanLedgerPage () {
     const [filterText, setFilterText] = useState('')
 
+    const [refreshing, setRefreshing] = useState(false)
+    const scrollViewRef = useRef(null)
+
     let filteredData = []
 
     filteredData = data.filter((newItem) => {
-        const formattedDate = DateTimeUtils.dateFullConvert(newItem.overtimeDate)
-        
         return (
             newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
-            formattedDate.toLowerCase().includes(filterText.toLowerCase())
+            newItem.loanTitle.toLowerCase().includes(filterText.toLowerCase())
         )
     })
+
+    const refresh = () => {
+        setRefreshing(true)
+        // setLoading(true)
+        // fetchData()
+    }
 
     return (
         <View>
@@ -85,9 +93,35 @@ export default function LoanLedgerPage () {
                 setFilterText={setFilterText}
             />
 
-            <FlatList 
+            { filteredData.length > 0 ? (
+                <ScrollView
+                    ref={scrollViewRef}
+                    refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={refresh} />
+                    }
+                    style={styles.loanLedgerList}
+                >
+                    {filteredData.map((item, index) => (
+                        <LoanLedgerItem 
+                            key={index}
+                            newItem={{ 
+                                ...item,
+                                details: details,
+                                formattedTransactionDate: DateTimeUtils.dateFullConvert(item.transactionDate), 
+                                formattedApprovedDate:  DateTimeUtils.dateFullConvert(item.approvedDate),
+                                formattedGrantedDate: DateTimeUtils.dateFullConvert(item.grantedDate),
+                                formattedFirstDueDate: DateTimeUtils.dateFullConvert(item.firstDueDate),
+                            }}
+                        />
+                    ))}
+
+                </ScrollView>
+            ) : ( <NothingFoundNote /> )}
+
+            {/* <FlatList 
                 data={data}
-                style={styles.loanLedgerList}
                 renderItem={({item, index}) => {
                     return (
                         <LoanLedgerItem 
@@ -104,7 +138,7 @@ export default function LoanLedgerPage () {
                     )
 
                 }}
-            />
+            /> */}
         </View>
     )
 }

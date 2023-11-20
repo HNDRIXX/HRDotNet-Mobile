@@ -6,6 +6,7 @@ import { AntDesign } from "@expo/vector-icons"
 import { COLORS } from "../../../../../constant"
 import ReviewedPanel from '../../../../../components/panel/home/Reviewed'
 import FiledPanel from '../../../../../components/panel/home/Filed'
+import PageHeader from "../../../../../components/header/PagesHeader"
 
 export default function PendingPage ({ navigation }) {
     const [activePanel, setActivePanel] = useState(1)
@@ -18,16 +19,7 @@ export default function PendingPage ({ navigation }) {
 
     return (
         <View style={{ flex: 1 }}>
-            <View style={styles.topHeader}>
-                <TouchableOpacity 
-                    style={styles.backButton} 
-                    onPress={() => navigation.goBack()}
-                >
-                    <AntDesign name='arrowleft' size={30} color={COLORS.clearWhite} />
-                </TouchableOpacity>
-
-                <Text style={styles.textHeader}>Pending</Text>
-            </View>
+            <PageHeader pageName={'Pending'} />
 
             <View style={styles.btnHorizontal}>
                 <TouchableOpacity
@@ -68,29 +60,6 @@ export default function PendingPage ({ navigation }) {
 
 
 const styles = StyleSheet.create({
-   
-    backButton: {
-        paddingHorizontal: 10,
-    },
-
-    topHeader: {
-        padding: 1,
-        paddingBottom: 10,
-        paddingVertical: 50,
-        alignItems: 'center',
-        flexDirection: 'row',
-        backgroundColor: COLORS.powderBlue,
-    },
-    
-    textHeader: {
-        color: COLORS.clearWhite,
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 18,
-        flex: 1,
-        textAlign: 'center',
-        marginRight: 50,
-    },
-
     btnHorizontal: {
         flexDirection: 'row',
         marginHorizontal: 10,

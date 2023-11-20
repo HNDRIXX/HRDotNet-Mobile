@@ -1,12 +1,8 @@
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native";
-import * as Animatable from 'react-native-animatable';
-import { AntDesign, Entypo, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
-import { useGlobalSearchParams } from "expo-router";
+import { View, Text, StyleSheet, FlatList } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import { router } from "expo-router";
 import { Shadow } from "react-native-shadow-2";
 
-import { COLORS, Utils} from "../../../../../constant";
+import { COLORS, Utils, DateTimeUtils } from "../../../../../constant";
 import PageHeader from "../../../../../components/header/PagesHeader";
 
 export default function LoanDetails ({ navigation }) {
@@ -122,7 +118,7 @@ export default function LoanDetails ({ navigation }) {
 
                                         <View style={styles.bodyDetail}>
                                             <Text style={styles.boldText}>Payment Date:
-                                            <Text style={styles.bodyText}> {item.paymentDate}</Text></Text>
+                                            <Text style={styles.bodyText}> {DateTimeUtils.dateFullConvert(item.paymentDate)}</Text></Text>
                                             <Text style={styles.boldText}>Payment Amount:
                                             <Text style={styles.bodyText}> {item.paymentAmount}</Text></Text>
                                         </View>

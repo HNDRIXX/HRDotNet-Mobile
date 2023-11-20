@@ -2,43 +2,9 @@ import { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Platform, Alert } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Entypo } from "@expo/vector-icons";
-import moment from "moment";
-import * as Notifications from 'expo-notifications';
-import * as TaskManager from 'expo-task-manager';
 
 import { COLORS, useFonts } from "../../../constant";
-import MessagePrompt from "../../../components/prompt/MessagePrompt";
 import { Image } from "expo-image";
-
-const NOTIFICATION_TASK = 'notification-task'
-
-TaskManager.defineTask(NOTIFICATION_TASK, async ({ data, error }) => {
-    if (error) {
-        console.error('Error in background task:', error)
-        return
-    }
-  
-    if (data) {
-        const { content } = data
-  
-        await Notifications.scheduleNotificationAsync({
-            content: {
-                ...content,
-                sound: 'default', 
-            },
-            trigger: null,
-            ios: {
-                sound: true,
-                badge: 1, 
-            },
-            android: {
-                sound: true,
-                vibrate: true,
-                priority: 'high',
-            },
-        })
-    }
-})
 
 export default function LogInPage ({ navigation }) {
     const [fontsLoaded] = useFonts()
@@ -49,50 +15,6 @@ export default function LogInPage ({ navigation }) {
     const [isShowPassword, setShowPassword] = useState(false)
 
     const paddingIOS = Platform.OS === 'ios'
-
-    const scheduleNotificationInBackground = async () => {
-        const notificationTime = moment('2023-12-07 22:00', 'YYYY-MM-DD HH:mm')
-
-        const secondsUntilNotification = notificationTime.diff(moment(), 'seconds')
-
-        console.log(secondsUntilNotification)
-        if (secondsUntilNotification > 0) {        
-            await Notifications.scheduleNotificationAsync({
-                content: {
-                    title: 'ALERT MESSAGE FOR YOU, ALEX',
-                    body: 'OPEN THIS MESSAGE!',
-                },
-                trigger: {
-                    seconds: secondsUntilNotification,
-                    channelId: 'default', 
-                },
-            })
-        } else { }
-
-        if (secondsUntilNotification < 0) { setMessage(true) } else { setMessage(false) }
-    }
-
-    useEffect(() => {
-        const setupNotifications = async () => {
-            const { status } = await Notifications.requestPermissionsAsync()
-
-            if (status !== 'granted') {
-                console.error('Notification permission not granted')
-                return
-            }
-
-            await Notifications.setNotificationChannelAsync('default', {
-                name: 'Default',
-                importance: Notifications.AndroidImportance.DEFAULT,
-                vibrationPattern: [0, 250, 250, 250],
-                lightColor: '#FF231F7C',
-            })
-
-            scheduleNotificationInBackground()
-        }
-
-        setupNotifications()
-    }, [])
 
     if (!fontsLoaded) {
         return (
@@ -117,19 +39,6 @@ export default function LogInPage ({ navigation }) {
 
     return (
         <>
-            { isMessage == true && (
-                Alert.alert(
-                    'MESSAGE FOR YOU',
-                    'Message for you',
-                    [
-                        {text: 'OKAYYY', onPress: () => alertHandle()},
-                        {text: 'OKAY', onPress: () => alertHandle()},
-                    ]
-                )
-            )}
-
-            { showMessagePrompt && <MessagePrompt onClose={onClose} /> }
-
             <View style={{ flex: 1, backgroundColor: COLORS.clearWhite }}>
                 <View style={styles.container}>
                     <StatusBar style='dark' />

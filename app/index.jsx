@@ -36,6 +36,7 @@ import LoanDetails from './access/navigate/home/more/LoanDetails';
 import OSRequest from './access/navigate/request/newrequest/OSRequest';
 import LVRequest from './access/navigate/request/newrequest/LVRequest';
 import MLRequest from './access/navigate/request/newrequest/MLRequest';
+import MorePayslip from './access/navigate/profile/MorePayslip';
 
 export default function Index() {
     const [fontsLoaded] = useFonts()
@@ -180,6 +181,8 @@ export default function Index() {
                     <Stack.Screen name="OSRequest" component={OSRequest} />
                     <Stack.Screen name="LVRequest" component={LVRequest} />
                     <Stack.Screen name="MLRequest" component={MLRequest} />
+
+                    <Stack.Screen name="MorePayslip" component={MorePayslip} />
 
                     <Stack.Screen 
                         name="RequestSummary" 
