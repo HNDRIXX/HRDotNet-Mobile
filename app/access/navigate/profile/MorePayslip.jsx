@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native'
 import { Shadow } from 'react-native-shadow-2'
 import { Entypo, AntDesign } from '@expo/vector-icons'
 import { useRoute } from '@react-navigation/native'
@@ -76,26 +76,240 @@ export default function MorePayslip () {
 
     const generateAndDownloadPDF = async () => {
         const htmlContent = `
-            <html>
-                <head>
-                    <style>
-                        body {
-                            text-align: center;
-                        }
-
-                        h1 {
-                            text-align: center;
-                        }
-                    </style>
-                </head>
-                
-                <body>
-                    <h1>MAGELLAN PERFORMANCE OUTSOURCING CORP.</h1>
-                    
-                    <p>Employee Name</p>
-                    <p>${params?.employeeName}</p>
-                </body>
-            </html>
+        <html lang="en">
+        <head>
+            <style>
+                body {
+                    font-family: Tahoma, Geneva, sans-serif;
+                    padding: 80px;
+                }
+        
+                #headerTitle {
+                    text-align: center;
+                    margin-left: 20px;
+                    margin-right: 20px;
+                }
+        
+                .rowView {
+                    line-height: 5px;
+                }
+        
+                .rowRightView {
+                    margin-top: -10px;
+                    display: flex;
+                    justify-content: flex-end;
+                }
+        
+                .rowIndentView {
+                    margin-left: 50px;
+                }
+        
+                .hr {
+                    height: 0px;
+                    border: none;
+                    border-top: 1px solid black;
+                }
+        
+                .hrThick {
+                    height: 0px;
+                    border: none;
+                    border-top: 2px solid black;
+                }
+        
+                #title {
+                    font-size: 20
+                }
+        
+                #boldText {
+                    font-size: 16px;
+                    font-weight: bolder;
+                    margin-right: 10px;
+                }
+        
+                #rowSpaceText {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    line-height: 5px;
+                }
+            </style>
+        </head>
+        <body>
+            <div>
+                <h2 id="headerTitle">MAGELLAN PERFORMANCE OUTSOURCING CORP.</h2>
+        
+                <div class="rowView" style="margin-top: 50px;">
+                    <p id="rowText">
+                        <span id="boldText">Document No: </span>
+                        <span id="regularText">PP01</span>
+                    </p>
+                </div>
+        
+                <div class="rowView">
+                    <p id="rowText">
+                        <span id="boldText">Employee Name: </span>
+                        <span id="regularText">Juan Dela Cruz</span>
+                    </p>
+                </div>
+        
+                <div class="rowView">
+                    <p id="rowText">
+                        <span id="boldText">Employee Code: </span>
+                        <span id="regularText">5985</span>
+                    </p>
+                </div> <hr class="hr" />
+        
+                <div class="rowView">
+                    <p id="rowText">
+                        <span id="boldText">Pay Out Date: </span>
+                        <span id="regularText">November 25, 2023</span>
+                    </p>
+                </div>
+        
+                <div class="rowView">
+                    <p id="rowText">
+                        <span id="boldText">Cut Off Period: </span>
+                        <span id="regularText">November 25, 2023</span>
+                    </p>
+                </div> <hr class="hr" />
+        
+                <p id="boldText" style="margin-top: 40px">Gross Pay</p>
+                <hr class="hrThick" /> <hr class="hrThick" />
+        
+                <div class="rowView">
+                    <p id="rowSpaceText">
+                        <span id="boldText">Regular Day: </span>
+                        <span id="regularText">84.62 hrs</span>
+                        <span id="regularText">15,075.36</span>
+                    </p>
+                </div>
+        
+                <div class="rowView">
+                    <p id="rowSpaceText">
+                        <span id="boldText">Meal Allowance: </span>
+                        <span id="regularText">736.10</span>
+                    </p>
+                </div>
+        
+                <div class="rowView">
+                    <p id="rowSpaceText">
+                        <span id="boldText">Complexity Allowance: </span>
+                        <span id="regularText">1,321.84</span>
+                    </p>
+                </div> <hr class="hr" />
+        
+                <div class="rowRightView">
+                    <p id="rowText">
+                        <span id="boldText">Total Gross Pay: </span>
+                        <span id="regularText">17133.3</span>
+                    </p>
+                </div>
+        
+                <p id="boldText">Deductions</p>
+                <hr class="hrThick" /> <hr class="hrThick" />
+        
+                <div class="rowView">
+                    <p id="rowSpaceText">
+                        <span id="boldText">SSS Employee Share: </span>
+                        <span id="regularText">675.00</span>
+                    </p>
+                </div>
+        
+                <div class="rowView">
+                    <p id="rowSpaceText">
+                        <span id="boldText">PhilHealth Employee Share: </span>
+                        <span id="regularText">301.51</span>
+                    </p>
+                </div>
+        
+                <div class="rowView">
+                    <p id="rowSpaceText">
+                        <span id="boldText">HDMF Employee Share: </span>
+                        <span id="regularText">100.00</span>
+                    </p>
+                </div> 
+        
+                <div class="rowView">
+                    <p id="rowSpaceText">
+                        <span id="boldText">Withholding Tax: </span>
+                        <span id="regularText">735.00</span>
+                    </p>
+                </div> <hr class="hr" />
+        
+                <div class="rowRightView">
+                    <p id="rowText">
+                        <span id="boldText">Total Deductions: </span>
+                        <span id="regularText">1811.51</span>
+                    </p>
+                </div>
+        
+                <p id="boldText">Net Pay</p>
+                <hr class="hrThick" /> <hr class="hrThick" />
+        
+                <div class="rowRightView">
+                    <p id="rowText">
+                        <span id="boldText">PHP: </span>
+                        <span id="boldText">15,378.24</span>
+                    </p>
+                </div> <hr class="hr" />
+        
+                <!-- Timekeeping -->
+                <div style="page-break-before: always;">
+                    <h3 id="headerTitle" style="margin-top: 70px;">TIMEKEEPING</h3>
+        
+                    <div class="rowView" style="margin-top: 40px;">
+                        <p id="rowText">
+                            <span id="boldText">Cut-off Period: </span>
+                            <span id="regularText">August 16-31, 2023</span>
+                        </p>
+                    </div>
+            
+                    <hr class="hrThick" /> <hr class="hrThick" />
+            
+                    <div class="rowView">
+                        <p id="boldText" style="margin-top: 20px; margin-bottom: 20px; font-size: 17px;">August 16, 2023</p>
+            
+                        <div class="rowIndentView">
+                            <p id="rowText">
+                                <span id="boldText">Date Type:</span>
+                                <span id="regularText">Regular Day</span>
+                            </p>
+            
+                            <p id="rowText">
+                                <span id="boldText">Schedule: </span>
+                                <span id="regularText">schedule</span>
+                            </p>
+            
+                            <p id="rowText">
+                                <span id="boldText">Time-in: </span>
+                                <span id="regularText">timeIn</span>
+                            </p>
+            
+                            <p id="rowText">
+                                <span id="boldText">Time-out: </span>
+                                <span id="regularText">timeOut</span>
+                            </p>
+            
+                            <p id="rowText" style="margin-top: 40px;">
+                                <span id="boldText">Regular Hours: </span>
+                                <span id="regularText">regularHours</span>
+                            </p>
+            
+                            <p id="rowText">
+                                <span id="boldText">Overtime: </span>
+                                <span id="regularText">overtime</span>
+                            </p>
+            
+                            <p id="rowText">
+                                <span id="boldText">Tardy: </span>
+                                <span id="regularText">tardy</span>
+                            </p> 
+                        </div> <hr class="hr" />
+                    </div>
+                </div>
+            </div>
+        </body>
+        </html>
         `
     
         const { uri } = await Print.printToFileAsync({ html: htmlContent });
@@ -109,8 +323,17 @@ export default function MorePayslip () {
                 to: destination,
             });
 
-            console.log(`PDF saved at ${destination}`)
+            console.log(`Nakasave sa ${destination}`)
             setPdfUri(destination)
+
+            Alert.alert(
+                'Success',
+                'PDF Payslip is done rendered.',
+                [
+                       { text: 'Cancel', style: 'cancel' },
+                       { text: 'Save', onPress: () => sharePDF() },
+                ]
+            )
         }
     }
 
@@ -144,26 +367,6 @@ export default function MorePayslip () {
                         style={{ marginRight: 10 }} />
                     
                     <Text style={{ color: COLORS.clearWhite, fontFamily: 'Inter_700Bold'}}>DOWNLOAD</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={{
-                        width: '100%',
-                        backgroundColor: COLORS.orange,
-                        padding: 10,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                    onPress={sharePDF}
-                >
-                    <Entypo 
-                        name="save" 
-                        size={24} 
-                        color={COLORS.clearWhite}
-                        style={{ marginRight: 10 }} />
-                    
-                    <Text style={{ color: COLORS.clearWhite, fontFamily: 'Inter_700Bold'}}>SAVE</Text>
                 </TouchableOpacity>
 
                 <View style={styles.container}>
