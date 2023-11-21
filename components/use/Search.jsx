@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   topContainer: {
     width: "100%",
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
     flexDirection: "row",
     justifyContent: 'flex-end',
   },

@@ -51,7 +51,6 @@ export default function LoanLedgerItem ({ newItem, details, index }) {
 const styles = StyleSheet.create({ 
     itemContainer: {
         backgroundColor: COLORS.clearWhite,
-        marginHorizontal: 20,
         marginBottom: 25,
         borderRadius: 20,
         elevation: 2,

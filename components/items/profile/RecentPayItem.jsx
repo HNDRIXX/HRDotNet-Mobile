@@ -17,7 +17,7 @@ export default function RecentPayItem ({ item, index, onHandleMore }) {
 
                     <View style={{ marginLeft: 20 }}>
                         <Text style={styles.recentPayText}>Recent Pay</Text>
-                        <Text>{DateTimeUtils.dateFullConvert(item.cutoffDate)}</Text>
+                        <Text>{DateTimeUtils.dateFullConvert(item.cutOffDate)}</Text>
                     </View>
                 </View>
 
@@ -106,6 +106,10 @@ const styles = StyleSheet.create({
         marginRight: 75,
         fontStyle: 'italic',
         fontSize: 14,
+    },
+
+    amountText: {
+        fontStyle: 'italic',
     },
 
     deductionsText: {

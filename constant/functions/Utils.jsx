@@ -105,9 +105,11 @@ export const Utils = {
     },
 
     amountFormat: (amount) => {
-        return amount.toLocaleString(undefined, {
-            minimumFractionDigits: 4,
-            maximumFractionDigits: 4,
+        const result = parseFloat(amount) || 0
+        
+        return result.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
         })
     },
 

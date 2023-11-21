@@ -4,14 +4,17 @@ import { Entypo } from '@expo/vector-icons'
 
 import { COLORS, DateTimeUtils, Utils } from '../../../constant'
 
-export default function PayHistoryItem ({ item, index }) {
+export default function PayHistoryItem ({ item, index, onHandleMore }) {
     return (
         <View style={styles.container}>
             <Shadow distance={4} style={styles.shadowItem}>
                 <Text style={styles.boldText}>{DateTimeUtils.dateFullConvert(item.cutoffDate)}</Text>
                 <Text style={styles.regularText}>Php {item.netpay}</Text>
 
-                <TouchableOpacity style={styles.row}>
+                <TouchableOpacity 
+                    style={styles.row}
+                    onPress={() => onHandleMore()}
+                >
                     <Text style={styles.moreButtonText}>More</Text>
                     <Entypo name="chevron-small-right" size={20} color="black" />
                 </TouchableOpacity>

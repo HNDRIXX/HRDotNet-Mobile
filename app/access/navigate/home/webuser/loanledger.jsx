@@ -85,61 +85,63 @@ export default function LoanLedgerPage () {
     }
 
     return (
-        <View>
+        <>
             <PageHeader pageName={"Loan Ledger"} />
 
-            <Search 
-                filterText={filterText}
-                setFilterText={setFilterText}
-            />
+            <View style={{ marginHorizontal: 20 }}>
+                <Search 
+                    filterText={filterText}
+                    setFilterText={setFilterText}
+                />
 
-            { filteredData.length > 0 ? (
-                <ScrollView
-                    ref={scrollViewRef}
-                    refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={refresh} />
-                    }
-                    style={styles.loanLedgerList}
-                >
-                    {filteredData.map((item, index) => (
-                        <LoanLedgerItem 
-                            key={index}
-                            newItem={{ 
-                                ...item,
-                                details: details,
-                                formattedTransactionDate: DateTimeUtils.dateFullConvert(item.transactionDate), 
-                                formattedApprovedDate:  DateTimeUtils.dateFullConvert(item.approvedDate),
-                                formattedGrantedDate: DateTimeUtils.dateFullConvert(item.grantedDate),
-                                formattedFirstDueDate: DateTimeUtils.dateFullConvert(item.firstDueDate),
-                            }}
-                        />
-                    ))}
+                { filteredData.length > 0 ? (
+                    <ScrollView
+                        ref={scrollViewRef}
+                        refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={refresh} />
+                        }
+                        style={styles.loanLedgerList}
+                    >
+                        {filteredData.map((item, index) => (
+                            <LoanLedgerItem 
+                                key={index}
+                                newItem={{ 
+                                    ...item,
+                                    details: details,
+                                    formattedTransactionDate: DateTimeUtils.dateFullConvert(item.transactionDate), 
+                                    formattedApprovedDate:  DateTimeUtils.dateFullConvert(item.approvedDate),
+                                    formattedGrantedDate: DateTimeUtils.dateFullConvert(item.grantedDate),
+                                    formattedFirstDueDate: DateTimeUtils.dateFullConvert(item.firstDueDate),
+                                }}
+                            />
+                        ))}
 
-                </ScrollView>
-            ) : ( <NothingFoundNote /> )}
+                    </ScrollView>
+                ) : ( <NothingFoundNote /> )}
 
-            {/* <FlatList 
-                data={data}
-                renderItem={({item, index}) => {
-                    return (
-                        <LoanLedgerItem 
-                            key={index}
-                            newItem={{ 
-                                ...item,
-                                details: details,
-                                formattedTransactionDate: DateTimeUtils.dateFullConvert(item.transactionDate), 
-                                formattedApprovedDate:  DateTimeUtils.dateFullConvert(item.approvedDate),
-                                formattedGrantedDate: DateTimeUtils.dateFullConvert(item.grantedDate),
-                                formattedFirstDueDate: DateTimeUtils.dateFullConvert(item.firstDueDate),
-                            }}
-                        />
-                    )
+                {/* <FlatList 
+                    data={data}
+                    renderItem={({item, index}) => {
+                        return (
+                            <LoanLedgerItem 
+                                key={index}
+                                newItem={{ 
+                                    ...item,
+                                    details: details,
+                                    formattedTransactionDate: DateTimeUtils.dateFullConvert(item.transactionDate), 
+                                    formattedApprovedDate:  DateTimeUtils.dateFullConvert(item.approvedDate),
+                                    formattedGrantedDate: DateTimeUtils.dateFullConvert(item.grantedDate),
+                                    formattedFirstDueDate: DateTimeUtils.dateFullConvert(item.firstDueDate),
+                                }}
+                            />
+                        )
 
-                }}
-            /> */}
-        </View>
+                    }}
+                /> */}
+            </View>
+        </>
     )
 }
 
