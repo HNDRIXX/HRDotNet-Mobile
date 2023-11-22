@@ -50,6 +50,7 @@ export default function Profile ({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: COLORS.clearWhite,
         flex: 1,
     },
 

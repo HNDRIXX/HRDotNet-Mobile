@@ -41,32 +41,33 @@ export default function WebUserRequest() {
             >
                 <View style={styles.container}>
                     <View style={styles.wrapper}>
-                    
-                    <FlatList
-                        data={data}
-                        renderItem={({ item, index }) => (
-                            <TouchableOpacity
-                                style={[
-                                    styles.button,
-                                    selectedButtonIndex === index && styles.selectedButton,
-                                ]}
-                                onPress={() => handleButtonPress(index)}
-                                disabled={ selectedButtonIndex === index ? true : false }
-                            >
-                                <Text 
-                                    style={[
-                                        styles.buttonText,
-                                        selectedButtonIndex === index && styles.selectedTextButton,
-                                        index == 6 && { color: COLORS.gray }
-                                    ]}
-                                >{item.title}</Text>
-                            </TouchableOpacity>
-                        )}
-                        style={styles.buttonList}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                    />
-                </View>
+                        {/* <View style={styles.innerWrapper}> */}
+                            <FlatList
+                                data={data}
+                                renderItem={({ item, index }) => (
+                                    <TouchableOpacity
+                                        style={[
+                                            styles.button,
+                                            selectedButtonIndex === index && styles.selectedButton,
+                                        ]}
+                                        onPress={() => handleButtonPress(index)}
+                                        disabled={ selectedButtonIndex === index ? true : false }
+                                    >
+                                        <Text 
+                                            style={[
+                                                styles.buttonText,
+                                                selectedButtonIndex === index && styles.selectedTextButton,
+                                                index == 6 && { color: COLORS.gray }
+                                            ]}
+                                        >{item.title}</Text>
+                                    </TouchableOpacity>
+                                )}
+                                style={styles.buttonList}
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                            />
+                        {/* </View> */}
+                    </View>
 
                 {
                     selectedButtonIndex == 0 ? ( <ChangeOfSchedulePanel /> )
@@ -88,26 +89,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  topHeader: {
-    padding: 3,
-    paddingTop: 50,
-    paddingBottom: 10,
-    alignItems: 'center',
-    backgroundColor: COLORS.powderBlue,
-  },
-
-  textHeader: {
-    color: COLORS.clearWhite,
-    fontFamily: 'Inter_600SemiBold',
-    fontSize: 18,
-  },
-
   wrapper: {
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomColor: COLORS.shadowGray,
     borderBottomWidth: 2,
-    marginHorizontal: 10,
+    // marginHorizontal: 10,
+  },
+
+  innerWrapper: {
+    // marginHorizontal: 10,
   },
 
   button: {
@@ -135,5 +126,12 @@ const styles = StyleSheet.create({
   selectedTextButton: {
       color: COLORS.clearWhite,
       fontFamily: 'Inter_700Bold'
+  },
+
+  buttonList: {
+    backgroundColor: COLORS.clearWhite,
+    borderColor: COLORS.orange,
+    borderBottomWidth: 3,
+    paddingHorizontal: 18
   }
 })

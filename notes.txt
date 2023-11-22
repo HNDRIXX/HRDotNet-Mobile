@@ -313,3 +313,6 @@ To Do
 - Camera Feature Functions
 - Payslip Profile Module
 
+NOW
+- Adjusting Shadow Display Element
+

@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     },
 
     backButton: {
-        paddingHorizontal: 10,
+        paddingHorizontal: 20,
     },
 
     topHeader: {
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         flex: 1,
         textAlign: 'center',
-        marginLeft: 50,
+        marginLeft: 72,
     },
 
     button: {

@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
     headerNavigation: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        marginHorizontal: 8,
         marginBottom: 10,
     },
 

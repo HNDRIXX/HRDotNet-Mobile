@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native'
 import { Shadow } from 'react-native-shadow-2'
 import { Entypo, AntDesign } from '@expo/vector-icons'
+import moment from 'moment'
 import { useRoute } from '@react-navigation/native'
 import * as Print from 'expo-print'
 import * as FileSystem from 'expo-file-system'
@@ -68,11 +69,19 @@ const sumTotal = ( a, b, c, d ) => {
 // }
 
 export default function MorePayslip () {
-    const [pdfUri, setPdfUri] = useState(null);
-    const [value, setValue] = useState(500)
+    const [filteredData, setFilteredData] = useState([])
+    const [pdfUri, setPdfUri] = useState(null)
+    const [isAlert, setAlert] = useState(false)
+
+    const [startDate, setStartDate] = useState(null)
+    const [endDate, setEndDate] = useState(null)
+
+    // const [secondHalfStart, setSecondHalfStart] = useState(DateTimeUtils.dateSecondHalfRange(params?.cutOffDate).startDate)
+    // const [secondHalfEnd, setSecondHalfEnd] = useState(DateTimeUtils.dateSecondHalfRange(params?.cutOffDate).endDate)
 
     const route = useRoute()
-    const params = route.params
+    const params = route.params.item
+    const TKparams = route.params.TKData
 
     const generateAndDownloadPDF = async () => {
         const htmlContent = `
@@ -81,51 +90,53 @@ export default function MorePayslip () {
             <style>
                 body {
                     font-family: Tahoma, Geneva, sans-serif;
-                    padding: 80px;
+                    padding: 50px;
                 }
-        
+
                 #headerTitle {
                     text-align: center;
                     margin-left: 20px;
                     margin-right: 20px;
                 }
-        
+
                 .rowView {
-                    line-height: 5px;
+                    line-height: 3px;
                 }
-        
+
                 .rowRightView {
                     margin-top: -10px;
                     display: flex;
                     justify-content: flex-end;
                 }
-        
+
                 .rowIndentView {
-                    margin-left: 50px;
+                    margin-left: 60px;
                 }
-        
+
                 .hr {
                     height: 0px;
                     border: none;
                     border-top: 1px solid black;
                 }
-        
+
                 .hrThick {
                     height: 0px;
+                    margin-top: -5px;
                     border: none;
                     border-top: 2px solid black;
                 }
-        
-                #title {
-                    font-size: 20
-                }
-        
+
                 #boldText {
-                    font-size: 16px;
+                    font-size: 15px;
                     font-weight: bolder;
                     margin-right: 10px;
                 }
-        
+
+                #regularText {
+                    font-size: 15px;
+                    font-weight: 500;
+                }
+
                 #rowSpaceText {
                     display: flex;
                     flex-direction: row;
@@ -136,46 +147,46 @@ export default function MorePayslip () {
         </head>
         <body>
             <div>
-                <h2 id="headerTitle">MAGELLAN PERFORMANCE OUTSOURCING CORP.</h2>
-        
+                <h3 id="headerTitle">MAGELLAN PERFORMANCE OUTSOURCING CORP.</h3>
+
                 <div class="rowView" style="margin-top: 50px;">
                     <p id="rowText">
                         <span id="boldText">Document No: </span>
                         <span id="regularText">PP01</span>
                     </p>
                 </div>
-        
+
                 <div class="rowView">
                     <p id="rowText">
                         <span id="boldText">Employee Name: </span>
                         <span id="regularText">Juan Dela Cruz</span>
                     </p>
                 </div>
-        
+
                 <div class="rowView">
                     <p id="rowText">
                         <span id="boldText">Employee Code: </span>
                         <span id="regularText">5985</span>
                     </p>
                 </div> <hr class="hr" />
-        
+
                 <div class="rowView">
                     <p id="rowText">
                         <span id="boldText">Pay Out Date: </span>
                         <span id="regularText">November 25, 2023</span>
                     </p>
                 </div>
-        
+
                 <div class="rowView">
                     <p id="rowText">
                         <span id="boldText">Cut Off Period: </span>
                         <span id="regularText">November 25, 2023</span>
                     </p>
                 </div> <hr class="hr" />
-        
-                <p id="boldText" style="margin-top: 40px">Gross Pay</p>
+
+                <p id="boldText">Gross Pay</p>
                 <hr class="hrThick" /> <hr class="hrThick" />
-        
+
                 <div class="rowView">
                     <p id="rowSpaceText">
                         <span id="boldText">Regular Day: </span>
@@ -183,80 +194,80 @@ export default function MorePayslip () {
                         <span id="regularText">15,075.36</span>
                     </p>
                 </div>
-        
+
                 <div class="rowView">
                     <p id="rowSpaceText">
                         <span id="boldText">Meal Allowance: </span>
                         <span id="regularText">736.10</span>
                     </p>
                 </div>
-        
+
                 <div class="rowView">
                     <p id="rowSpaceText">
                         <span id="boldText">Complexity Allowance: </span>
                         <span id="regularText">1,321.84</span>
                     </p>
                 </div> <hr class="hr" />
-        
+
                 <div class="rowRightView">
                     <p id="rowText">
                         <span id="boldText">Total Gross Pay: </span>
                         <span id="regularText">17133.3</span>
                     </p>
                 </div>
-        
+
                 <p id="boldText">Deductions</p>
                 <hr class="hrThick" /> <hr class="hrThick" />
-        
+
                 <div class="rowView">
                     <p id="rowSpaceText">
                         <span id="boldText">SSS Employee Share: </span>
                         <span id="regularText">675.00</span>
                     </p>
                 </div>
-        
+
                 <div class="rowView">
                     <p id="rowSpaceText">
                         <span id="boldText">PhilHealth Employee Share: </span>
                         <span id="regularText">301.51</span>
                     </p>
                 </div>
-        
+
                 <div class="rowView">
                     <p id="rowSpaceText">
                         <span id="boldText">HDMF Employee Share: </span>
                         <span id="regularText">100.00</span>
                     </p>
                 </div> 
-        
+
                 <div class="rowView">
                     <p id="rowSpaceText">
                         <span id="boldText">Withholding Tax: </span>
                         <span id="regularText">735.00</span>
                     </p>
                 </div> <hr class="hr" />
-        
+
                 <div class="rowRightView">
                     <p id="rowText">
                         <span id="boldText">Total Deductions: </span>
                         <span id="regularText">1811.51</span>
                     </p>
                 </div>
-        
+
                 <p id="boldText">Net Pay</p>
                 <hr class="hrThick" /> <hr class="hrThick" />
-        
+
                 <div class="rowRightView">
                     <p id="rowText">
-                        <span id="boldText">PHP: </span>
+                        <span id="boldText">PHP </span>
                         <span id="boldText">15,378.24</span>
                     </p>
                 </div> <hr class="hr" />
-        
+
                 <!-- Timekeeping -->
-                <div style="page-break-before: always;">
-                    <h3 id="headerTitle" style="margin-top: 70px;">TIMEKEEPING</h3>
-        
+                <div style="page-break-before: always; padding-top: 3em !important">
+                    <h4 id="headerTitle">TIMEKEEPING</h4>
+
                     <div class="rowView" style="margin-top: 40px;">
                         <p id="rowText">
                             <span id="boldText">Cut-off Period: </span>
@@ -267,7 +278,7 @@ export default function MorePayslip () {
                     <hr class="hrThick" /> <hr class="hrThick" />
             
                     <div class="rowView">
-                        <p id="boldText" style="margin-top: 20px; margin-bottom: 20px; font-size: 17px;">August 16, 2023</p>
+                        <p id="boldText" style="margin-top: 20px; margin-bottom: 20px; font-size: 15px;">August 16, 2023</p>
             
                         <div class="rowIndentView">
                             <p id="rowText">
@@ -315,7 +326,7 @@ export default function MorePayslip () {
         const { uri } = await Print.printToFileAsync({ html: htmlContent });
     
         if (uri) {
-            const pdfName = 'payslip.pdf';
+            const pdfName = DateTimeUtils.momentDashCurrDate() + '-Payslip.pdf';
             const destination = `${FileSystem.documentDirectory}${pdfName}`
 
             await FileSystem.moveAsync({
@@ -325,29 +336,78 @@ export default function MorePayslip () {
 
             console.log(`Nakasave sa ${destination}`)
             setPdfUri(destination)
-
-            Alert.alert(
-                'Success',
-                'PDF Payslip is done rendered.',
-                [
-                       { text: 'Cancel', style: 'cancel' },
-                       { text: 'Save', onPress: () => sharePDF() },
-                ]
-            )
+            setAlert(true)
         }
     }
 
     const sharePDF = async () => {
+        console.log(pdfUri)
+
         if (pdfUri) {
             const fileUri = pdfUri
             await Sharing.shareAsync(fileUri)
+        } else {
+            // generateAndDownloadPDF()
         }
     }
 
+    useEffect(() => {
+        // if (DateTimeUtils.checkDateHalf(params?.cutOffDate)) {
+        //   const startDateRange = DateTimeUtils.dateSecondHalfRange(params?.cutOffDate).startDate;
+        //   const endDateRange = DateTimeUtils.dateSecondHalfRange(params?.cutOffDate).endDate;
+      
+        //   const filteredData = TKparams.filter((item) => {
+        //     const itemDate = item.date;
+        //     return moment(itemDate, 'YYYYMMDD').isBetween(startDateRange, endDateRange, undefined, '[]');
+        //   });
+      
+        //   setFilteredData(filteredData);
+        //   console.log(filteredData)
+        // } else {
+        //   const startDateRange = DateTimeUtils.dateFirstHalfRange(params?.cutOffDate).startDate;
+        //   const endDateRange = DateTimeUtils.dateFirstHalfRange(params?.cutOffDate).endDate;
+      
+        //   const filteredData = TKparams.filter((item) => {
+        //     const itemDate = item.date;
+        //     return moment(itemDate, 'YYYYMMDD').isBetween(startDateRange, endDateRange, undefined, '[]');
+        //   });
+      
+        //   setFilteredData(filteredData)
+        // }
+
+        let startDateRange = DateTimeUtils.dateFirstHalfRange(params?.cutOffDate).startDate;
+        let endDateRange = DateTimeUtils.dateFirstHalfRange(params?.cutOffDate).endDate;
+      
+          const filteredData = TKparams.filter((item) => {
+            const itemDate = item.date
+            return moment(itemDate, 'YYYYMMDD').isBetween(DateTimeUtils.dateFirstHalfRange(params?.cutOffDate).startDate, DateTimeUtils.dateFirstHalfRange(params?.cutOffDate).endDate, undefined, '[]');
+          });
+
+          console.log(filteredData)
+      
+          setFilteredData(filteredData)
+    }, [params?.cutOffDate])
+
+
     return (
         <>
-            <PageHeader pageName={'Payslip'}/>
+            {isAlert && (
+                Alert.alert(
+                    'Success',
+                    'PDF Payslip is done rendered.',
+                    [
+                        { text: 'Cancel', style: 'cancel' },
+                        { text: 'Save', onPress: () => {
+                            if (pdfUri) {
+                                const fileUri = pdfUri
+                                Sharing.shareAsync(fileUri)
+                            }
+                        }},
+                    ]
+                )
+            )}
 
+            <PageHeader pageName={'Payslip'}/>
             <ScrollView>
                 <TouchableOpacity
                     style={{
@@ -370,7 +430,7 @@ export default function MorePayslip () {
                 </TouchableOpacity>
 
                 <View style={styles.container}>
-                    <Shadow distance={4} style={styles.shadowView}>
+                    <Shadow distance={5} offset={[2, 3]} style={styles.shadowView}>
                         <Text style={styles.titleText}>MAGELLAN PERFORMANCE OUTSOURCING CORP.</Text>
 
                         <View style={styles.textView}>
@@ -383,7 +443,17 @@ export default function MorePayslip () {
 
                         <View style={styles.textView}>
                             <RowTextView semiText='Pay Out Date' regularText={DateTimeUtils.dateFullConvert(params?.cutOffDate)} />
-                            <RowTextView semiText='Cut Off Period' regularText='cutOffPeriod' />
+
+                            <RowTextView 
+                                semiText='Cut Off Period' 
+                                regularText={
+                                    DateTimeUtils.checkDateHalf(params?.cutOffDate) == true ? (
+                                        DateTimeUtils.dateSecondHalfRange(params?.cutOffDate).startDate +  DateTimeUtils.dateSecondHalfRange(params?.cutOffDate).endDate
+                                    ) : (
+                                        DateTimeUtils.dateFirstHalfRange(params?.cutOffDate).startDate +  DateTimeUtils.dateFirstHalfRange(params?.cutOffDate).endDate
+                                    )
+                                }
+                            />
                         </View>
 
                         <Hr />
@@ -413,12 +483,7 @@ export default function MorePayslip () {
                         <Hr />
 
                         <View style={[styles.textView, { marginVertical: 0 }]}>
-                            <RowEndView title='Total Gross Pay' text={
-                                sumTotal(
-                                    params?.regularDayTotal, 
-                                    params?.mealAllowanceTotal, 
-                                    params?.complexityAllowance 
-                                )} />
+                            <RowEndView title='Total Gross Pay' text={Utils.amountFormat(params?.grossPay)}/>
                         </View>
 
                         <Text style={[styles.semiText(false), { marginTop: 10, }]}>Deductions</Text>
@@ -446,12 +511,7 @@ export default function MorePayslip () {
                         <Hr width={2.2} />
 
                         <View style={[styles.textView, { marginVertical: 0 }]}>
-                            <RowEndView title='Total Deductions' text={
-                                sumTotal(params?.SSSShare, 
-                                    params?.philHealthShare, 
-                                    params?.HDMFShare,
-                                    params?.withHoldingTax
-                                )} />
+                            <RowEndView title='Total Deductions' text={Utils.amountFormat(params?.deductions)} />
                         </View>
 
                         <Text style={[styles.semiText, { marginTop: 10, fontFamily: 'Inter_700Bold'}]}>Net Pay</Text>
@@ -461,7 +521,7 @@ export default function MorePayslip () {
                         <View style={[styles.textView, { marginVertical: 3 }]}>
                             <RowEndView 
                                 title='PHP' 
-                                text={ Utils.amountFormat(params?.netpay)} 
+                                text={ Utils.amountFormat(params?.netPay)} 
                                 bold={true} />
                         </View>
 
@@ -470,39 +530,65 @@ export default function MorePayslip () {
                 </View>
 
                 <View style={styles.container}>
-                    <Shadow distance={4} style={styles.shadowView}>
+                    <Shadow distance={5} offset={[2, 3]} style={styles.shadowView}>
                         <Text style={styles.titleText}>TIMEKEEPING</Text>
 
                         <View style={styles.textView}>
-                            <RowTextView semiText='Cut-off Period' regularText='August 16-31, 2023' />
+                            <RowTextView semiText='Cut-off Period' regularText={
+                                DateTimeUtils.dateSecondHalfRange(params?.cutOffDate).startDate +  DateTimeUtils.dateSecondHalfRange(params?.cutOffDate).endDate
+                            } />
                         </View>
-
                         <Hr width={1} />
                         <Hr width={1} space={.1} />
 
-                        <View style={styles.textView}>
-                            <Text style={styles.tkDateText}>August 16, 2023</Text>
-                            
-                            <View style={{ marginLeft: 30 }}>
-                                <TimekeepingText title='Day Type' text='Regular Day' />
-                                <TimekeepingText title='Schedule' text='schedule' />
-                                <TimekeepingText title='Time-in' text='timeIn' />
-                                <TimekeepingText title='Time-out' text='timeOut' />
-                                <TimekeepingText title='Regular Hours' text='regularHours' gap={true} />
+                        {/* const filteredData = TKData.filter((item) => {
+                            const itemDate = item.date;
+                            return moment(itemDate, 'YYYYMMDD').isBetween(startDateRange, endDateRange, undefined, '[]');
+                            }); */
+                        }
 
-                                <View style={styles.rowText}>
-                                    <Text style={[styles.semiText(false), { marginRight: 0 }]}>Overtime: </Text>
-                                    <Text style={styles.regularText(false)}>overtime</Text>
+                        {filteredData.map(( item, index ) => (
+                            <View key={index}>
+                                <View style={styles.textView}  >
+                                    <Text style={styles.tkDateText}>{DateTimeUtils.dateFullConvert(item.date)}</Text>
+                                    
+                                    <View style={{ marginLeft: 30 }}>
+                                        <TimekeepingText title='Day Type' text={item.dayType} />
+                                        
+                                        { item.dayType != 'Rest Day' && item.dayType != 'Special Holiday' && (
+                                            <>
+                                                <TimekeepingText title='Schedule' text={item.schedule} />
+
+                                                {item.leave == '' ? (
+                                                    <>
+                                                        <TimekeepingText title='Time-in' text={DateTimeUtils.timeConvert(item.timeIn)} />
+                                                        <TimekeepingText title='Time-out' text={DateTimeUtils.timeConvert(item.timeOut)} /> 
+                                                    </>
+                                                ) : ( <TimekeepingText title='Leave' text={item.leave} /> )}
+
+                                                <TimekeepingText title='Regular Hours' text={item.regularHours} gap={true} />
+                                            </>
+                                        )}
+
+                                        { item.overtime != '0.00' && (
+                                            <View style={styles.rowText}>
+                                                <Text style={[styles.semiText(false), { marginRight: 0 }]}>Overtime: </Text>
+                                                <Text style={styles.regularText(false)}>{item.overtime}</Text>
+                                            </View>
+                                        )}
+
+                                        { item.tardy != '0.00' && (
+                                            <View style={styles.rowText}>
+                                                <Text style={[styles.semiText(false), { marginRight: 0 }]}>Tardy: </Text>
+                                                <Text style={styles.regularText(false)}>{item.tardy}</Text>
+                                            </View>
+                                        )}
+                                    </View>
                                 </View>
 
-                                <View style={styles.rowText}>
-                                    <Text style={[styles.semiText(false), { marginRight: 0 }]}>Tardy: </Text>
-                                    <Text style={styles.regularText(false)}>tardy</Text>
-                                </View>
+                                <Hr width={1} />
                             </View>
-                        </View>
-
-                        <Hr width={1} />
+                        ))}
                     </Shadow>
                 </View>
             </ScrollView>
@@ -512,12 +598,14 @@ export default function MorePayslip () {
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: COLORS.clearWhite,
         flex: 1,
-        marginHorizontal: 20,
-        marginVertical: 30,
+        paddingHorizontal: 20,
+        paddingVertical: 20,
     },
 
     shadowView: {
+        backgroundColor: COLORS.clearWhite,
         width: '100%',
         paddingVertical: 35,
         paddingHorizontal: 35,

@@ -14,8 +14,8 @@ import PayHistoryItem from '../../items/profile/PayHistoryitem';
 
 const data = [{
     cutOffDate: '20231125',
-    netpay: '15378.2400',
-    grosspay: '17190.3100',
+    netPay: '15378.2400',
+    grossPay: '17190.3100',
     deductions: '1812.0600',    
 
     documentNo: 'PP001',
@@ -35,8 +35,8 @@ const data = [{
 },
 {
     cutOffDate: '20231025',
-    netpay: '8016.2900',
-    grosspay: '17190.3100',
+    netPay: '8016.2900',
+    grossPay: '17190.3100',
     deductions: '1812.0600',
 
     documentNo: 'PP002',
@@ -57,8 +57,8 @@ const data = [{
 },
 {
     cutOffDate: '2023101000',
-    netpay: '10941.0300',
-    grosspay: '17190.3100',
+    netPay: '10941.0300',
+    grossPay: '17190.3100',
     deductions: '1812.0600',
 
     documentNo: 'PP003',
@@ -77,7 +77,86 @@ const data = [{
     withHoldingTax: '735.0000',
 }]
 
+const TKData = [
+{
+    date: '20231014',
+    dayType: 'Regular Day',
+    schedule: '8:00 AM to 6:00 PM',
+    timeIn: '08:12',
+    timeOut: '18:00',
+    regularHours: '9.00',
+    overtime: '0.00',
+    leave: '0.00',
+    tardy: '0.12',
 
+},
+{
+    date: '20231015',
+    dayType: 'Regular Day',
+    schedule: '8:00 AM to 6:00 PM',
+    timeIn: '08:12',
+    timeOut: '18:00',
+    regularHours: '9.00',
+    overtime: '0.00',
+    leave: '0.00',
+    tardy: '0.12',
+},
+{
+    date: '20231016',
+    dayType: 'Regular Day',
+    schedule: '8:00 AM to 6:00 PM',
+    timeIn: '08:00',
+    timeOut: '18:00',
+    regularHours: '9.00',
+    overtime: '0.00',
+    leave: '',
+    tardy: '0.00',
+},
+{
+    date: '20231017',
+    dayType: 'Regular Day',
+    schedule: '8:00 AM to 6:00 PM',
+    timeIn: '00:00',
+    timeOut: '00:00',
+    regularHours: '9.00',
+    overtime: '0.00',
+    leave: 'Vacation Leave',
+    tardy: '0.00',
+},
+{
+    date: '20231018',
+    dayType: 'Regular Day',
+    schedule: '8:00 AM to 6:00 PM',
+    timeIn: '08:00',
+    timeOut: '18:00',
+    regularHours: '9.00',
+    overtime: '0.00',
+    leave: '',
+    tardy: '0.00',
+},
+{
+    date: '20231019',
+    dayType: 'Rest Day',
+    schedule: '8:00 AM to 6:00 PM',
+    timeIn: '0.00',
+    timeOut: '0.00',
+    regularHours: '0.00',
+    overtime: '0.00',
+    leave: '',
+    tardy: '0.00',
+},
+{
+    date: '20231020',
+    dayType: 'Special Holiday',
+    schedule: '8:00 AM to 6:00 PM',
+    timeIn: '0.00',
+    timeOut: '0.00',
+    regularHours: '0.00',
+    overtime: '0.00',
+    leave: '',
+    tardy: '0.00',
+},
+]
 
 export default function PayslipPanel () {
     const [isFirstHalf, setFirstHalf] = useState(null)
@@ -87,7 +166,7 @@ export default function PayslipPanel () {
 
     useEffect(() => { Utils.getHalf(setFirstHalf, setSecondHalf) })
     
-    const onHandleMore = (item) => { navigation.navigate('MorePayslip', item ) }
+    const onHandleMore = (item, TKData) => { navigation.navigate('MorePayslip', {item, TKData}) }
 
     return (
         <>
@@ -106,6 +185,7 @@ export default function PayslipPanel () {
                         (withinFirst || withinSecond) && (
                             <RecentPayItem
                                 item={item}
+                                TKData={TKData}
                                 index={index}
                                 key={index}
                                 onHandleMore={onHandleMore}
@@ -126,6 +206,7 @@ export default function PayslipPanel () {
                             (withinFirst || withinSecond) ? (
                                 <PayHistoryItem 
                                     item={item}
+                                    TKData={TKData}
                                     index={index}
                                     onHandleMore={onHandleMore}
                                 />
@@ -140,9 +221,10 @@ export default function PayslipPanel () {
 
 const styles = StyleSheet.create({
     animatedView: {
+        backgroundColor: COLORS.clearWhite,
         opacity: 1, 
         flex: 1, 
-        marginHorizontal: 20,
+        paddingHorizontal: 20,
     },
 
     payHistoryTitle: {

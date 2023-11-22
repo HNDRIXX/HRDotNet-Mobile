@@ -5,10 +5,10 @@ import { Entypo } from "@expo/vector-icons";
 
 import { COLORS, DateTimeUtils, Utils } from "../../../constant";
 
-export default function RecentPayItem ({ item, index, onHandleMore }) {
+export default function RecentPayItem ({ item, TKData, index, onHandleMore }) {
     return (
         <View key={index} style={styles.topView}>
-            <Shadow distance={4} style={styles.shadowView}>
+            <Shadow distance={4} offset={[2, 2]} style={styles.shadowView}>
                 <View style={styles.rowView}>
                     <Image
                         source={require('../../../assets/icons/pay.png')}
@@ -25,23 +25,23 @@ export default function RecentPayItem ({ item, index, onHandleMore }) {
                     <View>
                         <View style={styles.netpayView}>
                             <Text style={styles.netpayText}>Net Pay</Text>
-                            <Text style={styles.netpayValue}>Php {item.netpay}</Text>
+                            <Text style={styles.netpayValue}>Php {Utils.amountFormat(item.netPay)}</Text>
                         </View>
 
                         <View style={styles.grosspayView}>
                             <Text style={styles.grosspayText}>Gross Pay</Text>
-                            <Text style={styles.amountText}>{item.grosspay}</Text>
+                            <Text style={styles.amountText}>{Utils.amountFormat(item.grossPay)}</Text>
                         </View>
 
                         <View style={styles.deductionsView}>
                             <Text style={styles.deductionsText}>Deductions</Text>
-                            <Text style={styles.amountText}>{item.deductions}</Text>
+                            <Text style={styles.amountText}>{Utils.amountFormat(item.deductions)}</Text>
                         </View>
                     </View>
 
                     <TouchableOpacity
                         style={styles.topMoreButton}
-                        onPress={() => onHandleMore(item)}
+                        onPress={() => onHandleMore(item, TKData)}
                     >
                         <View style={styles.row}>
                             <Text style={styles.moreText}>More</Text>
@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     },
 
     shadowView: {
+        backgroundColor: COLORS.clearWhite,
         width: '100%',
         paddingRight: 15,
         paddingLeft: 15,

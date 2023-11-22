@@ -29,7 +29,6 @@ const styles = StyleSheet.create({
   topContainer: {
     width: "100%",
     paddingVertical: 10,
-    // paddingHorizontal: 20,
     flexDirection: "row",
     justifyContent: 'flex-end',
   },
@@ -41,13 +40,12 @@ const styles = StyleSheet.create({
   },
 
   searchValueText: (platformIOS) => ({
+    backgroundColor: COLORS.clearWhite,
     fontFamily: "Inter_500Medium",
     fontSize: 16,
     borderRadius: 15,
-    width: 170,
+    width: 130,
     marginLeft: 10,
-    borderColor: COLORS.orange,
-    borderWidth: 1,
     paddingHorizontal: 10,
     paddingVertical: platformIOS ? 5 : 0
   }),

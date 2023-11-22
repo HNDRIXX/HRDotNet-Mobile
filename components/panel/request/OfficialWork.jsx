@@ -51,8 +51,8 @@ export default function OfficialWorkPanel () {
     
     let filteredData = []
 
-    if (localData) {
-        filteredData = localData.filter((newItem) => {
+    if (!localData) {
+        filteredData = data.filter((newItem) => {
             const formattedDate = DateTimeUtils.dateFullConvert(newItem.officialWorkDate)
             
             return (
@@ -119,7 +119,7 @@ export default function OfficialWorkPanel () {
                     { filteredData.length > 0 ? (
                         <ScrollView>
                             { newCount > 0 && (<Text style={styles.itemStatusText}>New</Text>) }
-
+                            
                             {filteredData
                                 .filter((item) => {
                                     const withinFirst = isFirstHalf && Utils.withinFirst(item.filedDate)

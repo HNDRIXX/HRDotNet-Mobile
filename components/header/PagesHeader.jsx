@@ -30,7 +30,7 @@ export default function PageHeader ({ pageName, backStatus }) {
 
 const styles = StyleSheet.create({
     backButton: {
-        paddingHorizontal: 10,
+        paddingHorizontal: 17,
         paddingVertical: 3,
         marginTop: 5
     },
@@ -48,6 +48,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         flex: 1,
         textAlign: 'center',
-        marginRight: 50,
+        marginRight: 60,
     },
 })
