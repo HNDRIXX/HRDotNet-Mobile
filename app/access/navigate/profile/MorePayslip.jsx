@@ -38,7 +38,7 @@ const RowBetweenView = ({ title, textOne, textTwo }) => {
 const RowEndView = ({ title, text, bold }) => {
     return (
         <View style={[styles.regularDayView, { justifyContent: 'flex-end' }]}>
-            <Text style={styles.semiText(bold)}>{title}: </Text>
+            <Text style={styles.semiText(bold)}>{title} </Text>
             <Text style={styles.regularText(bold)}>{text}</Text>
         </View>
     )
@@ -73,8 +73,7 @@ export default function MorePayslip () {
     const [pdfUri, setPdfUri] = useState(null)
     const [isAlert, setAlert] = useState(false)
 
-    const [startDate, setStartDate] = useState(null)
-    const [endDate, setEndDate] = useState(null)
+    const [dateRange, setDateRange] = useState(null)
 
     // const [secondHalfStart, setSecondHalfStart] = useState(DateTimeUtils.dateSecondHalfRange(params?.cutOffDate).startDate)
     // const [secondHalfEnd, setSecondHalfEnd] = useState(DateTimeUtils.dateSecondHalfRange(params?.cutOffDate).endDate)
@@ -134,7 +133,6 @@ export default function MorePayslip () {
 
                 #regularText {
                     font-size: 15px;
-                    font-weight: 500;
                 }
 
                 #rowSpaceText {
@@ -271,52 +269,68 @@ export default function MorePayslip () {
                     <div class="rowView" style="margin-top: 40px;">
                         <p id="rowText">
                             <span id="boldText">Cut-off Period: </span>
-                            <span id="regularText">August 16-31, 2023</span>
+                            <span id="regularText">${dateRange}</span>
                         </p>
                     </div>
             
                     <hr class="hrThick" /> <hr class="hrThick" />
-            
-                    <div class="rowView">
-                        <p id="boldText" style="margin-top: 20px; margin-bottom: 20px; font-size: 15px;">August 16, 2023</p>
-            
-                        <div class="rowIndentView">
-                            <p id="rowText">
-                                <span id="boldText">Date Type:</span>
-                                <span id="regularText">Regular Day</span>
-                            </p>
-            
-                            <p id="rowText">
-                                <span id="boldText">Schedule: </span>
-                                <span id="regularText">schedule</span>
-                            </p>
-            
-                            <p id="rowText">
-                                <span id="boldText">Time-in: </span>
-                                <span id="regularText">timeIn</span>
-                            </p>
-            
-                            <p id="rowText">
-                                <span id="boldText">Time-out: </span>
-                                <span id="regularText">timeOut</span>
-                            </p>
-            
-                            <p id="rowText" style="margin-top: 40px;">
-                                <span id="boldText">Regular Hours: </span>
-                                <span id="regularText">regularHours</span>
-                            </p>
-            
-                            <p id="rowText">
-                                <span id="boldText">Overtime: </span>
-                                <span id="regularText">overtime</span>
-                            </p>
-            
-                            <p id="rowText">
-                                <span id="boldText">Tardy: </span>
-                                <span id="regularText">tardy</span>
-                            </p> 
-                        </div> <hr class="hr" />
-                    </div>
+                </div> 
+
+                <div class="rowView">
+                    ${filteredData.map((item, index) => `
+                            <p id="boldText" style="margin-top: 20px; margin-bottom: 20px; font-size: 15px;">${DateTimeUtils.dateFullConvert(item.date)}</p>
+
+                            <div class="rowIndentView">
+                                <p id="rowText">
+                                    <span id="boldText">Date Type:</span>
+                                    <span id="regularText">${item.dayType}</span>
+                                </p>
+
+                                ${item.dayType !== 'Rest Day' && item.dayType !== 'Special Holiday' ? (
+                                    `<p id="rowText">
+                                        <span id="boldText">Schedule: </span>
+                                        <span id="regularText">${item.schedule}</span>
+                                    </p>`
+                                
+                                    + (item.leave === '' ?
+                                        `<p id="rowText">
+                                            <span id="boldText">Time-in: </span>
+                                            <span id="regularText">${DateTimeUtils.timeConvert(item.timeIn)}</span>
+                                        </p>
+                                        <p id="rowText">
+                                            <span id="boldText">Time-out: </span>
+                                            <span id="regularText">${DateTimeUtils.timeConvert(item.timeOut)}</span>
+                                        </p>`
+                                        :
+                                        `<p id="rowText">
+                                            <span id="boldText">Leave: </span>
+                                            <span id="regularText">${item.leave}</span>
+                                        </p>`
+                                    )
+                                
+                                    + `<p id="rowText" style="margin-top: 40px;">
+                                        <span id="boldText">Regular Hours: </span>
+                                        <span id="regularText">${item.regularHours}</span>
+                                    </p>`
+                                ) : '' }
+
+                                ${ item.overtime != '0.00' ? `
+                                    <p id="rowText">
+                                        <span id="boldText">Overtime: </span>
+                                        <span id="regularText">${item.overtime}</span>
+                                    </p>
+                                ` : '' }
+                                
+                                ${ item.tardy != '0.00' ? `
+                                    <p id="rowText">
+                                        <span id="boldText">Tardy: </span>
+                                        <span id="regularText">${item.tardy}</span>
+                                    </p> 
+                                ` : ''}
+                            </div> <hr class="hr" />
+                    `).join('')}
+
+                    ${filteredData.length <= 0 ? `<h5 id="headerTitle">No Timekeeping Records.</h5>` : ''}
                 </div>
             </div>
         </body>
@@ -352,41 +366,34 @@ export default function MorePayslip () {
     }
 
     useEffect(() => {
-        // if (DateTimeUtils.checkDateHalf(params?.cutOffDate)) {
-        //   const startDateRange = DateTimeUtils.dateSecondHalfRange(params?.cutOffDate).startDate;
-        //   const endDateRange = DateTimeUtils.dateSecondHalfRange(params?.cutOffDate).endDate;
-      
-        //   const filteredData = TKparams.filter((item) => {
-        //     const itemDate = item.date;
-        //     return moment(itemDate, 'YYYYMMDD').isBetween(startDateRange, endDateRange, undefined, '[]');
-        //   });
-      
-        //   setFilteredData(filteredData);
-        //   console.log(filteredData)
-        // } else {
-        //   const startDateRange = DateTimeUtils.dateFirstHalfRange(params?.cutOffDate).startDate;
-        //   const endDateRange = DateTimeUtils.dateFirstHalfRange(params?.cutOffDate).endDate;
-      
-        //   const filteredData = TKparams.filter((item) => {
-        //     const itemDate = item.date;
-        //     return moment(itemDate, 'YYYYMMDD').isBetween(startDateRange, endDateRange, undefined, '[]');
-        //   });
-      
-        //   setFilteredData(filteredData)
-        // }
+        const halfStatus = DateTimeUtils.checkDateHalf(params?.cutOffDate)
 
-        let startDateRange = DateTimeUtils.dateFirstHalfRange(params?.cutOffDate).startDate;
-        let endDateRange = DateTimeUtils.dateFirstHalfRange(params?.cutOffDate).endDate;
+        if (halfStatus) {
+            const startDateRange = DateTimeUtils.dateFirstHalfRange(params?.cutOffDate).startDate;
+            const endDateRange = DateTimeUtils.dateFirstHalfRange(params?.cutOffDate).endDate;
       
-          const filteredData = TKparams.filter((item) => {
-            const itemDate = item.date
-            return moment(itemDate, 'YYYYMMDD').isBetween(DateTimeUtils.dateFirstHalfRange(params?.cutOffDate).startDate, DateTimeUtils.dateFirstHalfRange(params?.cutOffDate).endDate, undefined, '[]');
-          });
+            const filteredData = TKparams.filter((data) => {
+                const currentDate = moment(data.date, 'YYYYMMDD');
+                return currentDate.isBetween(startDateRange, endDateRange, null, '[]');
+            })
 
-          console.log(filteredData)
-      
-          setFilteredData(filteredData)
-    }, [params?.cutOffDate])
+            setDateRange(DateTimeUtils.dateMonthDayConvert(startDateRange) + ' - ' + 
+            DateTimeUtils.dateDayYearConvert(endDateRange))
+            setFilteredData(filteredData)
+        } else {
+            const startDateRange = DateTimeUtils.dateSecondHalfRange(params?.cutOffDate).startDate;
+            const endDateRange = DateTimeUtils.dateSecondHalfRange(params?.cutOffDate).endDate;
+        
+            const filteredData = TKparams.filter((data) => {
+                const currentDate = moment(data.date, 'YYYYMMDD');
+                return currentDate.isBetween(startDateRange, endDateRange, null, '[]');
+            })
+
+            setDateRange(DateTimeUtils.dateMonthDayConvert(startDateRange) + ' - ' + 
+            DateTimeUtils.dateDayYearConvert(endDateRange))
+            setFilteredData(filteredData)
+        }
+    }, [])
 
 
     return (
@@ -446,13 +453,7 @@ export default function MorePayslip () {
 
                             <RowTextView 
                                 semiText='Cut Off Period' 
-                                regularText={
-                                    DateTimeUtils.checkDateHalf(params?.cutOffDate) == true ? (
-                                        DateTimeUtils.dateSecondHalfRange(params?.cutOffDate).startDate +  DateTimeUtils.dateSecondHalfRange(params?.cutOffDate).endDate
-                                    ) : (
-                                        DateTimeUtils.dateFirstHalfRange(params?.cutOffDate).startDate +  DateTimeUtils.dateFirstHalfRange(params?.cutOffDate).endDate
-                                    )
-                                }
+                                regularText={dateRange}
                             />
                         </View>
 
@@ -534,9 +535,7 @@ export default function MorePayslip () {
                         <Text style={styles.titleText}>TIMEKEEPING</Text>
 
                         <View style={styles.textView}>
-                            <RowTextView semiText='Cut-off Period' regularText={
-                                DateTimeUtils.dateSecondHalfRange(params?.cutOffDate).startDate +  DateTimeUtils.dateSecondHalfRange(params?.cutOffDate).endDate
-                            } />
+                            <RowTextView semiText='Cut-off Period' regularText={dateRange} />
                         </View>
                         <Hr width={1} />
                         <Hr width={1} space={.1} />
@@ -589,6 +588,11 @@ export default function MorePayslip () {
                                 <Hr width={1} />
                             </View>
                         ))}
+                        {filteredData.length <= 0 && (
+                            <Text style={[styles.titleText, 
+                                {fontFamily: 'Inter_400Regular', fontSize: 14, paddingVertical: 10 }]}>
+                                No Records.</Text>
+                        )}
                     </Shadow>
                 </View>
             </ScrollView>
