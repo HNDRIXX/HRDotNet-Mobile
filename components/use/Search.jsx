@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingVertical: 10,
     flexDirection: "row",
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
   },
 
   searchContainer: {

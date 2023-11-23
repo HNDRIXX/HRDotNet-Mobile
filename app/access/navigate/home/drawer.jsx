@@ -65,6 +65,7 @@ export default function DrawerPage ({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: COLORS.clearWhite
     },
 
     backButton: {
@@ -97,11 +98,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderRadius: 20,
-        // elevation: 5,
-        // shadowColor: COLORS.darkGray,
-        // shadowOpacity: 0.1,
-        // shadowRadius: 2,
-        // shadowOffset : { width: 1, height: 5},
+        
+        elevation: 5,
+        shadowColor: COLORS.darkGray,
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        shadowOffset : { width: 1, height: 5},
     },
 
     textButton: {

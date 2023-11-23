@@ -7,7 +7,7 @@ import { Shadow } from 'react-native-shadow-2';
 export default function PendingItem ({onPanel, item, lastIndex, index, newItem}) {
     return (
         <View style={styles.itemContainer(index, lastIndex)} key={index}>
-            <Shadow distance={5} startColor={COLORS.shadowGray} style={styles.itemWrapper(index, lastIndex)}>
+            <Shadow distance={3} style={styles.itemWrapper(index, lastIndex)}>
                 <View style={styles.dateRowWrapper}>
                     <Text style={styles.statusText}>{item.status}</Text>
                     <Text style={styles.currDateText}>{newItem.formattedDate}</Text>    
@@ -36,6 +36,9 @@ const styles = StyleSheet.create({
         borderTopRightRadius: index == 0 ? 20 : 0,
         borderBottomLeftRadius : lastIndex == index ? 20 : 0,
         borderBottomRightRadius : lastIndex == index ? 20 : 0, 
+
+        paddingTop: index == 0 ? 5 : 0,
+        paddingBottom: lastIndex == index ? 5 : 0,
 
         borderBottomColor: COLORS.darkGray,
         borderBottomWidth: lastIndex != index ? 1 : 0,

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingVi
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useRoute } from "@react-navigation/native";
 import Checkbox from "expo-checkbox";
-import { Ionicons, AntDesign, FontAwesome } from "@expo/vector-icons";
+import { Ionicons, AntDesign, FontAwesome5 } from "@expo/vector-icons";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
 import TitleInput from "../../../../../components/section/request/TitleInput";
@@ -189,8 +189,8 @@ export default function LVRequest ({ navigation }) {
                                         name="camera" size={26} color={COLORS.darkGray}
                                         onPress={() => navigation.navigate('CameraAccess', { onPanel: 5 })} />
 
-                                    <FontAwesome 
-                                        name="file" size={18} color={COLORS.darkGray} style={{ marginLeft: 15 }}
+                                    <FontAwesome5
+                                        name="file-upload" size={18} color={COLORS.darkGray} style={{ marginLeft: 15 }}
                                         // onPress={() => Utils.fileAttach(setSelectedFile)}
                                     />
                                 </View>
@@ -216,7 +216,6 @@ export default function LVRequest ({ navigation }) {
                 isVisible={isDatePicker}
                 mode="date"
                 onConfirm={handleMissedLogData}
-                minimumDate={DateTimeUtils.currDate()}
                 onCancel={() => setDatePicker(false)} 
             />
 
@@ -224,7 +223,6 @@ export default function LVRequest ({ navigation }) {
                 isVisible={isTimePicker}
                 mode="time"
                 onConfirm={handleLogTime}
-                minimumDate={DateTimeUtils.currDate()}
                 onCancel={() => setTimePicker(false)} 
             />
         </>

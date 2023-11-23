@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, Refresh
 import { AntDesign } from '@expo/vector-icons'
 
 import { Search } from '../../../../../components/use/Search'
-import { DateTimeUtils } from '../../../../../constant'
+import { DateTimeUtils, COLORS } from '../../../../../constant'
 import LoanLedgerItem from '../../../../../components/items/home/LoanLedgerItem'
 import PageHeader from '../../../../../components/header/PagesHeader'
 import NothingFoundNote from '../../../../../components/note/NothingFoundNote'
@@ -12,7 +12,7 @@ const data = [
     {
         status: "Approved",
         loanTitle: "SSS Salary Loan",
-        balance: "10,554.93",
+        balance: "10554.93",
         documentNo: "LA22305230009",
         source: "Government Deduction",
         loanCode: "LN-SSS",
@@ -21,8 +21,8 @@ const data = [
         grantedDate: "20230501",
         firstDueDate: "20230510",
         referenceNo: "SL201708181674086",
-        loanAmount: "11,013.84",
-        disbursedAmount: "11,013.84",
+        loanAmount: "11013.84",
+        disbursedAmount: "11013.84",
         cycle: "Period 1",
         installmentAmountPerMonth: "458.91",
         totalInstallmentAmount: "458.91",
@@ -30,7 +30,7 @@ const data = [
     {
         status: "Filed",
         loanTitle: "HDMF Salary Loan",
-        balance: "3,671.93",
+        balance: "3671.93",
         documentNo: "LA22305230075",
         source: "Government Deduction",
         loanCode: "LN-SSS",
@@ -39,8 +39,8 @@ const data = [
         grantedDate: "20230501",
         firstDueDate: "20230510",
         referenceNo: "SL201708181674086",
-        loanAmount: "11,013.84",
-        disbursedAmount: "11,013.84",
+        loanAmount: "11013.84",
+        disbursedAmount: "11013.84",
         cycle: "Period 1",
         installmentAmountPerMonth: "458.91",
         totalInstallmentAmount: "458.91",
@@ -50,14 +50,14 @@ const data = [
 const details = [
     {
         loanTitle: "SSS Salary Loan",
-        balance: "10,554.93",
+        balance: "10554.93",
         documentNo: "LA22305230009",
         paymentDate: "20230823",
         paymentAmount: "458.91",
     },
     {
         loanTitle: "HDMF Salary Loan",
-        balance: "3,671.28",
+        balance: "3671.28",
         documentNo: "LA22305230075",
         paymentDate: "20230823",
         paymentAmount: "458.91",
@@ -71,10 +71,12 @@ export default function LoanLedgerPage () {
 
     let filteredData = []
 
-    filteredData = data.filter((newItem) => {
+    filteredData = data.filter((item) => {
         return (
-            newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
-            newItem.loanTitle.toLowerCase().includes(filterText.toLowerCase())
+            item.status.toLowerCase().includes(filterText.toLowerCase()) ||
+            item.loanTitle.toLowerCase().includes(filterText.toLowerCase()) ||
+            item.balance.toLowerCase().includes(filterText.toLowerCase()) ||
+            item.documentNo.toLowerCase().includes(filterText.toLowerCase())
         )
     })
 
@@ -85,7 +87,7 @@ export default function LoanLedgerPage () {
     }
 
     return (
-        <>
+        <View style={styles.container}>
             <PageHeader pageName={"Loan Ledger"} />
 
             <View style={{ marginHorizontal: 20 }}>
@@ -107,7 +109,7 @@ export default function LoanLedgerPage () {
                         {filteredData.map((item, index) => (
                             <LoanLedgerItem 
                                 key={index}
-                                newItem={{ 
+                                item={{ 
                                     ...item,
                                     details: details,
                                     formattedTransactionDate: DateTimeUtils.dateFullConvert(item.transactionDate), 
@@ -120,34 +122,15 @@ export default function LoanLedgerPage () {
 
                     </ScrollView>
                 ) : ( <NothingFoundNote /> )}
-
-                {/* <FlatList 
-                    data={data}
-                    renderItem={({item, index}) => {
-                        return (
-                            <LoanLedgerItem 
-                                key={index}
-                                newItem={{ 
-                                    ...item,
-                                    details: details,
-                                    formattedTransactionDate: DateTimeUtils.dateFullConvert(item.transactionDate), 
-                                    formattedApprovedDate:  DateTimeUtils.dateFullConvert(item.approvedDate),
-                                    formattedGrantedDate: DateTimeUtils.dateFullConvert(item.grantedDate),
-                                    formattedFirstDueDate: DateTimeUtils.dateFullConvert(item.firstDueDate),
-                                }}
-                            />
-                        )
-
-                    }}
-                /> */}
             </View>
-        </>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 1, 
+        backgroundColor: COLORS.clearWhite 
     },
 
     loanLedgerList: {

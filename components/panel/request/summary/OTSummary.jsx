@@ -11,8 +11,6 @@ import { Image } from "expo-image";
 
 export default function OTSummary({ route, openCustomAlert, closeCustomAlert, isSuccessAlertVisible }) {
 
-    const params = route.params
-
     return (
         <>
             <View style={styles.container}>
@@ -57,7 +55,7 @@ export default function OTSummary({ route, openCustomAlert, closeCustomAlert, is
 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>Reason</Text>
-                        <Text style={styles.summaryText}>{route.route?.reason}</Text>
+                        <Text style={styles.summaryText}>{route?.reason}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
@@ -65,17 +63,17 @@ export default function OTSummary({ route, openCustomAlert, closeCustomAlert, is
                         <Text style={styles.boldText}>File Attachment</Text>
 
                         <View style={styles.attachmentView}>
-                            {/* <Image 
-                                source={{ uri: route.route?.attachedFile }}
-                                style={{ width: 100, height: 100 }}
-                                contentFit="contain"
-                            />
-
-                            <Text style={[styles.summaryText, { width: '60%' }]}>
+                            {/* <Text style={[styles.summaryText, { width: '60%' }]}>
                                 {route.route?.attachedFile}
                             </Text> */}
 
-                            { route.route?.attachedFile && (
+                            <Image 
+                                source={{ uri: route?.attachedFile }}
+                                style={{ width: 130, height: 150 }}
+                                contentFit="contain"
+                            />
+
+                            { route?.attachedFile && (
                                 <Text style={styles.summaryText}>File Attached</Text>
                             )}
                         </View>

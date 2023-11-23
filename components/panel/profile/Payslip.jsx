@@ -11,9 +11,12 @@ import { Shadow } from 'react-native-shadow-2';
 import { Search } from '../../use/Search'
 import RecentPayItem from '../../items/profile/RecentPayItem';
 import PayHistoryItem from '../../items/profile/PayHistoryitem';
+import NothingFoundNote from '../../../components/note/NothingFoundNote'
 
 const data = [{
-    cutOffDate: '20231125',
+    payOutSchedule: '20231125',
+    dateTo: '20231101',
+    dateFrom: '20231115',
     netPay: '15378.2400',
     grossPay: '17190.3100',
     deductions: '1812.0600',    
@@ -34,7 +37,32 @@ const data = [{
     withHoldingTax: '735.0000',
 },
 {
-    cutOffDate: '20231025',
+    payOutSchedule: '20231110',
+    dateTo: '20231016',
+    dateFrom: '20231031',
+    netPay: '10000.2400',
+    grossPay: '17190.3100',
+    deductions: '1812.0600',    
+
+    documentNo: 'PP001',
+    employeeName: 'Juan dela Cruz',
+    employeeCode: '5985',
+    department: 'Quality Assurance',
+    
+    regularDayTotal: '15075.3600',
+    totalWorkingHours: '84.6200',
+    mealAllowanceTotal: '736.1000',
+    complexityAllowance: '1321.8400',
+
+    SSSShare: '675.0000',
+    philHealthShare: '301.5100',
+    HDMFShare: '100.0000',
+    withHoldingTax: '735.0000',
+},
+{
+    payOutSchedule: '20231025',
+    dateTo: '20231001',
+    dateFrom: '20231015',
     netPay: '8016.2900',
     grossPay: '17190.3100',
     deductions: '1812.0600',
@@ -56,7 +84,9 @@ const data = [{
 
 },
 {
-    cutOffDate: '2023101000',
+    payOutSchedule: '20231010',
+    dateTo: '20230916',
+    dateFrom: '20230931',
     netPay: '10941.0300',
     grossPay: '17190.3100',
     deductions: '1812.0600',
@@ -159,6 +189,8 @@ const TKData = [
 ]
 
 export default function PayslipPanel () {
+    const [filterText, setFilterText] = useState('')
+
     const [isFirstHalf, setFirstHalf] = useState(null)
     const [isSecondHalf, setSecondHalf] = useState(null)
 
@@ -168,6 +200,16 @@ export default function PayslipPanel () {
     
     const onHandleMore = (item, TKData) => { navigation.navigate('MorePayslip', {item, TKData}) }
 
+    let filteredData = []
+
+    filteredData = data.filter((item) => {
+        const formattedDate = DateTimeUtils.dateFullConvert(item.payOutSchedule)
+
+        return (
+            formattedDate.toLowerCase().includes(filterText.toLowerCase())
+        )
+    })
+    
     return (
         <>
             <Animatable.View
@@ -175,11 +217,14 @@ export default function PayslipPanel () {
                 duration={900}
                 style={styles.animatedView}
             >
-                <Search />
+                <Search 
+                    filterText={filterText}
+                    setFilterText={setFilterText}
+                />
 
-                {data.map((item, index) => {
-                    const withinFirst = isFirstHalf && Utils.withinFirst(item.cutOffDate)
-                    const withinSecond = isSecondHalf && Utils.withinSecond(item.cutOffDate)
+                {filteredData.map((item, index) => {
+                    const withinFirst = isFirstHalf && Utils.withinFirst(item.payOutSchedule)
+                    const withinSecond = isSecondHalf && Utils.withinSecond(item.payOutSchedule)
 
                     return (
                         (withinFirst || withinSecond) && (
@@ -196,11 +241,13 @@ export default function PayslipPanel () {
 
                 <Text style={styles.payHistoryTitle}>Pay History</Text>
 
+                {filteredData.length <= 0 && <NothingFoundNote /> }
+
                 <FlatList 
-                    data={data}
+                    data={filteredData}
                     renderItem={({ item, index }) => {
-                        const withinFirst = isFirstHalf && !Utils.withinFirst(item.cutOffDate)
-                        const withinSecond = isSecondHalf && !Utils.withinSecond(item.cutOffDate)
+                        const withinFirst = isFirstHalf && !Utils.withinFirst(item.payOutSchedule)
+                        const withinSecond = isSecondHalf && !Utils.withinSecond(item.payOutSchedule)
 
                         return (
                             (withinFirst || withinSecond) ? (
@@ -210,10 +257,11 @@ export default function PayslipPanel () {
                                     index={index}
                                     onHandleMore={onHandleMore}
                                 />
-                            ) : null
+                            ) : null 
                         )
                     }}
                 />
+
             </Animatable.View>
         </>
     )

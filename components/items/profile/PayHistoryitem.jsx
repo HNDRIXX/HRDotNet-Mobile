@@ -8,7 +8,7 @@ export default function PayHistoryItem ({ item, TKData, index, onHandleMore }) {
     return (
         <View style={styles.container}>
             <Shadow distance={4} offset={[2, 2]} style={styles.shadowItem}>
-                <Text style={styles.boldText}>{DateTimeUtils.dateFullConvert(item.cutOffDate)}</Text>
+                <Text style={styles.boldText}>{DateTimeUtils.dateFullConvert(item.payOutSchedule)}</Text>
                 <Text style={styles.regularText}>Php {Utils.amountFormat(item.netPay)}</Text>
 
                 <TouchableOpacity 

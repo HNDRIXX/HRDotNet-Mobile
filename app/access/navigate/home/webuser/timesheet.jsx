@@ -12,6 +12,7 @@ import CalendarNote from '../../../../../components/note/CalendarNote'
 import PageHeader from '../../../../../components/header/PagesHeader'
 
 import { useRoute } from '@react-navigation/native'
+import Loader from '../../../../../components/loader/Loader'
 
 export default function TimeSheetPage ({ navigation }) {
     const [isLoading, setIsLoading] = useState(true)
@@ -89,7 +90,7 @@ export default function TimeSheetPage ({ navigation }) {
             <PageHeader pageName={"Timesheet"}/>
 
             <View style={styles.container}>
-                { isLoading ? ( <ActivityIndicator size='large' color={COLORS.powderBlue} style={styles.loading}/> ) : (
+                { isLoading ? ( <Loader /> ) : (
                     <>
                         <View style={styles.agendaCalendar}>
                             <Text style={styles.monthYearText}>{month} {year}</Text>
@@ -173,13 +174,6 @@ export default function TimeSheetPage ({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1
-    },
-
-    loading: {
-        flex: 1,
-        justifyContent: 'center',
-        alignSelf: 'center',
-        alignItems: 'center',
     },
 
     line: {

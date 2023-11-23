@@ -34,7 +34,8 @@ export default function NotificationDetails({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: COLORS.clearWhite,
     },
 
     wrapper: {

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import * as Animatable from 'react-native-animatable';
-import { AntDesign } from "@expo/vector-icons";
-import moment from "moment/moment";
 
 import { COLORS, Utils, DateTimeUtils, RequestUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
 import RequestItem from "../../items/request/RequestItem"
+import Loader from "../../loader/Loader";
 
 const data = [
     { 
@@ -93,13 +92,11 @@ export default function LeavePanel () {
       
     return (
         <>
-            {isLoading ? (
-                <ActivityIndicator size="large" color={COLORS.powderBlue} style={styles.loader} />
-            ) : (
+            {isLoading ? ( <Loader /> ) : (
                 <Animatable.View
                     animation={'fadeIn'}
                     duration={500}
-                    style={{ opacity: 1, flex: 1 }}
+                    style={{ opacity: 1, flex: 1, backgroundColor: COLORS.clearWhite }}
                 >
                     <SearchAndNew 
                         onPanel={4}
@@ -146,21 +143,7 @@ export default function LeavePanel () {
     )
 }
 
-const formattedDateString = (dateString) => {
-    const year = dateString.substring(0, 4);
-    const month = dateString.substring(4, 6);
-    const day = dateString.substring(6);
-
-    return moment(`${month}-${day}-${year}`, 'MM-DD-YYYY').format('MMMM DD YYYY');
-}
-
 const styles = StyleSheet.create({
-    loader: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    
     bodyContainer: {
         flex: 1,
     },

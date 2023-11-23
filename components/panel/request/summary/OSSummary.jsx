@@ -11,8 +11,6 @@ import { Image } from "expo-image";
 
 export default function OSSummary({ route, openCustomAlert, closeCustomAlert, isSuccessAlertVisible }) {
 
-    const params = route.params
-
     return (
         <>
             <View style={styles.container}>
@@ -21,43 +19,43 @@ export default function OSSummary({ route, openCustomAlert, closeCustomAlert, is
                 <ScrollView style={styles.summaryView}> 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>Offset Date</Text>
-                        <Text style={styles.summaryText}>{DateTimeUtils.dateFullConvert(params?.offsetDate)}</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.dateFullConvert(route?.offsetDate)}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>Shift</Text>
-                        <Text style={styles.summaryText}>{params?.shiftSchedule}</Text>
+                        <Text style={styles.summaryText}>{route?.shiftSchedule}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>Actual OS In</Text>
-                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(params?.actualOSIn)}</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(route?.actualOSIn)}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>Actual OS Out</Text>
-                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(params?.actualOSOut)}</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(route?.actualOSOut)}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>OT Start</Text>
-                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(params?.OSStart)}</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(route?.OSStart)}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>OT End</Text>
-                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(params?.OSEnd)}</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(route?.OSEnd)}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>Reason</Text>
-                        <Text style={styles.summaryText}>{route.params?.reason}</Text>
+                        <Text style={styles.summaryText}>{route?.reason}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
@@ -66,12 +64,12 @@ export default function OSSummary({ route, openCustomAlert, closeCustomAlert, is
 
                         <View style={styles.attachmentView}>
                             <Image 
-                                source={{ uri: route.params?.attachedFile }}
+                                source={{ uri: route?.attachedFile }}
                                 style={{ width: 130, height: 150 }}
                                 contentFit="contain"
                             />
 
-                            { route.params?.attachedFile && (
+                            { route?.attachedFile && (
                                 <Text style={styles.summaryText}>File Attached</Text>
                             )}
                         </View>
@@ -88,7 +86,7 @@ export default function OSSummary({ route, openCustomAlert, closeCustomAlert, is
 
             <SuccessPromptPage
                 title={"Success!"}
-                subTitle = {`Your <b><u>Offset</u></b> request for <b><u>${DateTimeUtils.dateFullConvert(params?.offsetDate)}</u></b> was successfully submitted. We will get back to you soon.`}
+                subTitle = {`Your <b><u>Offset</u></b> request for <b><u>${DateTimeUtils.dateFullConvert(route?.offsetDate)}</u></b> was successfully submitted. We will get back to you soon.`}
                 buttonText={"OKAY"}
                 visible={isSuccessAlertVisible} 
                 onClose={closeCustomAlert} 

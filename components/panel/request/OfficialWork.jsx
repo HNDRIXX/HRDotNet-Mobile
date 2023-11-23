@@ -6,6 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { COLORS, Utils, DateTimeUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
 import RequestItem from "../../items/request/RequestItem"
+import Loader from "../../loader/Loader";
 
 const data = [
     { 
@@ -52,12 +53,14 @@ export default function OfficialWorkPanel () {
     let filteredData = []
 
     if (!localData) {
-        filteredData = data.filter((newItem) => {
-            const formattedDate = DateTimeUtils.dateFullConvert(newItem.officialWorkDate)
+        filteredData = data.filter((item) => {
+            const formattedDate = DateTimeUtils.dateFullConvert(item.officialWorkDate)
             
             return (
-                newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
-                formattedDate.toLowerCase().includes(filterText.toLowerCase())
+                formattedDate.toLowerCase().includes(filterText.toLowerCase()) ||
+                item.status.toLowerCase().includes(filterText.toLowerCase()) ||
+                item.location.toLowerCase().includes(filterText.toLowerCase()) ||
+                item.filedDate.toLowerCase().includes(filterText.toLowerCase())
             )
         })
     }
@@ -102,13 +105,11 @@ export default function OfficialWorkPanel () {
       
     return (
         <>
-            {isLoading ? (
-                <ActivityIndicator size="large" color={COLORS.powderBlue} style={styles.loader} />
-            ) : (
+            {isLoading ? ( <Loader /> ) : (
                 <Animatable.View
                     animation={'fadeIn'}
                     duration={500}
-                    style={{ opacity: 1, flex: 1 }}
+                    style={{ opacity: 1, flex: 1, backgroundColor: COLORS.clearWhite }}
                 >
                    <SearchAndNew 
                         filterText={filterText}
@@ -156,12 +157,6 @@ export default function OfficialWorkPanel () {
 }
 
 const styles = StyleSheet.create({
-    loader: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    
     bodyContainer: {
         flex: 1,
     },

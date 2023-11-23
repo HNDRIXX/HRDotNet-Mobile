@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import moment from "moment";
 import SelectDropdown from "react-native-select-dropdown";
 import { useRoute } from "@react-navigation/native";
 import Checkbox from "expo-checkbox";
-import { Ionicons, AntDesign, FontAwesome } from "@expo/vector-icons";
+import { Ionicons, AntDesign, FontAwesome5 } from "@expo/vector-icons";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
 import TitleInput from "../../../../../components/section/request/TitleInput";
@@ -228,8 +227,8 @@ export default function LVRequest ({ navigation }) {
                                         name="camera" size={26} color={COLORS.darkGray}
                                         onPress={() => navigation.navigate('CameraAccess', { onPanel: 4 })} />
 
-                                    <FontAwesome 
-                                        name="file" size={18} color={COLORS.darkGray} style={{ marginLeft: 15 }}
+                                    <FontAwesome5
+                                        name="file-upload" size={18} color={COLORS.darkGray} style={{ marginLeft: 15 }}
                                         // onPress={() => Utils.fileAttach(setSelectedFile)}
                                     />
                                 </View>
@@ -253,7 +252,7 @@ export default function LVRequest ({ navigation }) {
 
             <TouchableOpacity 
                 style={styles.button}
-                // onPress={onNextHandler}
+                onPress={onNextHandler}
             >
                 <Text style={styles.textButton}>NEXT</Text>
             </TouchableOpacity>
@@ -262,7 +261,6 @@ export default function LVRequest ({ navigation }) {
                 isVisible={isStartDatePicker}
                 mode="date"
                 onConfirm={handleStartDate}
-                minimumDate={DateTimeUtils.currDate()}
                 onCancel={() => setStartDatePicker(false)} 
             />
 
@@ -270,7 +268,6 @@ export default function LVRequest ({ navigation }) {
                 isVisible={isEndDatePicker}
                 mode="date"
                 onConfirm={handleEndDate}
-                minimumDate={DateTimeUtils.currDate()}
                 onCancel={() => setEndDatePicker(false)} 
             />
 

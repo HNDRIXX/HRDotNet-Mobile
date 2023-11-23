@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, BackHandler, Alert, KeyboardAvoidingView } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import moment from "moment";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import SelectDropdown from "react-native-select-dropdown";
 import { useRoute } from "@react-navigation/native";
-import { Ionicons, AntDesign, Entypo } from "@expo/vector-icons";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
 import TitleInput from "../../../../../components/section/request/TitleInput";
@@ -285,8 +284,8 @@ export default function OSRequest ({ navigation }) {
                                         name="camera" size={26} color={COLORS.darkGray}
                                         onPress={() => navigation.navigate('CameraAccess', { onPanel: 3 })} />
 
-                                    <FontAwesome 
-                                        name="file" size={18} color={COLORS.darkGray} style={{ marginLeft: 15 }}
+                                    <FontAwesome5
+                                        name="file-upload" size={18} color={COLORS.darkGray} style={{ marginLeft: 15 }}
                                         // onPress={() => Utils.fileAttach(setSelectedFile)}
                                     />
                                 </View>
@@ -310,7 +309,7 @@ export default function OSRequest ({ navigation }) {
 
             <TouchableOpacity 
                 style={styles.button}
-                // onPress={onNextHandler}
+                onPress={onNextHandler}
             >
                 <Text style={styles.textButton}>NEXT</Text>
             </TouchableOpacity>

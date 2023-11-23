@@ -10,6 +10,7 @@ import CalendarNote from "../../../components/note/CalendarNote";
 import NavigationHeader from "../../../components/header/NavigationHeader";
 import CalendarEvent from "../../../components/section/calendar/CalendarEvent";
 import { ScrollView } from "react-native-gesture-handler";
+import Loader from "../../../components/loader/Loader";
 
 const valueEvents = {
   '20231001': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day', }, ],
@@ -159,9 +160,7 @@ export default function CalendarScreen() {
     <>
       <NavigationHeader headerName="Calendar" />
       
-      {isLoading ? (
-          <ActivityIndicator size="large" color={COLORS.powderBlue} style={styles.loader} />
-      ) : (
+      {isLoading ? ( <Loader /> ) : (
           <Animatable.View
               animation={'fadeIn'}
               duration={500}
@@ -218,12 +217,6 @@ export default function CalendarScreen() {
 }
 
 const styles = StyleSheet.create({
-  loader: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-  },
-
   container: {
     flex: 1,
     backgroundColor: COLORS.clearWhite,

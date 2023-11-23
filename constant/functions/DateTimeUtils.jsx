@@ -4,7 +4,7 @@ import moment from "moment";
 export const DateTimeUtils = {
     currDate: () => new Date(),
     momentCurrDate: () => moment(),
-    momentDashCurrDate: () => moment().format('MMM-DD-YYYY'),
+    getDashDate: (date) => moment(date, 'YYYYMMDD').format('MMM-DD-YYYY'),
     getCurrMonth: () => moment().format('MMMM'),
     getCurrYear: () => moment().format('YYYY'),
     defaultDateFormat: () => moment().format('YYYYMMDD'),

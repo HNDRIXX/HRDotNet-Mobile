@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl } from "react-native";
+import { View, Text, StyleSheet, ScrollView, RefreshControl } from "react-native";
 import * as Animatable from 'react-native-animatable';
-import { AntDesign } from "@expo/vector-icons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import moment from "moment/moment";
 import axios from "axios";
 
 import { COLORS, Utils, DateTimeUtils, RequestUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
 import RequestItem from "../../items/request/RequestItem"
+import Loader from "../../loader/Loader";
 // DESKTOP-2VPR9IB\SQLEXPRESS
 
 const data = [
@@ -88,14 +87,16 @@ export default function ChangeOfSchedulePanel () {
 
 
     if (localData) {
-        filteredData = data.filter((newItem) => {
-            const formattedStartDate = DateTimeUtils.dateFullConvert(newItem.startDate)
-            const formattedEndDate = DateTimeUtils.dateFullConvert(newItem.endDate)
+        filteredData = data.filter((item) => {
+            const formattedStartDate = DateTimeUtils.dateFullConvert(item.startDate)
+            const formattedEndDate = DateTimeUtils.dateFullConvert(item.endDate)
 
             return (
                 formattedStartDate.toLowerCase().includes(filterText.toLowerCase()) ||
                 formattedEndDate.toLowerCase().includes(filterText.toLowerCase()) ||
-                newItem.status.toLowerCase().includes(filterText.toLowerCase())
+                item.status.toLowerCase().includes(filterText.toLowerCase()) ||
+                item.requestedSched.toLowerCase().includes(filterText.toLowerCase()) ||
+                item.filedDate.toLowerCase().includes(filterText.toLowerCase())
             )
         })
     }
@@ -130,13 +131,11 @@ export default function ChangeOfSchedulePanel () {
 
     return (
         <>
-            {isLoading ? (
-                <ActivityIndicator size="large" color={COLORS.powderBlue} style={styles.loader} />
-            ) : (
+            {isLoading ? ( <Loader /> ) : (
                 <Animatable.View
                     animation={'fadeIn'}
                     duration={500}
-                    style={{ opacity: 1, flex: 1 }}
+                    style={{ opacity: 1, flex: 1, backgroundColor: COLORS.clearWhite }}
                 >
                     <SearchAndNew 
                         filterText={filterText}
@@ -191,12 +190,6 @@ export default function ChangeOfSchedulePanel () {
 }
 
 const styles = StyleSheet.create({
-    loader: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-
     bodyContainer: {
         flex: 1,
     },

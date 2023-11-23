@@ -18,7 +18,7 @@ export default function PendingPage ({ navigation }) {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.container}>
             <PageHeader pageName={'Pending'} />
 
             <View style={styles.btnHorizontal}>
@@ -60,6 +60,11 @@ export default function PendingPage ({ navigation }) {
 
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1, 
+        backgroundColor: COLORS.clearWhite
+    },
+
     btnHorizontal: {
         flexDirection: 'row',
         marginHorizontal: 10,

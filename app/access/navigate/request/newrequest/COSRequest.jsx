@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from "react-native";
-import { AntDesign, FontAwesome } from "@expo/vector-icons";
+import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
@@ -217,9 +217,8 @@ export default function COSRequest ({ navigation }) {
                                     setSizeError(false)
                                 }} />
 
-                            <FontAwesome 
-                                name="file" size={18} style={{ marginLeft: 15 }}
-                                color={COLORS.darkGray}
+                            <FontAwesome5
+                                name="file-upload" size={18} color={COLORS.darkGray} style={{ marginLeft: 15 }}
                                 // onPress={() => Utils.fileAttach(setSelectedFile)}
                             />
                         </View>

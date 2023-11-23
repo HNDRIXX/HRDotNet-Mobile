@@ -71,7 +71,8 @@ export default function NotificationPage () {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: COLORS.clearWhite
     },
 
     listView: {
@@ -83,6 +84,6 @@ const styles = StyleSheet.create({
         margin: 20,
         borderRadius: 20,
         backgroundColor: COLORS.clearWhite,
-        elevation: 6,
+        elevation: 3,
     },
 })

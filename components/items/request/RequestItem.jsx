@@ -12,7 +12,7 @@ export default function RequestItem ({onPanel, newItem, index}) {
 
     return (
         <View style={styles.itemContainer} key={index}>
-            <Shadow distance={5} style={styles.itemWrapper}>
+            <Shadow distance={5} offset={[4, 1]} style={styles.itemWrapper}>
                 <View style={styles.dateRowWrapper(newItem)}>
                     <Text style={styles.currDateText}>{
                         onPanel == 0 ? newItem.formattedAppliedDate :
@@ -64,8 +64,10 @@ export default function RequestItem ({onPanel, newItem, index}) {
                         </View>
 
                         <TouchableOpacity
+                            style={styles.moreButton}
                             onPress={() => navigation.navigate('MorePage', newItem)}>
-                            <Text style={styles.moreText}>More {'>'}</Text>
+                                <Text style={styles.moreText}>More</Text>
+                                <Entypo name="chevron-small-right" size={18} color="black" />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -84,6 +86,7 @@ const styles = StyleSheet.create({
 
     itemWrapper: {
         width: '100%',
+        backgroundColor: COLORS.clearWhite,
         borderRadius: 20,
     },
 
@@ -135,5 +138,15 @@ const styles = StyleSheet.create({
     valueText: {
         fontFamily: 'Inter_400Regular',
     },
+
+    moreText: {
+        fontSize: 13,
+        paddingBottom: 2,
+    },
+
+    moreButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    }
 
 })

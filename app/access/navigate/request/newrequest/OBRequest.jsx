@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, BackHandler, Alert, KeyboardAvoidingView } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import SelectDropdown from "react-native-select-dropdown";
 import { useRoute } from "@react-navigation/native";
-import { Ionicons, AntDesign, Entypo } from "@expo/vector-icons";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
 import TitleInput from "../../../../../components/section/request/TitleInput";
-import { COLORS, STRINGS, Utils, DateTimeUtils } from "../../../../../constant";
+import { COLORS, STRINGS, Utils, DateTimeUtils, RequestUtils } from "../../../../../constant";
 import { ScrollView } from "react-native";
 
 const data = [{ timeIn: "10:00 AM", timeOut: "7:00 PM"}, { timeIn: "8:00 AM", timeOut: "6:00 PM" }]
@@ -258,8 +258,8 @@ export default function OBRequest ({ navigation }) {
                                         name="camera" size={26} color={COLORS.darkGray}
                                         onPress={() => navigation.navigate('CameraAccess', { onPanel: 1 })} />
 
-                                    <FontAwesome 
-                                        name="file" size={18} color={COLORS.darkGray} style={{ marginLeft: 15 }}
+                                    <FontAwesome5
+                                        name="file-upload" size={18} color={COLORS.darkGray} style={{ marginLeft: 15 }}
                                         // onPress={() => Utils.fileAttach(setSelectedFile)}
                                     />
                                 </View>
@@ -291,7 +291,7 @@ export default function OBRequest ({ navigation }) {
                 isVisible={isDatePicker}
                 mode="date"
                 onConfirm={handleOBDate}
-                minimumDate={DateTimeUtils.currDate()}
+                // minimumDate={DateTimeUtils.currDate()}
                 onCancel={() => setDatePicker(false)} 
             />
 

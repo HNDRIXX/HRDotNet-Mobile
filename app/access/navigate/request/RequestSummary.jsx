@@ -54,7 +54,7 @@ export default function RequestSummary({ navigation }) {
             case 1:
                 LocalData.insertOB(route)
                 break;
-        
+
             default:
                 break;
         }
@@ -93,7 +93,7 @@ export default function RequestSummary({ navigation }) {
                     isSuccessAlertVisible={isSuccessAlertVisible} />
             ) : currPanel == 3 ? ( 
                 <OSSummary 
-                    route={route}
+                    route={route.params}
                     openCustomAlert={openCustomAlert}
                     closeCustomAlert={closeCustomAlert}
                     isSuccessAlertVisible={isSuccessAlertVisible}

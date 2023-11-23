@@ -10,7 +10,7 @@ export default function LoanDetails ({ navigation }) {
     const detailsData = loanItem.details
 
     return (
-        <View style={{ flex: 1 }}>
+        <>
             <PageHeader pageName={'Loan Details'} />
 
             <View style={styles.topContent(loanItem)}>
@@ -67,12 +67,12 @@ export default function LoanDetails ({ navigation }) {
 
                         <View style={styles.rowWrapper}>
                             <Text style={styles.titleText}>Loan Amount:</Text>
-                            <Text style={styles.valueText}>{loanItem.loanAmount}</Text>
+                            <Text style={styles.valueText}>{Utils.amountFormat(loanItem.loanAmount)}</Text>
                         </View>
 
                         <View style={styles.rowWrapper}>
                             <Text style={styles.titleText}>Disbursed Amount:</Text>
-                            <Text style={styles.valueText}>{loanItem.disbursedAmount}</Text>
+                            <Text style={styles.valueText}>{Utils.amountFormat(loanItem.disbursedAmount)}</Text>
                         </View>
 
                         <View style={styles.rowWrapper}>
@@ -92,7 +92,7 @@ export default function LoanDetails ({ navigation }) {
 
                         <View style={styles.rowWrapper}>
                             <Text style={styles.titleText}>Balance:</Text>
-                            <Text style={styles.valueText}>{loanItem.balance}</Text>
+                            <Text style={styles.valueText}>{Utils.amountFormat(loanItem.balance)}</Text>
                         </View>
                     </Shadow>
                 </View>
@@ -128,11 +128,16 @@ export default function LoanDetails ({ navigation }) {
                         }
                     }}
                 />
-        </View>
+        </>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1, 
+        backgroundColor: COLORS.clearWhite
+    },
+    
     backButton: {
         paddingHorizontal: 10,
     },

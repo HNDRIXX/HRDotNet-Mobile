@@ -5,6 +5,7 @@ import * as Animatable from 'react-native-animatable';
 import { COLORS, Utils, DateTimeUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
 import RequestItem from "../../items/request/RequestItem"
+import Loader from "../../loader/Loader";
 
 const data = [
     { 
@@ -93,12 +94,12 @@ export default function OverTimePanel () {
     return (
         <>
             {isLoading ? (
-                <ActivityIndicator size="large" color={COLORS.powderBlue} style={styles.loader} />
+                <Loader />
             ) : (
                 <Animatable.View
                     animation={'fadeIn'}
                     duration={500}
-                    style={{ opacity: 1, flex: 1 }}
+                    style={{ opacity: 1, flex: 1, backgroundColor: COLORS.clearWhite }}
                 >
                    <SearchAndNew 
                         onPanel={2}
@@ -146,12 +147,6 @@ export default function OverTimePanel () {
 }
 
 const styles = StyleSheet.create({
-    loader: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    
     bodyContainer: {
         flex: 1,
     },

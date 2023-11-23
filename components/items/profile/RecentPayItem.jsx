@@ -17,7 +17,7 @@ export default function RecentPayItem ({ item, TKData, index, onHandleMore }) {
 
                     <View style={{ marginLeft: 20 }}>
                         <Text style={styles.recentPayText}>Recent Pay</Text>
-                        <Text>{DateTimeUtils.dateFullConvert(item.cutOffDate)}</Text>
+                        <Text>{DateTimeUtils.dateFullConvert(item.payOutSchedule)}</Text>
                     </View>
                 </View>
 

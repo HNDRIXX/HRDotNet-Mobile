@@ -57,7 +57,7 @@ export default function VacationLeavePage ({ navigation }) {
                 renderItem={({item, index}) => {
                     return (
                         <View style={styles.itemWrapper}>
-                            <Shadow distance={4} style={styles.shadowView}>
+                            <Shadow distance={3} offset={[2,2]} style={styles.shadowView}>
                                 <View style={styles.itemHeader}>
                                     <Text style={styles.itemHeaderText}>{item.status}</Text>
                                     <Text style={styles.itemHeaderText}>{item.leaveCredit}</Text>
@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
 
     shadowView: {
         width: '100%',
+        backgroundColor: COLORS.clearWhite,
         borderRadius: 20,
     },
 

@@ -6,8 +6,6 @@ import { useRoute } from "@react-navigation/native";
 import { Shadow } from "react-native-shadow-2";
 import * as Animatable from 'react-native-animatable';
 import { FontAwesome, Entypo } from "@expo/vector-icons";
-import { useGlobalSearchParams } from "expo-router";
-import Falling from "../../../components/use/Falling";
 
 import { COLORS } from "../../../constant";
 import TimeClock from "../../../components/section/home/TimeClock";
