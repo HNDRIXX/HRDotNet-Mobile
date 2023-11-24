@@ -6,7 +6,7 @@ export default function TitleInput ({title, inputValue, isInputCheck})  {
     return (
         <View style={{ flexDirection: 'row' }}>
             <Text style={styles.title}>{title}</Text>
-            { isInputCheck && !inputValue && ErrorUtils.errorIndicator()}
+            { isInputCheck && !inputValue  && ErrorUtils.errorIndicator()}
         </View>
     )
 }

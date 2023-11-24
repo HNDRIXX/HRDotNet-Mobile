@@ -34,11 +34,12 @@ export default function COSRequest ({ navigation }) {
     const [isSizeError, setSizeError] = useState(false)
 
     const route = useRoute()
-    const imageURL = decodeURIComponent(route.params?.image)
+    const imageParams = route.params?.image
+    // const imageURL = decodeURIComponent(route.params?.image)
 
     useEffect(() => {
-        imageURL != "undefined" && setSelectedFile(imageURL)
-    }, [imageURL])
+        imageParams != "undefined" && setSelectedFile(imageParams)
+    }, [imageParams])
 
     const onStartDateChange = (date) => {
         setStartDate(DateTimeUtils.converDateFormat(date))
@@ -49,7 +50,7 @@ export default function COSRequest ({ navigation }) {
         setEndDate(DateTimeUtils.converDateFormat(date))
         setShowEndDatePicker(false)
     }
-    
+
     const handleCheck = (index) => {
         setCheckSelect(index)
 
@@ -69,13 +70,14 @@ export default function COSRequest ({ navigation }) {
                 restDay: restDay,
                 schedule: schedule,
                 reason: reason,
-                attachedFile: selectedFile,
+                attachedFile: JSON.stringify(selectedFile),
             })    
         }
     }
 
+
     return (
-        <>
+        <View style={styles.mainView}>
             <PageHeader pageName={"COS New Request"} />
 
             <ScrollView style={styles.container}>
@@ -219,7 +221,7 @@ export default function COSRequest ({ navigation }) {
 
                             <FontAwesome5
                                 name="file-upload" size={18} color={COLORS.darkGray} style={{ marginLeft: 15 }}
-                                // onPress={() => Utils.fileAttach(setSelectedFile)}
+                                onPress={() => Utils.fileAttach(setSelectedFile)}
                             />
                         </View>
                     </View>
@@ -259,15 +261,20 @@ export default function COSRequest ({ navigation }) {
                 minimumDate={DateTimeUtils.currDate()}
                 onCancel={() => setShowEndDatePicker(false)} 
             />
-        </>
+        </View>
   )
 }
 
 const styles = StyleSheet.create({
+    mainView: {
+        flex: 1,
+        backgroundColor: COLORS.clearWhite,
+    },
+
     container: {
         flex: 1,
-        marginVertical: 15,
-        marginHorizontal: 20
+        paddingVertical: 15,
+        paddingHorizontal: 20,
     },
 
     wrapper: {

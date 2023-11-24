@@ -9,7 +9,7 @@ import SuccessPromptPage from "../../../../components/prompt/SuccessPrompt";
 import { COLORS, STRINGS, DateTimeUtils } from "../../../../constant";
 import { Image } from "expo-image";
 
-export default function OBSummary({ route, openCustomAlert, closeCustomAlert, isSuccessAlertVisible }) {
+export default function OBSummary({ route, imageParams, openCustomAlert, closeCustomAlert, isSuccessAlertVisible }) {
     return (
         <>
             <View style={styles.container}>
@@ -57,7 +57,7 @@ export default function OBSummary({ route, openCustomAlert, closeCustomAlert, is
 
                         <View style={styles.attachmentView}>
                             <Image 
-                                source={{ uri: route?.attachedFile }}
+                                source={{ uri: decodeURIComponent(imageParams?.uri) }}
                                 style={{ width: 130, height: 150 }}
                                 contentFit="contain"
                             />

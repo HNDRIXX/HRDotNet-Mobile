@@ -34,11 +34,12 @@ export default function LVRequest ({ navigation }) {
     const [isInputCheck, setInputCheck] = useState(false)
 
     const route = useRoute()
-    const imageURL = decodeURIComponent(route.params?.image)
+    const imageParams = route.params?.image
+    // const imageURL = decodeURIComponent(route.params?.image)
 
     useEffect(() => {
-        imageURL != "undefined" && setSelectedFile(imageURL)
-    }, [imageURL])
+        imageParams != "undefined" && setSelectedFile(imageParams)
+    }, [imageParams])
 
     const handleStartDate = (date) => {
         setStartDate(DateTimeUtils.converDateFormat(date))
@@ -68,13 +69,13 @@ export default function LVRequest ({ navigation }) {
                 startDate: startDate,
                 endDate: endDate,
                 reason: reason,
-                attachedFile: selectedFile,
+                attachedFile: JSON.stringify(selectedFile),
             })   
         }
     }
 
     return (
-        <>
+        <View style={styles.mainView}>
             <PageHeader pageName={"LV New Request"} />
 
             <KeyboardAvoidingView
@@ -97,6 +98,7 @@ export default function LVRequest ({ navigation }) {
                                 buttonStyle={{
                                     width: '100%',
                                     height: 'auto',
+                                    backgroundColor: COLORS.clearWhite,
                                     padding: 12,
                                     borderRadius: 15,
                                     borderColor: COLORS.darkGray,
@@ -106,7 +108,7 @@ export default function LVRequest ({ navigation }) {
                                     fontSize: 14,
                                     textAlign: 'left'
                                 }}
-                                defaultButtonText="(Select Leave Type)"
+                                defaultButtonText="Select Leave Type"
                             />
 
                             <View style={styles.timeWrapper}>
@@ -119,7 +121,7 @@ export default function LVRequest ({ navigation }) {
                             <View>
                                 <TitleInput 
                                     title="Leave Option"
-                                    inputValue={leaveType} 
+                                    inputValue={leaveOption} 
                                     isInputCheck={isInputCheck}
                                 />  
 
@@ -271,11 +273,16 @@ export default function LVRequest ({ navigation }) {
                 onCancel={() => setEndDatePicker(false)} 
             />
 
-        </>
+        </View>
   )
 }
 
 const styles = StyleSheet.create({
+    mainView: {
+        flex: 1,
+        backgroundColor: COLORS.clearWhite,
+    },
+    
     container: {
         flex: 1,
         marginVertical: 15,

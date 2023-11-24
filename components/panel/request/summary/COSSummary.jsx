@@ -9,7 +9,7 @@ import SuccessPromptPage from "../../../../components/prompt/SuccessPrompt";
 import { COLORS, STRINGS, DateTimeUtils, RequestUtils } from "../../../../constant";
 import { Image } from "expo-image";
 
-export default function COSSummary({ route, openCustomAlert, closeCustomAlert, isSuccessAlertVisible }) {
+export default function COSSummary({ route, imageParams, openCustomAlert, closeCustomAlert, isSuccessAlertVisible }) {
     return (
         <>
             <View style={styles.container}>
@@ -49,7 +49,7 @@ export default function COSSummary({ route, openCustomAlert, closeCustomAlert, i
 
                         <View style={styles.attachmentView}>
                             <Image 
-                                source={{ uri: route?.attachedFile }}
+                                source={{ uri: decodeURIComponent(imageParams?.uri) }}
                                 style={{ width: 130, height: 150 }}
                                 contentFit="contain"
                             />

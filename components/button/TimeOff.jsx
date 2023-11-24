@@ -34,7 +34,7 @@ export default function TimeOff () {
             </TouchableOpacity>
 
             <TouchableOpacity 
-                style={[styles.button, ]}
+                style={[styles.button]}
                 onPress={() => navigation.navigate('SickLeave')}
             >
                 <View style={[styles.alignWrapper, { height: imageSize }]}>
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         justifyContent: 'center',
 
-        elevation: 5,
+        elevation: 3,
         shadowColor: COLORS.black,
         shadowOpacity: 0.1,
         shadowRadius: 2,

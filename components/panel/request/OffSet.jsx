@@ -8,14 +8,15 @@ import { COLORS, Utils, DateTimeUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
 import RequestItem from "../../items/request/RequestItem"
 import Loader from "../../loader/Loader";
+import NothingFoundNote from "../../note/NothingFoundNote";
 
 const data = [
     { 
         status: 'Cancelled',  
         overtimeDate: '20231014',
         overtimeHours: '7:00 AM - 4:00 PM',
-        reason: '------',
-        attachedFile: '-----',
+        reason: '',
+        attachedFile: '',
         documentNo: 'OFF22307248376',
         filedDate: '20230916',
         statusBy: 'Kenneth Parungao',
@@ -40,11 +41,11 @@ export default function OffSetPanel () {
 
     if (localData) {
         filteredData = data.filter((newItem) => {
-            const formattedDate = DateTimeUtils.dateFullConvert(newItem.overTimeDate)
+            const formattedDate = DateTimeUtils.dateFullConvert(newItem.overtimeDate)
             
             return (
                 newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
-                formattedDate.toLowerCase().includes(filterText.toLowerCase())
+                formattedDate.toLowerCase().includes(filterText.toLowerCase()) 
             )
         })
     }
@@ -121,11 +122,7 @@ export default function OffSetPanel () {
                                 .map((item, index) => requestItemDisplay({ item, index }))
                             }
                         </ScrollView>
-                    ) : ( 
-                        <View style={styles.noSearchWrapper}>
-                            <Text>No Search Found.</Text>
-                        </View>
-                    )}
+                    ) : ( <NothingFoundNote /> )}
                 </Animatable.View>
             )}
         </>
@@ -137,18 +134,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
-    titleText: {
-        fontSize: 25,
-        fontFamily: 'Inter_600SemiBold',
-        margin: 10,
-    },
-
-    moreText: {
-        fontSize: 12,
-        color: COLORS.tr_gray,
-        paddingTop: 10,
-    },
-
     itemStatusText: {
         fontFamily: 'Inter_500Medium',
         color: COLORS.darkGray,
@@ -156,38 +141,4 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginHorizontal: 15
     },
-
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-      
-    modalContent: {
-        width: 300,
-        padding: 20,
-        backgroundColor: 'white',
-        borderRadius: 10,
-        alignItems: 'center',
-    },
-
-    closeBtn: {
-        padding: 10,
-        width: 100,
-        alignSelf: 'flex-end',
-        alignItems: 'center',
-        borderRadius: 20,
-        marginTop: 10,
-    },
-
-    closeText: {
-        color: COLORS.white,
-        fontFamily: 'Inter_500Medium',
-    },
-
-    noSearchWrapper: {
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
 })

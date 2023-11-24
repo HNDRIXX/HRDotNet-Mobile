@@ -9,7 +9,7 @@ import SuccessPromptPage from "../../../../components/prompt/SuccessPrompt";
 import { COLORS, STRINGS, DateTimeUtils } from "../../../../constant";
 import { Image } from "expo-image";
 
-export default function OTSummary({ route, openCustomAlert, closeCustomAlert, isSuccessAlertVisible }) {
+export default function OTSummary({ route, imageParams, openCustomAlert, closeCustomAlert, isSuccessAlertVisible }) {
 
     return (
         <>
@@ -68,7 +68,7 @@ export default function OTSummary({ route, openCustomAlert, closeCustomAlert, is
                             </Text> */}
 
                             <Image 
-                                source={{ uri: route?.attachedFile }}
+                                source={{ uri: decodeURIComponent(imageParams?.uri) }}
                                 style={{ width: 130, height: 150 }}
                                 contentFit="contain"
                             />

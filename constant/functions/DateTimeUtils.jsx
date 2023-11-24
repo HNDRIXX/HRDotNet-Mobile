@@ -3,6 +3,8 @@ import moment from "moment";
 
 export const DateTimeUtils = {
     currDate: () => new Date(),
+    momentCurrTime: () => moment().format('HH:mm'),
+    momentCurrDateFormat: () => moment().format('MMMM DD, YYYY'),
     momentCurrDate: () => moment(),
     getDashDate: (date) => moment(date, 'YYYYMMDD').format('MMM-DD-YYYY'),
     getCurrMonth: () => moment().format('MMMM'),

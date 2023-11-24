@@ -44,7 +44,7 @@ export default function OTRequest ({ navigation }) {
     const [OvertimeFrom, setOvertimeFrom] = useState(null)
     const [OvertimeTo, setOvertimeTo] = useState(null)
     const [reason, setReason] = useState(null)
-    const [selectedFile, setSelectedFile] = useState(null)
+    const [selectedFile, setSelectedFile] = useState({})
 
     const [isVisible, setVisible] = useState(true)
     const [OvertimeFromPicker, setOvertimeFromPicker] = useState(false)
@@ -62,18 +62,19 @@ export default function OTRequest ({ navigation }) {
     const [isFirstHalf, setFirstHalf] = useState(null)
     const [isSecondHalf, setSecondHalf] = useState(null)
 
-    const route = useRoute()
-    const imageURL = decodeURIComponent(route.params?.image)
-
     const currentDate = moment()
     const firstDayOfMonth = moment().startOf('month')
     const fifteenthDayOfMonth = moment().date(15)
     const lastDayOfMonth = moment().endOf('month')
     const sixteenthDayOfMonth = moment().date(15)
 
+    const route = useRoute()
+    const imageParams = route.params?.image
+    // const imageURL = decodeURIComponent(route.params?.image)
+
     useEffect(() => {
-        imageURL != "undefined" && setSelectedFile(imageURL)
-    }, [imageURL])
+        imageParams != "undefined" && setSelectedFile(imageParams)
+    }, [imageParams])
 
     useEffect(() => {
         if (moment(currentDate, 'YYYYMMDD').isBetween(firstDayOfMonth, fifteenthDayOfMonth, null, '[]')) {
@@ -125,7 +126,7 @@ export default function OTRequest ({ navigation }) {
                 OvertimeFrom: OvertimeFrom,
                 OvertimeTo: OvertimeTo,
                 reason: reason,
-                attachedFile: selectedFile,
+                attachedFile: JSON.stringify(selectedFile),
             })    
         }
     }
@@ -158,7 +159,7 @@ export default function OTRequest ({ navigation }) {
     }
 
     return (
-        <>
+        <View style={styles.mainView}>
             <PageHeader pageName={"OT New Request"} backStatus="react" />
 
             { isPromptLoad ? (
@@ -338,11 +339,16 @@ export default function OTRequest ({ navigation }) {
                 onConfirm={handleOvertimeTo}
                 onCancel={() => setOvertimeFrom(false)} 
             />
-        </>
+        </View>
   )
 }
 
 const styles = StyleSheet.create({
+    mainView: {
+        flex: 1,
+        backgroundColor: COLORS.clearWhite,
+    },
+    
     container: {
         flex: 1,
         marginVertical: 15,

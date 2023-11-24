@@ -37,6 +37,7 @@ import OSRequest from './access/navigate/request/newrequest/OSRequest';
 import LVRequest from './access/navigate/request/newrequest/LVRequest';
 import MLRequest from './access/navigate/request/newrequest/MLRequest';
 import MorePayslip from './access/navigate/profile/MorePayslip';
+import AttachedFile from './access/navigate/request/AttachedFile';
 
 export default function Index() {
     const [fontsLoaded] = useFonts()
@@ -168,6 +169,7 @@ export default function Index() {
                         }}
                     />
 
+                    <Stack.Screen name="AttachedFile" component={AttachedFile} />
                     <Stack.Screen 
                         name="MorePage" 
                         component={MorePage}

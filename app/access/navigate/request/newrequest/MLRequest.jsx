@@ -31,11 +31,12 @@ export default function LVRequest ({ navigation }) {
     const [isInputCheck, setInputCheck] = useState(false)
 
     const route = useRoute()
-    const imageURL = decodeURIComponent(route.params?.image)
+    const imageParams = route.params?.image
+    // const imageURL = decodeURIComponent(route.params?.image)
 
     useEffect(() => {
-        imageURL != "undefined" && setSelectedFile(imageURL)
-    }, [imageURL])
+        imageParams != "undefined" && setSelectedFile(imageParams)
+    }, [imageParams])
 
     const handleMissedLogData = (date) => {
         setMissedLogDate(DateTimeUtils.converDateFormat(date))
@@ -64,13 +65,13 @@ export default function LVRequest ({ navigation }) {
                 logType: logType,
                 logTime: logTime,
                 reason: reason,
-                attachedFile: selectedFile,
+                attachedFile: JSON.stringify(selectedFile),
             })   
         }
     }
 
     return (
-        <>
+        <View style={styles.mainView}>
             <PageHeader pageName={"ML New Request"} />
 
             <KeyboardAvoidingView
@@ -225,11 +226,16 @@ export default function LVRequest ({ navigation }) {
                 onConfirm={handleLogTime}
                 onCancel={() => setTimePicker(false)} 
             />
-        </>
+        </View>
   )
 }
 
 const styles = StyleSheet.create({
+    mainView: {
+        flex: 1,
+        backgroundColor: COLORS.clearWhite,
+    },
+    
     container: {
         flex: 1,
         marginVertical: 15,

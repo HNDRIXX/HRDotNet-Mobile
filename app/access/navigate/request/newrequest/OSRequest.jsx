@@ -40,11 +40,12 @@ export default function OSRequest ({ navigation }) {
     const [shiftSched, setShiftSched] = useState(null)
 
     const route = useRoute()
-    const imageURL = decodeURIComponent(route.params?.image)
+    const imageParams = route.params?.image
+    // const imageURL = decodeURIComponent(route.params?.image)
 
     useEffect(() => {
-        imageURL != "undefined" && setSelectedFile(imageURL)
-    }, [imageURL])
+        imageParams != "undefined" && setSelectedFile(imageParams)
+    }, [imageParams])
 
     const handleOFFDate = (date) => {
         setOffsetDate(DateTimeUtils.defaultDateFormat(date))
@@ -85,13 +86,13 @@ export default function OSRequest ({ navigation }) {
                 OSStart: OSStart,
                 OSEnd: OSEnd,
                 reason: reason,
-                attachedFile: selectedFile,
+                attachedFile: JSON.stringify(selectedFile),
             })   
         }
     }
 
     return (
-        <>
+        <View style={styles.mainView}>
             <PageHeader pageName={"OS New Request"} />
 
             <KeyboardAvoidingView
@@ -136,6 +137,7 @@ export default function OSRequest ({ navigation }) {
                                 buttonStyle={{
                                     width: '100%',
                                     height: 'auto',
+                                    backgroundColor: COLORS.clearWhite,
                                     padding: 12,
                                     borderRadius: 15,
                                     borderColor: COLORS.darkGray,
@@ -318,7 +320,6 @@ export default function OSRequest ({ navigation }) {
                 isVisible={isDatePicker}
                 mode="date"
                 onConfirm={handleOFFDate}
-                minimumDate={DateTimeUtils.currDate()}
                 onCancel={() => setDatePicker(false)} 
             />
 
@@ -349,11 +350,16 @@ export default function OSRequest ({ navigation }) {
                 onConfirm={handleOffsetEnd}
                 onCancel={() => setOSEndPicker(false)} 
             />
-        </>
+        </View>
   )
 }
 
 const styles = StyleSheet.create({
+    mainView: {
+        flex: 1,
+        backgroundColor: COLORS.clearWhite,
+    },
+
     container: {
         flex: 1,
         marginVertical: 15,

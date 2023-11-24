@@ -12,13 +12,12 @@ export default function NotificationsItem ({ item, index, formattedDate, onPress
             return (
                 <CachedImage
                     source={{  uri: ICONS.calendarBadge }}
-                    cacheKey={`reqIcon`}
+                    cacheKey={`calendarBadge`}
                     placeholderContent={( 
                         <ActivityIndicator size={'small'} />
                     )} 
                     style={{ height: 30, width: 30 }} 
                 />
-
             )
         } else if (name === "Advisory") {
             return (
@@ -32,7 +31,7 @@ export default function NotificationsItem ({ item, index, formattedDate, onPress
                 />
             )
         } else {
-          return ICONS.info;
+          return ICONS.info
         }
     }
 

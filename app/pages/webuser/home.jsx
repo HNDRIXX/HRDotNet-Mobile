@@ -11,6 +11,7 @@ import { COLORS } from "../../../constant";
 import TimeClock from "../../../components/section/home/TimeClock";
 import MenuButton from "../../../components/button/webuser/MenuButton";
 import TimeOff from "../../../components/button/TimeOff";
+import Loader from "../../../components/loader/Loader"
 
 export default function Home ({ navigation }) {  
     const [isLoading, setIsLoading] = useState(true)
@@ -26,9 +27,7 @@ export default function Home ({ navigation }) {
 
     return (
         <>
-            {isLoading ? (
-                <ActivityIndicator size="large" color={COLORS.powderBlue} style={styles.loader} />
-            ) : ( 
+            {isLoading ? ( <Loader /> ) : ( 
                 <Animatable.View
                     animation={'fadeIn'}
                     duration={500}
@@ -155,9 +154,9 @@ const styles = StyleSheet.create({
         color: COLORS.clearWhite,
         fontSize: 21,
 
-        textShadowColor: COLORS.tr_gray,
+        textShadowColor: COLORS.darkGray,
         textShadowOffset: {width: 1.5, height: 2},
-        textShadowRadius: 17
+        textShadowRadius: 10
     },
 
     nameText: {
@@ -167,9 +166,9 @@ const styles = StyleSheet.create({
         fontSize: 22,
         lineHeight: 26,
 
-        textShadowColor: COLORS.tr_gray,
+        textShadowColor: COLORS.darkGray,
         textShadowOffset: {width: 1.5, height: 2},
-        textShadowRadius: 17
+        textShadowRadius: 10
     },
 
     statusView: {

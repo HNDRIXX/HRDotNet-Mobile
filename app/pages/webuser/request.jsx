@@ -133,6 +133,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.clearWhite,
     borderColor: COLORS.orange,
     borderBottomWidth: 3,
-    paddingHorizontal: 18
+    paddingLeft: 10
   }
 })

@@ -37,11 +37,12 @@ export default function OBRequest ({ navigation }) {
     const [shiftSched, setShiftSched] = useState(null)
 
     const route = useRoute()
-    const imageURL = decodeURIComponent(route.params?.image)
+    const imageParams = route.params?.image
+    // const imageURL = decodeURIComponent(route.params?.image)
 
     useEffect(() => {
-        imageURL != "undefined" && setSelectedFile(imageURL)
-    }, [imageURL])
+        imageParams != "undefined" && setSelectedFile(imageParams)
+    }, [imageParams])
 
     const newData = data.map(item => `${item.timeIn} to ${item.timeOut}`)
 
@@ -73,13 +74,13 @@ export default function OBRequest ({ navigation }) {
                 timeIn: timeIn,
                 timeOut: timeOut,
                 reason: reason,
-                attachedFile: selectedFile,
+                attachedFile: JSON.stringify(selectedFile),
             })   
         }
     }
 
     return (
-        <>
+        <View style={styles.mainView}>
             <PageHeader pageName={"OB New Request"} />
 
             <KeyboardAvoidingView
@@ -144,6 +145,7 @@ export default function OBRequest ({ navigation }) {
                                 buttonStyle={{
                                     width: '100%',
                                     height: 'auto',
+                                    backgroundColor: COLORS.clearWhite,
                                     padding: 12,
                                     borderRadius: 15,
                                     borderColor: COLORS.darkGray,
@@ -308,11 +310,16 @@ export default function OBRequest ({ navigation }) {
                 onConfirm={handleTimeOut}
                 onCancel={() => setTimeOutPicker(false)} 
             />
-        </>
+        </View>
   )
 }
 
 const styles = StyleSheet.create({
+    mainView: {
+        flex: 1,
+        backgroundColor: COLORS.clearWhite,
+    },
+    
     container: {
         flex: 1,
         marginVertical: 15,
@@ -367,15 +374,16 @@ const styles = StyleSheet.create({
     },
 
     timeWrapper:{
-        marginVertical: 15,
+        marginVertical: 10,
         marginHorizontal: 20,
     },
 
     timeContent: {
         fontFamily: 'Inter_500Medium',
-        backgroundColor: COLORS.gray,
+        backgroundColor: COLORS.shadowGray,
         width: 100,
         textAlign: 'center',
+        paddingTop: 2,
 
         borderRadius: 5,
         borderWidth: 2,
@@ -385,7 +393,7 @@ const styles = StyleSheet.create({
     timeView: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        margin: 5
+        margin: 2
     },
 
     button: {

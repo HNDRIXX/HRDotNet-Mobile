@@ -6,9 +6,9 @@ import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import { useRoute } from '@react-navigation/native';
 
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons,  } from '@expo/vector-icons';
 
-import { COLORS } from '../../../constant';
+import { COLORS, DateTimeUtils } from '../../../constant';
 import PageHeader from '../../../components/header/PagesHeader';
 
 export default function CameraAccess ({ navigation }) {
@@ -39,8 +39,8 @@ export default function CameraAccess ({ navigation }) {
             await FileSystem.copyAsync({
                 from: photo.uri,
                 to: newUri,
-            });
-            
+            })
+
             const base64Image = await convertImageToBase64(newUri)
             
             setUserImage(photo.uri)
@@ -76,30 +76,65 @@ export default function CameraAccess ({ navigation }) {
     }
 
     const onRequestHandle = () => {
-
         switch ( route.params?.onPanel ) {
             case 0:
-                navigation.navigate('COSRequest', { image: encodeURIComponent(imgPath) })
+                navigation.navigate('COSRequest', {
+                    image: {
+                        uri: encodeURIComponent(imgPath),
+                        time: DateTimeUtils.momentCurrTime(),
+                        date: DateTimeUtils.momentCurrDateFormat()
+                    }
+                })
                 break
             
             case 1:
-                navigation.navigate('OBRequest', { image: encodeURIComponent(imgPath) })
+                navigation.navigate('OBRequest', { 
+                    image: {
+                        uri: encodeURIComponent(imgPath),
+                        time: DateTimeUtils.momentCurrTime(),
+                        date: DateTimeUtils.momentCurrDateFormat()
+                    }
+                })
                 break
             
             case 2: 
-                navigation.navigate('OTRequest', { image: encodeURIComponent(imgPath) }) 
+                navigation.navigate('OTRequest', { 
+                    image: {
+                        uri: encodeURIComponent(imgPath),
+                        time: DateTimeUtils.momentCurrTime(),
+                        date: DateTimeUtils.momentCurrDateFormat()
+                    }
+                }) 
                 break
             
             case 3:
-                navigation.navigate('OSRequest', { image: encodeURIComponent(imgPath) })
+                navigation.navigate('OSRequest', { 
+                    image: {
+                        uri: encodeURIComponent(imgPath),
+                        time: DateTimeUtils.momentCurrTime(),
+                        date: DateTimeUtils.momentCurrDateFormat()
+                    }
+                })
                 break
 
             case 4:
-                navigation.navigate('LVRequest', { image: encodeURIComponent(imgPath) })
+                navigation.navigate('LVRequest', { 
+                    image: {
+                        uri: encodeURIComponent(imgPath),
+                        time: DateTimeUtils.momentCurrTime(),
+                        date: DateTimeUtils.momentCurrDateFormat()
+                    }
+                })
                 break
             
             case 5:
-                navigation.navigate('MLRequest', { image: encodeURIComponent(imgPath) })
+                navigation.navigate('MLRequest', { 
+                    image: {
+                        uri: encodeURIComponent(imgPath),
+                        time: DateTimeUtils.momentCurrTime(),
+                        date: DateTimeUtils.momentCurrDateFormat()
+                    }
+                })
                 break
 
             default:

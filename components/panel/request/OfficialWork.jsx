@@ -7,6 +7,7 @@ import { COLORS, Utils, DateTimeUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
 import RequestItem from "../../items/request/RequestItem"
 import Loader from "../../loader/Loader";
+import NothingFoundNote from "../../note/NothingFoundNote";
 
 const data = [
     { 
@@ -15,7 +16,7 @@ const data = [
         officialWorkTime: '7:00 AM - 4:00 PM',
         location: 'Sofitel Philippine Plaza, Manila',
         reason: 'Client Meeting',
-        attachedFile: '-----',
+        attachedFile: {date: '20231014', time: '14:12', uri: 'file%3A%2F%2F%2Fdata%2Fuser%2F0%2Fhost.exp.exponent%2Fcache%2FExperienceData%2F%252540hndrx022%25252FHRDotNet-Mobile%2FCamera%2Fdebd91c0-7010-41d7-b45c-4d9458736563.jpg'},
         documentNo: 'OBS22307248376',
         filedDate: '20230916',
         statusBy: 'Kenneth Parungao',
@@ -29,7 +30,7 @@ const data = [
         officialWorkTime: '7:00 AM - 4:00 PM',
         location: '2138 Roxas Blvd., Manila',   
         reason: 'Client Meeting',
-        attachedFile: '-----',
+        attachedFile: '',
         documentNo: 'OBS22307240207',
         filedDate: '20230916',
         statusBy: 'Kenneth Parungao',
@@ -52,7 +53,7 @@ export default function OfficialWorkPanel () {
     
     let filteredData = []
 
-    if (!localData) {
+    if (localData) {
         filteredData = data.filter((item) => {
             const formattedDate = DateTimeUtils.dateFullConvert(item.officialWorkDate)
             
@@ -145,11 +146,7 @@ export default function OfficialWorkPanel () {
                                 .map((item, index) => requestItemDisplay({ item, index }))
                             }
                         </ScrollView>
-                    ) : ( 
-                        <View style={styles.noSearchWrapper}>
-                            <Text>No Search Found.</Text>
-                        </View>
-                    )}
+                    ) : ( <NothingFoundNote /> )}
                 </Animatable.View>
             )}
         </>
@@ -161,18 +158,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
-    titleText: {
-        fontSize: 25,
-        fontFamily: 'Inter_600SemiBold',
-        margin: 10,
-    },
-
-    moreText: {
-        fontSize: 12,
-        color: COLORS.tr_gray,
-        paddingTop: 10,
-    },
-
     itemStatusText: {
         fontFamily: 'Inter_500Medium',
         color: COLORS.darkGray,
@@ -180,38 +165,4 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginHorizontal: 15
     },
-
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-      
-    modalContent: {
-        width: 300,
-        padding: 20,
-        backgroundColor: 'white',
-        borderRadius: 10,
-        alignItems: 'center',
-    },
-
-    closeBtn: {
-        padding: 10,
-        width: 100,
-        alignSelf: 'flex-end',
-        alignItems: 'center',
-        borderRadius: 20,
-        marginTop: 10,
-    },
-
-    closeText: {
-        color: COLORS.white,
-        fontFamily: 'Inter_500Medium',
-    },
-
-    noSearchWrapper: {
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
 })

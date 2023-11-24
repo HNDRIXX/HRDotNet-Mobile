@@ -15,6 +15,7 @@ import MLSummary from "../../../../components/panel/request/summary/MLSummary";
 export default function RequestSummary({ navigation }) {
     const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false)
     const route = useRoute()
+    const imageParams = JSON.parse(route.params.attachedFile)
 
     // { 
     //     status: 'Cancelled',  
@@ -76,24 +77,28 @@ export default function RequestSummary({ navigation }) {
             {currPanel == 0 ? (
                 <COSSummary 
                     route={route.params}
+                    imageParams={imageParams}
                     openCustomAlert={openCustomAlert}
                     closeCustomAlert={closeCustomAlert}
                     isSuccessAlertVisible={isSuccessAlertVisible} />
             ) : currPanel == 1 ? (
                 <OBSummary 
                     route={route.params}
+                    imageParams={imageParams}
                     openCustomAlert={openCustomAlert}
                     closeCustomAlert={closeCustomAlert}
                     isSuccessAlertVisible={isSuccessAlertVisible} />
             ) : currPanel == 2 ? (
                 <OTSummary 
                     route={route.params}
+                    imageParams={imageParams}
                     openCustomAlert={openCustomAlert}
                     closeCustomAlert={closeCustomAlert}
                     isSuccessAlertVisible={isSuccessAlertVisible} />
             ) : currPanel == 3 ? ( 
                 <OSSummary 
                     route={route.params}
+                    imageParams={imageParams}
                     openCustomAlert={openCustomAlert}
                     closeCustomAlert={closeCustomAlert}
                     isSuccessAlertVisible={isSuccessAlertVisible}
@@ -101,6 +106,7 @@ export default function RequestSummary({ navigation }) {
             ) : currPanel == 4 ? ( 
                 <LVSummary 
                     route={route.params}
+                    imageParams={imageParams}
                     openCustomAlert={openCustomAlert}
                     closeCustomAlert={closeCustomAlert}
                     isSuccessAlertVisible={isSuccessAlertVisible}
@@ -108,12 +114,14 @@ export default function RequestSummary({ navigation }) {
             ) : currPanel == 5 ? ( 
                 <MLSummary 
                     route={route.params}
+                    imageParams={imageParams}
                     openCustomAlert={openCustomAlert}
                     closeCustomAlert={closeCustomAlert}
                     isSuccessAlertVisible={isSuccessAlertVisible}
                 />
             ): null }
             
+
         </>
     )
 }

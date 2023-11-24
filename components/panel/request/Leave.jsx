@@ -6,6 +6,7 @@ import { COLORS, Utils, DateTimeUtils, RequestUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
 import RequestItem from "../../items/request/RequestItem"
 import Loader from "../../loader/Loader";
+import NothingFoundNote from "../../note/NothingFoundNote";
 
 const data = [
     { 
@@ -13,7 +14,7 @@ const data = [
         filedDate: '20231014',
         leaveType: 'Vacation Leave',
         reason: 'Family Vacation',
-        attachedFile: '-----',
+        attachedFile: '',
         documentNo: 'LV22307248376',
         startDate: '20230925',
         endDate: '20230925',
@@ -27,7 +28,7 @@ const data = [
         filedDate: '20231014',
         leaveType: 'Sick Leave',
         reason: 'Flu',
-        attachedFile: '-----',
+        attachedFile: '',
         documentNo: 'LV22307248376',
         startDate: '20230925',
         endDate: '20230927',
@@ -132,11 +133,7 @@ export default function LeavePanel () {
                                 .map((item, index) => requestItemDisplay({ item, index }))
                             }
                         </ScrollView>
-                    ) : ( 
-                        <View style={styles.noSearchWrapper}>
-                            <Text>No Search Found.</Text>
-                        </View>
-                    )}
+                    ) : ( <NothingFoundNote /> )}
                 </Animatable.View>
             )}
         </>
@@ -148,18 +145,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
-    titleText: {
-        fontSize: 25,
-        fontFamily: 'Inter_600SemiBold',
-        margin: 10,
-    },
-
-    moreText: {
-        fontSize: 12,
-        color: COLORS.tr_gray,
-        paddingTop: 10,
-    },
-
     itemStatusText: {
         fontFamily: 'Inter_500Medium',
         color: COLORS.darkGray,
@@ -167,38 +152,4 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginHorizontal: 15
     },
-
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-      
-    modalContent: {
-        width: 300,
-        padding: 20,
-        backgroundColor: 'white',
-        borderRadius: 10,
-        alignItems: 'center',
-    },
-
-    closeBtn: {
-        padding: 10,
-        width: 100,
-        alignSelf: 'flex-end',
-        alignItems: 'center',
-        borderRadius: 20,
-        marginTop: 10,
-    },
-
-    closeText: {
-        color: COLORS.white,
-        fontFamily: 'Inter_500Medium',
-    },
-
-    noSearchWrapper: {
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
 })

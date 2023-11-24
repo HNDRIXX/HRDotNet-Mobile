@@ -10,7 +10,7 @@ export default function LoanDetails ({ navigation }) {
     const detailsData = loanItem.details
 
     return (
-        <>
+        <View style={{ flex: 1, backgroundColor: COLORS.clearWhite }}>
             <PageHeader pageName={'Loan Details'} />
 
             <View style={styles.topContent(loanItem)}>
@@ -128,7 +128,7 @@ export default function LoanDetails ({ navigation }) {
                         }
                     }}
                 />
-        </>
+        </View>
     )
 }
 

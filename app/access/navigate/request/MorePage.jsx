@@ -7,7 +7,7 @@ import { useRoute } from '@react-navigation/native';
 import { COLORS, Utils } from '../../../../constant';
 import PageHeader from '../../../../components/header/PagesHeader';
 
-export default function MorePage () {
+export default function MorePage ({ navigation }) {
     const params = useRoute().params
     let topDate
 
@@ -36,7 +36,7 @@ export default function MorePage () {
 
     return (
         <View style={{ flex: 1 }}>
-            <PageHeader pageName={"Request Details"}/>
+            <PageHeader pageName={"Request Details"} />
 
             <View>
                 <View style={styles.topContent(params)}>
@@ -165,7 +165,15 @@ export default function MorePage () {
 
                         <View style={styles.rowWrapper}>
                             <Text style={styles.titleText}>Attached File:</Text>
-                            <Text style={styles.valueText}>-----</Text>
+                            <Text style={styles.valueText}>
+                                { params.attachedFile == "" ? "-----" : (
+                                    <TouchableOpacity
+                                        onPress={() => navigation.navigate('AttachedFile', params)}
+                                    >
+                                        <Text style={styles.attachText}>View Attachment</Text>
+                                    </TouchableOpacity>
+                                )}
+                            </Text>
                         </View>
 
                         <View style={[styles.rowWrapper, { marginTop: 20 }]}>
@@ -240,5 +248,10 @@ const styles = StyleSheet.create({
 
     statusWrapper: {
         width: '80%',
+    },
+
+    attachText: {
+        color: COLORS.powderBlue,
+        fontFamily: 'Inter_600SemiBold',
     }
 })

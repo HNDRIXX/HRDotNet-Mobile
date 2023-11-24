@@ -8,6 +8,7 @@ import { COLORS, Utils, DateTimeUtils, RequestUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
 import RequestItem from "../../items/request/RequestItem"
 import Loader from "../../loader/Loader";
+import NothingFoundNote from "../../note/NothingFoundNote";
 // DESKTOP-2VPR9IB\SQLEXPRESS
 
 const data = [
@@ -17,7 +18,7 @@ const data = [
         endDate: '20231103',
         requestedSched: '7:00 AM - 4:00 PM',
         reason: '',
-        attachedFile: '-----',
+        attachedFile: {"date": "20231124", "time": "13:38 PM", "uri": "file%3A%2F%2F%2Fdata%2Fuser%2F0%2Fhost.exp.exponent%2Fcache%2FExperienceData%2F%252540hndrx022%25252FHRDotNet-Mobile%2FCamera%2F596b713f-d6b4-4636-abaa-821eb3850257.jpg"},
         documentNo: 'COS0001',
         filedDate: '20231102',
         statusBy: 'Mark Sasama',
@@ -31,7 +32,7 @@ const data = [
         endDate: '20231018',
         requestedSched: '7:00 AM - 4:00 PM',
         reason: '',
-        attachedFile: '-----',
+        attachedFile: '',
         documentNo: 'COS0002',
         filedDate: '20231115',
         statusBy: 'Mark Sasama',
@@ -84,7 +85,6 @@ export default function ChangeOfSchedulePanel () {
         // fetchData()
         Utils.getHalf(setFirstHalf, setSecondHalf)
     }, [])
-
 
     if (localData) {
         filteredData = data.filter((item) => {
@@ -147,9 +147,9 @@ export default function ChangeOfSchedulePanel () {
                         <ScrollView
                             ref={scrollViewRef}
                             refreshControl={
-                            <RefreshControl
-                                refreshing={refreshing}
-                                onRefresh={refresh} />
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={refresh} />
                             }
                         >
                             { newCount > 0 && (<Text style={styles.itemStatusText}>New</Text>) }
@@ -178,11 +178,7 @@ export default function ChangeOfSchedulePanel () {
                                 .map((item, index) => requestItemDisplay({ item, index }))
                             }
                         </ScrollView>
-                    ) : ( 
-                        <View style={styles.noSearchWrapper}>
-                            <Text>Nothing Found.</Text>
-                        </View>
-                    )}
+                    ) : ( <NothingFoundNote /> )}
                 </Animatable.View>
             )}
         </>
@@ -193,20 +189,7 @@ const styles = StyleSheet.create({
     bodyContainer: {
         flex: 1,
     },
-
-    titleText: {
-        fontSize: 25,
-        fontFamily: 'Inter_600SemiBold',
-        margin: 10,
-    },
-
-  
-    moreText: {
-        fontSize: 12,
-        color: COLORS.tr_gray,
-        paddingTop: 10,
-    },
-
+    
     itemStatusText: {
         fontFamily: 'Inter_500Medium',
         color: COLORS.darkGray,
@@ -214,38 +197,4 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginHorizontal: 15
     },
-
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-      
-    modalContent: {
-        width: 300,
-        padding: 20,
-        backgroundColor: 'white',
-        borderRadius: 10,
-        alignItems: 'center',
-    },
-
-    closeBtn: {
-        padding: 10,
-        width: 100,
-        alignSelf: 'flex-end',
-        alignItems: 'center',
-        borderRadius: 20,
-        marginTop: 10,
-    },
-
-    closeText: {
-        color: COLORS.white,
-        fontFamily: 'Inter_500Medium',
-    },
-
-    noSearchWrapper: {
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
 })
