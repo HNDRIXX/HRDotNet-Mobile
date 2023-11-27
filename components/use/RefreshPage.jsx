@@ -7,6 +7,9 @@ export default function RefreshPage ({ setRestart, refreshing, onRefresh }) {
     return (
       <ScrollView
         style={{ flex: 1 }}
+        contentContainerStyle={{
+          flexGrow: 1,
+        }}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}

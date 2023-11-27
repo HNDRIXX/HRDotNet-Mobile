@@ -1,14 +1,43 @@
+import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native'
 import { useRoute } from '@react-navigation/native'
 import { Image } from 'expo-image'
+import * as FileSystem from 'expo-file-system';
 
 import PageHeader from '../../../../components/header/PagesHeader'
 import { DateTimeUtils } from '../../../../constant'
 
 export default function AttachedFile ({ navigation }) {
+    const [imageUri, setImageUri] = useState(null);
+
     const route = useRoute()
     const params = route.params
     const imageParams = route.params.attachedFile
+
+    useEffect(() => {
+        // Replace the URI with your image URI
+        const uri = decodeURIComponent(imageParams.uri)
+
+        console.log(uri)
+    
+        // Create a temporary file
+        const createTempFile = async () => {
+          const fileUri = FileSystem.cacheDirectory + 'temp.jpg';
+    
+          try {
+            await FileSystem.copyAsync({
+              from: uri,
+              to: fileUri,
+            });
+    
+            setImageUri(fileUri);
+          } catch (error) {
+            console.error('Error creating temporary file:', error);
+          }
+        };
+    
+        createTempFile();
+      }, []);
 
     return (
         <>
@@ -18,7 +47,7 @@ export default function AttachedFile ({ navigation }) {
                 <Image 
                     source={
                         imageParams.uri == "" || imageParams.uri == null ? require('../../../../assets/mntn.jpg') 
-                        : { uri: decodeURIComponent(imageParams?.uri ) }
+                        : { uri: imageUri }
                     }
                     style={{ width: 350, height: 400, marginTop: 20, justifyContent: 'center', alignSelf: 'center'}}
                     contentFit='contain'

@@ -86,20 +86,22 @@ export default function ChangeOfSchedulePanel () {
         Utils.getHalf(setFirstHalf, setSecondHalf)
     }, [])
 
-    if (localData) {
-        filteredData = data.filter((item) => {
-            const formattedStartDate = DateTimeUtils.dateFullConvert(item.startDate)
-            const formattedEndDate = DateTimeUtils.dateFullConvert(item.endDate)
+    // if (localData) {
+        
+    // }
 
-            return (
-                formattedStartDate.toLowerCase().includes(filterText.toLowerCase()) ||
-                formattedEndDate.toLowerCase().includes(filterText.toLowerCase()) ||
-                item.status.toLowerCase().includes(filterText.toLowerCase()) ||
-                item.requestedSched.toLowerCase().includes(filterText.toLowerCase()) ||
-                item.filedDate.toLowerCase().includes(filterText.toLowerCase())
-            )
-        })
-    }
+    filteredData = data.filter((item) => {
+        const formattedStartDate = DateTimeUtils.dateFullConvert(item.startDate)
+        const formattedEndDate = DateTimeUtils.dateFullConvert(item.endDate)
+
+        return (
+            formattedStartDate.toLowerCase().includes(filterText.toLowerCase()) ||
+            formattedEndDate.toLowerCase().includes(filterText.toLowerCase()) ||
+            item.status.toLowerCase().includes(filterText.toLowerCase()) ||
+            item.requestedSched.toLowerCase().includes(filterText.toLowerCase()) ||
+            item.filedDate.toLowerCase().includes(filterText.toLowerCase())
+        )
+    })
 
     useEffect(() => {
         Utils.dataItemCount(filteredData, setNewCount, setEarlierCount, isFirstHalf, isSecondHalf)

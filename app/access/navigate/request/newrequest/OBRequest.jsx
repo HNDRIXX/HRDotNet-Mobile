@@ -9,14 +9,15 @@ import { Ionicons, AntDesign } from "@expo/vector-icons";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
 import TitleInput from "../../../../../components/section/request/TitleInput";
-import { COLORS, STRINGS, Utils, DateTimeUtils, RequestUtils } from "../../../../../constant";
+import { COLORS, STRINGS, Utils, DateTimeUtils, RequestUtils, LocationUtils } from "../../../../../constant";
 import { ScrollView } from "react-native";
 
 const data = [{ timeIn: "10:00 AM", timeOut: "7:00 PM"}, { timeIn: "8:00 AM", timeOut: "6:00 PM" }]
 
 export default function OBRequest ({ navigation }) {
     const [OBDate, setOBDate] = useState(null)
-    const [location, setLocation] = useState(null)
+    const [location, setLocation] = useState('')
+
     const [timeIn, setTimeIn] = useState(null)
     const [timeOut, setTimeOut] = useState(null)
     const [reason, setReason] = useState(null)
@@ -43,6 +44,28 @@ export default function OBRequest ({ navigation }) {
     useEffect(() => {
         imageParams != "undefined" && setSelectedFile(imageParams)
     }, [imageParams])
+
+    
+    useEffect(() => {
+        const getLocationPermission = async () => {
+          LocationUtils.locationPermissionEnabled()
+      
+          try {
+            LocationUtils.officialWorkLocation(location, setLocation)
+          } catch (error) {
+            await getLocationPermission()
+            return
+          }
+        }
+
+        getLocationPermission()
+
+        const intervalId = setInterval(() => {
+            getLocationPermission()
+        }, 2000)
+      
+        return () => clearInterval(intervalId)
+    }, [])
 
     const newData = data.map(item => `${item.timeIn} to ${item.timeOut}`)
 

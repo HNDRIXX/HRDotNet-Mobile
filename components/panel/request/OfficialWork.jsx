@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from "react-nat
 import * as Animatable from 'react-native-animatable';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { COLORS, Utils, DateTimeUtils } from "../../../constant";
+import { COLORS, Utils, DateTimeUtils, LocationUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
 import RequestItem from "../../items/request/RequestItem"
 import Loader from "../../loader/Loader";
@@ -53,19 +53,21 @@ export default function OfficialWorkPanel () {
     
     let filteredData = []
 
-    if (localData) {
-        filteredData = data.filter((item) => {
-            const formattedDate = DateTimeUtils.dateFullConvert(item.officialWorkDate)
-            
-            return (
-                formattedDate.toLowerCase().includes(filterText.toLowerCase()) ||
-                item.status.toLowerCase().includes(filterText.toLowerCase()) ||
-                item.location.toLowerCase().includes(filterText.toLowerCase()) ||
-                item.filedDate.toLowerCase().includes(filterText.toLowerCase())
-            )
-        })
-    }
+    // if (localData) {
+        
+    // }
 
+    filteredData = data.filter((item) => {
+        const formattedDate = DateTimeUtils.dateFullConvert(item.officialWorkDate)
+        
+        return (
+            formattedDate.toLowerCase().includes(filterText.toLowerCase()) ||
+            item.status.toLowerCase().includes(filterText.toLowerCase()) ||
+            item.location.toLowerCase().includes(filterText.toLowerCase()) ||
+            item.filedDate.toLowerCase().includes(filterText.toLowerCase())
+        )
+    })
+    
     useEffect(() => {
         setTimeout(() => {
           setIsLoading(false)

@@ -5,11 +5,22 @@ import { router } from 'expo-router';
 import { MaterialIcons, AntDesign } from '@expo/vector-icons/build/Icons';
 
 import { COLORS } from '../../../constant';
+import SuccessPromptPage from '../../../components/prompt/SuccessPrompt';
 
 export default function ForgotPasswordPage ({ navigation }) {
     const [email, setEmail] = useState('')
+    const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false)
 
     const paddingIOS = Platform.OS === "ios" 
+
+    const openCustomAlert = () => {
+        setIsSuccessAlertVisible(true)
+    }
+
+    const closeCustomAlert = () => {
+        setIsSuccessAlertVisible(false)
+        navigation.navigate('LogIn')
+    }
 
     return (
         <View style={styles.container}>
@@ -35,18 +46,35 @@ export default function ForgotPasswordPage ({ navigation }) {
                         style={styles.textInput(paddingIOS)}
                         onChangeText={(text) => setEmail(text)}
                         value={email}
-                        placeholder="Email"
+                        placeholder="Email Address"
                         placeholderTextColor={COLORS.tr_gray}
                     />
                 </View>
 
-                <TouchableOpacity 
-                    style={styles.sendCodeBtn}
-                    onPress={() => navigation.navigate('VerifyCode')}
-                >
-                    <Text style={styles.textBtn}>SEND CODE</Text>
-                </TouchableOpacity>
+                <View style={styles.buttonView}>
+                    <TouchableOpacity 
+                        style={styles.button}
+                        onPress={openCustomAlert}
+                    >
+                        <Text style={styles.textBtn}>SEND PASSWORD</Text>
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity 
+                        style={[styles.button, styles.buttonOutline]}
+                        onPress={() => navigation.navigate('LogIn')}
+                    >
+                        <Text style={[styles.textBtn, styles.textOutline]}>CANCEL</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
+
+            <SuccessPromptPage
+                title={"Password Sent!"}
+                subTitle={"The password has been sent to the email address you provided"}
+                buttonText={"OKAY"}
+                visible={isSuccessAlertVisible} 
+                onClose={closeCustomAlert} 
+            />
         </View>
     )
 }
@@ -103,15 +131,19 @@ const styles = StyleSheet.create({
     subText: {
         textAlign: 'center',
         fontFamily: 'Inter_400Regular',
-    },  
+    }, 
+    
+    buttonView: {
+        marginTop: 100,
+    },
 
-    sendCodeBtn: {
+    button: {
         backgroundColor: COLORS.orange,
         alignItems: 'center',
         alignSelf: 'center',
+        marginBottom: 10,
         width: 170,
-        marginTop: 100,
-        padding: 15,
+        padding: 10,
         borderRadius: 30,
     },
 
@@ -119,5 +151,15 @@ const styles = StyleSheet.create({
         color: COLORS.clearWhite,
         fontFamily: 'Inter_700Bold',
         fontSize: 15,
+    },
+
+    buttonOutline: {
+        backgroundColor: COLORS.clearWhite,
+        borderWidth: 2,
+        borderColor: COLORS.orange,
+    },
+
+    textOutline: {
+        color: COLORS.orange
     }
 })
