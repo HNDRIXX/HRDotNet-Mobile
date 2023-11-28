@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet, ScrollView, RefreshControl, FlatList } from "react-native";
 import * as Animatable from 'react-native-animatable';
 import Checkbox from 'expo-checkbox'
+import moment from "moment";
 
 import { COLORS, Utils, DateTimeUtils, RequestUtils } from "../../../../constant";
 import { Search } from "../../../use/Search";
@@ -30,7 +31,7 @@ export default function ChangeOfSchedulePanel () {
         {
             attachedFile: {"date": "20231124", "time": "13:38 PM", "uri": "file%3A%2F%2F%2Fdata%2Fuser%2F0%2Fhost.exp.exponent%2Fcache%2FExperienceData%2F%252540hndrx022%25252FHRDotNet-Mobile%2FCamera%2F596b713f-d6b4-4636-abaa-821eb3850257.jpg"},
             employeeName: 'Kel Jorge Cinco',
-            date: '20231118',
+            date: '20231111',
             requestedSched: '8:00 AM - 5:00 PM',
             type: 'Change of Schedule',
             documentNo: 'COS22307240207',
@@ -46,8 +47,34 @@ export default function ChangeOfSchedulePanel () {
     const [isLoading, setLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
     const [selectAll, setSelectAll] = useState(false)
+    const [filteredData, setFilteredData] = useState([]);
 
-    let filteredData = []
+    const sortByDateAsync = async (data) => {
+        return new Promise((resolve) => {
+          const sorted = data.sort((a, b) => {
+            const dateA = moment(a.date, 'YYYYMMDD');
+            const dateB = moment(b.date, 'YYYYMMDD');
+            return dateB - dateA
+          });
+          resolve(sorted);
+        });
+    };
+
+    useEffect(() => {
+        const sortData = async () => {
+          const sort = await sortByDateAsync(data)
+          setFilteredData(sort);
+        };
+    
+        sortData()
+    }, [data])
+
+      
+    const toggleSelectAll = () => {
+        const updatedData = data.map(item => ({ ...item, isChecked: !selectAll }));
+        setData(updatedData);
+        setSelectAll(!selectAll);
+    };
 
     return (
         <>
@@ -65,19 +92,25 @@ export default function ChangeOfSchedulePanel () {
 
                     <ApprovalsAction 
                         setData={setData}
+                        selectAll={selectAll}
+                        setSelectAll={setSelectAll}
+                        toggleSelectAll={toggleSelectAll}
                     />
 
                     <FlatList 
-                        data={data}
+                        data={filteredData}
+                        style={styles.flatList}
                         renderItem={({ item, index }) => (
                             <View style={styles.rowView}>
                                 <Checkbox
-                                    style={{ marginTop: 15 }}
+                                    color={COLORS.orange}
+                                    style={styles.checkBox}
                                     value={item.isChecked}
+
                                     onValueChange={(newValue) => {
-                                    const updatedData = [...data];
-                                    updatedData[index].isChecked = newValue;
-                                    setData(updatedData);
+                                        const updatedData = [...data]
+                                        updatedData[index].isChecked = newValue
+                                        setData(updatedData)
                                     }}
                                 />
 
@@ -106,6 +139,10 @@ const styles = StyleSheet.create({
     bodyContainer: {
         flex: 1,
     },
+
+    flatList: {
+        marginTop: 20,
+    },
     
     itemStatusText: {
         fontFamily: 'Inter_500Medium',
@@ -118,6 +155,12 @@ const styles = StyleSheet.create({
     rowView: {
         flexDirection: 'row',
         borderBottomColor: COLORS.darkGray,
-        borderBottomWidth: 2.5
-    }
+        borderBottomWidth: 1.5
+    },
+
+    checkBox: {
+        marginTop: 15, 
+        borderColor: COLORS.orange, 
+        borderWidth: 2 
+    },
 })

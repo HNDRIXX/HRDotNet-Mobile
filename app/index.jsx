@@ -6,29 +6,29 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { Easing } from 'react-native-reanimated';
 
-import Home from './pages/home/approver-home';
-import Calendar from './pages/calendar';
-import Request from './pages/request';
-import Profile from './pages/profile';
+import Home from './pages/home/ApproverHome';
+import Calendar from './pages/Calendar';
+import Request from './pages/Request';
+import Profile from './pages/Profile';
 import MorePage from './access/navigate/request/MorePage';
-import ClockInOut from './access/home/ClockInOut';
+import TimeClock from './access/home/TimeClock';
 
 import { useFonts } from '../constant/fonts';
-import LoanLedgerPage from './access/navigate/home/loanledger';
+import LoanLedgerPage from './access/navigate/home/LoanLedger';
 import { COLORS } from '../constant';
-import TimeSheetPage from './access/navigate/home/timesheet';
-import PendingPage from './access/navigate/home/pending';
-import VacationLeavePage from './access/navigate/home/vacationleave';
-import SickLeavePage from './access/navigate/home/sickleave';
-import NotificationPage from './access/navigate/home/notification';
-import DrawerPage from './access/navigate/home/drawer';
-import LogInPage from './authentication/base/login';
-import ForgotPasswordPage from './authentication/base/forgotpass';
-import ResetPasswordPage from './authentication/base/resetpassword';
-import VerifyCodePage from './authentication/auth/verifycode';
+import TimeSheetPage from './access/navigate/home/Timesheet';
+import PendingPage from './access/navigate/home/Pending';
+import VacationLeavePage from './access/navigate/home/VacationLeave';
+import SickLeavePage from './access/navigate/home/SickLeave';
+import NotificationPage from './access/navigate/home/Notification';
+import DrawerPage from './access/navigate/home/Drawer';
+import LogInPage from './authentication/base/LogIn';
+import ForgotPasswordPage from './authentication/base/ForgotPassword';
+import ResetPasswordPage from './authentication/base/ResetPassword';
+import VerifyCodePage from './authentication/auth/VerifyCode';
 import COSRequest from './access/navigate/request/newrequest/COSRequest';
 import RequestSummary from './access/navigate/request/RequestSummary';
-import CameraAccess from './access/use/camera';
+import CameraAccess from './access/use/Camera';
 import OBRequest from './access/navigate/request/newrequest/OBRequest';
 import OTRequest from './access/navigate/request/newrequest/OTRequest';
 import NotificationDetails from './access/navigate/home/more/NotificationDetails';
@@ -36,10 +36,11 @@ import LoanDetails from './access/navigate/home/more/LoanDetails';
 import OSRequest from './access/navigate/request/newrequest/OSRequest';
 import LVRequest from './access/navigate/request/newrequest/LVRequest';
 import MLRequest from './access/navigate/request/newrequest/MLRequest';
-import MorePayslip from './access/navigate/profile/MorePayslip';
+import MorePayslip from './access/navigate/profile/payslip/MorePayslip';
 import AttachedFile from './access/navigate/request/AttachedFile';
 
-import ApprovalsPage from './access/navigate/home/approver/approvals';
+import ApprovalsPage from './access/navigate/home/approver/Approvals';
+import ApprovalsDetails from './access/navigate/home/approver/ApprovalsDetails'
 
 export default function Index() {
     const [fontsLoaded] = useFonts()
@@ -65,7 +66,7 @@ export default function Index() {
           restDisplacementThreshold: 0.01,
           restSpeedThreshold: 0.01,
         },
-      };
+    }
 
     const TabStack = () => {
         return (
@@ -145,7 +146,7 @@ export default function Index() {
 
                     <Stack.Screen name="TabStack" component={TabStack} />
 
-                    <Stack.Screen name="ClockInOut" component={ClockInOut} />
+                    <Stack.Screen name="TimeClock" component={TimeClock} />
 
                     <Stack.Screen name="LoanLedger" component={LoanLedgerPage} />
                     <Stack.Screen 
@@ -156,6 +157,12 @@ export default function Index() {
                         }}/>
 
                     <Stack.Screen name="Approvals" component={ApprovalsPage} />
+                    <Stack.Screen 
+                        name="ApprovalsDetails" 
+                        component={ApprovalsDetails}
+                        options={{
+                            cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
+                        }} />                    
 
                     <Stack.Screen name="TimeSheet" component={TimeSheetPage} />
                     <Stack.Screen name="Pending" component={PendingPage} />
@@ -213,9 +220,3 @@ export default function Index() {
         </NavigationContainer>
     )
 }
-
-const styles = StyleSheet.create({
-    showNav: (show) => ({
-
-    })
-})

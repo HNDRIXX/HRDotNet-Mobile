@@ -8,11 +8,11 @@ import * as Print from 'expo-print'
 import * as FileSystem from 'expo-file-system'
 import * as Sharing from 'expo-sharing'
 
-import { Utils, DateTimeUtils, COLORS  } from '../../../../constant'
-import PageHeader from '../../../../components/header/PagesHeader'
-import Hr from '../../../../components/use/Hr'
-import Loader from '../../../../components/loader/Loader'
-import { PayslipPrint } from '../../../../constant/print/PayslipPrint'
+import { Utils, DateTimeUtils, COLORS  } from '../../../../../constant'
+import PageHeader from '../../../../../components/header/PagesHeader'
+import Hr from '../../../../../components/use/Hr'
+import Loader from '../../../../../components/loader/Loader'
+import { PayslipPrint } from '../../../../../constant/print/PayslipPrint'
 
 const RowTextView = ({ semiText, regularText }) => {
     return (

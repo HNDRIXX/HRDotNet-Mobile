@@ -82,11 +82,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomColor: COLORS.shadowGray,
     borderBottomWidth: 2,
-    // marginHorizontal: 10,
-  },
-
-  innerWrapper: {
-    // marginHorizontal: 10,
   },
 
   button: {

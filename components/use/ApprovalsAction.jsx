@@ -1,12 +1,19 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
+import Checkbox from 'expo-checkbox'
 
 import { COLORS } from '../../constant'
 
-export default function ApprovalsAction () {
+export default function ApprovalsAction ({ setData, selectAll, setSelectAll, toggleSelectAll }) {
     return (
         <View style={styles.container}>
-            <View>
+            <View style={styles.rowView}>
+                <Checkbox
+                    color={COLORS.orange}
+                    style={styles.checkBox}
+                    value={selectAll}
+                    onValueChange={toggleSelectAll}
+                />
                 <Text style={styles.regularText}>All</Text>
             </View>
 
@@ -43,6 +50,7 @@ const styles = StyleSheet.create({
 
     rowView: {
         flexDirection: 'row',
+        alignItems: 'center',
         gap: 13,
     },
 
@@ -52,7 +60,7 @@ const styles = StyleSheet.create({
     },
 
     regularText: {
-        fontFamily: 'Inter_500Medium',
+        fontFamily: 'Inter_600SemiBold',
         fontSize: 17
     },
 
@@ -60,5 +68,11 @@ const styles = StyleSheet.create({
         fontFamily: 'Inter_600SemiBold',
         marginLeft: 5,
         fontSize: 15
+    },
+
+    checkBox: {
+        marginTop: 2,
+        borderColor: COLORS.orange, 
+        borderWidth: 2,
     }
 })

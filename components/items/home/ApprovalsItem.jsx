@@ -1,9 +1,11 @@
 import { View, Text, StyleSheet, TouchableOpacity} from 'react-native'
 import { Entypo } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
 
 import { COLORS, DateTimeUtils } from '../../../constant'
 
 export default function ApprovalsItem ({ item, onPanel }) {
+    const navigation = useNavigation()
 
     return (
         <View style={styles.container}>
@@ -25,7 +27,9 @@ export default function ApprovalsItem ({ item, onPanel }) {
                         </View>
                     )}
                     
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('ApprovalsDetails', item)}
+                    >
                         <Entypo 
                             name="chevron-right" 
                             size={21} 

@@ -52,7 +52,7 @@ export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, c
                     <TouchableOpacity
                         style={styles.linkButton}
                         onPress={() => 
-                            navigation.navigate('ClockInOut', {
+                            navigation.navigate('TimeClock', {
                                 clockedValue: clockedValue
                             })
                         }
@@ -71,7 +71,7 @@ export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, c
                     <TouchableOpacity
                         style={styles.linkButton}
                         onPress={() => 
-                            navigation.navigate('ClockInOut', {
+                            navigation.navigate('TimeClock', {
                                 clockedValue: clockedValue
                             })
                         }
