@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: "row",
     alignItems: 'center',
-    marginLeft: 4,
+    marginLeft: -1,
   },
 
   searchValueText: (platformIOS) => ({

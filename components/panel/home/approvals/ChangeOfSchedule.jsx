@@ -4,13 +4,12 @@ import * as Animatable from 'react-native-animatable';
 import Checkbox from 'expo-checkbox'
 import moment from "moment";
 
-import { COLORS, Utils, DateTimeUtils, RequestUtils } from "../../../../constant";
 import { Search } from "../../../use/Search";
-import RequestItem from "../../../items/request/RequestItem";
 import ApprovalsAction from "../../../use/ApprovalsAction";
 import Loader from "../../../loader/Loader";
 import NothingFoundNote from "../../../note/NothingFoundNote";
 import ApprovalsItem from "../../../items/home/ApprovalsItem";
+import { COLORS, Utils, DateTimeUtils, RequestUtils } from "../../../../constant";
 
 export default function ChangeOfSchedulePanel () {
     const [data, setData] = useState([
@@ -30,7 +29,7 @@ export default function ChangeOfSchedulePanel () {
         },
         {
             attachedFile: {"date": "20231124", "time": "13:38 PM", "uri": "file%3A%2F%2F%2Fdata%2Fuser%2F0%2Fhost.exp.exponent%2Fcache%2FExperienceData%2F%252540hndrx022%25252FHRDotNet-Mobile%2FCamera%2F596b713f-d6b4-4636-abaa-821eb3850257.jpg"},
-            employeeName: 'Kel Jorge Cinco',
+            employeeName: 'Kel',
             date: '20231111',
             requestedSched: '8:00 AM - 5:00 PM',
             type: 'Change of Schedule',
@@ -43,47 +42,71 @@ export default function ChangeOfSchedulePanel () {
             isChecked: false, 
         },
     ])
+    const [filterText, setFilterText] = useState('')
+    const [sortedData, setSortedData] = useState([])
+    const [filteredData, setFilteredData] = useState([])
 
     const [isLoading, setLoading] = useState(true)
-    const [filterText, setFilterText] = useState('')
     const [selectAll, setSelectAll] = useState(false)
-    const [filteredData, setFilteredData] = useState([]);
+    const [refreshing, setRefreshing] = useState(false)
+    const scrollViewRef = useRef(null)
 
     const sortByDateAsync = async (data) => {
         return new Promise((resolve) => {
-          const sorted = data.sort((a, b) => {
-            const dateA = moment(a.date, 'YYYYMMDD');
-            const dateB = moment(b.date, 'YYYYMMDD');
-            return dateB - dateA
-          });
-          resolve(sorted);
-        });
-    };
+            const sorted = data.sort((a, b) => {
+                const dateA = moment(a.date, 'YYYYMMDD')
+                const dateB = moment(b.date, 'YYYYMMDD')
+                return dateB - dateA
+            })
+            
+            resolve(sorted)
+        })
+    }
+    
+    const filterData = () => {
+        const filtered = sortedData.filter((item) => {
+            const formattedDate = DateTimeUtils.dateFullConvert(item.date);
+        
+            return (
+                formattedDate.toLowerCase().includes(filterText.toLowerCase()) ||
+                item.employeeName.toLowerCase().includes(filterText.toLowerCase()) ||
+                item.requestedSched.toLowerCase().includes(filterText.toLowerCase())
+            )
+        })
+    
+        setFilteredData(filtered)
+    }
 
     useEffect(() => {
         const sortData = async () => {
-          const sort = await sortByDateAsync(data)
-          setFilteredData(sort);
-        };
+            setLoading(true)
+            const sort = await sortByDateAsync(data)
+            setSortedData(sort)
+            setLoading(false)
+        }
     
         sortData()
     }, [data])
 
-      
+    useEffect(() => {
+        filterData()
+    }, [sortedData, filterText])
+
     const toggleSelectAll = () => {
-        const updatedData = data.map(item => ({ ...item, isChecked: !selectAll }));
-        setData(updatedData);
-        setSelectAll(!selectAll);
-    };
+        const updatedData = data.map(item => ({ ...item, isChecked: !selectAll }))
+        setData(updatedData)
+        setSelectAll(!selectAll)
+    }
+
+    const refresh = () => {
+        setRefreshing(true)
+        setLoading(true)
+    }
 
     return (
         <>
-            {!isLoading ? ( <Loader /> ) : (
-                <Animatable.View
-                    animation={'fadeIn'}
-                    duration={500}
-                    style={styles.container}
-                >
+            {isLoading ? ( <Loader /> ) : (
+                <View style={styles.container}>
                     <Search 
                         filterText={filterText}
                         setFilterText={setFilterText}
@@ -96,33 +119,50 @@ export default function ChangeOfSchedulePanel () {
                         setSelectAll={setSelectAll}
                         toggleSelectAll={toggleSelectAll}
                     />
+                    
+                    {filteredData.length > 0 ? (
+                        <ScrollView
+                            ref={scrollViewRef}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={refresh} />
+                            }
+                        >
+                            <Animatable.View
+                                animation={'fadeIn'}
+                                duration={500}
+                            >
+                                <View style={styles.itemView}>
+                                    {filteredData.map((item, index) => (
+                                        <View 
+                                            style={styles.rowView}
+                                            key={index}
+                                        >
+                                            <Checkbox
+                                                color={COLORS.orange}
+                                                style={styles.checkBox}
+                                                value={item.isChecked}
 
-                    <FlatList 
-                        data={filteredData}
-                        style={styles.flatList}
-                        renderItem={({ item, index }) => (
-                            <View style={styles.rowView}>
-                                <Checkbox
-                                    color={COLORS.orange}
-                                    style={styles.checkBox}
-                                    value={item.isChecked}
+                                                onValueChange={(newValue) => {
+                                                    const updatedData = [...data]
+                                                    updatedData[index].isChecked = newValue
+                                                    setData(updatedData)
+                                                }}
+                                            />
 
-                                    onValueChange={(newValue) => {
-                                        const updatedData = [...data]
-                                        updatedData[index].isChecked = newValue
-                                        setData(updatedData)
-                                    }}
-                                />
-
-                                <ApprovalsItem 
-                                    item={item}
-                                    onPanel={0}
-                                    key={index}
-                                />
-                            </View>
-                        )}
-                    />
-                </Animatable.View>
+                                            <ApprovalsItem 
+                                                item={item}
+                                                onPanel={0}
+                                                key={index}
+                                            />
+                                        </View>
+                                    ))}
+                                </View>
+                            </Animatable.View>
+                        </ScrollView>
+                    ) : ( <NothingFoundNote /> )}
+                </View>
             )}
         </>
     )
@@ -140,7 +180,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
-    flatList: {
+    itemView: {
         marginTop: 20,
     },
     
