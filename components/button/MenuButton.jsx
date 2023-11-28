@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Platform, Dimensi
 import { Image } from 'expo-image'
 import { useNavigation } from '@react-navigation/native'
 
-import { COLORS } from '../../../constant'
+import { COLORS } from '../../constant'
 // import HomeButtonLoader from '../loader/HomeButtonLoader'
 
 export default function MenuButton ({ clockedDate, clockedTime, clockedLocation }) {
@@ -41,7 +41,7 @@ export default function MenuButton ({ clockedDate, clockedTime, clockedLocation 
                                     })
                                 }}>
                                 <Image 
-                                    source={require('../../../assets/icons/timesheet.png')}
+                                    source={require('../../assets/icons/timesheet.png')}
                                     style={{ width: imageSize ,  height: imageSize }}
                                     contentFit="contain"
                                 />
@@ -55,7 +55,7 @@ export default function MenuButton ({ clockedDate, clockedTime, clockedLocation 
                                 style={[styles.gridButton, { padding: padding }]}
                                 onPress={() => navigation.navigate('LoanLedger')}>
                                 <Image 
-                                    source={require('../../../assets/icons/ledger.png')}
+                                    source={require('../../assets/icons/ledger.png')}
                                     style={{ width: imageSize ,  height: imageSize }}
                                     contentFit="contain"
                                 />
@@ -69,7 +69,7 @@ export default function MenuButton ({ clockedDate, clockedTime, clockedLocation 
                                 style={[styles.gridButton, { padding: padding }]}
                                 onPress={() => navigation.navigate('Pending')}>
                                 <Image 
-                                    source={require('../../../assets/icons/pending.png')}
+                                    source={require('../../assets/icons/pending.png')}
                                     style={{ width: imageSize ,  height: imageSize }}
                                     contentFit="contain"
                                 />
@@ -86,7 +86,7 @@ export default function MenuButton ({ clockedDate, clockedTime, clockedLocation 
                                 style={[styles.gridButton, { padding: padding }]}
                                 onPress={() => navigation.navigate('COSRequest')} >
                                 <Image 
-                                    source={require('../../../assets/icons/cos.png')}
+                                    source={require('../../assets/icons/cos.png')}
                                     style={{ width: imageSize ,  height: imageSize }}
                                     contentFit="contain"
                                 />
@@ -101,7 +101,7 @@ export default function MenuButton ({ clockedDate, clockedTime, clockedLocation 
                                 style={[styles.gridButton, { padding: padding }]}
                                 onPress={() => navigation.navigate('OBRequest')}>
                                 <Image 
-                                    source={require('../../../assets/icons/ob.png')}
+                                    source={require('../../assets/icons/ob.png')}
                                     style={{ width: imageSize ,  height: imageSize }}
                                     contentFit="contain"
                                 />
@@ -116,7 +116,7 @@ export default function MenuButton ({ clockedDate, clockedTime, clockedLocation 
                                 style={[styles.gridButton, { padding: padding }]}
                                 onPress={() => navigation.navigate('OTRequest')}>
                                 <Image 
-                                    source={require('../../../assets/icons/ot.png')}
+                                    source={require('../../assets/icons/ot.png')}
                                     style={{ width: imageSize ,  height: imageSize }}
                                     contentFit="contain"
                                 />

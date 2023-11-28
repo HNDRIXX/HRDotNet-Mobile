@@ -62,9 +62,7 @@ export default function OfficialWorkPanel () {
         
         return (
             formattedDate.toLowerCase().includes(filterText.toLowerCase()) ||
-            item.status.toLowerCase().includes(filterText.toLowerCase()) ||
-            item.location.toLowerCase().includes(filterText.toLowerCase()) ||
-            item.filedDate.toLowerCase().includes(filterText.toLowerCase())
+            item.status.toLowerCase().includes(filterText.toLowerCase())
         )
     })
     

@@ -38,7 +38,7 @@ export default function DrawerPage ({ navigation }) {
                             uri={ICONS.terms}
                         />
                     
-                        <Text style={styles.textButton}>Terms and Condition</Text>
+                        <Text style={styles.textButton}>Terms and Conditions</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.button} >

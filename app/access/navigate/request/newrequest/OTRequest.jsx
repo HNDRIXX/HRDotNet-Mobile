@@ -142,10 +142,10 @@ export default function OTRequest ({ navigation }) {
 
     const handleCheck = (index) => {
         setCheckSelect(index)
-        setOTDate(sortedData[index].OTDate)
-        setShiftSched(sortedData[index].shiftSchedule)
-        setActualOTIn(sortedData[index].actualOTIn)
-        setActualOTOut(sortedData[index].actualOTOut)   
+        setOTDate(filteredData[index].OTDate)
+        setShiftSched(filteredData[index].shiftSchedule)
+        setActualOTIn(filteredData[index].actualOTIn)
+        setActualOTOut(filteredData[index].actualOTOut)   
     }
 
     const handleOvertimeFrom = (time) => {

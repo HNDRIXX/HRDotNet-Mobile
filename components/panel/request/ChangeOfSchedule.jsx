@@ -97,9 +97,7 @@ export default function ChangeOfSchedulePanel () {
         return (
             formattedStartDate.toLowerCase().includes(filterText.toLowerCase()) ||
             formattedEndDate.toLowerCase().includes(filterText.toLowerCase()) ||
-            item.status.toLowerCase().includes(filterText.toLowerCase()) ||
-            item.requestedSched.toLowerCase().includes(filterText.toLowerCase()) ||
-            item.filedDate.toLowerCase().includes(filterText.toLowerCase())
+            item.status.toLowerCase().includes(filterText.toLowerCase())
         )
     })
 

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions } from "react-native";
-import { Image } from "expo-image";
 import { useRoute } from "@react-navigation/native";
 import { Shadow } from "react-native-shadow-2";
 import * as Animatable from 'react-native-animatable';
+import { Image } from "react-native-expo-image-cache";
 import { FontAwesome, Entypo } from "@expo/vector-icons";
 
-import { COLORS } from "../../../constant";
+import { COLORS, ICONS } from "../../../constant";
 import TimeClock from "../../../components/section/home/TimeClock";
-import MenuButton from "../../../components/button/webuser/MenuButton";
+import ApproverMenuButton from "../../../components/button/ApproverMenuButton"
 import TimeOff from "../../../components/button/TimeOff";
 import Loader from "../../../components/loader/Loader"
 
@@ -53,12 +53,12 @@ export default function Home ({ navigation }) {
                             <View style={styles.welcomeView}>
                                 <Image 
                                     style={styles.userIcon} 
-                                    source={require('../../../assets/user/juan.jpg')}
-                                    contentFit="contain" />
+                                    uri={ICONS.maria}
+                                />
 
                                 <View>
                                     <Text style={styles.helloText}>Hello,</Text>
-                                    <Text style={styles.nameText}>Juan Dela Cruz!</Text>
+                                    <Text style={styles.nameText}>Maria Clara!</Text>
 
                                     <View style={styles.statusView}>
                                         <Entypo name={'briefcase'} size={17} color={COLORS.clearWhite} />
@@ -91,7 +91,7 @@ export default function Home ({ navigation }) {
                                 >
                                 <View style={[styles.sectionView, { marginBottom: 20 }]}>
                                     <Text style={styles.mainTitle}>Menu</Text>
-                                    <MenuButton 
+                                    <ApproverMenuButton 
                                         clockedDate={route.params?.clockedDate}
                                         clockedTime={route.params?.clockedTime}
                                         clockedLocation={"Location Location"}
@@ -209,19 +209,15 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.clearWhite,
     },
 
-    scrollView: {
-    },
-
     sectionView: {
         width: Dimensions.get('window').width, 
-
     },
 
     mainTitle: {
         marginHorizontal: 35,
-        fontSize: 16,
+        fontSize: 18,
         marginVertical: 6,
         color: COLORS.powderBlue,
-        fontFamily: 'Inter_700Bold',
+        fontFamily: 'Inter_600SemiBold',
     }
 })

@@ -6,13 +6,13 @@ import { Calendar } from 'react-native-big-calendar'
 import { Entypo, FontAwesome } from '@expo/vector-icons'
 import * as Animatable from 'react-native-animatable'
 import DashedLine from 'react-native-dashed-line'
-
-import { COLORS } from '../../../../../constant'
-import CalendarNote from '../../../../../components/note/CalendarNote'
-import PageHeader from '../../../../../components/header/PagesHeader'
-
 import { useRoute } from '@react-navigation/native'
-import Loader from '../../../../../components/loader/Loader'
+import { Shadow } from 'react-native-shadow-2'
+
+import { COLORS } from '../../../../constant'
+import CalendarNote from '../../../../components/note/CalendarNote'
+import PageHeader from '../../../../components/header/PagesHeader'
+import Loader from '../../../../components/loader/Loader'
 
 export default function TimeSheetPage ({ navigation }) {
     const [isLoading, setIsLoading] = useState(true)
@@ -48,7 +48,7 @@ export default function TimeSheetPage ({ navigation }) {
         location: route.params?.clockedLocation
     }
 
-    const formattedDate = moment(route.params?.clockedDate, 'MMMM DD, YYYY, dddd').format('YYYY-MM-DD');
+    const formattedDate = moment(route.params?.clockedDate, 'MMMM DD, YYYY, dddd').format('YYYY-MM-DD')
 
     if (items[formattedDate]) {
         const existingData = items[formattedDate]
@@ -61,10 +61,6 @@ export default function TimeSheetPage ({ navigation }) {
         items[formattedDate] = [newData]
         items[formattedDate].push({ time: null, location: null })
     }
-
-    const currentDate = new Date()
-    const currentMonth = currentDate.toLocaleString('default', { month: 'long' })
-    const currentYear = currentDate.getFullYear()
 
     useEffect(() => {
         setTimeout(() => {
@@ -85,6 +81,42 @@ export default function TimeSheetPage ({ navigation }) {
         setYear(year)
     }    
     
+    const renderEventItem = (event, index) => (
+        <View key={index} style={index === 3 ? { paddingBottom: 500 } : {}}>
+            <Text style={styles.clockInOutText}>
+                {index === 0 ? "Clock-in : " : index === 1 ? "Clock-out :" : null}
+            </Text>
+      
+            <View style={styles.itemContainer}>
+                <Shadow distance={3} style={styles.shadowView}>
+                    <FontAwesome
+                        name={index === 1 ? "sign-in" : index === 0 ? "sign-out" : null}
+                        size={34}
+                        color={ index === 1 ? COLORS.powderBlue : index === 0 ? COLORS.orange : null }
+                        style={{ paddingRight: 20, marginLeft: 10 }}
+                    />
+        
+                    <View style={styles.item}>
+                        {!event.time && !event.location ? (
+                            <DashedLine
+                                dashLength={5}
+                                dashColor={COLORS.darkGray}
+                                dashGap={2}
+                                dashThickness={2}
+                                style={{ width: 130, paddingVertical: 23 }}
+                            />
+                        ) : (
+                            <>
+                                <Text style={styles.itemText}>{event.time}</Text>
+                                <Text style={styles.itemLoc}>{event.location}</Text>
+                            </>
+                        )}
+                    </View>
+                </Shadow>
+            </View>
+        </View>
+    )
+      
     return (
         <>
             <PageHeader pageName={"Timesheet"}/>
@@ -107,53 +139,7 @@ export default function TimeSheetPage ({ navigation }) {
                                         
                                         {selectedDate && events && events.length === 0 ? (
                                             <Text style={styles.noEventsText}>No events to display</Text>
-                                        ) : (
-                                            events && events.map((event, index) => (
-                                                <View
-                                                    key={ index }
-                                                    style={ index === 3 ? { paddingBottom: 500 } : {}}
-                                                >
-                                                    <Text style={styles.clockInOutText}>
-                                                        { index === 0 ? "Clock-in : "
-                                                        : index === 1 ? "Clock-out :" : null}
-                                                    </Text>
-
-                                                    <View style={styles.itemContainer}>
-                                                        <FontAwesome 
-                                                            name={ 
-                                                                index === 1 ? "sign-in" : 
-                                                                index === 0 ? "sign-out" : null
-                                                            }
-                                                            size={34} 
-                                                            color={
-                                                                index === 1 ? COLORS.powderBlue : 
-                                                                index === 0 ? COLORS.orange : null
-                                                            }
-                                                            style={{ paddingRight: 20, marginLeft: 10 }}
-                                                        />
-
-                                                        <View style={styles.item}>
-                                                            {!event.time && !event.location ? 
-                                                                ( 
-                                                                    <DashedLine 
-                                                                        dashLength={5}
-                                                                        dashColor={COLORS.darkGray}
-                                                                        dashGap={2}
-                                                                        dashThickness={2}
-                                                                        style={{ width: 130, paddingVertical: 23 }}
-                                                                    />
-                                                                )
-                                                            : (
-                                                                <>
-                                                                    <Text style={styles.itemText}>{event.time}</Text>
-                                                                    <Text style={styles.itemLoc}>{event.location}</Text>
-                                                                </>
-                                                            )}
-                                                        </View>
-                                                    </View>
-                                                </View>
-                                            ))
-                                        )}
+                                        ) : ( events && events.map((event, index) => renderEventItem(event, index)) )}
                                     </View>
                                 )}
 
@@ -204,6 +190,8 @@ const styles = StyleSheet.create({
 
     agendaItem: {
         paddingBottom: 20,
+        flex: 1, 
+        backgroundColor: '#FCFCFC' 
     },
 
     clockInOutText: {
@@ -214,15 +202,16 @@ const styles = StyleSheet.create({
     },
 
     itemContainer: {
-        backgroundColor: COLORS.clearWhite,
         marginHorizontal: 23,
-        flexDirection: 'row',
+    },
+
+    shadowView: {
+        width: '100%',
+        backgroundColor: COLORS.clearWhite,
         alignItems: 'center',
+        flexDirection: 'row',
         borderRadius: 10,
         padding: 10,
-        shadowColor: '#000',
-    
-        elevation: 1.5,
     },
     
     itemText: {

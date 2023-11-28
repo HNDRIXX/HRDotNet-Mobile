@@ -1,42 +1,41 @@
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { Image } from "react-native-expo-image-cache";
 import { AntDesign } from "@expo/vector-icons";
 import { Shadow } from "react-native-shadow-2";
-import { Image } from "react-native-expo-image-cache";
-import moment from 'moment';
 
-import { COLORS, ICONS, DateTimeUtils } from "../../../../../constant";
-import PageHeader from "../../../../../components/header/PagesHeader";
+import { COLORS, ICONS, DateTimeUtils } from "../../../../constant";
+import PageHeader from "../../../../components/header/PagesHeader";
 
 const data = [
     {
-        status: "Application",
+        status: "Adjustment",
         date: "20230823",
-        leaveCredit: "1.50",
+        leaveCredit: "3.00",
         documentNo: "LA2230702003"
     },
     {
-        status: "Application",
+        status: "Adjustment",
         date: "20230818",
         leaveCredit: "-2.00",
         documentNo: "LA2230702003"
     },
     {
-        status: "Application",
+        status: "Adjustment",
         date: "20230801",
-        leaveCredit: "3.50",
+        leaveCredit: "5.00",
         documentNo: "LA2230702003"
     },
 ]
 
-export default function SickLeavePage ({ navigation }) {
+export default function VacationLeavePage ({ navigation }) {
     return (
         <View style={styles.container}>
-            <PageHeader pageName={'Sick Leave'}/>
+            <PageHeader pageName={'Vacation Leave'} />
 
             <View style={styles.topContainer}>
                 <Image 
-                    style={{ width: 60, height: 60, marginRight: 15 }}
-                    uri={ICONS.medicine}
+                    style={{ width: 70, height: 70, marginRight: 10 }}
+                    uri={ICONS.vacation}
                 />
 
                 <View>
@@ -47,12 +46,12 @@ export default function SickLeavePage ({ navigation }) {
 
             <View style={styles.creditContainer}>
                 <Shadow distance={3} style={styles.creditShadow}>
-                    <Text style={styles.creditsValue}>1.50</Text>
+                    <Text style={styles.creditsValue}>3.00</Text>
                 </Shadow>
             </View>
 
             <Text style={styles.detailsTitle}>Details</Text>
-            
+
             <FlatList 
                 data={data}
                 renderItem={({item, index}) => {
@@ -76,6 +75,7 @@ export default function SickLeavePage ({ navigation }) {
                             </Shadow>
                         </View>
                     )
+
                 }}
             />
         </View>
@@ -85,7 +85,7 @@ export default function SickLeavePage ({ navigation }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.clearWhite,
+        backgroundColor: COLORS.clearWhite
     },
 
     topContainer: {
@@ -95,15 +95,19 @@ const styles = StyleSheet.create({
         margin: 20,
     },
 
+    shadowView: {
+        width: '100%',
+        backgroundColor: COLORS.clearWhite,
+        borderRadius: 20,
+    },
+
     titleText: {
         fontFamily: 'Inter_700Bold',
-        color: COLORS.darkGray,  
         fontSize: 22,
     },
 
     yearText: {
         fontFamily: 'Inter_600SemiBold',
-        color: COLORS.darkGray,
         fontSize: 18
     },
 
@@ -139,14 +143,9 @@ const styles = StyleSheet.create({
     itemWrapper: {
         backgroundColor: COLORS.clearWhite,
         margin: 10,
-        marginHorizontal: 20,
         borderRadius: 20,
-    },
-
-    shadowView: {
-        width: '100%', 
-        backgroundColor: COLORS.clearWhite,
-        borderRadius: 20 
+        marginHorizontal: 20,
+        elevation: 2,
     },
 
     itemHeader: {

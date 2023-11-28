@@ -314,5 +314,39 @@ To Do
 - Payslip Profile Module
 
 NOW
+
+NOVEMBER 28, 2023
+Accomplished
+- Overtime - New Request Page (Functions)
+- Offset - New Request Page (Functions)
+- Leave - New Request Page (Interface)
+- Leave - New Request Page (Functions)
+- Missed Logs - New Request Page (Interface)
+- Missed Logs - New Request Page (Functions)
+
 - Adjusting Shadow Display Element
+
+- Reset Password Process
+- Payslip Profile Module (Interface)
+
+- New and Earlier Functions (Request Sorting Item)
+
+On going 
+- Payslip Profile Module (Functions)
+- Geofence Functions
+- Time Clock Adjustments
+- Camera Feature Functions
+- File Feature Functions
+- View Attachment (More Request)
+- Forgot Password Functions
+
+To Do
+- Payslip Profile Module (Functions)
+- Geofence Functions
+- Time Clock Adjustments
+- Camera Feature Functions
+- File Feature Functions
+- View Attachment (More Request)
+- Forgot Password Functions
+
 

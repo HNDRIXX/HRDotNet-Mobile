@@ -1,12 +1,11 @@
 import React, { useState } from "react"
 import { View, Text, StyleSheet,TouchableOpacity} from "react-native"
-import { router } from "expo-router"
-import { AntDesign } from "@expo/vector-icons"
 
-import { COLORS } from "../../../../../constant"
-import ReviewedPanel from '../../../../../components/panel/home/Reviewed'
-import FiledPanel from '../../../../../components/panel/home/Filed'
-import PageHeader from "../../../../../components/header/PagesHeader"
+import { COLORS } from "../../../../constant"
+import {Search} from "../../../../components/use/Search"
+import ReviewedPanel from '../../../../components/panel/home/Reviewed'
+import FiledPanel from '../../../../components/panel/home/Filed'
+import PageHeader from "../../../../components/header/PagesHeader"
 
 export default function PendingPage ({ navigation }) {
     const [activePanel, setActivePanel] = useState(1)
@@ -116,5 +115,9 @@ const styles = StyleSheet.create({
 
     selectedCounter: {
         display: 'flex',
+    },
+
+    searchView: {
+        marginHorizontal: 20,
     }
 })

@@ -4,13 +4,14 @@ import { StatusBar } from "expo-status-bar";
 import { Entypo } from "@expo/vector-icons";
 
 import { COLORS, useFonts } from "../../../constant";
+import { Account } from "../../../constant/array/account";
 import { Image } from "expo-image";
 
 export default function LogInPage ({ navigation }) {
     const [fontsLoaded] = useFonts()
     const [isMessage, setMessage] = useState(false)
     const [showMessagePrompt, setShowMessagePrompt] = useState(false)
-    const [username, setUsername] = useState('')
+    const [userName, setUserName] = useState('')
     const [password, setPassword] = useState('')
     const [isShowPassword, setShowPassword] = useState(false)
 
@@ -28,13 +29,20 @@ export default function LogInPage ({ navigation }) {
         setShowPassword(!isShowPassword)
     }
     
-    const alertHandle = () => {
-        setMessage(false)
-        setShowMessagePrompt(true)
-    }
+    const onHandleLogIn = () => {
+        navigation.navigate('TabStack', { screen: 'UserHome' })
+        // const user = Account.find(account => account.userName === userName && account.password === password)
+        // const acc = Account.find(account => account.role)
 
-    const onClose = () => {
-        setShowMessagePrompt(false)
+        // if (user) {
+        //     if (acc.role == "web-user") {
+        //     } 
+
+        //     setUserName('')
+        //     setPassword('')
+        // } else {
+        //     alert('Invalid username or password')
+        // }
     }
 
     return (
@@ -56,8 +64,9 @@ export default function LogInPage ({ navigation }) {
                         <View style={styles.inputWrapper}>
                             <TextInput
                                 style={styles.textInput(paddingIOS)}
-                                onChangeText={(text) => setUsername(text)}
-                                value={username}
+                                onChangeText={(text) => setUserName(text)}
+                                
+                                value={userName}
                                 placeholder="Username"
                                 placeholderTextColor={COLORS.tr_gray}
                             />
@@ -89,7 +98,7 @@ export default function LogInPage ({ navigation }) {
 
                         <TouchableOpacity 
                             style={styles.loginBtn}
-                            onPress={() => navigation.navigate('TabStack', { screen: 'Home' })}
+                            onPress={onHandleLogIn}
                         >
                             <Text style={styles.loginText}>LOG IN</Text>
                         </TouchableOpacity>

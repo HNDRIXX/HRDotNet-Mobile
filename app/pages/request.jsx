@@ -4,14 +4,14 @@ import { useNavigation } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as Animatable from 'react-native-animatable';
 
-import { COLORS } from '../../../constant'
-import NavigationHeader from '../../../components/header/NavigationHeader';
-import ChangeOfSchedulePanel from '../../../components/panel/request/ChangeOfSchedule';
-import OfficialWorkPanel from '../../../components/panel/request/OfficialWork';
-import OverTimePanel from '../../../components/panel/request/OverTime';
-import OffSetPanel from '../../../components/panel/request/OffSet';
-import LeavePanel from '../../../components/panel/request/Leave';
-import MissedLogsPanel from '../../../components/panel/request/MissedLogs';
+import { COLORS } from '../../constant'
+import NavigationHeader from '../../components/header/NavigationHeader';
+import ChangeOfSchedulePanel from '../../components/panel/request/ChangeOfSchedule';
+import OfficialWorkPanel from '../../components/panel/request/OfficialWork';
+import OverTimePanel from '../../components/panel/request/OverTime';
+import OffSetPanel from '../../components/panel/request/OffSet';
+import LeavePanel from '../../components/panel/request/Leave';
+import MissedLogsPanel from '../../components/panel/request/MissedLogs';
 
 const data = [
     { title: 'Change of Schedule' },

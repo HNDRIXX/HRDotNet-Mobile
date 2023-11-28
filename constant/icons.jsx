@@ -11,6 +11,9 @@ const ICONS = {
     vacation: "https://i.postimg.cc/XJ35C77B/vacation.png",
     hat: "https://i.postimg.cc/br4tZFfv/hat.png",
     alpine: "https://i.postimg.cc/wBKYw5gs/alpine.png",
+
+    maria: "https://i.postimg.cc/JhbL4W6z/jorik-kleen-l-NNHy-Rbmm0o-unsplash.jpg",
+    
 }
 
 export { ICONS }

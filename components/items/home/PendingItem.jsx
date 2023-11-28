@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity,  } from 'react-native';
 import { COLORS } from '../../../constant';
 import { Shadow } from 'react-native-shadow-2';
 
-export default function PendingItem ({onPanel, item, lastIndex, index, newItem}) {
+export default function PendingItem ({ item, lastIndex, index, newItem }) {
     return (
         <View style={styles.itemContainer(index, lastIndex)} key={index}>
             <Shadow distance={3} style={styles.itemWrapper(index, lastIndex)}>
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
         paddingBottom: lastIndex == index ? 5 : 0,
 
         borderBottomColor: COLORS.darkGray,
-        borderBottomWidth: lastIndex != index ? 1 : 0,
+        borderBottomWidth: lastIndex != index ? 1.5 : 0,
     }),
 
     itemWrapper: (index, lastIndex) => ({

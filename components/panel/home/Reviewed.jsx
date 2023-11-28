@@ -5,6 +5,8 @@ import { AntDesign, Entypo, FontAwesome5, MaterialCommunityIcons } from "@expo/v
 import moment from "moment/moment";
 
 import { COLORS, DateTimeUtils, Utils } from "../../../constant";
+import { Search } from "../../use/Search";
+import NothingFoundNote from "../../note/NothingFoundNote";
 import PendingItem from "../../items/home/PendingItem";
 
 const data = [
@@ -26,49 +28,43 @@ const data = [
 ] 
 
 export default function ReviewedPanel ({ onAnimate, setReviewedCount } ) {
-    const [isModalVisible, setIsModalVisible] = useState(false)
     const [filterText, setFilterText] = useState('')
 
-    const currentDate = moment()
-    const dateThreshold = currentDate.clone().subtract(7, 'days')
+    let filteredData = []
+    filteredData = data.filter((item) => {
+        const formattedDate = DateTimeUtils.dateFullConvert(item.date)
+
+        return (
+            formattedDate.toLowerCase().includes(filterText.toLowerCase()) ||
+            item.status.toLowerCase().includes(filterText.toLowerCase())
+        )
+    }) 
 
     useEffect(() => {
         const totalItems = data.length
         setReviewedCount(totalItems)
     })
 
-    const filteredData = data.filter((newItem) => {
-        const formattedDate = DateTimeUtils.dateFullConvert(newItem.date)
-
-        return (
-            formattedDate.toLowerCase().includes(filterText.toLowerCase())
-        )
-    })
-
-    const toggleModal = () => {
-        setIsModalVisible(!isModalVisible)
-    }    
-
     return (
         <Animatable.View
             animation={onAnimate ? 'fadeIn' : ''}
             duration={600}
-            style={[styles.bodyContainer, {opacity: onAnimate ? 1 : 0,}]}
+            style={[styles.bodyContainer, {opacity: onAnimate ? 1 : 0}]}
         >
-            {/* <SearchAndNewRequest 
-                filterText={filterText}
-                setFilterText={setFilterText}
-                toggleModal={toggleModal}
-            /> */}
+            <View style={{ marginHorizontal: 20 }}>
+                <Search 
+                    filterText={filterText}
+                    setFilterText={setFilterText}
+                />
+            </View>
 
             { filteredData.length > 0 ? (
                 <FlatList 
                     data={filteredData}
-                    style={{ marginTop: 20 }}
                     renderItem={({item, index}) => {
                         const formattedDate = DateTimeUtils.dateHalfMonthConvert(item.date)
                         const appliedDate = DateTimeUtils.dateFullConvert(item.appliedDate)
-
+                        
                         return (
                             <PendingItem 
                                 onPanel={0}
@@ -80,27 +76,9 @@ export default function ReviewedPanel ({ onAnimate, setReviewedCount } ) {
                         )
                     }}
                 />
-            ) : ( 
-                <View style={styles.noSearchWrapper}>
-                    <AntDesign
-                        name="search1"
-                        size={55}
-                        color={COLORS.darkGray}
-                        style={{ padding: 20 }}
-                    />
-                    <Text>No Search Found.</Text>
-                </View>
-            )}
+            ) : ( <NothingFoundNote /> )}
         </Animatable.View> 
     )
-}
-
-const formattedDateString = (date) => {
-    const year = date.substring(0, 4)
-    const month = date.substring(4, 6)
-    const day = date.substring(6)
-
-    return moment(`${month}-${day}-${year}`, 'MM-DD-YYYY').format('MMMM DD YYYY')
 }
 
 const styles = StyleSheet.create({
@@ -108,57 +86,4 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
-    titleText: {
-        fontSize: 25,
-        fontFamily: 'Inter_600SemiBold',
-        margin: 10,
-    },
-
-    moreText: {
-        fontSize: 12,
-        color: COLORS.tr_gray,
-        paddingTop: 10,
-    },
-
-    itemStatusText: {
-        fontFamily: 'Inter_500Medium',
-        color: COLORS.darkGray,
-        padding: 10,
-        fontSize: 18,
-        marginHorizontal: 15
-    },
-
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-      
-    modalContent: {
-        width: 300,
-        padding: 20,
-        backgroundColor: 'white',
-        borderRadius: 10,
-        alignItems: 'center',
-    },
-
-    closeBtn: {
-        padding: 10,
-        width: 100,
-        alignSelf: 'flex-end',
-        alignItems: 'center',
-        borderRadius: 20,
-        marginTop: 10,
-    },
-
-    closeText: {
-        color: COLORS.white,
-        fontFamily: 'Inter_500Medium',
-    },
-
-    noSearchWrapper: {
-        justifyContent: 'center',
-        alignItems: 'center'
-    }
 })

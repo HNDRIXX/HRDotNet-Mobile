@@ -2,11 +2,11 @@ import { useState, useRef } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, RefreshControl } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 
-import { Search } from '../../../../../components/use/Search'
-import { DateTimeUtils, COLORS } from '../../../../../constant'
-import LoanLedgerItem from '../../../../../components/items/home/LoanLedgerItem'
-import PageHeader from '../../../../../components/header/PagesHeader'
-import NothingFoundNote from '../../../../../components/note/NothingFoundNote'
+import { Search } from '../../../../components/use/Search'
+import { DateTimeUtils, COLORS } from '../../../../constant'
+import LoanLedgerItem from '../../../../components/items/home/LoanLedgerItem'
+import PageHeader from '../../../../components/header/PagesHeader'
+import NothingFoundNote from '../../../../components/note/NothingFoundNote'
 
 const data = [
     {

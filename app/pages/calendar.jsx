@@ -5,12 +5,12 @@ import * as Animatable from 'react-native-animatable';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import moment from "moment";
 
-import { COLORS } from "../../../constant";
-import CalendarNote from "../../../components/note/CalendarNote";
-import NavigationHeader from "../../../components/header/NavigationHeader";
-import CalendarEvent from "../../../components/section/calendar/CalendarEvent";
+import { COLORS } from "../../constant";
+import CalendarNote from "../../components/note/CalendarNote";
+import NavigationHeader from "../../components/header/NavigationHeader";
+import CalendarEvent from "../../components/section/calendar/CalendarEvent";
 import { ScrollView } from "react-native-gesture-handler";
-import Loader from "../../../components/loader/Loader";
+import Loader from "../../components/loader/Loader";
 
 const valueEvents = {
   '20231001': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day', }, ],

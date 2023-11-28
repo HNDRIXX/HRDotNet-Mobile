@@ -6,20 +6,20 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { Easing } from 'react-native-reanimated';
 
-import Home from './pages/webuser/home';
-import Calendar from './pages/webuser/calendar';
-import Request from './pages/webuser/request';
+import Home from './pages/home/approver-home';
+import Calendar from './pages/calendar';
+import Request from './pages/request';
 import Profile from './pages/profile';
 import MorePage from './access/navigate/request/MorePage';
 import ClockInOut from './access/home/ClockInOut';
 
 import { useFonts } from '../constant/fonts';
-import LoanLedgerPage from './access/navigate/home/webuser/loanledger';
+import LoanLedgerPage from './access/navigate/home/loanledger';
 import { COLORS } from '../constant';
-import TimeSheetPage from './access/navigate/home/webuser/timesheet';
-import PendingPage from './access/navigate/home/webuser/pending';
-import VacationLeavePage from './access/navigate/home/webuser/vacationleave';
-import SickLeavePage from './access/navigate/home/webuser/sickleave';
+import TimeSheetPage from './access/navigate/home/timesheet';
+import PendingPage from './access/navigate/home/pending';
+import VacationLeavePage from './access/navigate/home/vacationleave';
+import SickLeavePage from './access/navigate/home/sickleave';
 import NotificationPage from './access/navigate/home/notification';
 import DrawerPage from './access/navigate/home/drawer';
 import LogInPage from './authentication/base/login';
@@ -39,9 +39,10 @@ import MLRequest from './access/navigate/request/newrequest/MLRequest';
 import MorePayslip from './access/navigate/profile/MorePayslip';
 import AttachedFile from './access/navigate/request/AttachedFile';
 
+import ApprovalsPage from './access/navigate/home/approver/approvals';
+
 export default function Index() {
     const [fontsLoaded] = useFonts()
-    const [show, setShow] = useState()
 
     const Stack = createStackNavigator()
     const Tab = createBottomTabNavigator()
@@ -107,7 +108,7 @@ export default function Index() {
                     tabBarActiveTintColor: COLORS.orange,
                     tabBarInactiveTintColor: COLORS.darkGray,
                 })}
-                initialRouteName="HomeScreen"
+                initialRouteName="Home"
             >
                 <Stack.Screen name="Home" component={Home} />
                 <Stack.Screen 
@@ -154,6 +155,7 @@ export default function Index() {
                             cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
                         }}/>
 
+                    <Stack.Screen name="Approvals" component={ApprovalsPage} />
 
                     <Stack.Screen name="TimeSheet" component={TimeSheetPage} />
                     <Stack.Screen name="Pending" component={PendingPage} />
@@ -176,6 +178,7 @@ export default function Index() {
                         options={{
                             cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
                         }} />                    
+
 
                     <Stack.Screen name="COSRequest" component={COSRequest} />
                     <Stack.Screen name="OBRequest" component={OBRequest} />
