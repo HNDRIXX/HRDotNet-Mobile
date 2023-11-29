@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
-import { COLORS } from "../../constant";
+import { STYLES } from "../../constant";
 import NavigationHeader from "../../components/header/NavigationHeader";
 import PersonalPanel from "../../components/panel/profile/Personal";
 import PayslipPanel from "../../components/panel/profile/Payslip";
 
 export default function Profile ({ navigation }) {
     const [isPanel, setPanel] = useState(0)
+
+    const styles = STYLES.Profile
 
     return (
         <>
@@ -47,45 +49,3 @@ export default function Profile ({ navigation }) {
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: COLORS.clearWhite,
-        flex: 1,
-    },
-
-    buttonScroll: {
-        justifyContent: 'space-evenly',
-        flexDirection: 'row',
-        paddingVertical: 10,
-        borderColor: COLORS.orange,
-        borderBottomWidth: 3,
-    },
-
-    button: {
-        paddingVertical: 5,
-        width: 120,
-        alignItems: 'center',
-        borderRadius: 20,
-    },
-
-    textButton: {
-        fontFamily: 'Inter_500Medium',
-        fontSize: 16,
-        color: COLORS.darkGray,
-    },
-
-    active: {
-        backgroundColor: COLORS.orange,
-
-        elevation: 5,
-        shadowOffset: { width: 10, height: 10 },
-        shadowColor: COLORS.darkGray,
-        shadowRadius: 20,
-    },
-
-    textActive: {
-        fontFamily: 'Inter_700Bold',
-        color: COLORS.clearWhite
-    }
-})

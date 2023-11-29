@@ -10,7 +10,7 @@ import { Ionicons, AntDesign } from "@expo/vector-icons";
 import PageHeader from "../../../../../components/header/PagesHeader";
 import FileAttachedNote from "../../../../../components/note/FileAttachedNote";
 import TitleInput from "../../../../../components/section/request/TitleInput";
-import { COLORS, STRINGS, Utils, DateTimeUtils, RequestUtils, LocationUtils } from "../../../../../constant";
+import { COLORS, STRINGS, STYLES, Utils, DateTimeUtils, RequestUtils, LocationUtils } from "../../../../../constant";
 import { ScrollView } from "react-native";
 
 const data = [{ timeIn: "10:00 AM", timeOut: "7:00 PM"}, { timeIn: "8:00 AM", timeOut: "6:00 PM" }]
@@ -39,6 +39,7 @@ export default function OBRequest ({ navigation }) {
     const [shiftSched, setShiftSched] = useState(null)
 
     const route = useRoute()
+    const styles = STYLES.OBRequest
     const imageParams = route.params?.image
 
     useEffect(() => {
@@ -328,109 +329,3 @@ export default function OBRequest ({ navigation }) {
         </View>
   )
 }
-
-const styles = StyleSheet.create({
-    mainView: {
-        flex: 1,
-        backgroundColor: COLORS.clearWhite,
-    },
-    
-    container: {
-        flex: 1,
-        marginVertical: 15,
-        marginHorizontal: 20
-    },
-
-    wrapper: {
-        marginTop: 10,
-    },
-
-    border: {
-        borderColor: COLORS.darkGray,
-        borderWidth: 1,
-        borderRadius: 12,
-    },
-
-    title: {
-        fontFamily: 'Inter_600SemiBold',
-        marginHorizontal: 15,
-        marginBottom: 7,
-    },
-
-    text: { 
-        fontFamily: 'Inter_400Regular',
-        paddingVertical: 5,
-    },
-
-    grayText: {
-        fontFamily: 'Inter_500Medium',
-        color: COLORS.darkGray
-    },
-
-    rowView: {
-        paddingHorizontal: 15,
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        alignItems: 'center',
-        height: 45
-    },
-
-    placeholder: {
-        color: COLORS.tr_gray,
-    },
-
-    itemPicker: {
-        fontSize: 14
-    },
-
-    textInput: {
-        paddingLeft: 15,
-        height: 45
-    },
-
-    timeWrapper:{
-        marginVertical: 10,
-        marginHorizontal: 20,
-    },
-
-    timeContent: {
-        fontFamily: 'Inter_500Medium',
-        backgroundColor: COLORS.shadowGray,
-        width: 100,
-        textAlign: 'center',
-        paddingTop: 2,
-
-        borderRadius: 5,
-        borderWidth: 2,
-        borderColor: COLORS.tr_gray
-    },
-
-    timeView: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        margin: 2
-    },
-
-    button: {
-        justifyContent: 'center',
-        alignSelf: 'center',
-        backgroundColor: COLORS.orange,
-        width: 170,
-        padding: 10,
-        marginVertical: 20,
-        borderRadius: 20,
-    },
-
-    textButton: {
-        fontFamily: 'Inter_700Bold',
-        fontSize: 16,
-        color: COLORS.clearWhite,
-        textAlign: 'center',
-    },
-
-    fileSuccess: {
-        color: COLORS.green,
-        marginLeft: 10,
-        fontFamily: 'Inter_600SemiBold'
-    }
-})

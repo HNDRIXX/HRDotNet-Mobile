@@ -3,19 +3,17 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator,
 import { StatusBar } from "expo-status-bar";
 import { Entypo } from "@expo/vector-icons";
 
-import { COLORS, useFonts } from "../../../constant";
+import { COLORS, useFonts, STYLES} from "../../../constant";
 import { Account } from "../../../constant/array/account";
 import { Image } from "expo-image";
 
 export default function LogInPage ({ navigation }) {
     const [fontsLoaded] = useFonts()
-    const [isMessage, setMessage] = useState(false)
-    const [showMessagePrompt, setShowMessagePrompt] = useState(false)
     const [userName, setUserName] = useState('')
     const [password, setPassword] = useState('')
     const [isShowPassword, setShowPassword] = useState(false)
 
-    const paddingIOS = Platform.OS === 'ios'
+    const styles = STYLES.LogIn
 
     if (!fontsLoaded) {
         return (
@@ -63,7 +61,7 @@ export default function LogInPage ({ navigation }) {
 
                         <View style={styles.inputWrapper}>
                             <TextInput
-                                style={styles.textInput(paddingIOS)}
+                                style={styles.textInput}
                                 onChangeText={(text) => setUserName(text)}
                                 
                                 value={userName}
@@ -74,7 +72,7 @@ export default function LogInPage ({ navigation }) {
 
                         <View style={[styles.inputWrapper, { marginHorizontal: 10 }]}>
                             <TextInput
-                                style={styles.textInput(paddingIOS)}
+                                style={styles.textInput}
                                 onChangeText={(text) => setPassword(text)}
                                 value={password}
                                 secureTextEntry={!isShowPassword}
@@ -105,90 +103,8 @@ export default function LogInPage ({ navigation }) {
                     </View>
                 </View>
 
-                <Text style={styles.textFooter(paddingIOS)}>Powered by{'\n'}Intellismart Technology Inc.</Text>
+                <Text style={styles.textFooter}>Powered by{'\n'}Intellismart Technology Inc.</Text>
             </View>
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    
-    logo: {
-        width: 230, height: 100,
-        marginBottom: 20,
-    },
-
-    inputContainer: {
-        margin: 10,
-        padding: 20,
-        flex: 1,
-        marginTop: 0,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-
-    inputWrapper: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 10,
-        paddingHorizontal: 20,
-        backgroundColor: COLORS.clearWhite,
-        borderRadius: 30,
-        marginBottom: 15,
-
-        elevation: 5,
-        shadowColor: COLORS.darkGray,
-        shadowOffset: { width: 2, height: 2 },
-        shadowOpacity: 0.5, 
-        shadowRadius: 5, 
-    },
-
-    textInput: (paddingIOS) => ({
-        width: '100%',
-        fontFamily: 'Inter_400Regular',
-        paddingVertical: paddingIOS ? 10 : 0, 
-        color: COLORS.darkGray
-    }),
-
-    loginBtn: {
-        backgroundColor: COLORS.orange,
-        alignItems: 'center',
-        alignSelf: 'center',
-        width: 160,
-        padding: 15,
-        borderRadius: 50,
-        marginTop: 70,
-
-        elevation: 5,
-        shadowColor: COLORS.darkGray,
-        shadowOffset: { width: 2, height: 2 },
-        shadowOpacity: 0.5, 
-        shadowRadius: 5, 
-    },
-
-    loginText: {
-        color: COLORS.clearWhite,
-        fontSize: 15,
-        fontFamily: 'Inter_800ExtraBold'
-    },
-
-    forgotBtn: {
-        alignSelf: 'center',
-    },
-
-    forgotText: {
-        fontFamily: 'Inter_400Regular'
-    },
-
-    textFooter: (paddingIOS) => ({
-        textAlign: 'center',
-        color: COLORS.darkGray,
-        fontFamily: 'Inter_400Regular',
-        fontSize: 13,
-        marginTop: 30,
-        marginBottom: paddingIOS ? 30 : 10,
-    })
-})

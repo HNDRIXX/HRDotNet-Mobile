@@ -7,7 +7,7 @@ import DashedLine from 'react-native-dashed-line'
 import { useRoute } from '@react-navigation/native'
 import { Shadow } from 'react-native-shadow-2'
 
-import { COLORS } from '../../../../constant'
+import { COLORS, STYLES } from '../../../../constant'
 import CalendarNote from '../../../../components/note/CalendarNote'
 import PageHeader from '../../../../components/header/PagesHeader'
 import Loader from '../../../../components/loader/Loader'
@@ -22,6 +22,7 @@ export default function TimeSheetPage ({ navigation }) {
     const [events, setEvents] = useState(null)
 
     const route = useRoute()
+    const styles = STYLES.Timesheet
 
     const items = {
         '2023-11-05': [
@@ -153,79 +154,3 @@ export default function TimeSheetPage ({ navigation }) {
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1
-    },
-
-    line: {
-        borderBottomColor: 'black',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-    },
-    
-    textHeader: {
-        color: COLORS.clearWhite,
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 18,
-        flex: 1,
-        textAlign: 'center',
-        marginRight: 50,
-    },
-
-    agendaCalendar: {
-        flex: 1,
-        backgroundColor: COLORS.clearWhite,
-    },
-
-    monthYearText: {
-        fontFamily: 'Inter_600SemiBold',
-        color: COLORS.darkGray,
-        padding: 15,
-        fontSize: 18,
-    },
-
-    agendaItem: {
-        paddingBottom: 20,
-        flex: 1, 
-        backgroundColor: '#FCFCFC' 
-    },
-
-    clockInOutText: {
-        color: COLORS.darkGray,
-        marginHorizontal: 20,
-        marginVertical: 13,
-        fontFamily: 'Inter_600SemiBold',
-    },
-
-    itemContainer: {
-        marginHorizontal: 23,
-    },
-
-    shadowView: {
-        width: '100%',
-        backgroundColor: COLORS.clearWhite,
-        alignItems: 'center',
-        flexDirection: 'row',
-        borderRadius: 10,
-        padding: 10,
-    },
-    
-    itemText: {
-        fontFamily: 'Inter_700Bold',
-        fontSize: 19,
-    },
-
-    itemLoc: {
-        color: COLORS.darkGray,
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 12,
-    },
-
-    noEventsText: {
-        color: COLORS.tr_gray,
-        textAlign: 'center',
-        padding: 20,
-        fontFamily: 'Inter_500Medium'
-    },
-})

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, BackHandler } from 'react-native'
 import * as Animatable from 'react-native-animatable';
 
-import { COLORS } from '../../../../../constant';
+import { COLORS, STYLES} from '../../../../../constant';
 import PageHeader from '../../../../../components/header/PagesHeader';
 import ChangeOfSchedulePanel from '../../../../../components/panel/home/approvals/ChangeOfSchedule';
 
@@ -17,6 +17,8 @@ const data = [
 
 export default function ApprovalsPage() {
     const [selectedButtonIndex, setSelectedButtonIndex] = useState(0)
+
+    const styles = STYLES.Approvals
 
     const handleButtonPress = (index, title) => {
         setSelectedButtonIndex(index)
@@ -67,51 +69,3 @@ export default function ApprovalsPage() {
         </>
     )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.clearWhite,
-  },
-
-  wrapper: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderBottomColor: COLORS.shadowGray,
-    borderBottomWidth: 2,
-  },
-
-  button: {
-      width: 'auto',
-      height: 35,
-      paddingHorizontal: 20,
-      marginRight: 20,
-      borderRadius: 15,
-      marginVertical: 13,
-      marginLeft: 0,
-      alignItems: 'center',
-      justifyContent: 'center',
-  },
-
-  buttonText: {
-      color: COLORS.tr_gray,
-      fontSize: 17,
-      fontFamily: 'Inter_600SemiBold'
-  },
-
-  selectedButton: {
-      backgroundColor: COLORS.orange,
-  },
-
-  selectedTextButton: {
-      color: COLORS.clearWhite,
-      fontFamily: 'Inter_700Bold'
-  },
-
-  buttonList: {
-    backgroundColor: COLORS.clearWhite,
-    borderColor: COLORS.orange,
-    borderBottomWidth: 3,
-    paddingLeft: 10
-  }
-})

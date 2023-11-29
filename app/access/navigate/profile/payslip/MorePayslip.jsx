@@ -1,18 +1,20 @@
 import { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native'
 import { Shadow } from 'react-native-shadow-2'
-import { Entypo, FontAwesome5 } from '@expo/vector-icons'
+import { FontAwesome5 } from '@expo/vector-icons'
 import moment from 'moment'
 import { useRoute } from '@react-navigation/native'
 import * as Print from 'expo-print'
 import * as FileSystem from 'expo-file-system'
 import * as Sharing from 'expo-sharing'
 
-import { Utils, DateTimeUtils, COLORS  } from '../../../../../constant'
+import { Utils, DateTimeUtils, COLORS, STYLES } from '../../../../../constant'
 import PageHeader from '../../../../../components/header/PagesHeader'
 import Hr from '../../../../../components/use/Hr'
 import Loader from '../../../../../components/loader/Loader'
 import { PayslipPrint } from '../../../../../constant/print/PayslipPrint'
+
+const styles = STYLES.MorePayslip
 
 const RowTextView = ({ semiText, regularText }) => {
     return (
@@ -54,7 +56,6 @@ const TimekeepingText = ({ title, text, gap }) => {
         </View>
     )
 }
-
 
 export default function MorePayslip () {
     const route = useRoute()
@@ -138,32 +139,6 @@ export default function MorePayslip () {
             { isLoading ? ( <Loader /> ) : (
                 <View style={{ flex: 1, backgroundColor: COLORS.clearWhite }}>
                     <ScrollView>
-                        {/* <TouchableOpacity
-                            style={[styles.downloadButton, { marginTop: 20, backgroundColor: COLORS.clearWhite }]}
-                            onPress={generateAndDownloadPDF}
-                        >
-                            <Entypo 
-                                name="download"
-                                size={24}
-                                color={COLORS.orange} 
-                                style={{ marginRight: 10 }} />
-                            
-                            <Text style={{ color: COLORS.orange, fontFamily: 'Inter_700Bold'}}>DOWNLOAD</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                            style={[styles.downloadButton, { marginTop: 20}]}
-                            onPress={generateAndDownloadPDF}
-                        >
-                            <Entypo 
-                                name="download"
-                                size={24}
-                                color={COLORS.clearWhite} 
-                                style={{ marginRight: 10 }} />
-                            
-                            <Text style={{ color: COLORS.clearWhite, fontFamily: 'Inter_700Bold'}}>DOWNLOAD</Text>
-                        </TouchableOpacity> */}
-
                         <TouchableOpacity
                             style={[styles.downloadButton, { marginTop: 20}]}
                             onPress={generateAndDownloadPDF}
@@ -276,12 +251,6 @@ export default function MorePayslip () {
                                 <Hr width={1} />
                                 <Hr width={1} space={.1} />
 
-                                {/* const filteredData = TKData.filter((item) => {
-                                    const itemDate = item.date;
-                                    return moment(itemDate, 'YYYYMMDD').isBetween(startDateRange, endDateRange, undefined, '[]');
-                                    }); */
-                                }
-
                                 {filteredData.map(( item, index ) => (
                                     <View key={index}>
                                         <View style={styles.textView}  >
@@ -332,93 +301,8 @@ export default function MorePayslip () {
                             </Shadow>
                         </View>
                     </ScrollView>
-
-                    {/* <Shadow distance={5} style={styles.shadowViewButton}>
-                        <TouchableOpacity
-                            style={styles.downloadButton}
-                            onPress={generateAndDownloadPDF}
-                        >
-                            <Entypo 
-                                name="download"
-                                size={24}
-                                color={COLORS.green} 
-                                style={{ marginRight: 10 }} />
-                            
-                            <Text style={{ color: COLORS.green, fontFamily: 'Inter_700Bold'}}>DOWNLOAD</Text>
-                        </TouchableOpacity>
-                    </Shadow> */}
                 </View>
             )}
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: COLORS.clearWhite,
-        flex: 1,
-        paddingHorizontal: 20,
-        paddingVertical: 20,
-    },
-
-    shadowView: {
-        backgroundColor: COLORS.clearWhite,
-        width: '100%',
-        paddingVertical: 35,
-        paddingHorizontal: 35,
-    },
-
-    titleText: {
-        fontFamily: 'Inter_700Bold',
-        fontSize: 17,
-        textAlign: 'center',
-        alignSelf: 'center',
-        marginBottom: 10,
-        width: '100%'
-    },
-
-    textView: {
-        justifyContent: 'flex-start',
-        alignItems: 'baseline',
-        marginVertical: 10
-    },
-
-    semiText: (bold) => ({
-        fontFamily: bold ? 'Inter_700Bold' : 'Inter_600SemiBold',
-        marginRight: 20
-    }),
-
-    regularText: (bold) => ({
-        fontFamily: bold ? 'Inter_700Bold' : 'Inter_400Regular'
-    }),
-
-    rowText: {
-        flexDirection: 'row',
-        textAlign: 'left',
-    },
-
-    regularDayView: {
-        justifyContent: 'space-between', 
-        flexDirection: 'row', 
-        width: '100%',
-    },
-
-    tkDateText: {
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 16
-    },
-
-    shadowViewButton: {
-        width: '100%',
-        paddingVertical: 17,
-        borderRadius: 0,
-    },
-
-    downloadButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        alignSelf: 'flex-end',
-        justifyContent: 'flex-end',
-        marginHorizontal: 20,
-    }
-})

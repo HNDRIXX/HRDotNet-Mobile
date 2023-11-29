@@ -8,7 +8,7 @@ import { Ionicons, AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import PageHeader from "../../../../../components/header/PagesHeader";
 import TitleInput from "../../../../../components/section/request/TitleInput";
 import FileAttachedNote from "../../../../../components/note/FileAttachedNote";
-import { COLORS, STRINGS, Utils, DateTimeUtils } from "../../../../../constant";
+import { COLORS, STRINGS, STYLES, Utils, DateTimeUtils } from "../../../../../constant";
 import { ScrollView } from "react-native";
 
 const checkboxData = ['Time-in', 'Time-out']
@@ -31,6 +31,7 @@ export default function LVRequest ({ navigation }) {
     const [isInputCheck, setInputCheck] = useState(false)
 
     const route = useRoute()
+    const styles = STYLES.MLRequest
     const imageParams = route.params?.image
 
     useEffect(() => {
@@ -228,122 +229,3 @@ export default function LVRequest ({ navigation }) {
         </View>
   )
 }
-
-const styles = StyleSheet.create({
-    mainView: {
-        flex: 1,
-        backgroundColor: COLORS.clearWhite,
-    },
-    
-    container: {
-        flex: 1,
-        marginVertical: 15,
-        marginHorizontal: 20
-    },
-
-    wrapper: {
-        marginTop: 10,
-    },
-
-    border: {
-        borderColor: COLORS.darkGray,
-        borderWidth: 1,
-        borderRadius: 12,
-    },
-
-    title: {
-        fontFamily: 'Inter_600SemiBold',
-        marginHorizontal: 15,
-        marginBottom: 7,
-    },
-
-    text: { 
-        fontFamily: 'Inter_400Regular',
-        paddingVertical: 5,
-    },
-
-    mediumText: {
-        fontFamily: 'Inter_500Medium',
-    },
-
-    rowView: {
-        paddingHorizontal: 15,
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        alignItems: 'center',
-        height: 45
-    },
-
-    placeholder: {
-        color: COLORS.tr_gray,
-    },
-
-    itemPicker: {
-        fontSize: 14
-    },
-
-    textInput: {
-        paddingLeft: 15,
-        height: 45
-    },
-
-    timeWrapper:{
-        marginVertical: 10,
-        marginHorizontal: 18,
-    },
-
-    timeContent: {
-        fontFamily: 'Inter_500Medium',
-        backgroundColor: COLORS.gray,
-        width: 60,
-        paddingTop: 3,
-        textAlign: 'center',
-
-        borderRadius: 5,
-        borderWidth: 2,
-        borderColor: COLORS.tr_gray
-    },
-
-    timeView: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-
-    button: {
-        justifyContent: 'center',
-        alignSelf: 'center',
-        backgroundColor: COLORS.orange,
-        width: 170,
-        padding: 10,
-        marginVertical: 20,
-        borderRadius: 20,
-    },
-
-    textButton: {
-        fontFamily: 'Inter_700Bold',
-        fontSize: 16,
-        color: COLORS.clearWhite,
-        textAlign: 'center',
-    },
-
-    checkboxView: {
-        flexDirection: 'row',
-        paddingVertical: 8,
-    },
-
-    checkboxItem: {
-        flexDirection: 'row', 
-        paddingHorizontal: 14,
-    },
-
-    checkboxText: {
-        fontFamily: 'Inter_500Medium',
-        paddingLeft: 8,
-    },
-
-    fileSuccess: {
-        color: COLORS.green,
-        marginLeft: 10,
-        fontFamily: 'Inter_600SemiBold'
-    }
-})

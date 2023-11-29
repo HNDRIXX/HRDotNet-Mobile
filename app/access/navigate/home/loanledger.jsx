@@ -2,7 +2,7 @@ import { useState, useRef } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, RefreshControl } from 'react-native'
 
 import { Search } from '../../../../components/use/Search'
-import { DateTimeUtils, COLORS } from '../../../../constant'
+import { COLORS, STYLES, DateTimeUtils, } from '../../../../constant'
 import LoanLedgerItem from '../../../../components/items/home/LoanLedgerItem'
 import PageHeader from '../../../../components/header/PagesHeader'
 import NothingFoundNote from '../../../../components/note/NothingFoundNote'
@@ -68,6 +68,7 @@ export default function LoanLedgerPage () {
     const [refreshing, setRefreshing] = useState(false)
     const scrollViewRef = useRef(null)
 
+    const styles = STYLES.LoanLedger
     let filteredData = []
 
     filteredData = data.filter((item) => {
@@ -123,14 +124,3 @@ export default function LoanLedgerPage () {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1, 
-        backgroundColor: COLORS.clearWhite 
-    },
-
-    loanLedgerList: {
-        marginTop: 20,
-    }
-})

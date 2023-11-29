@@ -3,7 +3,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { Shadow } from "react-native-shadow-2";
 import { Image } from "react-native-expo-image-cache";
 
-import { COLORS, ICONS, DateTimeUtils } from "../../../../constant";
+import { COLORS, ICONS, STYLES, DateTimeUtils } from "../../../../constant";
 import PageHeader from "../../../../components/header/PagesHeader";
 
 const data = [
@@ -28,6 +28,8 @@ const data = [
 ]
 
 export default function SickLeavePage ({ navigation }) {
+    const styles = STYLES.SickLeave
+    
     return (
         <View style={styles.container}>
             <PageHeader pageName={'Sick Leave'}/>
@@ -80,96 +82,3 @@ export default function SickLeavePage ({ navigation }) {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: COLORS.clearWhite,
-    },
-
-    topContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        margin: 20,
-    },
-
-    titleText: {
-        fontFamily: 'Inter_700Bold',
-        fontSize: 22,
-    },
-
-    yearText: {
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 18
-    },
-
-    yearValue: {
-        color: COLORS.orange,
-    },
-
-    creditContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        alignSelf: 'center',
-        backgroundColor: COLORS.clearWhite,
-    },
-
-    creditShadow: {
-        borderRadius: 15,
-    },
-
-    creditsValue: {
-        padding: 18,
-        fontSize: 25,
-        color: COLORS.orange,
-        fontFamily: 'Inter_600SemiBold',
-    },
-
-    detailsTitle: {
-        fontSize: 15,
-        marginHorizontal: 20,
-        marginTop: 20,
-        fontFamily: 'Inter_600SemiBold',
-    },
-
-    itemWrapper: {
-        backgroundColor: COLORS.clearWhite,
-        margin: 10,
-        marginHorizontal: 20,
-        borderRadius: 20,
-    },
-
-    shadowView: {
-        width: '100%', 
-        backgroundColor: COLORS.clearWhite,
-        borderRadius: 20 
-    },
-
-    itemHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: COLORS.tr_gray,
-        padding: 10,
-        paddingHorizontal: 20,
-        borderTopRightRadius: 20,
-        borderTopLeftRadius: 20,
-    },
-
-    itemHeaderText: {
-        color: COLORS.clearWhite,
-        fontFamily: 'Inter_700Bold',
-    },
-
-    itemBody: {
-        padding: 15,
-    },
-
-    bodyText: {
-        fontFamily: 'Inter_600SemiBold',
-    },
-
-    itemText: {
-        fontFamily: 'Inter_400Regular'
-    }
-})

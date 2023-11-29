@@ -4,11 +4,12 @@ import * as Animatable from 'react-native-animatable';
 import { Shadow } from 'react-native-shadow-2';
 import { useRoute } from '@react-navigation/native';
 
-import { COLORS, Utils } from '../../../../constant';
+import { COLORS, STYLES, Utils } from '../../../../constant';
 import PageHeader from '../../../../components/header/PagesHeader';
 
 export default function MorePage ({ navigation }) {
     const params = useRoute().params
+    const styles = STYLES.MorePage(params)
     let topDate
 
     switch (params.requestType) {
@@ -39,7 +40,7 @@ export default function MorePage ({ navigation }) {
             <PageHeader pageName={"Request Details"} />
 
             <View>
-                <View style={styles.topContent(params)}>
+                <View style={styles.topContent}>
                     <Text style={styles.topDate}>{topDate}</Text>
                     
                     <View style={styles.rowWrapper}>
@@ -195,63 +196,3 @@ export default function MorePage ({ navigation }) {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    topContent: (item) => ({
-        backgroundColor: 
-            item.status == "Filed" ?
-                COLORS.filed :
-            item.status == "Reviewed" ?
-                COLORS.purple :
-            item.status == "Approved" ?
-                COLORS.green :
-            item.status == "Cancelled" ?
-                COLORS.red
-            : COLORS.tr_gray,
-
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        padding: 15,
-    }),
-
-    topDate: {
-        color: COLORS.clearWhite,
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 15,
-    },
-
-    container: {
-        marginHorizontal: 20,
-        marginVertical: 20,
-    },
-
-    content: {
-        padding: 20,
-        borderRadius: 20,
-        width: '100%'
-    },
-
-    rowWrapper: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-
-    titleText: {
-        fontFamily: 'Inter_600SemiBold',
-        marginRight: 10,
-    },
-
-    valueText: {
-        fontFamily: 'Inter_400Regular',
-        color: COLORS.black,
-    },
-
-    statusWrapper: {
-        width: '80%',
-    },
-
-    attachText: {
-        color: COLORS.powderBlue,
-        fontFamily: 'Inter_600SemiBold',
-    }
-})

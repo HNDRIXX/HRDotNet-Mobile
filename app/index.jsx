@@ -13,7 +13,7 @@ import Profile from './pages/Profile';
 import MorePage from './access/navigate/request/MorePage';
 import TimeClock from './access/home/TimeClock';
 
-import { useFonts } from '../constant/fonts';
+import { useFonts } from '../constant/Fonts';
 import LoanLedgerPage from './access/navigate/home/LoanLedger';
 import { COLORS } from '../constant';
 import TimeSheetPage from './access/navigate/home/Timesheet';

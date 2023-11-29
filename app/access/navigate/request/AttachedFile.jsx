@@ -5,10 +5,11 @@ import { Image } from 'expo-image'
 import * as FileSystem from 'expo-file-system';
 
 import PageHeader from '../../../../components/header/PagesHeader'
-import { DateTimeUtils } from '../../../../constant'
+import { STYLES, DateTimeUtils } from '../../../../constant'
 
 export default function AttachedFile ({ navigation }) {
     const route = useRoute()
+    const styles = STYLES.AttachedFile
     const params = route.params
     const imageParams = route.params.attachedFile
     const imageUri = decodeURIComponent(imageParams?.uri)
@@ -52,27 +53,3 @@ export default function AttachedFile ({ navigation }) {
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        marginHorizontal: 30
-    },
-
-    textView: {
-        flexDirection: 'row',
-    },
-
-    rowView: {
-        marginTop: 20,
-    },
-
-    boldText: {
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 15
-    },
-
-    regularText: {
-        fontFamily: 'Inter_400Regular',
-        fontSize: 15,
-    }
-})

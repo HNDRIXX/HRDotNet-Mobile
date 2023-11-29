@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { View, Text, StyleSheet,TouchableOpacity} from "react-native"
 
-import { COLORS } from "../../../../constant"
+import { COLORS, STYLES } from "../../../../constant"
 import ReviewedPanel from '../../../../components/panel/home/Reviewed'
 import FiledPanel from '../../../../components/panel/home/Filed'
 import PageHeader from "../../../../components/header/PagesHeader"
@@ -10,6 +10,8 @@ export default function PendingPage ({ navigation }) {
     const [activePanel, setActivePanel] = useState(1)
     const [filedCount, setFiledCount] = useState(0)
     const [reviewedCount, setReviewedCount] = useState(0)
+
+    const styles = STYLES.Pending
 
     const switchPanel = (panelNum) => {
         setActivePanel(panelNum)
@@ -55,68 +57,3 @@ export default function PendingPage ({ navigation }) {
         </View>
     )
 }
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1, 
-        backgroundColor: COLORS.clearWhite
-    },
-
-    btnHorizontal: {
-        flexDirection: 'row',
-        marginHorizontal: 10,
-        borderBottomColor: COLORS.lighterOrange,
-        borderBottomWidth: 2,
-    },
-
-    button: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        margin: 15,
-        padding: 5,
-        borderRadius: 20,
-        alignItems: 'center',
-    },
-
-    counterText: {
-        backgroundColor: COLORS.clearWhite,
-        color: COLORS.orange,
-        marginRight: 10,
-        fontSize: 18,
-        fontFamily: 'Inter_700Bold',
-        paddingHorizontal: 9,
-        borderRadius: 10,
-        overflow: 'hidden',
-        display: 'none',
-    },
-  
-    buttonText: {
-        color: COLORS.tr_gray,
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 17,
-    },
-  
-    selectedButton: {
-        backgroundColor: COLORS.orange,
-        elevation: 7,
-        shadowColor: COLORS.darkGray,
-        shadowOffset: {width: 1, height: 1},
-        shadowOpacity: .2,
-        shadowRadius: 10,
-    },
-  
-    selectedTextButton: {
-        color: COLORS.clearWhite,
-        fontFamily: 'Inter_700Bold',
-    },
-
-    selectedCounter: {
-        display: 'flex',
-    },
-
-    searchView: {
-        marginHorizontal: 20,
-    }
-})

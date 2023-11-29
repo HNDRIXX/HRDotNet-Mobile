@@ -4,10 +4,11 @@ import { useRoute } from '@react-navigation/native'
 import { Shadow } from 'react-native-shadow-2'
 import { Image } from 'react-native-expo-image-cache'
 
-import { COLORS, ICONS } from '../../../../../constant'
+import { COLORS, ICONS, STYLES} from '../../../../../constant'
 
 export default function NotificationDetails({ navigation }) {
     const route = useRoute()
+    const styles = STYLES.NotificationDetails
     
     return (
         <View style={styles.container}>
@@ -31,34 +32,3 @@ export default function NotificationDetails({ navigation }) {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: COLORS.clearWhite,
-    },
-
-    wrapper: {
-        margin: 20,
-        marginHorizontal: 30,
-        borderRadius: 20,
-        backgroundColor: COLORS.clearWhite,
-    },
-
-    icon: {
-        height: 100, width: 100,
-        alignSelf: 'center',
-        justifyContent: 'center',
-        marginBottom: 20
-    },
-
-    shadowView: {
-        width: '100%',
-        borderRadius: 20,
-        padding: 30,
-    },
-    
-    text: {
-        fontSize: 14,
-    }
-})

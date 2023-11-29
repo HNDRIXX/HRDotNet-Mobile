@@ -2,7 +2,7 @@ import { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, FlatList } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import { COLORS, ICONS, DateTimeUtils } from "../../../../constant";
+import { COLORS, STYLES, DateTimeUtils } from "../../../../constant";
 import PageHeader from "../../../../components/header/PagesHeader";
 import NotificationsItem from "../../../../components/items/home/NotificationsItem";
 
@@ -30,6 +30,8 @@ const data = [
 export default function NotificationPage () {
     const navigation = useNavigation()
     const [listData, setListData] = useState(data)
+
+    const styles = STYLES.Notifications
 
     const handleNotificationPress = (index, item) => {
         const newData = [...listData]
@@ -64,22 +66,3 @@ export default function NotificationPage () {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: COLORS.clearWhite
-    },
-
-    listView: {
-        padding: 20,
-    },
-
-    wrapper: {
-        flex: 1,
-        margin: 20,
-        borderRadius: 20,
-        backgroundColor: COLORS.clearWhite,
-        elevation: 3,
-    },
-})

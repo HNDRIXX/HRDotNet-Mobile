@@ -9,7 +9,7 @@ import SelectDropdown from "react-native-select-dropdown";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
 import FileAttachedNote from "../../../../../components/note/FileAttachedNote";
-import { COLORS, STRINGS, DateTimeUtils, Utils, ErrorUtils } from "../../../../../constant";
+import { COLORS, STRINGS, DateTimeUtils, Utils, STYLES } from "../../../../../constant";
 import TitleInput from "../../../../../components/section/request/TitleInput";
 
 const checkboxData = ['Work Shift', 'Rest Day']
@@ -35,6 +35,7 @@ export default function COSRequest ({ navigation }) {
     const [isSizeError, setSizeError] = useState(false)
 
     const route = useRoute()
+    const styles = STYLES.COSRequest
     const imageParams = route.params?.image
 
     useEffect(() => {
@@ -256,89 +257,3 @@ export default function COSRequest ({ navigation }) {
         </View>
   )
 }
-
-const styles = StyleSheet.create({
-    mainView: {
-        flex: 1,
-        backgroundColor: COLORS.clearWhite,
-    },
-
-    container: {
-        flex: 1,
-        paddingVertical: 15,
-        paddingHorizontal: 20,
-    },
-
-    wrapper: {
-        marginVertical: 10,
-    },
-
-    border: {
-        borderColor: COLORS.darkGray,
-        borderWidth: 1,
-        borderRadius: 12,
-    },
-
-    placeholder: {
-        color: COLORS.tr_gray,
-    },
-
-    dateText: {
-        paddingVertical: 7,
-    },
-
-    rowView: {
-        paddingVertical: 5,
-        paddingHorizontal: 15,
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-
-    itemPicker: {
-        fontSize: 14
-    },
-
-    textInput: {
-        paddingLeft: 15,
-        paddingVertical: 12
-    },
-
-    button: {
-        justifyContent: 'center',
-        alignSelf: 'center',
-        backgroundColor: COLORS.orange,
-        width: 170,
-        padding: 10,
-        marginVertical: 20,
-        borderRadius: 20,
-    },
-
-    textButton: {
-        fontFamily: 'Inter_700Bold',
-        fontSize: 16,
-        color: COLORS.clearWhite,
-        textAlign: 'center',
-    },
-
-    checkboxView: {
-        flexDirection: 'row',
-        paddingVertical: 8, 
-    },
-
-    checkboxItem: {
-        flexDirection: 'row', 
-        paddingHorizontal: 15
-    },
-
-    checkboxText: {
-        fontFamily: 'Inter_400Regular',
-        paddingLeft: 10,
-    },
-
-    fileSuccess: {
-        color: COLORS.green,
-        marginLeft: 10,
-        fontFamily: 'Inter_600SemiBold'
-    }
-})

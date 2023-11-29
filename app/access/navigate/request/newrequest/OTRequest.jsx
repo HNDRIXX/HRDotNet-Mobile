@@ -9,7 +9,7 @@ import { Ionicons, Entypo, AntDesign } from "@expo/vector-icons";
 import PageHeader from "../../../../../components/header/PagesHeader";
 import Loader from "../../../../../components/prompt/loader/Loader";
 import FileAttachedNote from "../../../../../components/note/FileAttachedNote";
-import { COLORS, STRINGS, DateTimeUtils, Utils} from "../../../../../constant";
+import { COLORS, STRINGS, STYLES, DateTimeUtils, Utils} from "../../../../../constant";
 
 import OverTimePrompt from "../../../../../components/prompt/OverTimePrompt";
 
@@ -33,8 +33,6 @@ const data = [
         shiftSchedule: '06:30 AM to 05:30 PM (Default Schedule)',
     },
 ]
-
-const sortedData = [...data].sort((a, b) => a.OTDate.localeCompare(b.OTDate))
 
 export default function OTRequest ({ navigation }) {
     const [filteredData, setFilteredData] = useState([])
@@ -70,6 +68,7 @@ export default function OTRequest ({ navigation }) {
     const sixteenthDayOfMonth = moment().date(15)
 
     const route = useRoute()
+    const styles = STYLES.OTRequest
     const imageParams = route.params?.image
 
     useEffect(() => {
@@ -335,113 +334,3 @@ export default function OTRequest ({ navigation }) {
         </View>
   )
 }
-
-const styles = StyleSheet.create({
-    mainView: {
-        flex: 1,
-        backgroundColor: COLORS.clearWhite,
-    },
-    
-    container: {
-        flex: 1,
-        marginVertical: 15,
-        marginHorizontal: 20
-    },
-
-    wrapper: {
-        marginTop: 10,
-    },
-
-    border: {
-        borderColor: COLORS.darkGray,
-        borderWidth: 1,
-        borderRadius: 12,
-    },
-
-    title: {
-        fontFamily: 'Inter_600SemiBold',
-        marginHorizontal: 15,
-        marginBottom: 7,
-    },
-
-    text: { 
-        fontFamily: 'Inter_400Regular',
-        paddingVertical: 5,
-    },
-
-    grayText: {
-        fontFamily: 'Inter_500Medium',
-        color: COLORS.darkGray
-    },
-
-    rowView: {
-        paddingHorizontal: 15,
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        alignItems: 'center',
-        height: 45
-    },
-
-    placeholder: {
-        color: COLORS.tr_gray,
-    },
-
-    itemPicker: {
-        fontSize: 14
-    },
-
-    textInput: {
-        fontFamily: 'Inter_500Medium',
-        paddingLeft: 15,
-        height: 45
-    },
-
-    timeWrapper:{
-        marginVertical: 15,
-        marginHorizontal: 20,
-    },
-
-    timeContent: {
-        fontFamily: 'Inter_500Medium',
-        backgroundColor: COLORS.gray,
-        width: 100,
-        textAlign: 'center',
-
-        borderRadius: 5,
-        borderWidth: 2,
-        borderColor: COLORS.tr_gray
-    },
-
-    timeView: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        margin: 5
-    },
-
-    button: {
-        justifyContent: 'center',
-        alignSelf: 'center',
-        backgroundColor: COLORS.orange,
-        width: 170,
-        padding: 10,
-        marginVertical: 20,
-        borderRadius: 20,
-    },
-
-    textButton: {
-        fontFamily: 'Inter_700Bold',
-        fontSize: 16,
-        color: COLORS.clearWhite,
-        textAlign: 'center',
-    },
-
-    disabledInput: {
-        backgroundColor: COLORS.lightGray3,
-    },
-    
-    fileSuccess: {
-        color: COLORS.green,
-        marginLeft: 10,
-        fontFamily: 'Inter_600SemiBold'
-    }
-})

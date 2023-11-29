@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions } from "react-native";
-import { Image } from "expo-image";
+import { Image } from "react-native-expo-image-cache";
 import { useRoute } from "@react-navigation/native";
 import { Shadow } from "react-native-shadow-2";
 import * as Animatable from 'react-native-animatable';
 import { FontAwesome, Entypo } from "@expo/vector-icons";
 
-import { COLORS } from "../../../constant";
+import { COLORS, ICONS, STYLES } from "../../../constant";
 import TimeClock from "../../../components/section/home/TimeClock";
 import MenuButton from "../../../components/button/MenuButton";
 import TimeOff from "../../../components/button/TimeOff";
@@ -15,13 +15,14 @@ import Loader from "../../../components/loader/Loader"
 
 export default function Home ({ navigation }) {  
     const [isLoading, setIsLoading] = useState(true)
+
     const route = useRoute()
-    
     const insets = useSafeAreaInsets()
+    const styles = STYLES.UserHome(insets)
 
     useEffect(() => {
         setTimeout(() => {
-        setIsLoading(false)
+            setIsLoading(false)
         }, 800)
     }, [])
 
@@ -33,7 +34,7 @@ export default function Home ({ navigation }) {
                     duration={500}
                     style={{ opacity: 1, flex: 1 }}
                 >
-                    <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: COLORS.powderBlue }}>
+                    <View style={styles.container}>
                         <StatusBar backgroundColor={COLORS.powderBlue} barStyle={'light-content'} />
 
                         <View style={styles.headerView}>
@@ -53,8 +54,7 @@ export default function Home ({ navigation }) {
                             <View style={styles.welcomeView}>
                                 <Image 
                                     style={styles.userIcon} 
-                                    source={require('../../../assets/user/juan.jpg')}
-                                    contentFit="contain" />
+                                    uri={ICONS.juan} />
 
                                 <View>
                                     <Text style={styles.helloText}>Hello,</Text>
@@ -112,116 +112,5 @@ export default function Home ({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    loader: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-
-    headerView: {
-        padding: 20,
-        paddingTop: 15,
-        height: 225,
-        backgroundColor: COLORS.powderBlue,
-    },
-
-    headerNavigation: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginHorizontal: 8,
-        marginBottom: 10,
-    },
-
-    welcomeView: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginTop: 8,
-        marginHorizontal: 10
-    },
-
-    userIcon: {
-        width: 83,
-        height: 83,
-        borderWidth: 4,
-        borderColor: COLORS.orange,
-        borderRadius: 40,
-        marginRight: 15
-    },
-
-    helloText: {
-        fontFamily: 'Inter_800ExtraBold',
-        letterSpacing: -.5,
-        color: COLORS.clearWhite,
-        fontSize: 21,
-
-        textShadowColor: COLORS.darkGray,
-        textShadowOffset: {width: 1.5, height: 2},
-        textShadowRadius: 10
-    },
-
-    nameText: {
-        fontFamily: 'Inter_800ExtraBold',
-        letterSpacing: -.5,
-        color: COLORS.clearWhite,
-        fontSize: 22,
-        lineHeight: 26,
-
-        textShadowColor: COLORS.darkGray,
-        textShadowOffset: {width: 1.5, height: 2},
-        textShadowRadius: 10
-    },
-
-    statusView: {
-        flexDirection: 'row',
-        marginTop: 2,
-        alignItems: 'center'
-    },
-
-    statusText: {
-        color: COLORS.clearWhite,
-        fontFamily: 'Inter_600SemiBold',
-        marginLeft: 10,    
-        fontSize: 13, 
-    },
-
-    timeClockText: {
-        color: COLORS.clearWhite,
-        fontSize: 16,
-        paddingHorizontal: 5,
-        marginTop: 10,
-        fontFamily: 'Inter_700Bold'
-    },
-
-    timeClockView: {
-        backgroundColor: COLORS.clearWhite,
-        alignContent: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderTopLeftRadius: 70,
-        borderTopEndRadius: 70,
-        width: '100%',
-    },
    
-    menuView: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: COLORS.clearWhite,
-    },
-
-    scrollView: {
-    },
-
-    sectionView: {
-        width: Dimensions.get('window').width, 
-
-    },
-
-    mainTitle: {
-        marginHorizontal: 35,
-        fontSize: 18,
-        marginVertical: 6,
-        color: COLORS.powderBlue,
-        fontFamily: 'Inter_600SemiBold',
-    }
 })

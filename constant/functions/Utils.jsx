@@ -6,8 +6,8 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as Location from 'expo-location';
 import * as FileSystem from 'expo-file-system';
 
-import { COLORS } from '../theme';
-import { STRINGS } from '../strings';
+import { COLORS } from '../Theme';
+import { STRINGS } from '../Strings';
 
 const currentDate = moment()
 const firstDayOfMonth = moment().startOf('month')

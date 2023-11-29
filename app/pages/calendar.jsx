@@ -1,11 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, StyleSheet,  RefreshControl, ActivityIndicator, BackHandler, Platform  } from "react-native";
+import { View, StyleSheet,  RefreshControl } from "react-native";
 import { Calendar } from "react-native-calendars";
 import * as Animatable from 'react-native-animatable';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import moment from "moment";
 
-import { COLORS } from "../../constant";
+import { COLORS, STYLES } from "../../constant";
 import CalendarNote from "../../components/note/CalendarNote";
 import NavigationHeader from "../../components/header/NavigationHeader";
 import CalendarEvent from "../../components/section/calendar/CalendarEvent";
@@ -38,7 +37,7 @@ export default function CalendarScreen() {
   const [nextDate, setNextDate] = useState(null)
   const scrollViewRef = useRef(null)
 
-  const navigation = useNavigation()
+  const styles = STYLES.Calendar
   const updatedValueEvents = {}
 
   useEffect(() => {
@@ -105,10 +104,6 @@ export default function CalendarScreen() {
 
     setTimeout(() => {
       setRefreshing(false)
-
-      if (scrollViewRef.current) {
-        scrollViewRef.current.scrollTo({ y: 0, animated: true })
-      }
     }, 1000)
   }
 
@@ -172,21 +167,23 @@ export default function CalendarScreen() {
                     refreshControl={
                       <RefreshControl
                         refreshing={refreshing}
-                        onRefresh={refresh}
-                      />
+                        onRefresh={refresh} />
                   }>
                     <Calendar
                         onDayPress={dayPress}
                         style={styles.calendarView}
                         enableSwipeMonths
+
                         headerStyle={{
                           backgroundColor: COLORS.clearWhite,
                         }}
+
                         theme={{
                           dotColor: COLORS.orange,
                           todayTextColor: COLORS.baseOrange,
                           arrowColor: COLORS.powderBlue,
                         }}
+
                         markedDates={addMarkedDates()}
                     />
                   </ScrollView>
@@ -215,19 +212,3 @@ export default function CalendarScreen() {
     </>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.clearWhite,
-  },
-
-  calendarView: {
-    paddingTop: 10,
-    height: 'auto',
-  },
-
-  promptView: {
-    marginBottom: 70,
-  }
-})
