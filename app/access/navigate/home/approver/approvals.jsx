@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, BackHandler } from 'react-native'
-import { useNavigation } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
 import * as Animatable from 'react-native-animatable';
 
 import { COLORS } from '../../../../../constant';
@@ -19,8 +17,7 @@ const data = [
 
 export default function ApprovalsPage() {
     const [selectedButtonIndex, setSelectedButtonIndex] = useState(0)
-    const navigation = useNavigation()
-    
+
     const handleButtonPress = (index, title) => {
         setSelectedButtonIndex(index)
     }

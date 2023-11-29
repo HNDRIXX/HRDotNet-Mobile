@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { View, Text , StyleSheet, TouchableOpacity, ScrollView } from "react-native";
-import { useRoute } from "@react-navigation/native";
-import moment from "moment";
 import DashedLine from "react-native-dashed-line";
 
-import PageHeader from "../../../../components/header/PagesHeader";
 import SuccessPromptPage from "../../../../components/prompt/SuccessPrompt";
 import { COLORS, STRINGS, DateTimeUtils } from "../../../../constant";
 import { Image } from "expo-image";
@@ -63,10 +60,6 @@ export default function OTSummary({ route, imageParams, openCustomAlert, closeCu
                         <Text style={styles.boldText}>File Attachment</Text>
 
                         <View style={styles.attachmentView}>
-                            {/* <Text style={[styles.summaryText, { width: '60%' }]}>
-                                {route.route?.attachedFile}
-                            </Text> */}
-
                             <Image 
                                 source={{ uri: decodeURIComponent(imageParams?.uri) }}
                                 style={{ width: 130, height: 150 }}
@@ -102,8 +95,9 @@ export default function OTSummary({ route, imageParams, openCustomAlert, closeCu
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginVertical: 20,
-        marginHorizontal: 20,
+        paddingVertical: 20,
+        paddingHorizontal: 20,
+        backgroundColor: COLORS.clearWhite
     },
 
     summaryView: {

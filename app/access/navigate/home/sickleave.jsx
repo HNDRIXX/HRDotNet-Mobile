@@ -2,7 +2,6 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator }
 import { AntDesign } from "@expo/vector-icons";
 import { Shadow } from "react-native-shadow-2";
 import { Image } from "react-native-expo-image-cache";
-import moment from 'moment';
 
 import { COLORS, ICONS, DateTimeUtils } from "../../../../constant";
 import PageHeader from "../../../../components/header/PagesHeader";

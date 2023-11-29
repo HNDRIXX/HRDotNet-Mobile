@@ -1,7 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { AntDesign, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
-// import { Image } from "expo-image";
-import { router } from "expo-router";
 import { Image } from "react-native-expo-image-cache";
 
 import { COLORS, ICONS } from "../../../../constant";

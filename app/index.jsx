@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { Easing } from 'react-native-reanimated';
 
-import Home from './pages/home/ApproverHome';
+import Home from './pages/home/UserHome';
 import Calendar from './pages/Calendar';
 import Request from './pages/Request';
 import Profile from './pages/Profile';
@@ -20,7 +20,7 @@ import TimeSheetPage from './access/navigate/home/Timesheet';
 import PendingPage from './access/navigate/home/Pending';
 import VacationLeavePage from './access/navigate/home/VacationLeave';
 import SickLeavePage from './access/navigate/home/SickLeave';
-import NotificationPage from './access/navigate/home/Notification';
+import NotificationPage from './access/navigate/home/Notifications';
 import DrawerPage from './access/navigate/home/Drawer';
 import LogInPage from './authentication/base/LogIn';
 import ForgotPasswordPage from './authentication/base/ForgotPassword';

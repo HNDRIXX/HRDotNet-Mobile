@@ -8,6 +8,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SelectDropdown from "react-native-select-dropdown";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
+import FileAttachedNote from "../../../../../components/note/FileAttachedNote";
 import { COLORS, STRINGS, DateTimeUtils, Utils, ErrorUtils } from "../../../../../constant";
 import TitleInput from "../../../../../components/section/request/TitleInput";
 
@@ -35,7 +36,6 @@ export default function COSRequest ({ navigation }) {
 
     const route = useRoute()
     const imageParams = route.params?.image
-    // const imageURL = decodeURIComponent(route.params?.image)
 
     useEffect(() => {
         imageParams != "undefined" && setSelectedFile(imageParams)
@@ -74,8 +74,7 @@ export default function COSRequest ({ navigation }) {
             })    
         }
     }
-
-
+    
     return (
         <View style={styles.mainView}>
             <PageHeader pageName={"COS New Request"} />
@@ -226,17 +225,10 @@ export default function COSRequest ({ navigation }) {
                         </View>
                     </View>
 
-                    { isFileNote && (
-                        <Text style={styles.fileNote}>{STRINGS.fileNote}</Text>
-                    )}
-
-                    { isInvalidError && (
-                        <Text style={styles.fileError}>{STRINGS.invalidError}</Text>
-                    )}
-
-                    { isSizeError && (
-                        <Text style={styles.fileError}>{STRINGS.sizeError}</Text>
-                    )}
+                    <FileAttachedNote 
+                        isFileNote={isFileNote}
+                        isInvalidError={isInvalidError}
+                        isSizeError={isSizeError} />
                 </View>
             </ScrollView>
 
@@ -342,21 +334,6 @@ const styles = StyleSheet.create({
     checkboxText: {
         fontFamily: 'Inter_400Regular',
         paddingLeft: 10,
-    },
-
-    fileNote: {
-        fontStyle: 'italic',
-        fontSize: 13,
-        marginHorizontal: 20,
-        marginVertical: 10,
-    },
-
-    fileError: {
-        fontSize: 13,
-        paddingHorizontal: 20,
-        paddingVertical: 5,
-        color: COLORS.red,
-        fontStyle: 'italic',
     },
 
     fileSuccess: {

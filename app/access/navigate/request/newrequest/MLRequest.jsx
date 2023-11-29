@@ -32,7 +32,6 @@ export default function LVRequest ({ navigation }) {
 
     const route = useRoute()
     const imageParams = route.params?.image
-    // const imageURL = decodeURIComponent(route.params?.image)
 
     useEffect(() => {
         imageParams != "undefined" && setSelectedFile(imageParams)

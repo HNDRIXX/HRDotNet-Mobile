@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { View, Text, StyleSheet, ScrollView, RefreshControl } from "react-native";
 import * as Animatable from 'react-native-animatable';
 
 import { COLORS, Utils, DateTimeUtils, RequestUtils } from "../../../constant";
@@ -41,37 +41,17 @@ const data = [
 ]
 
 export default function LeavePanel () {
-    const [localData, setLocalData] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
 
     const [newCount, setNewCount] = useState(0)
     const [earlierCount, setEarlierCount] = useState(0)
 
+    const [refreshing, setRefreshing] = useState(false)
+    const scrollViewRef = useRef(null)
+
     const [isFirstHalf, setFirstHalf] = useState(null)
-    const [isSecondHalf, setSecondHalf] = useState(null)
-
-    let filteredData = []
-
-    if (localData) {
-        filteredData = data.filter((newItem) => {
-            const formattedDate = DateTimeUtils.dateFullConvert(newItem.startDate)
-            
-            return (
-                newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
-                formattedDate.toLowerCase().includes(filterText.toLowerCase())
-            )
-        })
-    }
-
-    useEffect(() => {
-        setTimeout(() => { setIsLoading(false) }, 800)
-        Utils.getHalf(setFirstHalf, setSecondHalf)
-    }, [])
-
-    useEffect(() => {
-        Utils.dataItemCount(filteredData, setNewCount, setEarlierCount, isFirstHalf, isSecondHalf)
-    }, [filteredData])
+    const [isSecondHalf, setSecondHalf] = useState(null)    
 
     const requestItemDisplay = ({ item, index }) => {
         return (
@@ -90,6 +70,35 @@ export default function LeavePanel () {
             />
         )
     }
+    
+    let filteredData = []
+
+    filteredData = data.filter((newItem) => {
+        const formattedDate = DateTimeUtils.dateFullConvert(newItem.startDate)
+        
+        return (
+            newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
+            formattedDate.toLowerCase().includes(filterText.toLowerCase())
+        )
+    })
+
+    const refresh = () => {
+        setRefreshing(true)
+        setLoading(true)
+    }
+
+    useEffect(() => {
+        setTimeout(() => {
+            setRefreshing(false)
+            setLoading(false)
+        }, 800)
+
+        Utils.getHalf(setFirstHalf, setSecondHalf)
+    }, [isLoading])
+
+    useEffect(() => {
+        Utils.dataItemCount(filteredData, setNewCount, setEarlierCount, isFirstHalf, isSecondHalf)
+    }, [filteredData])
       
     return (
         <>
@@ -106,7 +115,14 @@ export default function LeavePanel () {
                     />
 
                     { filteredData.length > 0 ? (
-                        <ScrollView>
+                        <ScrollView
+                            ref={scrollViewRef}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={refresh} />
+                            }
+                        >
                             { newCount > 0 && (<Text style={styles.itemStatusText}>New</Text>) }
 
                             {filteredData

@@ -4,7 +4,8 @@ import Checkbox from 'expo-checkbox'
 
 import { COLORS } from '../../constant'
 
-export default function ApprovalsAction ({ setData, selectAll, setSelectAll, toggleSelectAll }) {
+export default function ApprovalsAction ({isDisabled, selectAll, toggleSelectAll, onHandleApprove}) {
+
     return (
         <View style={styles.container}>
             <View style={styles.rowView}>
@@ -14,27 +15,31 @@ export default function ApprovalsAction ({ setData, selectAll, setSelectAll, tog
                     value={selectAll}
                     onValueChange={toggleSelectAll}
                 />
+                
                 <Text style={styles.regularText}>All</Text>
             </View>
 
            <View style={styles.rowView}>
                 <TouchableOpacity
                     style={styles.button}
+                    disabled={isDisabled}
                 >
                     <MaterialIcons 
                         name="cancel" 
                         size={24} 
-                        color={COLORS.red} />
+                        color={isDisabled ? COLORS.darkGray : COLORS.red} />
                     <Text style={styles.boldText}>Cancel</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity 
                     style={styles.button}
+                    disabled={isDisabled}
+                    onPress={onHandleApprove}
                 >
                     <FontAwesome 
                         name="check-circle" 
                         size={24} 
-                        color={COLORS.green} />
+                        color={isDisabled ? COLORS.darkGray : COLORS.green} />
                     <Text style={styles.boldText}>Approve</Text>
                 </TouchableOpacity>
            </View>

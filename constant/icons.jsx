@@ -13,6 +13,7 @@ const ICONS = {
     alpine: "https://i.postimg.cc/wBKYw5gs/alpine.png",
 
     maria: "https://i.postimg.cc/JhbL4W6z/jorik-kleen-l-NNHy-Rbmm0o-unsplash.jpg",
+    juan: "https://i.postimg.cc/cC4dxYdh/alexander-hipp-i-EEBWg-Y-6l-A-unsplash-1.jpg",
     
 }
 

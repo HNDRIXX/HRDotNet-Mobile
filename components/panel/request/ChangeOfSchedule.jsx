@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet, ScrollView, RefreshControl } from "react-native";
 import * as Animatable from 'react-native-animatable';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from "axios";
 
 import { COLORS, Utils, DateTimeUtils, RequestUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
 import RequestItem from "../../items/request/RequestItem"
 import Loader from "../../loader/Loader";
 import NothingFoundNote from "../../note/NothingFoundNote";
-// DESKTOP-2VPR9IB\SQLEXPRESS
 
 const data = [
     {
@@ -58,38 +55,6 @@ export default function ChangeOfSchedulePanel () {
 
     let filteredData = []
 
-    // const fetchData = async () => {
-    //     try {
-    //         const response = await axios.get(`http://192.168.1.4:3000/api/tChangeOfSchedule`);
-    //         setLocalData(response.data)
-    //     } catch (error) {
-    //         console.error('Error fetching data:', error)
-    //     } finally {
-    //         setRefreshing(false)
-    //         setLoading(false)
-    //     }
-    // }
-
-    useEffect(() => {
-        setLoading(false)
-
-        AsyncStorage.getItem('COSData')
-            .then((storedData) => {
-                const retrievedData = JSON.parse(storedData)
-                setLocalData(retrievedData)
-            })
-            .catch((error) => {
-                console.error('Error retrieving data:', error)
-        })
-
-        // fetchData()
-        Utils.getHalf(setFirstHalf, setSecondHalf)
-    }, [])
-
-    // if (localData) {
-        
-    // }
-
     filteredData = data.filter((item) => {
         const formattedStartDate = DateTimeUtils.dateFullConvert(item.startDate)
         const formattedEndDate = DateTimeUtils.dateFullConvert(item.endDate)
@@ -100,16 +65,6 @@ export default function ChangeOfSchedulePanel () {
             item.status.toLowerCase().includes(filterText.toLowerCase())
         )
     })
-
-    useEffect(() => {
-        Utils.dataItemCount(filteredData, setNewCount, setEarlierCount, isFirstHalf, isSecondHalf)
-    }, [filteredData])
-
-    const refresh = () => {
-        setRefreshing(true)
-        setLoading(true)
-        // fetchData()
-    }
     
     const requestItemDisplay = ({ item, index }) => {
         return (
@@ -127,6 +82,24 @@ export default function ChangeOfSchedulePanel () {
                 key={index}
             />
         )
+    }
+
+    useEffect(() => {
+        setTimeout(() => {
+            setRefreshing(false)
+            setLoading(false)
+        }, 800)
+
+        Utils.getHalf(setFirstHalf, setSecondHalf)
+    }, [isLoading])
+
+    useEffect(() => {
+        Utils.dataItemCount(filteredData, setNewCount, setEarlierCount, isFirstHalf, isSecondHalf)
+    }, [filteredData])
+    
+    const refresh = () => {
+        setRefreshing(true)
+        setLoading(true)
     }
 
     return (

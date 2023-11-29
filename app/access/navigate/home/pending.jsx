@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import { View, Text, StyleSheet,TouchableOpacity} from "react-native"
 
 import { COLORS } from "../../../../constant"
-import {Search} from "../../../../components/use/Search"
 import ReviewedPanel from '../../../../components/panel/home/Reviewed'
 import FiledPanel from '../../../../components/panel/home/Filed'
 import PageHeader from "../../../../components/header/PagesHeader"

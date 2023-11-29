@@ -79,8 +79,9 @@ export default function MLSummary({ route, imageParams, openCustomAlert, closeCu
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginVertical: 20,
-        marginHorizontal: 20,
+        paddingVertical: 20,
+        paddingHorizontal: 20,
+        backgroundColor: COLORS.clearWhite
     },
 
     summaryView: {

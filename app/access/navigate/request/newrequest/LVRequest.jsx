@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SelectDropdown from "react-native-select-dropdown";
 import { useRoute } from "@react-navigation/native";
@@ -8,10 +8,9 @@ import { Ionicons, AntDesign, FontAwesome5 } from "@expo/vector-icons";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
 import TitleInput from "../../../../../components/section/request/TitleInput";
+import FileAttachedNote from "../../../../../components/note/FileAttachedNote";
 import { COLORS, STRINGS, Utils, DateTimeUtils } from "../../../../../constant";
-import { ScrollView } from "react-native";
 
-const dropdownData = ["Vacation Leave"]
 const checkboxData = ['Whole Day', '1st Half', '2nd Half']
 
 export default function LVRequest ({ navigation }) {
@@ -35,7 +34,6 @@ export default function LVRequest ({ navigation }) {
 
     const route = useRoute()
     const imageParams = route.params?.image
-    // const imageURL = decodeURIComponent(route.params?.image)
 
     useEffect(() => {
         imageParams != "undefined" && setSelectedFile(imageParams)
@@ -236,17 +234,10 @@ export default function LVRequest ({ navigation }) {
                                 </View>
                             </View>
 
-                            { isFileNote && (
-                                <Text style={styles.fileNote}>{STRINGS.fileNote}</Text>
-                            )}
-
-                            { isInvalidError && (
-                                <Text style={styles.fileError}>{STRINGS.invalidError}</Text>
-                            )}
-
-                            { isSizeError && (
-                                <Text style={styles.fileError}>{STRINGS.sizeError}</Text>
-                            )}
+                            <FileAttachedNote 
+                                isFileNote={isFileNote}
+                                isInvalidError={isInvalidError}
+                                isSizeError={isSizeError} />
                         </View>
                     </View>
                 </ScrollView>
@@ -387,21 +378,6 @@ const styles = StyleSheet.create({
     checkboxText: {
         fontFamily: 'Inter_500Medium',
         paddingLeft: 8,
-    },
-
-    fileNote: {
-        fontStyle: 'italic',
-        fontSize: 13,
-        marginHorizontal: 20,
-        marginVertical: 10,
-    },
-
-    fileError: {
-        fontSize: 13,
-        paddingHorizontal: 20,
-        paddingVertical: 5,
-        color: COLORS.red,
-        fontStyle: 'italic',
     },
 
     fileSuccess: {

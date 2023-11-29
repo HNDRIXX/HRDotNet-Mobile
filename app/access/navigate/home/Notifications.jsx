@@ -1,9 +1,5 @@
 import { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, FlatList } from "react-native";
-import { AntDesign, FontAwesome, Entypo } from "@expo/vector-icons";
-import moment from "moment";
-import DashedLine from "react-native-dashed-line";
-import { Image, CacheManager } from "react-native-expo-image-cache";
 import { useNavigation } from "@react-navigation/native";
 
 import { COLORS, ICONS, DateTimeUtils } from "../../../../constant";

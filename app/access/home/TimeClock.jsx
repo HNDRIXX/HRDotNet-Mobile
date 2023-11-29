@@ -38,7 +38,6 @@ export default function TimeClock ({ navigation }) {
 
   const [isInsideGeofences, setIsInsideGeofences] = useState([])
 
-  const [authenticationStatus, setAuthenticationStatus] = useState('');
   const [isSuccessAlertVisible, setIsSuccessAlertVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isRestart, setRestart] = useState(false)

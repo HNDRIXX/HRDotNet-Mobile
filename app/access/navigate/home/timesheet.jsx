@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
 import moment from 'moment'
 import { Agenda } from 'react-native-calendars'
-import { Calendar } from 'react-native-big-calendar'
 import { Entypo, FontAwesome } from '@expo/vector-icons'
-import * as Animatable from 'react-native-animatable'
 import DashedLine from 'react-native-dashed-line'
 import { useRoute } from '@react-navigation/native'
 import { Shadow } from 'react-native-shadow-2'
@@ -126,6 +124,7 @@ export default function TimeSheetPage ({ navigation }) {
                     <>
                         <View style={styles.agendaCalendar}>
                             <Text style={styles.monthYearText}>{month} {year}</Text>
+
                             <Agenda
                                 items={items}
                                 onDayPress={dayPress}
@@ -148,8 +147,6 @@ export default function TimeSheetPage ({ navigation }) {
                                 )}
                             />
                         </View>
-
-
                     </>
                 )}
             </View>

@@ -43,9 +43,36 @@ export default function MorePage ({ navigation }) {
                         </View>
 
                         <View style={styles.rowWrapper}>
+                            <Text style={styles.titleText}>Date Filed:</Text>
+                            <Text style={styles.valueText}>{DateTimeUtils.dateFullConvert(params?.filedDate)}</Text>
+                        </View>
+
+
+                        { params?.type === "Change of Schedule" ? (
+                            <>
+                                <View style={[styles.rowWrapper, { marginTop: 20 }]}>
+                                    <Text style={styles.titleText}>COS Date:</Text>
+                                    <Text style={styles.valueText}>{DateTimeUtils.dateFullConvert(params?.date)}</Text>
+                                </View>
+
+                                <View style={styles.rowWrapper}>
+                                    <Text style={styles.titleText}>Requested Schedule:</Text>
+                                    <Text style={styles.valueText}>{params?.requestedSched}</Text>
+                                </View>
+                            </>
+                        ) : null}
+
+                        <View style={styles.rowWrapper}>
+                            <Text style={styles.titleText}>Reason:</Text>
+                            <Text style={styles.valueText}>
+                                { params?.reason == "" ? "-----" : params?.reason }
+                            </Text>
+                        </View>
+
+                        <View style={styles.rowWrapper}>
                             <Text style={styles.titleText}>Attached File:</Text>
                             <Text style={styles.valueText}>
-                                { params.attachedFile == "" ? "-----" : (
+                                { params?.attachedFile == "" ? "-----" : (
                                     <TouchableOpacity
                                         onPress={() => navigation.navigate('AttachedFile', params)}
                                     >
@@ -64,7 +91,7 @@ export default function MorePage ({ navigation }) {
                                         <Text style={[styles.valueText, { marginBottom: 10 }]}>{params.status} by {params.statusBy} on {params.formattedStatusByDate}</Text>
                                     )}
                                     
-                                    <Text stye={styles.valueText}>Reviewed by {params.reviewedBy} on {params.formattedReviewedDate}</Text>
+                                    <Text stye={styles.valueText}>Reviewed by {params?.reviewedBy} on {DateTimeUtils.dateFullConvert(params?.reviewedDate)}</Text>
                                 </View>
                             ) : (<Text>Filed</Text>)}
                         </View>

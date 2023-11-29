@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl } from "react-native";
 import * as Animatable from 'react-native-animatable';
-import { AntDesign } from "@expo/vector-icons";
-import moment from "moment/moment";
 
 import { COLORS, Utils, DateTimeUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
@@ -27,8 +25,7 @@ const data = [
 ]
 
 export default function OffSetPanel () {
-    const [localData, setLocalData] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
 
     const [newCount, setNewCount] = useState(0)
@@ -39,28 +36,35 @@ export default function OffSetPanel () {
 
     let filteredData = []
 
-    if (localData) {
-        filteredData = data.filter((newItem) => {
-            const formattedDate = DateTimeUtils.dateFullConvert(newItem.overtimeDate)
-            
-            return (
-                newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
-                formattedDate.toLowerCase().includes(filterText.toLowerCase()) 
-            )
-        })
-    }
+    const [refreshing, setRefreshing] = useState(false)
+    const scrollViewRef = useRef(null)
+
+    filteredData = data.filter((newItem) => {
+        const formattedDate = DateTimeUtils.dateFullConvert(newItem.overtimeDate)
+        
+        return (
+            newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
+            formattedDate.toLowerCase().includes(filterText.toLowerCase()) 
+        )
+    })
 
     useEffect(() => {
         setTimeout(() => {
-          setIsLoading(false)
+            setRefreshing(false)
+            setLoading(false)
         }, 800)
 
         Utils.getHalf(setFirstHalf, setSecondHalf)
-    }, [])
+    }, [isLoading])
 
     useEffect(() => {
         Utils.dataItemCount(filteredData, setNewCount, setEarlierCount, isFirstHalf, isSecondHalf)
     }, [filteredData])
+
+    const refresh = () => {
+        setRefreshing(true)
+        setLoading(true)
+    }
 
     const requestItemDisplay = ({ item, index }) => {
         return (
@@ -95,7 +99,14 @@ export default function OffSetPanel () {
                     />
 
                     { filteredData.length > 0 ? (
-                        <ScrollView>
+                        <ScrollView
+                            ref={scrollViewRef}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={refresh} />
+                            }
+                        >
                             { newCount > 0 && (<Text style={styles.itemStatusText}>New</Text>) }
 
                             {filteredData

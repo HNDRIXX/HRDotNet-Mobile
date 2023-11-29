@@ -8,36 +8,10 @@ import PageHeader from '../../../../components/header/PagesHeader'
 import { DateTimeUtils } from '../../../../constant'
 
 export default function AttachedFile ({ navigation }) {
-    const [imageUri, setImageUri] = useState(null);
-
     const route = useRoute()
     const params = route.params
     const imageParams = route.params.attachedFile
-
-    useEffect(() => {
-        // Replace the URI with your image URI
-        const uri = decodeURIComponent(imageParams.uri)
-
-        console.log(uri)
-    
-        // Create a temporary file
-        const createTempFile = async () => {
-          const fileUri = FileSystem.cacheDirectory + 'temp.jpg';
-    
-          try {
-            await FileSystem.copyAsync({
-              from: uri,
-              to: fileUri,
-            });
-    
-            setImageUri(fileUri);
-          } catch (error) {
-            console.error('Error creating temporary file:', error);
-          }
-        };
-    
-        createTempFile();
-      }, []);
+    const imageUri = decodeURIComponent(imageParams?.uri)
 
     return (
         <>
@@ -46,7 +20,7 @@ export default function AttachedFile ({ navigation }) {
             <View style={styles.container}>
                 <Image 
                     source={
-                        imageParams.uri == "" || imageParams.uri == null ? require('../../../../assets/mntn.jpg') 
+                        imageUri == "" || imageUri == null ? require('../../../../assets/mntn.jpg') 
                         : { uri: imageUri }
                     }
                     style={{ width: 350, height: 400, marginTop: 20, justifyContent: 'center', alignSelf: 'center'}}

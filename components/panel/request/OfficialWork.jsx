@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { View, Text, StyleSheet, ActivityIndicator, RefreshControl, ScrollView } from "react-native";
 import * as Animatable from 'react-native-animatable';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -41,8 +41,7 @@ const data = [
 ]
 
 export default function OfficialWorkPanel () {
-    const [localData, setLocalData] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
 
     const [newCount, setNewCount] = useState(0)
@@ -50,12 +49,11 @@ export default function OfficialWorkPanel () {
 
     const [isFirstHalf, setFirstHalf] = useState(null)
     const [isSecondHalf, setSecondHalf] = useState(null)
+
+    const [refreshing, setRefreshing] = useState(false)
+    const scrollViewRef = useRef(null)
     
     let filteredData = []
-
-    // if (localData) {
-        
-    // }
 
     filteredData = data.filter((item) => {
         const formattedDate = DateTimeUtils.dateFullConvert(item.officialWorkDate)
@@ -65,27 +63,6 @@ export default function OfficialWorkPanel () {
             item.status.toLowerCase().includes(filterText.toLowerCase())
         )
     })
-    
-    useEffect(() => {
-        setTimeout(() => {
-          setIsLoading(false)
-        }, 800)
-
-        AsyncStorage.getItem('OBData')
-            .then((storedData) => {
-                const retrievedData = JSON.parse(storedData)
-                setLocalData(retrievedData)
-            })
-            .catch((error) => {
-                console.error('Error retrieving data:', error)
-        })
-
-        Utils.getHalf(setFirstHalf, setSecondHalf)
-    }, [])
-
-    useEffect(() => {
-        Utils.dataItemCount(filteredData, setNewCount, setEarlierCount, isFirstHalf, isSecondHalf)
-    }, [filteredData])
 
     const requestItemDisplay = ({ item, index }) => {
         return (
@@ -103,6 +80,24 @@ export default function OfficialWorkPanel () {
                 key={index}
             />
     )}
+
+    useEffect(() => {
+        setTimeout(() => {
+            setRefreshing(false)
+            setLoading(false)
+        }, 800)
+
+        Utils.getHalf(setFirstHalf, setSecondHalf)
+    }, [isLoading])
+
+    useEffect(() => {
+        Utils.dataItemCount(filteredData, setNewCount, setEarlierCount, isFirstHalf, isSecondHalf)
+    }, [filteredData])
+
+    const refresh = () => {
+        setRefreshing(true)
+        setLoading(true)
+    }
       
     return (
         <>
@@ -119,7 +114,14 @@ export default function OfficialWorkPanel () {
                     />
 
                     { filteredData.length > 0 ? (
-                        <ScrollView>
+                        <ScrollView
+                            ref={scrollViewRef}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={refresh} />
+                            }
+                        >
                             { newCount > 0 && (<Text style={styles.itemStatusText}>New</Text>) }
                             
                             {filteredData

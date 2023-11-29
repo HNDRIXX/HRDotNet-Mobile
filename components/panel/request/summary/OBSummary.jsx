@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { View, Text , StyleSheet, TouchableOpacity, ScrollView } from "react-native";
-import { useRoute } from "@react-navigation/native";
 import moment from "moment";
 import DashedLine from "react-native-dashed-line";
 
-import PageHeader from "../../../../components/header/PagesHeader";
 import SuccessPromptPage from "../../../../components/prompt/SuccessPrompt";
 import { COLORS, STRINGS, DateTimeUtils } from "../../../../constant";
 import { Image } from "expo-image";
@@ -92,8 +90,9 @@ export default function OBSummary({ route, imageParams, openCustomAlert, closeCu
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginVertical: 20,
-        marginHorizontal: 20,
+        paddingVertical: 20,
+        paddingHorizontal: 20,
+        backgroundColor: COLORS.clearWhite
     },
 
     summaryView: {

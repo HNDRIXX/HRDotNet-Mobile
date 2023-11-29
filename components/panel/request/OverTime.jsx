@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { View, Text, StyleSheet, ActivityIndicator, ScrollView, RefreshControl } from "react-native";
 import * as Animatable from 'react-native-animatable';
 
 import { COLORS, Utils, DateTimeUtils } from "../../../constant";
@@ -39,8 +39,7 @@ const data = [
 ]
 
 export default function OverTimePanel () {
-    const [localData, setLocalData] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
 
     const [newCount, setNewCount] = useState(0)
@@ -49,30 +48,19 @@ export default function OverTimePanel () {
     const [isFirstHalf, setFirstHalf] = useState(null)
     const [isSecondHalf, setSecondHalf] = useState(null)
 
+    const [refreshing, setRefreshing] = useState(false)
+    const scrollViewRef = useRef(null)
+
     let filteredData = []
 
-    if (localData) {
-        filteredData = data.filter((newItem) => {
-            const formattedDate = DateTimeUtils.dateFullConvert(newItem.overtimeDate)
-            
-            return (
-                newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
-                formattedDate.toLowerCase().includes(filterText.toLowerCase())
-            )
-        })
-    }
-
-    useEffect(() => {
-        setTimeout(() => {
-          setIsLoading(false)
-        }, 800)
-
-        Utils.getHalf(setFirstHalf, setSecondHalf)
-    }, [])
-
-    useEffect(() => {
-        Utils.dataItemCount(filteredData, setNewCount, setEarlierCount, isFirstHalf, isSecondHalf)
-    }, [filteredData])
+    filteredData = data.filter((newItem) => {
+        const formattedDate = DateTimeUtils.dateFullConvert(newItem.overtimeDate)
+        
+        return (
+            newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
+            formattedDate.toLowerCase().includes(filterText.toLowerCase())
+        )
+    })
 
     const requestItemDisplay = ({ item, index }) => {
         return (
@@ -90,6 +78,24 @@ export default function OverTimePanel () {
                 key={index}
             />
         )
+    }
+
+    useEffect(() => {
+        setTimeout(() => {
+            setRefreshing(false)
+            setLoading(false)
+        }, 800)
+
+        Utils.getHalf(setFirstHalf, setSecondHalf)
+    }, [isLoading])
+
+    useEffect(() => {
+        Utils.dataItemCount(filteredData, setNewCount, setEarlierCount, isFirstHalf, isSecondHalf)
+    }, [filteredData])
+
+    const refresh = () => {
+        setRefreshing(true)
+        setLoading(true)
     }
       
     return (
@@ -109,7 +115,14 @@ export default function OverTimePanel () {
                     />
 
                     { filteredData.length > 0 ? (
-                        <ScrollView>
+                        <ScrollView
+                            ref={scrollViewRef}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={refresh} />
+                            }
+                        >
                             { newCount > 0 && (<Text style={styles.itemStatusText}>New</Text>) }
 
                             {filteredData

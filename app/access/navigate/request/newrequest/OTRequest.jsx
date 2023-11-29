@@ -8,6 +8,7 @@ import { Ionicons, Entypo, AntDesign } from "@expo/vector-icons";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
 import Loader from "../../../../../components/prompt/loader/Loader";
+import FileAttachedNote from "../../../../../components/note/FileAttachedNote";
 import { COLORS, STRINGS, DateTimeUtils, Utils} from "../../../../../constant";
 
 import OverTimePrompt from "../../../../../components/prompt/OverTimePrompt";
@@ -70,7 +71,6 @@ export default function OTRequest ({ navigation }) {
 
     const route = useRoute()
     const imageParams = route.params?.image
-    // const imageURL = decodeURIComponent(route.params?.image)
 
     useEffect(() => {
         imageParams != "undefined" && setSelectedFile(imageParams)
@@ -303,17 +303,10 @@ export default function OTRequest ({ navigation }) {
                                 </View>
                             </View>
 
-                            { isFileNote && (
-                                <Text style={styles.fileNote}>{STRINGS.fileNote}</Text>
-                            )}
-
-                            { isInvalidError && (
-                                <Text style={styles.fileError}>{STRINGS.invalidError}</Text>
-                            )}
-
-                            { isSizeError && (
-                                <Text style={styles.fileError}>{STRINGS.sizeError}</Text>
-                            )}
+                            <FileAttachedNote 
+                                isFileNote={isFileNote}
+                                isInvalidError={isInvalidError}
+                                isSizeError={isSizeError} />
                         </View>
                     </View>
                 </ScrollView>
@@ -445,22 +438,7 @@ const styles = StyleSheet.create({
     disabledInput: {
         backgroundColor: COLORS.lightGray3,
     },
-
-    fileNote: {
-        fontStyle: 'italic',
-        fontSize: 13,
-        marginHorizontal: 20,
-        marginVertical: 10,
-    },
-
-    fileError: {
-        fontSize: 13,
-        paddingHorizontal: 20,
-        paddingVertical: 5,
-        color: COLORS.red,
-        fontStyle: 'italic',
-    },
-
+    
     fileSuccess: {
         color: COLORS.green,
         marginLeft: 10,

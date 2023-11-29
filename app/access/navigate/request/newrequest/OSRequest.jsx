@@ -7,6 +7,7 @@ import { useRoute } from "@react-navigation/native";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
+import FileAttachedNote from "../../../../../components/note/FileAttachedNote";
 import TitleInput from "../../../../../components/section/request/TitleInput";
 import { COLORS, STRINGS, Utils, DateTimeUtils } from "../../../../../constant";
 import { ScrollView } from "react-native";
@@ -41,7 +42,6 @@ export default function OSRequest ({ navigation }) {
 
     const route = useRoute()
     const imageParams = route.params?.image
-    // const imageURL = decodeURIComponent(route.params?.image)
 
     useEffect(() => {
         imageParams != "undefined" && setSelectedFile(imageParams)
@@ -293,17 +293,10 @@ export default function OSRequest ({ navigation }) {
                                 </View>
                             </View>
 
-                            { isFileNote && (
-                                <Text style={styles.fileNote}>{STRINGS.fileNote}</Text>
-                            )}
-
-                            { isInvalidError && (
-                                <Text style={styles.fileError}>{STRINGS.invalidError}</Text>
-                            )}
-
-                            { isSizeError && (
-                                <Text style={styles.fileError}>{STRINGS.sizeError}</Text>
-                            )}
+                            <FileAttachedNote 
+                                isFileNote={isFileNote}
+                                isInvalidError={isInvalidError}
+                                isSizeError={isSizeError} />
                         </View>
                     </View>
                 </ScrollView>
@@ -450,21 +443,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: COLORS.clearWhite,
         textAlign: 'center',
-    },
-
-    fileNote: {
-        fontStyle: 'italic',
-        fontSize: 13,
-        marginHorizontal: 20,
-        marginVertical: 10,
-    },
-
-    fileError: {
-        fontSize: 13,
-        paddingHorizontal: 20,
-        paddingVertical: 5,
-        color: COLORS.red,
-        fontStyle: 'italic',
     },
 
     fileSuccess: {

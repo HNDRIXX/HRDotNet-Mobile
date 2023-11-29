@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, RefreshControl } from 'react-native'
-import { AntDesign } from '@expo/vector-icons'
 
 import { Search } from '../../../../components/use/Search'
 import { DateTimeUtils, COLORS } from '../../../../constant'
@@ -82,8 +81,6 @@ export default function LoanLedgerPage () {
 
     const refresh = () => {
         setRefreshing(true)
-        // setLoading(true)
-        // fetchData()
     }
 
     return (
