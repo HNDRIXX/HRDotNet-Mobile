@@ -3,6 +3,7 @@ import { useFonts } from './Fonts'
 import { ICONS } from './Icons'
 import { STRINGS } from './Strings'
 import { STYLES } from './styles/Styles'
+import { COMPONENT_STYLES } from './styles/ComponentStyles'
 
 import { DateTimeUtils } from './functions/DateTimeUtils'
 import { Utils } from './functions/Utils'
@@ -11,4 +12,4 @@ import { RequestUtils } from './functions/RequestUtils'
 import { LocalData } from './functions/LocalData'
 import { LocationUtils } from './functions/LocationUtils'
 
-export { COLORS, useFonts, ICONS, STRINGS, DateTimeUtils, Utils, ErrorUtils, RequestUtils, LocalData, LocationUtils, STYLES}
+export { COLORS, useFonts, ICONS, STRINGS, DateTimeUtils, Utils, ErrorUtils, RequestUtils, LocalData, LocationUtils, STYLES, COMPONENT_STYLES }

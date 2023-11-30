@@ -11,10 +11,10 @@ import { Image } from 'expo-image';
 import PagesHeader from '../../../components/header/PagesHeader'
 import SuccessTimeClock from '../../../components/prompt/SuccessTimeClock'
 import RefreshPage from '../../../components/use/RefreshPage'
-import { COLORS, Utils, DateTimeUtils, STYLES } from '../../../constant';
+import { COLORS, Utils, DateTimeUtils } from '../../../constant';
 import { LocationUtils } from '../../../constant/functions/LocationUtils';
 
-export default function TimeClock({ navigation }) {
+export default function TimeClock ({ navigation }) {
   const [clockedStatus, setClockedStatus] = useState('')
   const [clockedValue, setClockedValue] = useState(1)
   const [clockedTime, setClockedTime] = useState('')
@@ -25,9 +25,9 @@ export default function TimeClock({ navigation }) {
   const [region, setRegion] = useState(null)
   const [geofences, setGeofences] = useState([
     {
-      latitude: 14.64390146932187,
+      latitude: 14.64370146932187,
       longitude: 121.02651191049141,
-      radius: 70,
+      radius: 10,
     },
     {
       latitude: 14.64186612992079,
@@ -45,29 +45,28 @@ export default function TimeClock({ navigation }) {
 
   const [time, setTime] = useState(moment())
   const route = useRoute()
-  const styles = STYLES.TimeClock
 
   useEffect(() => {
-    const timer = setInterval(() => setTime(moment()), 1000)
+    const timer = setInterval(() => setTime(moment()), 1000)  
     return () => clearInterval(timer)
   }, [])
 
   useEffect(() => {
     const getLocationPermission = async () => {
       LocationUtils.locationPermissionEnabled()
-
+  
       try {
         LocationUtils.locationEnabled()
-
+        
         const userLocation = await Location.getCurrentPositionAsync({})
         setLocation(userLocation.coords)
         setRegion({
           latitude: userLocation.coords.latitude,
           longitude: userLocation.coords.longitude,
           latitudeDelta: 0.001,
-          longitudeDelta: 0.005,
+          longitudeDelta: 0.00001,
         })
-
+  
         const locationWatcher = await Location.watchPositionAsync(
           { distanceInterval: 5 },
           (newLocation) => {
@@ -78,7 +77,7 @@ export default function TimeClock({ navigation }) {
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             })
-
+  
             const insideGeofences = geofences.map((geofence) => {
               const distance = LocationUtils.calculationDistance(
                 newLocation.coords.latitude,
@@ -89,7 +88,7 @@ export default function TimeClock({ navigation }) {
 
               return distance <= geofence.radius
             })
-
+  
             setIsInsideGeofences(insideGeofences)
           }
         )
@@ -100,10 +99,10 @@ export default function TimeClock({ navigation }) {
         return
       }
     }
-
+  
     getLocationPermission()
   }, [geofences, isRestart])
-
+  
   const openCustomAlert = () => {
     setIsSuccessAlertVisible(true)
 
@@ -112,17 +111,17 @@ export default function TimeClock({ navigation }) {
   }
 
   const closeCustomAlert = async () => {
-    setIsSuccessAlertVisible(false)
+      setIsSuccessAlertVisible(false)
 
-    navigation.navigate('TabStack', {
-      screen: 'Home',
-      params: {
-        clockedValue: clockedValue,
-        clockedStatus: clockedStatus,
-        clockedDate: clockedDate,
-        clockedTime: clockedTime,
-      },
-    })
+      navigation.navigate('TabStack', {
+          screen: 'Home',
+          params: {
+            clockedValue: clockedValue,
+            clockedStatus: clockedStatus,
+            clockedDate: clockedDate,
+            clockedTime: clockedTime,
+          },
+      })  
   }
 
   const onRefresh = useCallback(() => {
@@ -131,34 +130,35 @@ export default function TimeClock({ navigation }) {
     setTimeout(() => {
       setRefreshing(false)
     }, 3000)
-  }, [])
+  }, []) 
 
   return (
     <>
-      <PagesHeader pageName={'Time Clock'} />
+      <PagesHeader pageName={'Time Clock'}/>
 
-      {isLoading ? (
+      {/* { isLoading ? (
         <RefreshPage setRestart={setRestart} onRefresh={onRefresh} refreshing={refreshing} />
       ) : (
         <>
           {location ? (
             <View style={styles.container}>
-              <MapView
-                style={{ flex: 1 }}
-                initialRegion={region}
+              <MapView 
+                style={{ flex: 1 }} 
+                initialRegion={region} 
+                userInterfaceStyle='light'
                 userLocationPriority='high'
-                showsUserLocation
+                showsUserLocation 
                 followsUserLocation
               >
-                <Marker
-                  coordinate={location}
-                  title="Your Location"
-                  description="You are here"
+                <Marker 
+                  coordinate={location} 
+                  title="Your Location" 
+                  description="You are here" 
                 >
                   <View style={{ alignSelf: 'center', justifyContent: 'center' }}>
-                    <Image
+                    <Image 
                       source={require('../../../assets/icons/usermap.png')}
-                      style={{ width: 80, height: 80 }}
+                      style={{ width: 80, height: 80}}
                       contentFit='contain'
                     />
                   </View>
@@ -177,54 +177,54 @@ export default function TimeClock({ navigation }) {
               </MapView>
 
               <Shadow style={styles.bottomContainer}>
-                <View style={styles.dateTimeWrapper}>
-                  <Text style={styles.dateText}>{DateTimeUtils.momentCurrDateWithExtra()}</Text>
-                  <Text style={styles.timeText}>{time.format('h:mm:ss A')}</Text>
-                </View>
+              <View style={styles.dateTimeWrapper}>
+                <Text style={styles.dateText}>{DateTimeUtils.momentCurrDateWithExtra()}</Text>
+                <Text style={styles.timeText}>{time.format('h:mm:ss A')}</Text>
+              </View>
 
-                {route.params.clockedValue == 0 ? (
-                  <TouchableOpacity
-                    style={[styles.clockOutBtn, !isInsideGeofences.some((inside) => inside) ? styles.disabledBtn : null]}
-                    disabled={!isInsideGeofences.some((inside) => inside)}
-                    onPress={() => {
-                      setClockedStatus("Clocked Out")
-                      setClockedValue(1)
-                      openCustomAlert()
-                    }}
-                  >
-                    <Ionicons
-                      name='stopwatch'
-                      size={22}
-                      color={COLORS.clearWhite}
-                    />
+              { route.params.clockedValue == 0 ? (
+                <TouchableOpacity 
+                  style={[ styles.clockOutBtn, !isInsideGeofences.some((inside) => inside) ? styles.disabledBtn : null ]}
+                  disabled={!isInsideGeofences.some((inside) => inside)}
+                  onPress={() => {
+                    setClockedStatus("Clocked Out")
+                    setClockedValue(1)
+                    openCustomAlert()
+                  }}
+                >
+                  <Ionicons
+                    name='stopwatch'
+                    size={22}
+                    color={COLORS.clearWhite}
+                  />
 
-                    <Text style={styles.textClockIn}>Clock-Out</Text>
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    style={[styles.clockInBtn,
-                    !isInsideGeofences.some((inside) => inside) ? styles.disabledBtn : null]}
-                    disabled={!isInsideGeofences.some((inside) => inside)}
-                    onPress={() => {
-                      setClockedStatus("Clocked In")
-                      setClockedValue(0)
-                      openCustomAlert()
-                    }}
-                  >
-                    <Ionicons
-                      name='stopwatch'
-                      size={22}
-                      color={COLORS.clearWhite}
-                    />
+                  <Text style={styles.textClockIn}>Clock-Out</Text>
+                </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity 
+                      style={[ styles.clockInBtn, 
+                        !isInsideGeofences.some((inside) => inside) ? styles.disabledBtn : null  ]}
+                      disabled={!isInsideGeofences.some((inside) => inside)}
+                      onPress={() => {
+                        setClockedStatus("Clocked In")
+                        setClockedValue(0)
+                        openCustomAlert()
+                      }}
+                    >
+                      <Ionicons
+                        name='stopwatch'
+                        size={22}
+                        color={COLORS.clearWhite}
+                      />
 
-                    <Text style={styles.textClockIn}>Clock-In</Text>
-                  </TouchableOpacity>
-                )}
-              </Shadow>
-            </View>
-          ) : (
-            <RefreshPage setRestart={setRestart} onRefresh={onRefresh} refreshing={refreshing} />
-          )}
+                      <Text style={styles.textClockIn}>Clock-In</Text>
+                    </TouchableOpacity>
+                  )}
+                </Shadow>
+              </View>
+            ) : (
+              <RefreshPage setRestart={setRestart} onRefresh={onRefresh} refreshing={refreshing} />
+            )}
 
           <SuccessTimeClock
             clockedTime={clockedTime}
@@ -236,7 +236,69 @@ export default function TimeClock({ navigation }) {
             onClose={closeCustomAlert}
           />
         </>
-      )}
+      )} */}
     </>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.clearWhite
+  },
+
+  disabledBtn: {
+      backgroundColor: 'gray',
+      opacity: 0.3,
+  },
+
+  bottomContainer: {
+    width: '100%',
+    backgroundColor: COLORS.clearWhite,
+    padding: 30,
+    borderTopLeftRadius: 50,
+    borderTopRightRadius: 50,
+  },
+
+  dateTimeWrapper: {
+    alignItems: 'center',
+  },
+
+  dateText: {
+    fontSize: 12,
+    fontFamily: 'Inter_500Medium'
+  },
+
+  timeText: {
+    fontSize: 25,
+    fontFamily: 'Inter_700Bold'
+  },
+
+  clockInBtn: {
+    width: 170,
+    marginTop: 10,
+    flexDirection: 'row',
+    alignSelf: 'center',
+    backgroundColor: COLORS.orange,
+    justifyContent: 'center',
+    padding: 13,
+    borderRadius: 8
+  },
+
+  clockOutBtn: {
+    width: 170,
+    marginTop: 10,
+    flexDirection: 'row',
+    alignSelf: 'center',
+    backgroundColor: COLORS.powderBlue,
+    justifyContent: 'center',
+    padding: 13,
+    borderRadius: 8
+  },
+
+  textClockIn: {
+    color: COLORS.clearWhite,
+    fontSize: 17,
+    fontFamily: 'Inter_700Bold'
+  },
+})

@@ -4,7 +4,8 @@ import * as Animatable from 'react-native-animatable';
 
 import { COLORS, STYLES} from '../../../../../constant';
 import PageHeader from '../../../../../components/header/PagesHeader';
-import ChangeOfSchedulePanel from '../../../../../components/panel/home/approvals/ChangeOfSchedule';
+import COSApprovals from '../../../../../components/panel/home/approvals/COSApprovals';
+import OBApprovals from '../../../../../components/panel/home/approvals/OBApprovals'
 
 const data = [
     { title: 'Change of Schedule' },
@@ -61,8 +62,8 @@ export default function ApprovalsPage() {
                         />
                     </View>
 
-                    { selectedButtonIndex == 0 ? ( <ChangeOfSchedulePanel /> )
-                        
+                    {   selectedButtonIndex == 0 ? ( <COSApprovals /> ) :
+                        selectedButtonIndex == 1 ? ( <OBApprovals /> )
                     : ( null )}
                 </View>
             </Animatable.View>

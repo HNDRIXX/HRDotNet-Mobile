@@ -4,7 +4,7 @@ import { StatusBar } from "expo-status-bar";
 import { Entypo } from "@expo/vector-icons";
 
 import { COLORS, useFonts, STYLES} from "../../../constant";
-import { Account } from "../../../constant/array/account";
+import { Account } from "../../../constant/array/Account";
 import { Image } from "expo-image";
 
 export default function LogInPage ({ navigation }) {

@@ -41,6 +41,7 @@ import AttachedFile from './access/navigate/request/AttachedFile';
 
 import ApprovalsPage from './access/navigate/home/approver/Approvals';
 import ApprovalsDetails from './access/navigate/home/approver/ApprovalsDetails'
+import Loader from '../components/loader/Loader';
 
 export default function Index() {
     const [fontsLoaded] = useFonts()
@@ -49,11 +50,7 @@ export default function Index() {
     const Tab = createBottomTabNavigator()
 
     if (!fontsLoaded) {
-        return (
-            <View style={{ flex: 1, justifyContent: 'center' }}>
-                <ActivityIndicator size={'large'} />
-            </View>
-        )
+        return ( <Loader /> )
     }
 
     const config = {
@@ -77,7 +74,6 @@ export default function Index() {
                     tabBarStyle: { },
                     tabBarLabelStyle: {
                         fontSize: 11,
-                        // marginBottom: 8,
                         fontFamily: 'Inter_600SemiBold',
                     },
 

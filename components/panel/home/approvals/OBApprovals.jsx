@@ -1,4 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+// HRDotNet-Mobile
+// Designed by : Alex
+// Developed by: Patrick 
+
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { View, Text, StyleSheet, ScrollView, RefreshControl, FlatList } from "react-native";
 import * as Animatable from 'react-native-animatable';
 import Checkbox from 'expo-checkbox'
@@ -9,52 +13,92 @@ import ApprovalsAction from "../../../use/ApprovalsAction";
 import Loader from "../../../loader/Loader";
 import NothingFoundNote from "../../../note/NothingFoundNote";
 import ApprovalsItem from "../../../items/home/ApprovalsItem";
-import { COLORS, Utils, DateTimeUtils, RequestUtils } from "../../../../constant";
+import { COLORS, STRINGS, Utils, DateTimeUtils, COMPONENT_STYLES } from "../../../../constant";
 import ConfirmationPrompt from "../../../prompt/approvals/ConfirmationPrompt";
 import SuccessPromptPage from "../../../prompt/SuccessPrompt";
 
-export default function ChangeOfSchedulePanel () {
+export default function OBApprovals () {
+    const styles = COMPONENT_STYLES.PanelApprovals
+    
     const [data, setData] = useState([
         {
             attachedFile: {"date": "20231124", "time": "13:38 PM", "uri": "file%3A%2F%2F%2Fdata%2Fuser%2F0%2Fhost.exp.exponent%2Fcache%2FExperienceData%2F%252540hndrx022%25252FHRDotNet-Mobile%2FCamera%2F596b713f-d6b4-4636-abaa-821eb3850257.jpg"},
             employeeName: 'Kel Jorge Cinco',
-            date: '20231118',
-            requestedSched: '8:00 AM - 5:00 PM',
-            type: 'Change of Schedule',
-            documentNo: 'COS22307240207',
-            filedDate: '20231114',
+            type: 'Official Work',
+            documentNo: 'OB22307240207',
+            filedDate: '20231120',
+            officialWorkDate: '20231118',
+            officialWorkTime: '8:00 AM to 6:00 PM',
+            location: 'Sofitel Philippine Plaza, Manila',
             reason: '',
             status: 'Reviewed',
             reviewedBy: 'Kenneth Parungao',
             reviewedDate: '20231115',
+            isCOS: 1,
             isChecked: false, 
         },
         {
             attachedFile: {"date": "20231124", "time": "13:38 PM", "uri": "file%3A%2F%2F%2Fdata%2Fuser%2F0%2Fhost.exp.exponent%2Fcache%2FExperienceData%2F%252540hndrx022%25252FHRDotNet-Mobile%2FCamera%2F596b713f-d6b4-4636-abaa-821eb3850257.jpg"},
             employeeName: 'Henry Balani Valerio',
-            date: '20231113',
-            requestedSched: '8:30 AM - 5:30 PM',
-            type: 'Change of Schedule',
-            documentNo: 'COS22302932712',
-            filedDate: '20231115',
+            type: 'Official Work',
+            documentNo: 'OB22307240207',
+            filedDate: '20231120',
+            officialWorkDate: '20231118',
+            officialWorkTime: '8:00 AM to 6:00 PM',
+            location: 'Sofitel Philippine Plaza, Manila',
             reason: '',
             status: 'Reviewed',
             reviewedBy: 'Kenneth Parungao',
             reviewedDate: '20231115',
+            isCOS: 1,
+            isChecked: false,
+        },
+        {
+            attachedFile: {"date": "20231124", "time": "13:38 PM", "uri": "file%3A%2F%2F%2Fdata%2Fuser%2F0%2Fhost.exp.exponent%2Fcache%2FExperienceData%2F%252540hndrx022%25252FHRDotNet-Mobile%2FCamera%2F596b713f-d6b4-4636-abaa-821eb3850257.jpg"},
+            employeeName: 'Jessa Pana Galvez',
+            type: 'Official Work',
+            documentNo: 'OB22307240207',
+            filedDate: '20231120',
+            officialWorkDate: '20231118',
+            officialWorkTime: '8:00 AM to 6:00 PM',
+            location: 'Sofitel Philippine Plaza, Manila',
+            reason: '',
+            status: 'Reviewed',
+            reviewedBy: 'Kenneth Parungao',
+            reviewedDate: '20231115',
+            isCOS: 0,
             isChecked: false, 
+        },
+        {
+            attachedFile: {"date": "20231124", "time": "13:38 PM", "uri": "file%3A%2F%2F%2Fdata%2Fuser%2F0%2Fhost.exp.exponent%2Fcache%2FExperienceData%2F%252540hndrx022%25252FHRDotNet-Mobile%2FCamera%2F596b713f-d6b4-4636-abaa-821eb3850257.jpg"},
+            employeeName: 'Mary Grace Manalo',
+            type: 'Official Work',
+            documentNo: 'OB22307240207',
+            filedDate: '20231120',
+            officialWorkDate: '20231118',
+            officialWorkTime: '8:00 AM to 6:00 PM',
+            location: 'Sofitel Philippine Plaza, Manila',
+            reason: '',
+            status: 'Reviewed',
+            reviewedBy: 'Kenneth Parungao',
+            reviewedDate: '20231115',
+            isCOS: 0,
+            isChecked: false,
         },
     ])
 
     const [filterText, setFilterText] = useState('')
     const [sortedData, setSortedData] = useState([])
     const [filteredData, setFilteredData] = useState([])
-    const [checkedCount, setCheckedCount] = useState(null)
+    const [checkCount, setCheckCount] = useState(null)
+    const [pendingCount, setPendingCount] = useState(null)
+    const [prevCount, setPrevCount] = useState(0)
 
     const [isVisible, setVisible] = useState(false)
+    const [isConfirmSelection, setConfirmSelection] = useState(false)
     const [isSuccessPrompt, setSuccessPrompt] = useState(false)
     const [isLoading, setLoading] = useState(true)
     const [selectAll, setSelectAll] = useState(false)
-    const [isDisabled, setDisabled] = useState(true)
 
     const [refreshing, setRefreshing] = useState(false)
     const scrollViewRef = useRef(null)
@@ -73,16 +117,71 @@ export default function ChangeOfSchedulePanel () {
     
     const filterData = () => {
         const filtered = sortedData.filter((item) => {
-            const formattedDate = DateTimeUtils.dateFullConvert(item.date)
+            const formattedDate = DateTimeUtils.dateFullConvert(item.officialWorkDate)
         
             return (
                 formattedDate.toLowerCase().includes(filterText.toLowerCase()) ||
                 item.employeeName.toLowerCase().includes(filterText.toLowerCase()) ||
-                item.requestedSched.toLowerCase().includes(filterText.toLowerCase())
+                item.location.toLowerCase().includes(filterText.toLowerCase())
             )
         })
     
         setFilteredData(filtered)
+    }
+
+    const toggleSelectAll = () => {
+        const updatedData = data.map(item => ({ ...item, isChecked: !selectAll }))
+        setFilteredData(updatedData)
+        setSelectAll(!selectAll)
+    }
+
+    const onRefresh = useCallback(() => {
+        setLoading(true)
+        setRefreshing(true)
+    
+        setTimeout(() => {
+            setLoading(false)
+            setRefreshing(false)
+        }, 3000)
+    }, []) 
+
+    const onHandleApprove = () => {
+        setVisible(true)
+
+        if (pendingCount > 0) {
+            setConfirmSelection(true)
+        } else {
+            setConfirmSelection(false)
+        }
+    }
+
+    const onHandleConfirmApprove = () => {
+        setVisible(false)
+        setPrevCount(0)
+        let count = 1
+
+        const dataSet = [...filteredData]
+    
+        for (let i = 0; i < dataSet.length; i++) {
+            if (dataSet[i].isChecked && dataSet[i].isCOS == 1 && dataSet[i].status !== 'Approve') {
+                dataSet[i].status = 'Approve'
+                setPrevCount(count++)
+            }
+            dataSet[i].isChecked = false
+        }
+
+        const updatedData = dataSet.filter(item => item.status !== 'Approve')
+        
+        setData(updatedData)
+        setFilteredData(updatedData)
+        setSuccessPrompt(true)
+    }
+
+    const onCheckboxValueChange = (value) => {
+        setSelectAll(false)
+        const updatedData = [...filteredData]
+        updatedData[index].isChecked = value
+        setFilteredData(updatedData)
     }
 
     useEffect(() => {
@@ -92,7 +191,7 @@ export default function ChangeOfSchedulePanel () {
             setSortedData(sort)
             setLoading(false)
         }
-    
+
         sortData()
     }, [data])
 
@@ -101,24 +200,15 @@ export default function ChangeOfSchedulePanel () {
     }, [sortedData, filterText])
 
     useEffect(() => {
-        setCheckedCount(filteredData.filter(item => item.isChecked).length)
+        setCheckCount(filteredData.filter(item => item.isChecked).length)
+        setPendingCount(filteredData.filter(item => item.isChecked && item.isCOS === 0).length)
     }, [selectAll, filterData])
-
-    const toggleSelectAll = () => {
-        const updatedData = data.map(item => ({ ...item, isChecked: !selectAll }))
-        setFilteredData(updatedData)
-        setSelectAll(!selectAll)
-    }
-
-    const refresh = () => {
-        setRefreshing(true)
-        setLoading(true)
-    }
 
     return (
         <>
             {isLoading ? ( <Loader /> ) : (
                 <View style={styles.container}>
+                    
                     <Search 
                         filterText={filterText}
                         setFilterText={setFilterText}
@@ -130,7 +220,7 @@ export default function ChangeOfSchedulePanel () {
                         selectAll={selectAll}
                         toggleSelectAll={toggleSelectAll}
                         isVisible={isVisible}
-                        onHandleApprove={() => setVisible(true)}
+                        onHandleApprove={onHandleApprove}
                     />
                     
                     {filteredData.length > 0 ? (
@@ -139,7 +229,7 @@ export default function ChangeOfSchedulePanel () {
                             refreshControl={
                                 <RefreshControl
                                     refreshing={refreshing}
-                                    onRefresh={refresh} />
+                                    onRefresh={onRefresh} />
                             }
                         >
                             <Animatable.View
@@ -159,16 +249,12 @@ export default function ChangeOfSchedulePanel () {
                                                 style={styles.checkBox}
                                                 value={item.isChecked}
 
-                                                onValueChange={(newValue) => {
-                                                    const updatedData = [...data]
-                                                    updatedData[index].isChecked = newValue
-                                                    setFilteredData(updatedData)
-                                                }}
+                                                onValueChange={(value) => onCheckboxValueChange(value)}
                                             />
 
                                             <ApprovalsItem 
                                                 item={item}
-                                                onPanel={0}
+                                                onPanel={1}
                                                 key={index}
                                             />
                                         </View>
@@ -183,16 +269,15 @@ export default function ChangeOfSchedulePanel () {
             <ConfirmationPrompt 
                 isVisible={isVisible}
                 setVisible={setVisible}
-                subTitle={`<b><u>${checkedCount} COS Request/s</u></b> are selected for <b><u>approval.</u></b>${'\n'}Continue?`}
-                onHandlePress={() => {
-                    setVisible(false)
-                    setSuccessPrompt(true)
-                }}
+                subTitle={
+                    isConfirmSelection ? STRINGS.pendingCOSConfirmation(pendingCount, checkCount) : STRINGS.approvalsConfirmation(checkCount)
+                }
+                onHandlePress={onHandleConfirmApprove}
             />
 
             <SuccessPromptPage
                 title={"Success!"}
-                subTitle={`You have successfully approved${'\n'}<b><u>${checkedCount} COS Request/s!</u></b>`}
+                subTitle={STRINGS.approvalSuccess(prevCount)}
                 buttonText={"OKAY"}
                 visible={isSuccessPrompt} 
                 onClose={() => setSuccessPrompt(false)} 
@@ -200,40 +285,3 @@ export default function ChangeOfSchedulePanel () {
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        opacity: 1, 
-        flex: 1, 
-        backgroundColor: COLORS.clearWhite,
-        marginHorizontal: 20
-    },
-
-    bodyContainer: {
-        flex: 1,
-    },
-
-    itemView: {
-        marginTop: 20,
-    },
-    
-    itemStatusText: {
-        fontFamily: 'Inter_500Medium',
-        color: COLORS.darkGray,
-        padding: 10,
-        fontSize: 18,
-        marginHorizontal: 15
-    },
-
-    rowView: {
-        flexDirection: 'row',
-        borderBottomColor: COLORS.darkGray,
-        borderBottomWidth: 1.5
-    },
-
-    checkBox: {
-        marginTop: 15, 
-        borderColor: COLORS.orange, 
-        borderWidth: 2 
-    },
-})

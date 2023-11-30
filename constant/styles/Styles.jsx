@@ -841,6 +841,12 @@ export const STYLES = StyleSheet.create({
             width: 200,
             alignSelf: 'center',
             borderRadius: 20,
+
+            elevation: 5,
+            shadowColor: COLORS.darkGray,
+            shadowOffset: { width: 2, height: 2 },
+            shadowOpacity: 0.5,
+            shadowRadius: 5,
         },
 
         logOutText: {
@@ -871,12 +877,15 @@ export const STYLES = StyleSheet.create({
             padding: 20,
         },
 
+        shadowView: {
+            borderRadius: 15,
+        },
+
         wrapper: {
             flex: 1,
             margin: 20,
             borderRadius: 20,
             backgroundColor: COLORS.clearWhite,
-            elevation: 3,
         },
     },
 

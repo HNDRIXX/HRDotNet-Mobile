@@ -6,8 +6,6 @@ import { useNavigation } from '@react-navigation/native'
 import { COLORS } from '../../constant'
 
 export default function MenuButton ({ clockedDate, clockedTime, clockedLocation }) {
-    const [isLoading, setIsLoading] = useState(false)
-
     const navigation = useNavigation()
 
     const screenWidth = Dimensions.get('window').height
@@ -15,7 +13,6 @@ export default function MenuButton ({ clockedDate, clockedTime, clockedLocation 
     const padding = screenWidth * 0.015
 
     return (
-
         <View style={styles.container}>     
             <View style={styles.buttonWrapper}>
                 <View style={styles.buttonContainer}>

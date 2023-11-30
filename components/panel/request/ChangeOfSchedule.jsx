@@ -40,7 +40,6 @@ const data = [
 ]
 
 export default function ChangeOfSchedulePanel () {
-    const [localData, setLocalData] = useState([])
     const [isLoading, setLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
 

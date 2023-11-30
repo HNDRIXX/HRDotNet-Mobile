@@ -12,20 +12,32 @@ export default function ApprovalsItem ({ item, onPanel }) {
             <View style={styles.itemView}>
                 <Text style={styles.boldText}>{item.employeeName}</Text>
 
-                {onPanel == 0 && (
+                {onPanel == 0 ? (
                     <View style={styles.rowView}>
                         <Text style={styles.regularText}>Date: </Text>
-                        <Text style={styles.regularText}>{DateTimeUtils.dateFullConvert(item.date)}</Text>
+                        <Text style={styles.regularText}>{DateTimeUtils.dateFullConvert(item.COSDate)}</Text>
+
                     </View>
-                )}
+                ) : onPanel == 1 ? (
+                    <View style={styles.rowView}>
+                        <Text style={styles.regularText}>Date: </Text>
+                        <Text style={styles.regularText}>{DateTimeUtils.dateFullConvert(item.officialWorkDate)}</Text>
+
+                    </View>
+                ) : null }
 
                 <View style={styles.rowSpaceView}>
-                    {onPanel == 0 && (
+                    { onPanel == 0 ? (
                         <View style={styles.rowView}>
                             <Text style={styles.regularText}>Requested Sched: </Text>
                             <Text style={styles.regularText}>{item.requestedSched}</Text>
                         </View>
-                    )}
+                    ) : onPanel == 1 ? (
+                        <View style={styles.rowView}>
+                            <Text style={styles.regularText}>Location: </Text>
+                            <Text style={styles.regularText}>{item.location}</Text>
+                        </View>
+                    ) : null }
                     
                     <TouchableOpacity
                         onPress={() => navigation.navigate('ApprovalsDetails', item)}

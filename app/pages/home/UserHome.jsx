@@ -54,7 +54,7 @@ export default function Home ({ navigation }) {
                             <View style={styles.welcomeView}>
                                 <Image 
                                     style={styles.userIcon} 
-                                    uri={ICONS.juan} />
+                                    uri={ICONS.maria} />
 
                                 <View>
                                     <Text style={styles.helloText}>Hello,</Text>

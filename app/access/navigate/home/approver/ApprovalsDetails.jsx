@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, BackHandler, TouchableOpacity } from 'react-native'
 import { Shadow } from 'react-native-shadow-2';
 import { useRoute } from '@react-navigation/native';
@@ -11,13 +11,26 @@ export default function MorePage ({ navigation }) {
     const params = useRoute().params
     const styles = STYLES.ApprovalsDetails(params)
 
+    let topDate
+
+    switch (params?.type) {
+        case 'Change of Schedule':
+            topDate = params.filedDate
+            break
+        case 'Official Work':
+            topDate = params.officialWorkDate
+            break
+        default:
+            topDate = null
+    }
+
     return (
         <View style={{ flex: 1 }}>
             <PageHeader pageName={"Approvals Details"} />
 
             <View>
                 <View style={styles.topContent}>
-                    <Text style={styles.topDate}>{DateTimeUtils.dateHalfMonthConvert(params.date)}</Text>
+                    <Text style={styles.topDate}>{DateTimeUtils.dateHalfMonthConvert(topDate)}</Text>
                     
                     <View style={styles.rowWrapper}>
                         { Utils.statusIcon(params.status) }
@@ -53,12 +66,28 @@ export default function MorePage ({ navigation }) {
                             <>
                                 <View style={[styles.rowWrapper, { marginTop: 20 }]}>
                                     <Text style={styles.titleText}>COS Date:</Text>
-                                    <Text style={styles.valueText}>{DateTimeUtils.dateFullConvert(params?.date)}</Text>
+                                    <Text style={styles.valueText}>{DateTimeUtils.dateFullConvert(params?.COSDate)}</Text>
                                 </View>
 
                                 <View style={styles.rowWrapper}>
                                     <Text style={styles.titleText}>Requested Schedule:</Text>
                                     <Text style={styles.valueText}>{params?.requestedSched}</Text>
+                                </View>
+                            </>
+                        ) : params?.type === "Official Work" ? (
+                            <>
+                                <View style={[styles.rowWrapper, { marginTop: 20 }]}>
+                                    <Text style={styles.titleText}>Official Work Date:</Text>
+                                    <Text style={styles.valueText}>{DateTimeUtils.dateFullConvert(params?.officialWorkDate)}</Text>
+                                </View>
+
+                                <View style={styles.rowWrapper}>
+                                    <Text style={styles.titleText}>Official Work Time:</Text>
+                                    <Text style={styles.valueText}>{params?.officialWorkTime}</Text>
+                                </View>
+                                <View style={styles.rowWrapper}>
+                                    <Text style={styles.titleText}>Location:</Text>
+                                    <Text style={styles.valueText}>{params?.location}</Text>
                                 </View>
                             </>
                         ) : null}

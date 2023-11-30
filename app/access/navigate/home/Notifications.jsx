@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { COLORS, STYLES, DateTimeUtils } from "../../../../constant";
 import PageHeader from "../../../../components/header/PagesHeader";
 import NotificationsItem from "../../../../components/items/home/NotificationsItem";
+import { Shadow } from "react-native-shadow-2";
 
 const data = [
     {
@@ -50,18 +51,20 @@ export default function NotificationPage () {
             <PageHeader pageName="Notifications" />
 
             <View style={styles.wrapper}> 
-                <FlatList 
-                    style={styles.listView}
-                    data={listData}
-                    renderItem={({item, index}) => (
-                        <NotificationsItem 
-                            item={item}
-                            index={index}
-                            formattedDate={DateTimeUtils.dateHalfMonthConvert(item.date)}
-                            onPress={handleNotificationPress}
-                        />
-                    )}
-                />
+                <Shadow distance={4} style={styles.shadowView}>
+                    <FlatList 
+                        style={styles.listView}
+                        data={listData}
+                        renderItem={({item, index}) => (
+                            <NotificationsItem 
+                                item={item}
+                                index={index}
+                                formattedDate={DateTimeUtils.dateHalfMonthConvert(item.date)}
+                                onPress={handleNotificationPress}
+                            />
+                        )}
+                    />
+                </Shadow>
             </View>
         </View>
     )

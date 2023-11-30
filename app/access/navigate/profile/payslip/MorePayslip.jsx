@@ -15,7 +15,6 @@ import Loader from '../../../../../components/loader/Loader'
 import { PayslipPrint } from '../../../../../constant/print/PayslipPrint'
 
 const styles = STYLES.MorePayslip
-
 const RowTextView = ({ semiText, regularText }) => {
     return (
         <View style={styles.rowText}>
