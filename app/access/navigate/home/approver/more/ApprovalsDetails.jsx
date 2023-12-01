@@ -3,10 +3,10 @@ import { View, Text, StyleSheet, BackHandler, TouchableOpacity } from 'react-nat
 import { Shadow } from 'react-native-shadow-2';
 import { useRoute } from '@react-navigation/native';
 
-import { COLORS, STYLES, Utils } from '../../../../../constant';
-import PageHeader from '../../../../../components/header/PagesHeader';
+import { COLORS, STYLES, Utils } from '../../../../../../constant';
+import PageHeader from '../../../../../../components/header/PagesHeader';
 
-import { DateTimeUtils } from '../../../../../constant';
+import { DateTimeUtils } from '../../../../../../constant';
 export default function MorePage ({ navigation }) {
     const params = useRoute().params
     const styles = STYLES.ApprovalsDetails(params)

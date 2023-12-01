@@ -84,7 +84,7 @@ export default function MenuButton ({ clockedDate, clockedTime, clockedLocation 
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity 
                         style={[styles.gridButton, { padding: padding }]}
-                        onPress={() => navigation.navigate('OBRequest')}>
+                        onPress={() => navigation.navigate('Teams')}>
                         <Image 
                             source={require('../../assets/icons/teams.png')}
                             style={{ width: imageSize ,  height: imageSize }}

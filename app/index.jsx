@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { Easing } from 'react-native-reanimated';
 
-import Home from './pages/home/UserHome';
+import Home from './pages/home/ApproverHome';
 import Calendar from './pages/Calendar';
 import Request from './pages/Request';
 import Profile from './pages/Profile';
@@ -39,8 +39,10 @@ import MLRequest from './access/navigate/request/newrequest/MLRequest';
 import MorePayslip from './access/navigate/profile/payslip/MorePayslip';
 import AttachedFile from './access/navigate/request/AttachedFile';
 
+import TeamsPage from './access/navigate/home/approver/Teams'
 import ApprovalsPage from './access/navigate/home/approver/Approvals';
-import ApprovalsDetails from './access/navigate/home/approver/ApprovalsDetails'
+import ApprovalsDetails from './access/navigate/home/approver/more/ApprovalsDetails'
+import TeamMember from './access/navigate/home/approver/more/TeamMember'
 import Loader from '../components/loader/Loader';
 
 export default function Index() {
@@ -158,7 +160,15 @@ export default function Index() {
                         component={ApprovalsDetails}
                         options={{
                             cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
-                        }} />                    
+                        }} />           
+
+                    <Stack.Screen name="Teams" component={TeamsPage} />
+                    <Stack.Screen 
+                        name="TeamMember" 
+                        component={TeamMember}
+                        options={{
+                            cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
+                        }} />  
 
                     <Stack.Screen name="TimeSheet" component={TimeSheetPage} />
                     <Stack.Screen name="Pending" component={PendingPage} />

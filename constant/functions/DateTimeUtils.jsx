@@ -8,6 +8,7 @@ export const DateTimeUtils = {
     momentCurrDateFormat: () => moment().format('MMMM DD, YYYY'),
     momentCurrDate: () => moment(),
     getDashDate: (date) => moment(date, 'YYYYMMDD').format('MMM-DD-YYYY'),
+    getDashDateReverse: (date) => moment(date, 'YYYYMMDD').format('YYYY-MM-DD'),
     getCurrMonth: () => moment().format('MMMM'),
     getCurrYear: () => moment().format('YYYY'),
     defaultDateFormat: () => moment().format('YYYYMMDD'),

@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { Octicons, Entypo } from '@expo/vector-icons'
-import { Image } from 'react-native-expo-image-cache'
+// import { Image } from 'react-native-expo-image-cache'
+import { Image } from 'expo-image'
 import DashedLine from 'react-native-dashed-line'
 import CachedImage from 'expo-cached-image'
 
@@ -10,24 +11,18 @@ export default function NotificationsItem ({ item, index, formattedDate, onPress
     const getSourceUri = (name) => {
         if (name === "Request Update") {
             return (
-                <CachedImage
-                    source={{  uri: ICONS.calendarBadge }}
-                    cacheKey={`calendarBadge`}
-                    placeholderContent={( 
-                        <ActivityIndicator size={'small'} />
-                    )} 
-                    style={{ height: 30, width: 30 }} 
+                <Image 
+                    source={require('../../../assets/svg/calendar-badge.svg')}
+                    style={{ height: 30, width: 30 }}
+                    co
                 />
             )
         } else if (name === "Advisory") {
             return (
-                <CachedImage
-                    source={{  uri: ICONS.megaphone }}
-                    cacheKey={`advisory`}
-                    placeholderContent={( 
-                        <ActivityIndicator size={'small'} />
-                    )} 
-                    style={{ height: 30, width: 30 }} 
+                <Image 
+                    source={require('../../../assets/svg/megaphone.svg')}
+                    style={{ height: 30, width: 30 }}
+                    contentFit='contain'
                 />
             )
         } else {

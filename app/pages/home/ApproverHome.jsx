@@ -4,7 +4,8 @@ import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity, Activi
 import { useRoute } from "@react-navigation/native";
 import { Shadow } from "react-native-shadow-2";
 import * as Animatable from 'react-native-animatable';
-import { Image } from "react-native-expo-image-cache";
+import { Image } from "expo-image";
+// import { Image } from "react-native-expo-image-cache";
 import { FontAwesome, Entypo } from "@expo/vector-icons";
 
 import { COLORS, ICONS } from "../../../constant";
@@ -42,7 +43,7 @@ export default function Home ({ navigation }) {
                                     onPress={() => navigation.navigate('SideDrawer')}>
                                     <FontAwesome name={'bars'} size={25} color={COLORS.clearWhite} />
                                 </TouchableOpacity>
-
+                            
                                 <TouchableOpacity
                                     onPress={() => navigation.navigate('Notification')}
                                 >
@@ -55,6 +56,7 @@ export default function Home ({ navigation }) {
                                     style={styles.userIcon} 
                                     uri={ICONS.maria}
                                 />
+
 
                                 <View>
                                     <Text style={styles.helloText}>Hello,</Text>

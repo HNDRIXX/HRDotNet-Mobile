@@ -267,11 +267,11 @@ export const STYLES = StyleSheet.create({
 
         userIcon: {
             width: 83,
-            height: 83,
+            height: 80,
             borderWidth: 4,
             borderColor: COLORS.orange,
             borderRadius: 40,
-            marginRight: 15
+            marginRight: 15,
         },
 
         helloText: {

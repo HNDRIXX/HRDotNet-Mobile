@@ -137,6 +137,7 @@ export default function COSApprovals () {
     }, []) 
 
     const onHandleConfirmApprove = () => {
+        setSelectAll(false)
         setVisible(false)
         
         const dataSet = [...filteredData]

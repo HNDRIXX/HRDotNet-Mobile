@@ -26,6 +26,85 @@ const data = [
         message: "Intellismart, Stork, Supersam, and Opulence, which were under Intellismart Technology Inc., now have Tiktok accounts!",
         isReaded: 0 
     },
+    {
+        name: "Advisory",
+        date: "20231018",
+        message: "Intellismart, Stork, Supersam, and Opulence, which were under Intellismart Technology Inc., now have Tiktok accounts!",
+        isReaded: 0 
+    },
+    {
+        name: "Advisory",
+        date: "20231018",
+        message: "Intellismart, Stork, Supersam, and Opulence, which were under Intellismart Technology Inc., now have Tiktok accounts!",
+        isReaded: 0 
+    },
+    {
+        name: "Advisory",
+        date: "20231018",
+        message: "Intellismart, Stork, Supersam, and Opulence, which were under Intellismart Technology Inc., now have Tiktok accounts!",
+        isReaded: 0 
+    },
+    {
+        name: "Advisory",
+        date: "20231018",
+        message: "Intellismart, Stork, Supersam, and Opulence, which were under Intellismart Technology Inc., now have Tiktok accounts!",
+        isReaded: 0 
+    },
+    {
+        name: "Advisory",
+        date: "20231018",
+        message: "Intellismart, Stork, Supersam, and Opulence, which were under Intellismart Technology Inc., now have Tiktok accounts!",
+        isReaded: 0 
+    },
+    {
+        name: "Advisory",
+        date: "20231018",
+        message: "Intellismart, Stork, Supersam, and Opulence, which were under Intellismart Technology Inc., now have Tiktok accounts!",
+        isReaded: 0 
+    },
+    {
+        name: "Advisory",
+        date: "20231018",
+        message: "Intellismart, Stork, Supersam, and Opulence, which were under Intellismart Technology Inc., now have Tiktok accounts!",
+        isReaded: 0 
+    },
+    {
+        name: "Advisory",
+        date: "20231018",
+        message: "Intellismart, Stork, Supersam, and Opulence, which were under Intellismart Technology Inc., now have Tiktok accounts!",
+        isReaded: 0 
+    },
+    {
+        name: "Advisory",
+        date: "20231018",
+        message: "Intellismart, Stork, Supersam, and Opulence, which were under Intellismart Technology Inc., now have Tiktok accounts!",
+        isReaded: 0 
+    },
+    {
+        name: "Advisory",
+        date: "20231018",
+        message: "Intellismart, Stork, Supersam, and Opulence, which were under Intellismart Technology Inc., now have Tiktok accounts!",
+        isReaded: 0 
+    },
+    {
+        name: "Advisory",
+        date: "20231018",
+        message: "Intellismart, Stork, Supersam, and Opulence, which were under Intellismart Technology Inc., now have Tiktok accounts!",
+        isReaded: 0 
+    },
+    {
+        name: "Advisory",
+        date: "20231018",
+        message: "Intellismart, Stork, Supersam, and Opulence, which were under Intellismart Technology Inc., now have Tiktok accounts!",
+        isReaded: 0 
+    },
+    {
+        name: "Advisory",
+        date: "20231018",
+        message: "Intellismart, Stork, Supersam, and Opulence, which were under Intellismart Technology Inc., now have Tiktok accounts!",
+        isReaded: 0 
+    },
+    
 ]
 
 export default function NotificationPage () {

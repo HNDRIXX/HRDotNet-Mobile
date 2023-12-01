@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions } from "react-native";
 import { Image } from "react-native-expo-image-cache";
+// import { Image } from "expo-image";
 import { useRoute } from "@react-navigation/native";
 import { Shadow } from "react-native-shadow-2";
 import * as Animatable from 'react-native-animatable';
@@ -54,7 +55,11 @@ export default function Home ({ navigation }) {
                             <View style={styles.welcomeView}>
                                 <Image 
                                     style={styles.userIcon} 
-                                    uri={ICONS.maria} />
+                                    uri={ICONS.juan} />
+
+                                {/* <Image
+                                    style={styles.userIcon}
+                                    source={require('../../../assets/user/juan.svg')}/> */}
 
                                 <View>
                                     <Text style={styles.helloText}>Hello,</Text>

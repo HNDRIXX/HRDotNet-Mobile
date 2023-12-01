@@ -5,7 +5,11 @@ import * as Animatable from 'react-native-animatable';
 import { COLORS, STYLES} from '../../../../../constant';
 import PageHeader from '../../../../../components/header/PagesHeader';
 import COSApprovals from '../../../../../components/panel/home/approvals/COSApprovals';
-import OBApprovals from '../../../../../components/panel/home/approvals/OBApprovals'
+import OBApprovals from '../../../../../components/panel/home/approvals/OBApprovals';
+import OTApprovals from '../../../../../components/panel/home/approvals/OTApprovals';
+import LVApprovals from '../../../../../components/panel/home/approvals/LVApprovals';
+import OSApprovals from '../../../../../components/panel/home/approvals/OSApprovals';
+import MLApprovals from '../../../../../components/panel/home/approvals/MLApprovals';
 
 const data = [
     { title: 'Change of Schedule' },
@@ -63,8 +67,12 @@ export default function ApprovalsPage() {
                     </View>
 
                     {   selectedButtonIndex == 0 ? ( <COSApprovals /> ) :
-                        selectedButtonIndex == 1 ? ( <OBApprovals /> )
-                    : ( null )}
+                        selectedButtonIndex == 1 ? ( <OBApprovals /> ) :
+                        selectedButtonIndex == 2 ? ( <OTApprovals /> ) :
+                        selectedButtonIndex == 3 ? ( <OSApprovals /> ) :
+                        selectedButtonIndex == 4 ? ( <LVApprovals /> ) :
+                        selectedButtonIndex == 5 ? ( <MLApprovals /> ) 
+                        : ( null )}
                 </View>
             </Animatable.View>
         </>
