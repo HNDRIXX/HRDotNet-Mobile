@@ -15,6 +15,29 @@ import NothingFoundNote from '../../../components/note/NothingFoundNote'
 
 const data = [
 {
+    payOutSchedule: '20231210',
+    dateTo: '20231116',
+    dateFrom: '20231130',
+    netPay: '15378.2400',
+    grossPay: '17190.3100',
+    deductions: '1812.0600',    
+
+    documentNo: 'PP001',
+    employeeName: 'Juan dela Cruz',
+    employeeCode: '5985',
+    department: 'Quality Assurance',
+    
+    regularDayTotal: '15075.3600',
+    totalWorkingHours: '84.6200',
+    mealAllowanceTotal: '736.1000',
+    complexityAllowance: '1321.8400',
+
+    SSSShare: '675.0000',
+    philHealthShare: '301.5100',
+    HDMFShare: '100.0000',
+    withHoldingTax: '735.0000',
+},
+{
     payOutSchedule: '20231125',
     dateTo: '20231101',
     dateFrom: '20231115',

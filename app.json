@@ -9,9 +9,13 @@
     ],
     "orientation": "portrait",
     "name": "HRDotNet-Mobile",
-    "slug": "HRDotNet-Mobile",
+    "slug": "hrdotnet-mobile",
     "icon": "./assets/icon.png",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -44,8 +48,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "00a79da3-f5ea-460d-9c97-12a30d7a5bf5"
+        "projectId": "b7bf4f49-92f0-470c-b7a1-5843a61d6ebc"
       }
-    }
+    },
+    "owner": "hrdotnet-mobile"
   }
 }

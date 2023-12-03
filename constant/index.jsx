@@ -5,11 +5,25 @@ import { STRINGS } from './Strings'
 import { STYLES } from './styles/Styles'
 import { COMPONENT_STYLES } from './styles/ComponentStyles'
 
-import { DateTimeUtils } from './functions/DateTimeUtils'
-import { Utils } from './functions/Utils'
-import { ErrorUtils } from './functions/ErrorUtils'
-import { RequestUtils } from './functions/RequestUtils'
-import { LocalData } from './functions/LocalData'
-import { LocationUtils } from './functions/LocationUtils'
+import { DateTimeUtils } from './utils/DateTimeUtils'
+import { Utils } from './utils/Utils'
+import { ErrorUtils } from './utils/ErrorUtils'
+import { RequestUtils } from './utils/RequestUtils'
+import { LocalData } from './utils/LocalData'
+import { LocationUtils } from './utils/LocationUtils'
+import { ApprovalsUtils } from './utils/ApprovalsUtils'
 
-export { COLORS, useFonts, ICONS, STRINGS, DateTimeUtils, Utils, ErrorUtils, RequestUtils, LocalData, LocationUtils, STYLES, COMPONENT_STYLES }
+export { COLORS, 
+         useFonts, 
+         ICONS, 
+         STRINGS, 
+         DateTimeUtils, 
+         Utils, 
+         ErrorUtils, 
+         RequestUtils, 
+         LocalData, 
+         LocationUtils, 
+         STYLES, 
+         COMPONENT_STYLES, 
+         ApprovalsUtils 
+    }

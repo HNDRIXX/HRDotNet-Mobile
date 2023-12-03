@@ -4,8 +4,8 @@ import { AntDesign } from '@expo/vector-icons'
 import { COLORS } from '../../constant'
 import { Link } from 'expo-router'
 
-export default function SuccessTimeClock ({ clockedTime, clockedStatus, clockedValue, clockedDate, subText, visible, onClose }) {
-
+export default function SuccessTimeClock ({ clockedTime, clockedStatus, clockedValue, clockedDate, 
+  clockedAddress, visible, onClose }) {
     return (
         <>
             <Modal
@@ -27,8 +27,8 @@ export default function SuccessTimeClock ({ clockedTime, clockedStatus, clockedV
 
                     <Text style={styles.subText}>You have successfully  
                         <Text style={{ fontFamily: 'Inter_700Bold' }}> {clockedStatus} </Text>
-                        {/* from  */}
-                        {/* <Text style={{ fontFamily: 'Inter_700Bold' }}> {subText}</Text> */}
+                        from 
+                        <Text style={{ fontFamily: 'Inter_700Bold' }}> {clockedAddress}</Text>
                     </Text>
                     
                     <TouchableOpacity

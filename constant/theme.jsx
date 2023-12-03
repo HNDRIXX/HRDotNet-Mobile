@@ -36,6 +36,8 @@ const COLORS = {
     darkGray: '#575757',
     shadowGray: 'rgba(119, 119, 119, 0.06)',
 
+    opaqueRed: 'rgba(246, 69, 69, 0.4)',
+    opaqueGreen: 'rgba(0,255,0,0.2)',
 }
 
 export { COLORS }

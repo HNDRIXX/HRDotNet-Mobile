@@ -1,5 +1,5 @@
-import { Utils } from "../functions/Utils"
-import { DateTimeUtils } from "../functions/DateTimeUtils"
+import { Utils } from "../utils/Utils"
+import { DateTimeUtils } from "../utils/DateTimeUtils"
 
 export const PayslipPrint = {
     payslip: (params, filteredData, dateRange) => `

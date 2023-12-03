@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions } from "react-native";
-import { Image } from "react-native-expo-image-cache";
+import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions, BackHandler, BackHandlerIOS, Platform } from "react-native";
+import { Image } from 'react-native-elements';
 // import { Image } from "expo-image";
 import { useRoute } from "@react-navigation/native";
 import { Shadow } from "react-native-shadow-2";
@@ -25,6 +25,26 @@ export default function Home ({ navigation }) {
         setTimeout(() => {
             setIsLoading(false)
         }, 800)
+    }, [])
+    
+    useEffect(() => {
+        const handleBackPress = () => {
+          return true
+        }
+    
+        if (Platform.OS === 'android') {
+          BackHandler.addEventListener('hardwareBackPress', handleBackPress)
+        } else if (Platform.OS === 'ios') {
+          BackHandlerIOS.addEventListener('hardwareBackPress', handleBackPress)
+        }
+    
+        return () => {
+          if (Platform.OS === 'android') {
+            BackHandler.removeEventListener('hardwareBackPress', handleBackPress)
+          } else if (Platform.OS === 'ios') {
+            BackHandlerIOS.removeEventListener('hardwareBackPress', handleBackPress)
+          }
+        }
     }, [])
 
     return (
@@ -53,13 +73,11 @@ export default function Home ({ navigation }) {
                             </View>
 
                             <View style={styles.welcomeView}>
-                                <Image 
-                                    style={styles.userIcon} 
-                                    uri={ICONS.juan} />
-
-                                {/* <Image
+                                <Image
+                                    source={require('../../../assets/user/juan.jpg')}
                                     style={styles.userIcon}
-                                    source={require('../../../assets/user/juan.svg')}/> */}
+                                    PlaceholderContent={<Loader />}
+                                />
 
                                 <View>
                                     <Text style={styles.helloText}>Hello,</Text>

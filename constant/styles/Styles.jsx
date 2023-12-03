@@ -10,6 +10,7 @@ export const STYLES = StyleSheet.create({
         container: {
             flex: 1,
         },
+        
 
         logo: {
             width: 230, height: 100,
@@ -1004,46 +1005,6 @@ export const STYLES = StyleSheet.create({
             marginTop: 20,
             fontFamily: 'Inter_600SemiBold',
         },
-
-        itemWrapper: {
-            backgroundColor: COLORS.clearWhite,
-            margin: 10,
-            marginHorizontal: 20,
-            borderRadius: 20,
-        },
-
-        shadowView: {
-            width: '100%',
-            backgroundColor: COLORS.clearWhite,
-            borderRadius: 20
-        },
-
-        itemHeader: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            backgroundColor: COLORS.tr_gray,
-            padding: 10,
-            paddingHorizontal: 20,
-            borderTopRightRadius: 20,
-            borderTopLeftRadius: 20,
-        },
-
-        itemHeaderText: {
-            color: COLORS.clearWhite,
-            fontFamily: 'Inter_700Bold',
-        },
-
-        itemBody: {
-            padding: 15,
-        },
-
-        bodyText: {
-            fontFamily: 'Inter_600SemiBold',
-        },
-
-        itemText: {
-            fontFamily: 'Inter_400Regular'
-        }
     },
 
     Timesheet: {
@@ -1135,12 +1096,6 @@ export const STYLES = StyleSheet.create({
             margin: 20,
         },
 
-        shadowView: {
-            width: '100%',
-            backgroundColor: COLORS.clearWhite,
-            borderRadius: 20,
-        },
-
         titleText: {
             fontFamily: 'Inter_700Bold',
             fontSize: 22,
@@ -1179,41 +1134,6 @@ export const STYLES = StyleSheet.create({
             marginTop: 20,
             fontFamily: 'Inter_600SemiBold',
         },
-
-        itemWrapper: {
-            backgroundColor: COLORS.clearWhite,
-            margin: 10,
-            borderRadius: 20,
-            marginHorizontal: 20,
-            elevation: 2,
-        },
-
-        itemHeader: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            backgroundColor: COLORS.tr_gray,
-            padding: 10,
-            paddingHorizontal: 20,
-            borderTopRightRadius: 20,
-            borderTopLeftRadius: 20,
-        },
-
-        itemHeaderText: {
-            color: COLORS.clearWhite,
-            fontFamily: 'Inter_700Bold',
-        },
-
-        itemBody: {
-            padding: 15,
-        },
-
-        bodyText: {
-            fontFamily: 'Inter_600SemiBold',
-        },
-
-        itemText: {
-            fontFamily: 'Inter_400Regular'
-        }
     },
 
     MorePayslip: {

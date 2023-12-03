@@ -1,9 +1,10 @@
-import { Image } from 'expo-image'
+import { Image } from 'react-native-elements';
 import React from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import * as Animatable from 'react-native-animatable';
 
-import { COLORS } from '../../../constant'
+import { COLORS, ICONS } from '../../../constant'
+import Loader from '../../loader/Loader';
 
 export default function PersonalPanel () {
     return (
@@ -15,10 +16,12 @@ export default function PersonalPanel () {
             >
                 <View style={styles.topView}>
                     <View style={styles.imageView}>
-                        <Image 
+                        <Image
                             source={require('../../../assets/user/juan.jpg')}
                             style={styles.profilePic}
+                            PlaceholderContent={<Loader />}
                         />
+                            
                     </View>
 
                     <Text style={styles.nameText}>Juan dela Cruz</Text>

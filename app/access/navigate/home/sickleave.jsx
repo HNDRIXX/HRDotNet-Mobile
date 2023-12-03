@@ -1,10 +1,14 @@
+import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
 import { Shadow } from "react-native-shadow-2";
+import * as Animatable from 'react-native-animatable';
 import { Image } from "react-native-expo-image-cache";
+import CachedImage from 'expo-cached-image'
 
+import Loader from "../../../../components/loader/Loader";
 import { COLORS, ICONS, STYLES, DateTimeUtils } from "../../../../constant";
 import PageHeader from "../../../../components/header/PagesHeader";
+import TimeOffItem from "../../../../components/items/home/TimeOffItem";
 
 const data = [
     {
@@ -28,16 +32,27 @@ const data = [
 ]
 
 export default function SickLeavePage ({ navigation }) {
+    const [isLoading, setLoading] = useState(true)
     const styles = STYLES.SickLeave
+
+    useEffect(() => {
+        setTimeout(() => {
+            setLoading(false)
+        }, 2000)
+    }, [])
     
     return (
         <View style={styles.container}>
             <PageHeader pageName={'Sick Leave'}/>
 
             <View style={styles.topContainer}>
-                <Image 
-                    style={{ width: 60, height: 60, marginRight: 15 }}
-                    uri={ICONS.medicine}
+                <CachedImage
+                    source={{  uri: ICONS.medicine}}
+                    style={{ width: 70, height: 70, marginRight: 10 }}
+                    cacheKey={`medecines`}
+                    placeholderContent={( 
+                        <ActivityIndicator size={'small'} style={{marginRight: 30}} />
+                    )} 
                 />
 
                 <View>
@@ -54,31 +69,24 @@ export default function SickLeavePage ({ navigation }) {
 
             <Text style={styles.detailsTitle}>Details</Text>
             
-            <FlatList 
-                data={data}
-                renderItem={({item, index}) => {
-                    return (
-                        <View style={styles.itemWrapper}>
-                            <Shadow distance={3} offset={[2,2]} style={styles.shadowView}>
-                                <View style={styles.itemHeader}>
-                                    <Text style={styles.itemHeaderText}>{item.status}</Text>
-                                    <Text style={styles.itemHeaderText}>{item.leaveCredit}</Text>
-                                </View>
-
-                                <View style={styles.itemBody}>
-                                    <Text style={styles.bodyText}>Date: 
-                                        <Text style={styles.itemText}> {DateTimeUtils.dateFullConvert(item.date)}</Text>
-                                    </Text>
-
-                                    <Text style={styles.bodyText}>Document No: 
-                                        <Text style={styles.itemText}> {item.documentNo}</Text>
-                                    </Text>
-                                </View>
-                            </Shadow>
-                        </View>
-                    )
-                }}
-            />
+            { isLoading ? (<Loader />) : (
+                <Animatable.View
+                    animation={'fadeIn'}
+                    duration={500}
+                    style={{ opacity: 1, flex: 1, backgroundColor: COLORS.clearWhite }}
+                >
+                    <FlatList 
+                        data={data}
+                        renderItem={({item, index}) => {
+                            return (
+                                <TimeOffItem 
+                                    item={item}
+                                />
+                            )
+                        }}
+                    />
+                </Animatable.View>
+            )}
         </View>
     )
 }

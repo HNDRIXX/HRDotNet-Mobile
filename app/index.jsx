@@ -6,12 +6,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { Easing } from 'react-native-reanimated';
 
-import Home from './pages/home/ApproverHome';
+import Home from './pages/home/UserHome';
 import Calendar from './pages/Calendar';
 import Request from './pages/Request';
 import Profile from './pages/Profile';
 import MorePage from './access/navigate/request/MorePage';
-import TimeClock from './access/home/TimeClock';
+import ClockInOut from './access/home/ClockInOut';
 
 import { useFonts } from '../constant/Fonts';
 import LoanLedgerPage from './access/navigate/home/LoanLedger';
@@ -22,10 +22,9 @@ import VacationLeavePage from './access/navigate/home/VacationLeave';
 import SickLeavePage from './access/navigate/home/SickLeave';
 import NotificationPage from './access/navigate/home/Notifications';
 import DrawerPage from './access/navigate/home/Drawer';
-import LogInPage from './authentication/base/LogIn';
-import ForgotPasswordPage from './authentication/base/ForgotPassword';
-import ResetPasswordPage from './authentication/base/ResetPassword';
-import VerifyCodePage from './authentication/auth/VerifyCode';
+import LogInPage from './authentication/auth/LogIn';
+import ForgotPasswordPage from './authentication/auth/ForgotPassword';
+import ResetPasswordPage from './authentication/auth/ResetPassword';
 import COSRequest from './access/navigate/request/newrequest/COSRequest';
 import RequestSummary from './access/navigate/request/RequestSummary';
 import CameraAccess from './access/use/Camera';
@@ -140,11 +139,9 @@ export default function Index() {
                     <Stack.Screen name="LogIn" component={LogInPage} />
                     <Stack.Screen name="ForgotPassword" component={ForgotPasswordPage} />
                     <Stack.Screen name="ResetPassword" component={ResetPasswordPage} />
-                    <Stack.Screen name="VerifyCode" component={VerifyCodePage} />
-
                     <Stack.Screen name="TabStack" component={TabStack} />
 
-                    <Stack.Screen name="TimeClock" component={TimeClock} />
+                    <Stack.Screen name="ClockInOut" component={ClockInOut} />
 
                     <Stack.Screen name="LoanLedger" component={LoanLedgerPage} />
                     <Stack.Screen 

@@ -6,14 +6,13 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { View, Text, StyleSheet, ScrollView, RefreshControl, FlatList } from "react-native";
 import * as Animatable from 'react-native-animatable';
 import Checkbox from 'expo-checkbox'
-import moment from "moment";
 
 import { Search } from "../../../use/Search";
 import ApprovalsAction from "../../../use/ApprovalsAction";
 import Loader from "../../../loader/Loader";
 import NothingFoundNote from "../../../note/NothingFoundNote";
 import ApprovalsItem from "../../../items/home/ApprovalsItem";
-import { COLORS, STRINGS, Utils, DateTimeUtils, COMPONENT_STYLES } from "../../../../constant";
+import { COLORS, STRINGS, Utils, ApprovalsUtils, DateTimeUtils, COMPONENT_STYLES } from "../../../../constant";
 import ConfirmationPrompt from "../../../prompt/approvals/ConfirmationPrompt";
 import SuccessPromptPage from "../../../prompt/SuccessPrompt";
 
@@ -79,9 +78,9 @@ export default function COSApprovals () {
         },
     ])
 
-    const [filterText, setFilterText] = useState('')
     const [sortedData, setSortedData] = useState([])
     const [filteredData, setFilteredData] = useState([])
+    const [filterText, setFilterText] = useState('')
     const [checkCount, setCheckCount] = useState(null)
     const [prevCount, setPrevCount] = useState(null)
 
@@ -89,42 +88,9 @@ export default function COSApprovals () {
     const [isSuccessPrompt, setSuccessPrompt] = useState(false)
     const [isLoading, setLoading] = useState(true)
     const [selectAll, setSelectAll] = useState(false)
-    const [isDisabled, setDisabled] = useState(true)
 
     const [refreshing, setRefreshing] = useState(false)
     const scrollViewRef = useRef(null)
-
-    const sortByDateAsync = async (data) => {
-        return new Promise((resolve) => {
-            const sorted = data.sort((a, b) => {
-                const dateA = moment(a.date, 'YYYYMMDD')
-                const dateB = moment(b.date, 'YYYYMMDD')
-                return dateB - dateA
-            })
-            
-            resolve(sorted)
-        })
-    }
-    
-    const filterData = () => {
-        const filtered = sortedData.filter((item) => {
-            const formattedDate = DateTimeUtils.dateFullConvert(item.COSDate)
-        
-            return (
-                formattedDate.toLowerCase().includes(filterText.toLowerCase()) ||
-                item.employeeName.toLowerCase().includes(filterText.toLowerCase()) ||
-                item.requestedSched.toLowerCase().includes(filterText.toLowerCase())
-            )
-        })
-    
-        setFilteredData(filtered)
-    }
-
-    const toggleSelectAll = () => {
-        const updatedData = data.map(item => ({ ...item, isChecked: !selectAll }))
-        setFilteredData(updatedData)
-        setSelectAll(!selectAll)
-    }
 
     const onRefresh = useCallback(() => {
         setLoading(true)
@@ -155,18 +121,12 @@ export default function COSApprovals () {
         setSuccessPrompt(true)
     }
 
-    const onCheckboxValueChange = (value) => {
-        setSelectAll(false)
-        const updatedData = [...filteredData]
-        updatedData[index].isChecked = value
-        setFilteredData(updatedData)
-    }
-
     useEffect(() => {
         const sortData = async () => {
             setLoading(true)
-            const sort = await sortByDateAsync(data)
+            const sort = await ApprovalsUtils.sortByDateAsync(data)
             setSortedData(sort)
+            setFilteredData(sort)
             setLoading(false)
         }
 
@@ -174,16 +134,16 @@ export default function COSApprovals () {
     }, [data])
 
     useEffect(() => {
-        setPrevCount(checkCount)
-    }, [isVisible])
-
-    useEffect(() => {
-        filterData()
-    }, [sortedData, filterText])
+        ApprovalsUtils.onFilterData(0, sortedData, filterText, setFilteredData)
+    }, [filterText])    
 
     useEffect(() => {
         setCheckCount(filteredData.filter(item => item.isChecked).length)
-    }, [selectAll, filterData])
+    }, [selectAll, filteredData])
+
+    useEffect(() => {
+        setPrevCount(checkCount)
+    }, [isVisible])
 
     return (
         <>
@@ -198,7 +158,9 @@ export default function COSApprovals () {
                     <ApprovalsAction 
                         isDisabled={filteredData.every(item => !item.isChecked)}
                         selectAll={selectAll}
-                        toggleSelectAll={toggleSelectAll}
+
+                        toggleSelectAll={() => ApprovalsUtils.toggleSelectAll(filteredData, setFilteredData, selectAll, setSelectAll)}
+
                         isVisible={isVisible}
                         onHandleApprove={() => setVisible(true)}
                     />
@@ -209,7 +171,8 @@ export default function COSApprovals () {
                             refreshControl={
                                 <RefreshControl
                                     refreshing={refreshing}
-                                    onRefresh={onRefresh} />
+                                    onRefresh={onRefresh} 
+                                    colors={[COLORS.powderBlue]}/>
                             }
                         >
                             <Animatable.View
@@ -229,7 +192,7 @@ export default function COSApprovals () {
                                                 style={styles.checkBox}
                                                 value={item.isChecked}
 
-                                                onValueChange={(value) => onCheckboxValueChange(value)}
+                                                onValueChange={(value) => ApprovalsUtils.onCheckboxValueChange(filteredData, value, index, setSelectAll, setFilteredData)}
                                             />
 
                                             <ApprovalsItem 

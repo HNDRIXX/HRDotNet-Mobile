@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 import { AntDesign } from "@expo/vector-icons";
@@ -7,10 +8,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { COLORS } from "../../constant";
 
 export default function PageHeader ({ pageName, backStatus }) {
+    const [isDisabled, setDisabled] = useState(false)
     const navigation = useNavigation()
     const insets = useSafeAreaInsets()
 
     const onBackHandler = () => {
+        setDisabled(true)
         backStatus == "expo" ? router.back() : navigation.goBack()
     }
 
@@ -19,6 +22,7 @@ export default function PageHeader ({ pageName, backStatus }) {
             <TouchableOpacity 
                 style={styles.backButton} 
                 onPress={onBackHandler}
+                disabled={isDisabled ? true : false}
             >
                 <AntDesign name='arrowleft' size={30} color={COLORS.clearWhite} />
             </TouchableOpacity>

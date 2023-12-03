@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions } from "react-native";
+import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions, BackHandler, BackHandlerIOS, Platform} from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { Shadow } from "react-native-shadow-2";
 import * as Animatable from 'react-native-animatable';
-import { Image } from "expo-image";
+import { Image } from 'react-native-elements';
 // import { Image } from "react-native-expo-image-cache";
 import { FontAwesome, Entypo } from "@expo/vector-icons";
 
@@ -16,14 +16,34 @@ import Loader from "../../../components/loader/Loader"
 
 export default function Home ({ navigation }) {  
     const [isLoading, setIsLoading] = useState(true)
-    const route = useRoute()
     
+    const route = useRoute()
     const insets = useSafeAreaInsets()
 
     useEffect(() => {
         setTimeout(() => {
         setIsLoading(false)
         }, 800)
+    }, [])
+
+    useEffect(() => {
+        const handleBackPress = () => {
+          return true
+        }
+    
+        if (Platform.OS === 'android') {
+          BackHandler.addEventListener('hardwareBackPress', handleBackPress)
+        } else if (Platform.OS === 'ios') {
+          BackHandlerIOS.addEventListener('hardwareBackPress', handleBackPress)
+        }
+    
+        return () => {
+          if (Platform.OS === 'android') {
+            BackHandler.removeEventListener('hardwareBackPress', handleBackPress)
+          } else if (Platform.OS === 'ios') {
+            BackHandlerIOS.removeEventListener('hardwareBackPress', handleBackPress)
+          }
+        }
     }, [])
 
     return (
@@ -52,11 +72,11 @@ export default function Home ({ navigation }) {
                             </View>
 
                             <View style={styles.welcomeView}>
-                                <Image 
-                                    style={styles.userIcon} 
-                                    uri={ICONS.maria}
+                                <Image
+                                    source={require('../../../assets/user/maria.jpg')}
+                                    style={styles.userIcon}
+                                    PlaceholderContent={<Loader />}
                                 />
-
 
                                 <View>
                                     <Text style={styles.helloText}>Hello,</Text>

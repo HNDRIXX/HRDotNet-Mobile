@@ -1,11 +1,13 @@
-import { useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, RefreshControl } from 'react-native'
+import * as Animatable from 'react-native-animatable';
 
 import { Search } from '../../../../components/use/Search'
 import { COLORS, STYLES, DateTimeUtils, } from '../../../../constant'
 import LoanLedgerItem from '../../../../components/items/home/LoanLedgerItem'
 import PageHeader from '../../../../components/header/PagesHeader'
 import NothingFoundNote from '../../../../components/note/NothingFoundNote'
+import Loader from '../../../../components/loader/Loader';
 
 const data = [
     {
@@ -63,12 +65,13 @@ const details = [
     },
 ]
 export default function LoanLedgerPage () {
+    const styles = STYLES.LoanLedger
+    const [isLoading, setLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
 
     const [refreshing, setRefreshing] = useState(false)
     const scrollViewRef = useRef(null)
 
-    const styles = STYLES.LoanLedger
     let filteredData = []
 
     filteredData = data.filter((item) => {
@@ -82,45 +85,62 @@ export default function LoanLedgerPage () {
 
     const refresh = () => {
         setRefreshing(true)
+        setLoading(true)
     }
+
+    useEffect(() => {
+        setTimeout(() => {
+            setRefreshing(false)
+            setLoading(false)
+        }, 800)
+    }, [isLoading])
 
     return (
         <View style={styles.container}>
             <PageHeader pageName={"Loan Ledger"} />
 
-            <View style={{ marginHorizontal: 20 }}>
-                <Search 
-                    filterText={filterText}
-                    setFilterText={setFilterText}
-                />
+            { isLoading ? (<Loader />) : (
+                <Animatable.View
+                    animation={'fadeIn'}
+                    duration={500}
+                    style={{ opacity: 1, flex: 1, backgroundColor: COLORS.clearWhite }}
+                >
+                    <View style={{ marginHorizontal: 20 }}>
+                        <Search 
+                            filterText={filterText}
+                            setFilterText={setFilterText}
+                        />
 
-                { filteredData.length > 0 ? (
-                    <ScrollView
-                        ref={scrollViewRef}
-                        refreshControl={
-                        <RefreshControl
-                            refreshing={refreshing}
-                            onRefresh={refresh} />
-                        }
-                        style={styles.loanLedgerList}
-                    >
-                        {filteredData.map((item, index) => (
-                            <LoanLedgerItem 
-                                key={index}
-                                item={{ 
-                                    ...item,
-                                    details: details,
-                                    formattedTransactionDate: DateTimeUtils.dateFullConvert(item.transactionDate), 
-                                    formattedApprovedDate:  DateTimeUtils.dateFullConvert(item.approvedDate),
-                                    formattedGrantedDate: DateTimeUtils.dateFullConvert(item.grantedDate),
-                                    formattedFirstDueDate: DateTimeUtils.dateFullConvert(item.firstDueDate),
-                                }}
-                            />
-                        ))}
+                        
+                    { filteredData.length > 0 ? (
+                        <ScrollView
+                            ref={scrollViewRef}
+                            refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={refresh} />
+                            }
+                            style={styles.loanLedgerList}
+                        >
+                            {filteredData.map((item, index) => (
+                                <LoanLedgerItem 
+                                    key={index}
+                                    item={{ 
+                                        ...item,
+                                        details: details,
+                                        formattedTransactionDate: DateTimeUtils.dateFullConvert(item.transactionDate), 
+                                        formattedApprovedDate:  DateTimeUtils.dateFullConvert(item.approvedDate),
+                                        formattedGrantedDate: DateTimeUtils.dateFullConvert(item.grantedDate),
+                                        formattedFirstDueDate: DateTimeUtils.dateFullConvert(item.firstDueDate),
+                                    }}
+                                />
+                            ))}
 
-                    </ScrollView>
-                ) : ( <NothingFoundNote /> )}
-            </View>
+                        </ScrollView>
+                        ) : ( <NothingFoundNote /> )}
+                    </View>
+                </Animatable.View>
+            )}
         </View>
     )
 }

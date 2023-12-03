@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
 import { AntDesign, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Image } from "react-native-expo-image-cache";
+import CachedImage from 'expo-cached-image'
 
 import { COLORS, ICONS, STYLES} from "../../../../constant";
 
@@ -24,27 +25,39 @@ export default function DrawerPage ({ navigation }) {
                 <View style={{ marginTop: 20 }}>
                     <TouchableOpacity style={styles.button} >
                  
-                        <Image 
-                            style={{ height: 30, width: 30 }}
-                            uri={ICONS.privacy}
+                        <CachedImage
+                            source={{ uri: ICONS.privacy }}
+                            cacheKey={`privacy`}
+                            placeholderContent={( 
+                                <ActivityIndicator size={'small'} />
+                            )} 
+                            style={{ height: 30, width: 30 }} 
                         />
 
                         <Text style={styles.textButton}>Privacy Policy</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.button} >
-                        <Image 
-                            style={{ height: 30, width: 30 }}
-                            uri={ICONS.terms}
+                        <CachedImage
+                            source={{ uri: ICONS.terms }}
+                            cacheKey={`condition`}
+                            placeholderContent={( 
+                                <ActivityIndicator size={'small'} />
+                            )} 
+                            style={{ height: 30, width: 30 }} 
                         />
                     
                         <Text style={styles.textButton}>Terms and Conditions</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.button} >
-                        <Image 
+                        <CachedImage
+                            source={{ uri: ICONS.info }}
+                            cacheKey={`info`}
+                            placeholderContent={( 
+                                <ActivityIndicator size={'small'} />
+                            )} 
                             style={{ height: 30, width: 30 }} 
-                            uri={ICONS.info}
                         />
                         
                         <Text style={styles.textButton}>About Us</Text>

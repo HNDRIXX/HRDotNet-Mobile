@@ -1,35 +1,39 @@
-import { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native'
-import { Calendar } from "react-native-calendars";
+import { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
-import { Agenda } from 'react-native-calendars'
+import { Agenda } from 'react-native-calendars';
+import { Shadow } from 'react-native-shadow-2';
+import moment from 'moment';
 
+import Loader from '../../../../../components/loader/Loader';
 import { COLORS, DateTimeUtils } from '../../../../../constant';
 import PageHeader from '../../../../../components/header/PagesHeader'
-import { Shadow } from 'react-native-shadow-2';
+import CalendarNote from '../../../../../components/note/CalendarNote';
 
 export default function TeamsPage () {
     const [data, setData] = useState({ 
-        '2023-12-01' : [
+        '20231201' : [
             { name: 'Alejandro Alcanar', position: 'Customer Service Specialist' },
             { name: 'Brian Noel Cruz', position: 'Training Specialist' },
             { name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist'},
         ],
         
-        '2023-12-02' : [
+        '20231202' : [
             { name: 'Alejandro Alcanar', position: 'Customer Service Specialist' },
             { name: 'Brian Noel Cruz', position: 'Training Specialist' },
             { name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist'},
         ],
 
-        '2023-12-03' : [
+        '20231203' : [
             { name: 'Alejandro Alcanar', position: 'Customer Service Specialist' },
             { name: 'Brian Noel Cruz', position: 'Training Specialist' },
             { name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist'},
         ],
     })
+    const [isLoading, setIsLoading] = useState(true)
     const [selectedDate, setSelectedDate] = useState(null)
     const [events, setEvents] = useState(null)
+    const [formatted, setFormatted] = useState(false)
     
 
     const onHandleDayPress = (day) => {
@@ -42,39 +46,71 @@ export default function TeamsPage () {
         const month = selectedDateObj.toLocaleString('default', { month: 'long' })
         const year = selectedDateObj.getFullYear()
     }    
+
+    const formatDateKeyData = async () => {
+        const formattedData = {}
+    
+        Object.keys(data).forEach(dateKey => {
+          const formattedDate = moment(dateKey, 'YYYYMMDD').format('YYYY-MM-DD')
+          formattedData[formattedDate] = data[dateKey]
+        })
+
+        return formattedData
+    }
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const formattedData = await formatDateKeyData()
+            setData(formattedData)
+        }
+
+        fetchData()
+
+        setTimeout(() => {
+            setIsLoading(false)
+        }, 800)
+    }, [])
     
     
     return (
         <>
             <PageHeader pageName={'Teams'}/>
 
-            <View style={styles.container}>
-                <Agenda
-                    items={data}
-                    onDayPress={onHandleDayPress}
-                    showOnlySelectedDayItem
+            { isLoading ? ( <Loader /> ) : ( 
+                <View style={styles.container}>
+                    <Agenda
+                        items={data}
+                        onDayPress={onHandleDayPress}
+                        showOnlySelectedDayItem
 
-                    renderList={() => (
-                        <View>
-                            { events && events.map((event, index) => (
-                                <View style={styles.itemView} key={index}>
-                                    <Shadow distance={3} style={styles.shadowView}>
-                                        <Image 
-                                            source={require('../../../../../assets/user/juan.svg')}
-                                            style={styles.userProfile}
-                                        />
+                        renderList={() => (
+                            <View>
+                                {selectedDate == null && (
+                                    <CalendarNote />
+                                )}
+                                    
+                                { events && events.map((event, index) => (
+                                    <TouchableOpacity style={styles.itemView} key={index}>
+                                        <Shadow distance={3} style={styles.shadowView}>
+                                            <Image 
+                                                source={require('../../../../../assets/user/juan.svg')}
+                                                style={styles.userProfile}
+                                            />
 
-                                        <View>
-                                            <Text>{event.name}</Text>
-                                            <Text>{event.position}</Text>
-                                        </View>
-                                    </Shadow>
-                                </View>
-                            )) }
-                        </View>
-                    )}
-                />
-            </View>
+                                            <View>
+                                                <Text>{event.name}</Text>
+                                                <Text>{event.position}</Text>
+                                            </View>
+                                        </Shadow>
+                                    </TouchableOpacity>
+                                )) }
+                            </View>
+                        )}
+                    />
+                </View>
+            )}
+            
         </>
     )
 }

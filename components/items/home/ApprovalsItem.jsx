@@ -24,7 +24,32 @@ export default function ApprovalsItem ({ item, onPanel }) {
                         <Text style={styles.regularText}>{DateTimeUtils.dateFullConvert(item.officialWorkDate)}</Text>
 
                     </View>
-                ) : null }
+                ) : onPanel == 2 ? (
+                    <View style={styles.rowView}>
+                        <Text style={styles.regularText}>Date: </Text>
+                        <Text style={styles.regularText}>{DateTimeUtils.dateFullConvert(item.overtimeDate)}</Text>
+
+                    </View>
+                ) : onPanel == 3 ? (
+                    <View style={styles.rowView}>
+                        <Text style={styles.regularText}>Date: </Text>
+                        <Text style={styles.regularText}>{DateTimeUtils.dateFullConvert(item.overtimeDate)}</Text>
+
+                    </View>
+                ) : onPanel == 4 ? (
+                    <View style={styles.rowView}>
+                        <Text style={styles.regularText}>Type: </Text>
+                        <Text style={styles.regularText}>{item.reason}</Text>
+
+                    </View>
+                ) : onPanel == 5 ? (
+                    <View style={styles.rowView}>
+                        <Text style={styles.regularText}>Date: </Text>
+                        <Text style={styles.regularText}>{DateTimeUtils.dateFullConvert(item.missedLogDate)}</Text>
+
+                    </View>
+                )
+                : null }
 
                 <View style={styles.rowSpaceView}>
                     { onPanel == 0 ? (
@@ -37,7 +62,31 @@ export default function ApprovalsItem ({ item, onPanel }) {
                             <Text style={styles.regularText}>Location: </Text>
                             <Text style={styles.regularText}>{item.location}</Text>
                         </View>
-                    ) : null }
+                    ) : onPanel == 2 ? (
+                        <View style={styles.rowView}>
+                            <Text style={styles.regularText}>Time: </Text>
+                            <Text style={styles.regularText}>{item.overtimeHours}</Text>
+                        </View>
+                    ) : onPanel == 3 ? (
+                        <View style={styles.rowView}>
+                            <Text style={styles.regularText}>Offset Hours: </Text>
+                            <Text style={styles.regularText}>{item.overtimeHours}</Text>
+                        </View>
+                    ) : onPanel == 4 ? (
+                        <View style={styles.rowView}>
+                            <Text style={styles.regularText}>Applied Date/s: </Text>
+                            <Text style={styles.regularText}>
+                                {DateTimeUtils.dateFullConvert(item.startDate)}
+                                { item.endDate ? DateTimeUtils.dateFullConvert(item.endDate) : null }
+                            </Text>
+                        </View>
+                    ) : onPanel == 5 ? (
+                        <View style={styles.rowView}>
+                            <Text style={styles.regularText}>Log Type: </Text>
+                            <Text style={styles.regularText}>{item.logType}</Text>
+                        </View>
+                    )
+                    : null }
                     
                     <TouchableOpacity
                         onPress={() => navigation.navigate('ApprovalsDetails', item)}

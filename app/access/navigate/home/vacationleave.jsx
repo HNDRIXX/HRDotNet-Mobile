@@ -1,10 +1,14 @@
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from 'react'
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
+import * as Animatable from 'react-native-animatable';
 import { Image } from "react-native-expo-image-cache";
-import { AntDesign } from "@expo/vector-icons";
+import CachedImage from 'expo-cached-image'
 import { Shadow } from "react-native-shadow-2";
 
+import Loader from '../../../../components/loader/Loader';
 import { COLORS, ICONS, STYLES, DateTimeUtils } from "../../../../constant";
 import PageHeader from "../../../../components/header/PagesHeader";
+import TimeOffItem from '../../../../components/items/home/TimeOffItem';
 
 const data = [
     {
@@ -27,17 +31,29 @@ const data = [
     },
 ]
 
+
 export default function VacationLeavePage ({ navigation }) {
+    const [isLoading, setLoading] = useState(true)
     const styles = STYLES.VacationLeave
     
+    useEffect(() => {
+        setTimeout(() => {
+            setLoading(false)
+        }, 2000)
+    }, [])
+
     return (
         <View style={styles.container}>
             <PageHeader pageName={'Vacation Leave'} />
 
             <View style={styles.topContainer}>
-                <Image 
+                <CachedImage
+                    source={{  uri: ICONS.vacation}}
                     style={{ width: 70, height: 70, marginRight: 10 }}
-                    uri={ICONS.vacation}
+                    cacheKey={`vacation`}
+                    placeholderContent={( 
+                        <ActivityIndicator size={'small'} style={{marginRight: 30}} />
+                    )} 
                 />
 
                 <View>
@@ -54,32 +70,25 @@ export default function VacationLeavePage ({ navigation }) {
 
             <Text style={styles.detailsTitle}>Details</Text>
 
-            <FlatList 
-                data={data}
-                renderItem={({item, index}) => {
-                    return (
-                        <View style={styles.itemWrapper}>
-                            <Shadow distance={3} offset={[2,2]} style={styles.shadowView}>
-                                <View style={styles.itemHeader}>
-                                    <Text style={styles.itemHeaderText}>{item.status}</Text>
-                                    <Text style={styles.itemHeaderText}>{item.leaveCredit}</Text>
-                                </View>
+            { isLoading ? (<Loader />) : (
+                <Animatable.View
+                    animation={'fadeIn'}
+                    duration={500}
+                    style={{ opacity: 1, flex: 1, backgroundColor: COLORS.clearWhite }}
+                >
+                    <FlatList 
+                        data={data}
+                        renderItem={({item, index}) => {
+                            return (
+                                <TimeOffItem 
+                                    item={item}
+                                />
+                            )
 
-                                <View style={styles.itemBody}>
-                                    <Text style={styles.bodyText}>Date: 
-                                        <Text style={styles.itemText}> {DateTimeUtils.dateFullConvert(item.date)}</Text>
-                                    </Text>
-
-                                    <Text style={styles.bodyText}>Document No: 
-                                        <Text style={styles.itemText}> {item.documentNo}</Text>
-                                    </Text>
-                                </View>
-                            </Shadow>
-                        </View>
-                    )
-
-                }}
-            />
+                        }}
+                    />
+                </Animatable.View>
+            )}
         </View>
     )
 }

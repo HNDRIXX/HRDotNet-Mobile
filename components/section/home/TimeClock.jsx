@@ -2,15 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { Shadow } from 'react-native-shadow-2';
+import {  Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
-import { Entypo, Ionicons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
-// import { Image } from 'react-native-expo-image-cache';
 
-import { COLORS } from '../../../constant';
+import { COLORS, DateTimeUtils } from '../../../constant';
 
 export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, clockedTime }) {
-    const [currTime, setCurrTime] = useState(new Date())
     const [time, setTime] = useState(moment())
 
     const navigation = useNavigation()
@@ -21,7 +18,6 @@ export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, c
         return () => clearInterval(timer)
     }, [])
 
-    const currentDate = moment().format('MMMM D, YYYY, dddd')
     const formattedClocked = moment(clockedDate, 'MMMM DD, YYYY, dddd').format('MMMM DD, YYYY')
 
     return (
@@ -40,54 +36,33 @@ export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, c
             /> */}
             
             <View style={styles.wrapperBox}>
-                <Text style={styles.dateText}>{currentDate}</Text>
+                <Text style={styles.dateText}>{DateTimeUtils.momentCurrDateWithExtra()}</Text>
                 <Text style={styles.timeText}>{time.format('h:mm:ss A')}</Text>
-
-                {/* Clocked Out: September 18 at 6:18:00 PM */}
+                
                 <Text style={styles.clockInOutText}>
                     {clockedStatus ? `${clockedStatus}: ${dateToday === formattedClocked ? "Today" : formattedClocked} at ${clockedTime}` : `Clocked: ${dateToday}`}
                 </Text>
 
-                { clockedValue == 0 ? (
-                    <TouchableOpacity
-                        style={styles.linkButton}
-                        onPress={() => 
-                            navigation.navigate('TimeClock', {
-                                clockedValue: clockedValue
-                            })
-                        }
-                    >
-                        <Shadow distance={3} style={styles.clockOutButton}>
-                            <Ionicons
-                                name='stopwatch'
-                                size={25}
-                                color={COLORS.clearWhite}
-                            />
+                <TouchableOpacity
+                    style={styles.linkButton}
+                    onPress={() =>
+                        navigation.navigate('ClockInOut', {
+                            clockedValue: clockedValue
+                        })
+                    }
+                >
+                    <Shadow distance={3} style={clockedValue === 0 ? styles.clockOutButton : styles.clockInButton}>
+                        <Ionicons
+                            name='stopwatch'
+                            size={clockedValue === 0 ? 25 : 23}
+                            color={COLORS.clearWhite}
+                        />
 
-                            <Text style={styles.timeInOutText}>Clock-Out</Text>
-                        </Shadow>
-                    </TouchableOpacity>
-                ) :  (
-                    <TouchableOpacity
-                        style={styles.linkButton}
-                        onPress={() => 
-                            navigation.navigate('TimeClock', {
-                                clockedValue: clockedValue
-                            })
-                        }
-                    >
-                        <Shadow distance={3} style={styles.clockInButton}>
-                            <Ionicons
-                                name='stopwatch'
-                                size={23}
-                                color={COLORS.clearWhite}
-                                allo
-                            />
-
-                            <Text style={styles.timeInOutText}>Clock-In</Text>
-                        </Shadow>
-                    </TouchableOpacity>
-                )}
+                        <Text style={styles.timeInOutText}>
+                            {clockedValue === 0 ? 'Clock-Out' : 'Clock-In'}
+                        </Text>
+                    </Shadow>
+                </TouchableOpacity>
             </View>
         </View>
     )
