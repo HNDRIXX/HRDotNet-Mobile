@@ -17,15 +17,29 @@ export default function MorePage ({ navigation }) {
         case 'Change of Schedule':
             topDate = params.filedDate
             break
+
         case 'Official Work':
             topDate = params.officialWorkDate
             break
+
+        case 'Overtime':
+            topDate = params.overtimeDate
+            break
+
+        case 'Offset':
+            topDate = params.overtimeDate
+            break
+
+        case 'Missed Log': 
+            topDate = params.missedLogDate
+            break
+
         default:
             topDate = null
-    }
+    } 
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: COLORS.clearWhite }}>
             <PageHeader pageName={"Approvals Details"} />
 
             <View>
@@ -90,7 +104,60 @@ export default function MorePage ({ navigation }) {
                                     <Text style={styles.valueText}>{params?.location}</Text>
                                 </View>
                             </>
-                        ) : null}
+                        ) : params?.type === "Overtime" ? (
+                            <>
+                                <View style={[styles.rowWrapper, { marginTop: 20 }]}>
+                                    <Text style={styles.titleText}>Overtime Date:</Text>
+                                    <Text style={styles.valueText}>{DateTimeUtils.dateFullConvert(params?.overtimeDate)}</Text>
+                                </View>
+
+                                <View style={styles.rowWrapper}>
+                                    <Text style={styles.titleText}>Overtime Hours:</Text>
+                                    <Text style={styles.valueText}>{params?.overtimeHours}</Text>
+                                </View>
+                            </>
+                        ) : params?.type === "Offset" ? (
+                            <>
+                                <View style={[styles.rowWrapper, { marginTop: 20 }]}>
+                                    <Text style={styles.titleText}>Overtime Date:</Text>
+                                    <Text style={styles.valueText}>{DateTimeUtils.dateFullConvert(params?.overtimeDate)}</Text>
+                                </View>
+
+                                <View style={styles.rowWrapper}>
+                                    <Text style={styles.titleText}>Overtime Hours:</Text>
+                                    <Text style={styles.valueText}>{params?.overtimeHours}</Text>
+                                </View>
+                            </>
+                        ) : params?.type === "Leave" ? (
+                            <>
+                                <View style={[styles.rowWrapper, { marginTop: 20 }]}>
+                                    <Text style={styles.titleText}>Applied Date/:</Text>
+                                    <Text style={styles.valueText}>
+                                        {DateTimeUtils.dateFullConvert(params?.startDate)}
+                                        {DateTimeUtils.dateFullConvert(params?.endDate)}
+                                    </Text>
+                                </View>
+                            </>
+                        ) : params?.type === "Missed Log" ? (
+                            <>
+                                <View style={[styles.rowWrapper, { marginTop: 20 }]}>
+                                    <Text style={styles.titleText}>Missed Log Date/:</Text>
+                                    <Text style={styles.valueText}>
+                                        {DateTimeUtils.dateFullConvert(params?.missedLogDate)}
+                                    </Text>
+                                </View>
+
+                                <View style={styles.rowWrapper}>
+                                    <Text style={styles.titleText}>Log Type:</Text>
+                                    <Text style={styles.valueText}>{params?.logType}</Text>
+                                </View>
+
+                                <View style={styles.rowWrapper}>
+                                    <Text style={styles.titleText}>Log Time:</Text>
+                                    <Text style={styles.valueText}>{DateTimeUtils.timeConvert(params?.logTime)}</Text>
+                                </View>
+                            </>
+                        )  : null}
 
                         <View style={styles.rowWrapper}>
                             <Text style={styles.titleText}>Reason:</Text>

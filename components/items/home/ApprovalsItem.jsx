@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native'
 
 import { COLORS, DateTimeUtils } from '../../../constant'
 
-export default function ApprovalsItem ({ item, onPanel }) {
+export default function ApprovalsItem ({ item, formattedAppliedDate, onPanel }) {
     const navigation = useNavigation()
 
     return (
@@ -75,10 +75,7 @@ export default function ApprovalsItem ({ item, onPanel }) {
                     ) : onPanel == 4 ? (
                         <View style={styles.rowView}>
                             <Text style={styles.regularText}>Applied Date/s: </Text>
-                            <Text style={styles.regularText}>
-                                {DateTimeUtils.dateFullConvert(item.startDate)}
-                                { item.endDate ? DateTimeUtils.dateFullConvert(item.endDate) : null }
-                            </Text>
+                            <Text style={styles.regularText}>{ formattedAppliedDate && formattedAppliedDate }</Text>
                         </View>
                     ) : onPanel == 5 ? (
                         <View style={styles.rowView}>

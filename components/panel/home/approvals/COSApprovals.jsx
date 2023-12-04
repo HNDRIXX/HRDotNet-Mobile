@@ -134,7 +134,7 @@ export default function COSApprovals () {
     }, [data])
 
     useEffect(() => {
-        ApprovalsUtils.onFilterData(0, sortedData, filterText, setFilteredData)
+        ApprovalsUtils.onFilterData(0, sortedData, filterText, setFilteredData, filteredData)
     }, [filterText])    
 
     useEffect(() => {
@@ -159,7 +159,8 @@ export default function COSApprovals () {
                         isDisabled={filteredData.every(item => !item.isChecked)}
                         selectAll={selectAll}
 
-                        toggleSelectAll={() => ApprovalsUtils.toggleSelectAll(filteredData, setFilteredData, selectAll, setSelectAll)}
+                        toggleSelectAll={() => ApprovalsUtils.toggleSelectAll(filteredData, setFilteredData, 
+                        selectAll, setSelectAll, setSortedData)}
 
                         isVisible={isVisible}
                         onHandleApprove={() => setVisible(true)}

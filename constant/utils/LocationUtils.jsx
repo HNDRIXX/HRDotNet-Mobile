@@ -22,7 +22,7 @@ export const LocationUtils = {
           const askEnableLocation = await Location.enableNetworkProviderAsync()
           if (!askEnableLocation) {
             await LocationUtils.locationEnabled()
-            return;
+            return
           }
         }
     },
@@ -30,7 +30,13 @@ export const LocationUtils = {
     officialWorkLocation: async (location, setLocation) => {
         try {
             const isLocationEnabled = await Location.hasServicesEnabledAsync()
-        
+            const { coords } = await Location.getCurrentPositionAsync({})
+            
+            const geocodeLocation = await Location.reverseGeocodeAsync({
+                latitude: coords.latitude,
+                longitude: coords.longitude,
+            })
+
             if (!isLocationEnabled) {
                 const askEnableLocation = await Location.enableNetworkProviderAsync()
                 
@@ -40,11 +46,11 @@ export const LocationUtils = {
                 }
             }
             
-            const { coords } = await Location.getCurrentPositionAsync({})
-            setLocation(`${coords.latitude.toString()}, ${coords.longitude.toString()}`)
-            setProceed(true)
-          } catch (error) {
-          }
+            const currAddress = geocodeLocation[0]
+            setLocation(`${currAddress?.name} ${currAddress?.street}, ${currAddress?.city}, ${currAddress?.country}`)
+        } catch (error) {
+            // return LocationUtils.officialWorkLocation()
+        }
     },
 
     openLocation: async () => {

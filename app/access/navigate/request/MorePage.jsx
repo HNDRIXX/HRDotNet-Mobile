@@ -36,7 +36,7 @@ export default function MorePage ({ navigation }) {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: COLORS.clearWhite }}>
             <PageHeader pageName={"Request Details"} />
 
             <View>

@@ -1,17 +1,21 @@
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions} from "react-native";
 import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import { Image } from "expo-image";
+import CachedImage from 'expo-cached-image'
 import { useNavigation } from "@react-navigation/native";
 
-import { COLORS } from "../../constant";
+import { COLORS, ICONS } from "../../constant";
 
 export default function TimeOff () {
-    const { width, height } = Dimensions.get('window')
     const navigation = useNavigation()
 
     const screenWidth = Dimensions.get('window').height
     const imageSize = Math.max(15, screenWidth * 0.13 / 1.3)
-    const padding = screenWidth * 0.008
+    
+    const commonProps = {
+        style: { width: 50, height: 50, marginRight: 10 },
+        contentFit: "contain"
+    }
 
     return (
         <View style={styles.container}>
@@ -20,10 +24,10 @@ export default function TimeOff () {
                 onPress={() => navigation.navigate('VacationLeave')}
             >
                 <View style={[styles.alignWrapper, { height: imageSize}]}>
-                    <Image 
-                        source={require('../../assets/icons/vacation.png')}
-                        style={{ width: 50, height: 50, marginRight: 10 }}
-                        contentFit="contain"
+                    <CachedImage
+                        source={{ uri: ICONS.vacation }}
+                        cacheKey={`vacation`}
+                        {...commonProps}
                     />
 
                     <View>
@@ -38,10 +42,10 @@ export default function TimeOff () {
                 onPress={() => navigation.navigate('SickLeave')}
             >
                 <View style={[styles.alignWrapper, { height: imageSize }]}>
-                    <Image 
-                        source={require('../../assets/icons/meds.png')}
-                        style={{ width: 47, height: 47, paddingVertical: 34,  marginRight: 10, }}
-                        contentFit="contain"
+                    <CachedImage
+                        source={{ uri: ICONS.medicine }}
+                        cacheKey={`medicine`}
+                        {...commonProps}
                     />
 
                     <View>

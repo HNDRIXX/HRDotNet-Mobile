@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { Easing } from 'react-native-reanimated';
 
-import Home from './pages/home/UserHome';
+import Home from './pages/home/ApproverHome';
 import Calendar from './pages/Calendar';
 import Request from './pages/Request';
 import Profile from './pages/Profile';

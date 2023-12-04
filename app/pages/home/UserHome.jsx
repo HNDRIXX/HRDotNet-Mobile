@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions, BackHandler, BackHandlerIOS, Platform } from "react-native";
 import { Image } from 'react-native-elements';
+import CachedImage from "expo-cached-image";
 // import { Image } from "expo-image";
 import { useRoute } from "@react-navigation/native";
 import { Shadow } from "react-native-shadow-2";
@@ -73,10 +74,13 @@ export default function Home ({ navigation }) {
                             </View>
 
                             <View style={styles.welcomeView}>
-                                <Image
-                                    source={require('../../../assets/user/juan.jpg')}
+                                <CachedImage
+                                    source={{ uri: ICONS.juan }}
+                                    cacheKey={`juan`}
                                     style={styles.userIcon}
-                                    PlaceholderContent={<Loader />}
+                                    placeholderContent={
+                                        <ActivityIndicator size={'small'} color={COLORS.clearWhite} style={{ marginRight: 30, marginLeft: 40 }} />
+                                    }
                                 />
 
                                 <View>

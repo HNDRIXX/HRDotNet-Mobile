@@ -8,30 +8,42 @@ import { ICONS, COLORS } from '../../../constant'
 
 export default function NotificationsItem ({ item, index, formattedDate, onPress }) {
     const getSourceUri = (name) => {
-        if (name === "Request Update") {
-            return (
-                <CachedImage
-                    source={{ uri: ICONS.calendarBadge }}
-                    cacheKey={`itemCalendar`}
-                    placeholderContent={( 
-                        <ActivityIndicator size={'small'} />
-                    )} 
-                    style={{ height: 30, width: 30 }} 
-                />
+        const commonProps = {
+            placeholderContent: <ActivityIndicator size={'small'} style={{ marginTop: 30 }} />,
+            style: { height: 30, width: 30 },
+        }
+    
+        switch (name) {
+            case "Request Update":
+                return (
+                    <CachedImage
+                        source={{ uri: ICONS.calendarBadge }}
+                        cacheKey={`itemCalendar`}
+                        {...commonProps}
+                    />
+                )
+    
+            case "Advisory":
+                return (
+                    <CachedImage
+                        source={{ uri: ICONS.megaphone }}
+                        cacheKey={`advisory`}
+                        {...commonProps}
+                    />
+                )
 
-            )
-        } else if (name === "Advisory") {
-            return (
-                <CachedImage
-                    source={{  uri: ICONS.megaphone }}
-                    cacheKey={`advisory`}
-                    placeholderContent={( 
-                        <ActivityIndicator size={'small'} />
-                    )} 
-                    style={{ height: 30, width: 30 }} 
-                />
-            )
-        } else { return ICONS.info }
+            case "Approvals Update":
+                return (
+                    <CachedImage
+                        source={{ uri: ICONS.fileApprovals }}
+                        cacheKey={`fileApprovals`}
+                        {...commonProps}
+                        style={{ height: 40, width: 40, marginLeft: -9}}
+                    />
+                )
+    
+            default: null
+        }
     }
 
     return (

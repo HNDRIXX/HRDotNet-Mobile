@@ -67,7 +67,7 @@ export default function LVApprovals () {
             attachedFile: {"date": "20231124", "time": "13:38 PM", "uri": "file%3A%2F%2F%2Fdata%2Fuser%2F0%2Fhost.exp.exponent%2Fcache%2FExperienceData%2F%252540hndrx022%25252FHRDotNet-Mobile%2FCamera%2F596b713f-d6b4-4636-abaa-821eb3850257.jpg"},
             employeeName: 'Mary Grace Manalo',
             startDate: '20231118',
-            endDate: '',
+            endDate: '20231120',
             type: 'Leave',
             documentNo: 'LV22307240207',
             filedDate: '20231119',
@@ -136,7 +136,7 @@ export default function LVApprovals () {
     }, [data])
 
     useEffect(() => {
-        ApprovalsUtils.onFilterData(0, sortedData, filterText, setFilteredData)
+        ApprovalsUtils.onFilterData(4, sortedData, filterText, setFilteredData)
     }, [filterText])    
 
     useEffect(() => {
@@ -161,7 +161,8 @@ export default function LVApprovals () {
                         isDisabled={filteredData.every(item => !item.isChecked)}
                         selectAll={selectAll}
 
-                        toggleSelectAll={() => ApprovalsUtils.toggleSelectAll(filteredData, setFilteredData, selectAll, setSelectAll)}
+                        toggleSelectAll={() => ApprovalsUtils.toggleSelectAll(filteredData, setFilteredData, 
+                        selectAll, setSelectAll, setSortedData)}
 
                         isVisible={isVisible}
                         onHandleApprove={() => setVisible(true)}
@@ -199,6 +200,9 @@ export default function LVApprovals () {
 
                                             <ApprovalsItem 
                                                 item={item}
+                                                formattedAppliedDate={
+                                                    item.endDate ?  `${DateTimeUtils.dateMonthDayConvert(item.startDate)} - ${DateTimeUtils.dateDayYearConvert(item.endDate)}` : `${DateTimeUtils.dateFullConvert(item.startDate)}`
+                                                }
                                                 onPanel={4}
                                                 key={index}
                                             />

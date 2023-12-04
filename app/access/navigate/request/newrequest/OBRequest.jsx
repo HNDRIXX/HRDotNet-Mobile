@@ -51,12 +51,12 @@ export default function OBRequest ({ navigation }) {
         const getLocationPermission = async () => {
           LocationUtils.locationPermissionEnabled()
       
-          try {
-            LocationUtils.officialWorkLocation(location, setLocation)
-          } catch (error) {
-            await getLocationPermission()
-            return
-          }
+            try {
+                LocationUtils.officialWorkLocation(location, setLocation)
+            } catch (error) {
+                await getLocationPermission()
+                return
+            }
         }
 
         getLocationPermission()

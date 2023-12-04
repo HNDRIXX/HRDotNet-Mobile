@@ -140,7 +140,7 @@ export default function OSApprovals () {
     }, [data])
 
     useEffect(() => {
-        ApprovalsUtils.onFilterData(0, sortedData, filterText, setFilteredData)
+        ApprovalsUtils.onFilterData(5, sortedData, filterText, setFilteredData)
     }, [filterText])    
 
     useEffect(() => {
@@ -165,7 +165,8 @@ export default function OSApprovals () {
                         isDisabled={filteredData.every(item => !item.isChecked)}
                         selectAll={selectAll}
 
-                        toggleSelectAll={() => ApprovalsUtils.toggleSelectAll(filteredData, setFilteredData, selectAll, setSelectAll)}
+                        toggleSelectAll={() => ApprovalsUtils.toggleSelectAll(filteredData, setFilteredData, 
+                        selectAll, setSelectAll, setSortedData)}
 
                         isVisible={isVisible}
                         onHandleApprove={() => setVisible(true)}

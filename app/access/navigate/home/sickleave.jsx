@@ -49,7 +49,7 @@ export default function SickLeavePage ({ navigation }) {
                 <CachedImage
                     source={{  uri: ICONS.medicine}}
                     style={{ width: 70, height: 70, marginRight: 10 }}
-                    cacheKey={`medecines`}
+                    cacheKey={`medecine`}
                     placeholderContent={( 
                         <ActivityIndicator size={'small'} style={{marginRight: 30}} />
                     )} 

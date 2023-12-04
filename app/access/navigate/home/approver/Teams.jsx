@@ -2,39 +2,105 @@ import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { Agenda } from 'react-native-calendars';
+import CachedImage from 'expo-cached-image';
 import { Shadow } from 'react-native-shadow-2';
 import moment from 'moment';
 
 import Loader from '../../../../../components/loader/Loader';
-import { COLORS, DateTimeUtils } from '../../../../../constant';
+import { COLORS, ICONS, DateTimeUtils } from '../../../../../constant';
 import PageHeader from '../../../../../components/header/PagesHeader'
 import CalendarNote from '../../../../../components/note/CalendarNote';
 
 export default function TeamsPage () {
     const [data, setData] = useState({ 
-        '20231201' : [
-            { name: 'Alejandro Alcanar', position: 'Customer Service Specialist' },
-            { name: 'Brian Noel Cruz', position: 'Training Specialist' },
-            { name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist'},
+        '20231204' : [
+            { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist' },
+            { id: 'MGL002', name: 'Brian Noel Cruz', position: 'Training Specialist' },
+            { id: 'MGL003', name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist'},
         ],
         
-        '20231202' : [
-            { name: 'Alejandro Alcanar', position: 'Customer Service Specialist' },
-            { name: 'Brian Noel Cruz', position: 'Training Specialist' },
-            { name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist'},
+        '20231205' : [
+            { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist' },
+            { id: 'MGL002', name: 'Brian Noel Cruz', position: 'Training Specialist' },
+            { id: 'MGL003', name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist'},
         ],
 
-        '20231203' : [
-            { name: 'Alejandro Alcanar', position: 'Customer Service Specialist' },
-            { name: 'Brian Noel Cruz', position: 'Training Specialist' },
-            { name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist'},
+        '20231206' : [
+            { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist' },
+            { id: 'MGL002', name: 'Brian Noel Cruz', position: 'Training Specialist' },
+            { id: 'MGL003', name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist'},
         ],
     })
+
+    const [calendarData, setCalendarData] = useState({
+        '20231204' : [
+            { id: 'MGL001', event: '8:00 AM to 6:00 PM', status: 'Work Day' },
+            { id: 'MGL002', event: '', status: 'Leave' },
+            { id: 'MGL003', event: '8:00 AM to 5:00 PM', status: 'Work Day'},
+        ],
+        
+        '20231205' : [
+            { id: 'MGL001', event: '', status: 'Holiday' },
+            { id: 'MGL002', event: '', status: 'Holiday' },
+            { id: 'MGL003', event: '', status: 'Holiday'},
+        ],
+
+        '20231206' : [
+            { id: 'MGL001', event: '8:00 AM to 6:00 PM', status: 'Work Day' },
+            { id: 'MGL002', event: '8:00 AM to 6:00 PM', status: 'Work Day' },
+            { id: 'MGL003', event: '8:00 AM to 6:00 PM', status: 'Work Day'},
+        ],
+    })
+
+    const [clockedData, setClockedData] = useState({
+        '20231204' : [
+            [
+                { id: 'MGL001', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+                { id: 'MGL001', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+            ],
+            [
+                { id: 'MGL002', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+                { id: 'MGL002', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+            ],
+            [
+                { id: 'MGL003', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+                { id: 'MGL003', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+            ],
+        ],
+        '20231205' : [
+            [
+                { id: 'MGL001', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+                { id: 'MGL001', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+            ],
+            [
+                { id: 'MGL002', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+                { id: 'MGL002', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+            ],
+            [
+                { id: 'MGL003', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+                { id: 'MGL003', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+            ],
+        ],
+        '20231206' : [
+            [
+                { id: 'MGL001', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+                { id: 'MGL001', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+            ],
+            [
+                { id: 'MGL002', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+                { id: 'MGL002', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+            ],
+            [
+                { id: 'MGL003', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+                { id: 'MGL003', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+            ],
+        ],
+    })
+
     const [isLoading, setIsLoading] = useState(true)
     const [selectedDate, setSelectedDate] = useState(null)
     const [events, setEvents] = useState(null)
     const [formatted, setFormatted] = useState(false)
-    
 
     const onHandleDayPress = (day) => {
         // setSelectedDate(DateTimeUtils.getDashDateReverse(day.dateString))
@@ -58,7 +124,6 @@ export default function TeamsPage () {
         return formattedData
     }
 
-
     useEffect(() => {
         const fetchData = async () => {
             const formattedData = await formatDateKeyData()
@@ -71,7 +136,6 @@ export default function TeamsPage () {
             setIsLoading(false)
         }, 800)
     }, [])
-    
     
     return (
         <>
@@ -92,15 +156,16 @@ export default function TeamsPage () {
                                     
                                 { events && events.map((event, index) => (
                                     <TouchableOpacity style={styles.itemView} key={index}>
-                                        <Shadow distance={3} style={styles.shadowView}>
-                                            <Image 
-                                                source={require('../../../../../assets/user/juan.svg')}
+                                        <Shadow distance={3} offset={[2,3]} style={styles.shadowView}>
+                                            <CachedImage
+                                                source={{ uri: ICONS.juan }}
+                                                cacheKey={`juan`}
                                                 style={styles.userProfile}
                                             />
 
                                             <View>
-                                                <Text>{event.name}</Text>
-                                                <Text>{event.position}</Text>
+                                                <Text style={styles.boldText}>{event.name}</Text>
+                                                <Text style={styles.regularText}>{event.position}</Text>
                                             </View>
                                         </Shadow>
                                     </TouchableOpacity>
@@ -124,11 +189,14 @@ const styles = StyleSheet.create({
     userProfile: {
         width: 50, 
         height: 50, 
+        borderRadius: 90,
         marginRight: 20,
+       
     },
 
     shadowView: {
         width: '100%',
+        backgroundColor: COLORS.clearWhite,
         padding: 15,
         borderRadius: 20,
         
@@ -141,5 +209,13 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         marginHorizontal: 20,
         borderRadius: 20,
+    },
+
+    boldText: {
+        fontFamily: 'Inter_600SemiBold'
+    },
+
+    regularText: {
+        fontFamily: 'Inter_400Regular'
     }
 })

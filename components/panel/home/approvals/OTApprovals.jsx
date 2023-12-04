@@ -161,7 +161,8 @@ export default function OTApprovals () {
                         isDisabled={filteredData.every(item => !item.isChecked)}
                         selectAll={selectAll}
 
-                        toggleSelectAll={() => ApprovalsUtils.toggleSelectAll(filteredData, setFilteredData, selectAll, setSelectAll)}
+                        toggleSelectAll={() => ApprovalsUtils.toggleSelectAll(filteredData, setFilteredData, 
+                        selectAll, setSelectAll, setSortedData)}
                         
                         isVisible={isVisible}
                         onHandleApprove={() => setVisible(true)}

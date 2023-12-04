@@ -21,6 +21,7 @@ export default function NotificationDetails({ navigation }) {
                         uri={ 
                             route.params.name === "Request Update" ? ICONS.calendarBadge 
                             : route.params.name === "Advisory" ? ICONS.megaphone 
+                            : route.params.name === "Approvals Update" ? ICONS.fileApprovals 
                             : ICONS.info
                         }
                         transitionDuration={100}

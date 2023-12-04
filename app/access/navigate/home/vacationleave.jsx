@@ -48,7 +48,7 @@ export default function VacationLeavePage ({ navigation }) {
 
             <View style={styles.topContainer}>
                 <CachedImage
-                    source={{  uri: ICONS.vacation}}
+                    source={{uri: ICONS.vacation}}
                     style={{ width: 70, height: 70, marginRight: 10 }}
                     cacheKey={`vacation`}
                     placeholderContent={( 

@@ -11,14 +11,20 @@ import Loader from "../../../../components/loader/Loader";
 const data = [
     {
         name: "Request Update",
-        date: "20231020",
+        date: "20231120",
         message: "Your Emergency Leave Doc. No, LV2230922165 has a new status. Please check the Requests pages for more details.",
         isReaded: 0
     },
     {
-        name: "Request Update",
+        name: "Advisory",
+        date: "20231120",
+        message: "Intellismart, Stock, Supersam, and Opulence, which were under Intellismart.",
+        isReaded: 0
+    },
+    {
+        name: "Approvals Update",
         date: "20231020",
-        message: "Your Emergency Leave Doc. No, LV2230922165 has a new status. Please check the Requests pages for more details.",
+        message: "You have new pending applications for approvals.",
         isReaded: 0
     },
 ]

@@ -5,6 +5,7 @@ import { useRoute } from "@react-navigation/native";
 import { Shadow } from "react-native-shadow-2";
 import * as Animatable from 'react-native-animatable';
 import { Image } from 'react-native-elements';
+import CachedImage from "expo-cached-image";
 // import { Image } from "react-native-expo-image-cache";
 import { FontAwesome, Entypo } from "@expo/vector-icons";
 
@@ -72,10 +73,13 @@ export default function Home ({ navigation }) {
                             </View>
 
                             <View style={styles.welcomeView}>
-                                <Image
-                                    source={require('../../../assets/user/maria.jpg')}
+                                <CachedImage
+                                    source={{ uri: ICONS.maria }}
+                                    cacheKey={`maria`}
                                     style={styles.userIcon}
-                                    PlaceholderContent={<Loader />}
+                                    placeholderContent={
+                                        <ActivityIndicator size={'small'} color={COLORS.clearWhite} style={{ marginRight: 30, marginLeft: 40 }} />
+                                    }
                                 />
 
                                 <View>
@@ -116,7 +120,7 @@ export default function Home ({ navigation }) {
                                     <ApproverMenuButton 
                                         clockedDate={route.params?.clockedDate}
                                         clockedTime={route.params?.clockedTime}
-                                        clockedLocation={"Location Location"}
+                                        clockedLocation={route.params?.clockedAddress}
                                     />
                                 </View>
 
