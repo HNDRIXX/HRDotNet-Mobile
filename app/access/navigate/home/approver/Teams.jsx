@@ -11,7 +11,7 @@ import { COLORS, ICONS, DateTimeUtils } from '../../../../../constant';
 import PageHeader from '../../../../../components/header/PagesHeader'
 import CalendarNote from '../../../../../components/note/CalendarNote';
 
-export default function TeamsPage () {
+export default function TeamsPage ({ navigation }) {
     const [data, setData] = useState({ 
         '20231204' : [
             { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist' },
@@ -124,6 +124,10 @@ export default function TeamsPage () {
         return formattedData
     }
 
+    const onHandleItemPress = () => {
+        navigation.navigate('TeamMember')
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             const formattedData = await formatDateKeyData()
@@ -155,7 +159,10 @@ export default function TeamsPage () {
                                 )}
                                     
                                 { events && events.map((event, index) => (
-                                    <TouchableOpacity style={styles.itemView} key={index}>
+                                    <TouchableOpacity 
+                                        style={styles.itemView} key={index}
+                                        onPress={onHandleItemPress}
+                                        >
                                         <Shadow distance={3} offset={[2,3]} style={styles.shadowView}>
                                             <CachedImage
                                                 source={{ uri: ICONS.juan }}
