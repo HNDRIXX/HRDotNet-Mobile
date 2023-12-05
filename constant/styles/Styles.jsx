@@ -1071,7 +1071,8 @@ export const STYLES = StyleSheet.create({
 
         itemLoc: {
             color: COLORS.darkGray,
-            fontFamily: 'Inter_600SemiBold',
+            fontStyle: 'italic',
+            fontWeight: '600',
             fontSize: 12,
         },
 

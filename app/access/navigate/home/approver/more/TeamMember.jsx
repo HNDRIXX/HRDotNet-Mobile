@@ -1,28 +1,33 @@
-import { View, Text, StyleSheet, ActivityIndicator} from 'react-native'
-import CachedImage from 'expo-cached-image'
-import { Shadow } from 'react-native-shadow-2'
-import { FontAwesome } from '@expo/vector-icons'
-import DashedLine from 'react-native-dashed-line'
+import { View, Text, StyleSheet, ActivityIndicator} from 'react-native';
+import CachedImage from 'expo-cached-image';
+import { Shadow } from 'react-native-shadow-2';
+import { FontAwesome } from '@expo/vector-icons';
+import DashedLine from 'react-native-dashed-line';
+import { useRoute } from '@react-navigation/native';
 
-import { COLORS, DateTimeUtils, ICONS } from '../../../../../../constant'
-import PageHeader from '../../../../../../components/header/PagesHeader'
-import Hr from '../../../../../../components/use/Hr'
+import { COLORS, DateTimeUtils, Utils, ICONS } from '../../../../../../constant';
+import PageHeader from '../../../../../../components/header/PagesHeader';
+import Hr from '../../../../../../components/use/Hr';
 
 export default function TeamMember () {
+    const route = useRoute()
+    const params = route.params
 
-    const displayBulletDay = () => {
+    const checkCircledBullet = (value) => {
+        return Utils.circledBulletColor(value)
+    }
+
+    const displayBulletDay = (status, event) => {
         return (
-            <View style={styles.dayBelowEventWrapper}>
+            <View style={styles.dayBelowEventWrapper(checkCircledBullet(params?.status))}>
                 <FontAwesome
                     name="circle"
                     size={27}
-                    color={COLORS.orange}
+                    color={checkCircledBullet(params?.status)}
                     style={styles.topCircle}
                 />
 
-                <Text style={styles.dayBelowEvent}>
-                    Empty
-                </Text>
+                <Text style={styles.dayBelowEvent}>{status} {event}</Text>
             </View>
         )
     }
@@ -50,8 +55,8 @@ export default function TeamMember () {
                                 }
                             />
 
-                            <Text style={[styles.boldText, { marginTop: 20 }]}>Juan dela Cruz</Text>
-                            <Text style={styles.regularText}>Quality Assurance Specialist</Text>
+                            <Text style={[styles.boldText, { marginTop: 20 }]}>{params?.name}</Text>
+                            <Text style={styles.regularText}>{params?.position}</Text>
                         </View>
 
                         <View style={styles.rowViewSpace}>
@@ -59,7 +64,7 @@ export default function TeamMember () {
                             <Text >Date</Text>
                         </View>
 
-                        {displayBulletDay()}
+                        {displayBulletDay(params?.status, params?.event)}
 
                         <View>                            
                             <Text style={styles.clockedTitle}>Clock-In</Text>
@@ -187,20 +192,19 @@ const styles = StyleSheet.create({
     },
 
     // Calendar Styles
-    dayBelowEventWrapper: {
+    dayBelowEventWrapper: (color) => ({
         flex: 0,
         flexDirection: 'row',
         alignItems: 'center',
-        width: '50%',
         height: 25,
         paddingLeft: 40,
         borderRadius: 50,
-        borderColor: COLORS.orange,
+        borderColor: color,
         borderWidth: 1,
-        marginLeft: 20,
+        marginLeft: 10,
         marginVertical: 10,
         backgroundColor: COLORS.clearWhite,
-    },
+    }),
 
     topCircle: {
         position: 'absolute',

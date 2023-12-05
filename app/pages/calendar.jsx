@@ -4,7 +4,7 @@ import { Calendar } from "react-native-calendars";
 import * as Animatable from 'react-native-animatable';
 import moment from "moment";
 
-import { COLORS, STYLES } from "../../constant";
+import { COLORS, STYLES, Utils } from "../../constant";
 import CalendarNote from "../../components/note/CalendarNote";
 import NavigationHeader from "../../components/header/NavigationHeader";
 import CalendarEvent from "../../components/section/calendar/CalendarEvent";
@@ -125,30 +125,7 @@ export default function CalendarScreen() {
   }
 
   const checkColor = (valueColor) => {
-    let color
-
-    switch (valueColor) {
-      case "Work Day":
-        color = COLORS.green
-        break
-
-      case "Holiday":
-        color = COLORS.red
-        break
-
-      case "Leave": 
-        color = COLORS.filed
-        break
-      
-      case "Rest Day": 
-        color = COLORS.purple
-        break
-
-      default:
-        color = COLORS.darkGray
-    }
-
-    return color
+    return Utils.circledBulletColor(valueColor)
   }
 
   return (

@@ -13,6 +13,9 @@ import PageHeader from '../../../../components/header/PagesHeader'
 import Loader from '../../../../components/loader/Loader'
 
 export default function TimeSheetPage ({ navigation }) {
+    const route = useRoute()
+    const styles = STYLES.Timesheet
+
     const [isLoading, setIsLoading] = useState(true)
     
     const [month, setMonth] = useState(moment().format('MMMM'))
@@ -20,9 +23,6 @@ export default function TimeSheetPage ({ navigation }) {
 
     const [selectedDate, setSelectedDate] = useState(null)
     const [events, setEvents] = useState(null)
-
-    const route = useRoute()
-    const styles = STYLES.Timesheet
 
     const items = {
         '2023-11-05': [
@@ -89,7 +89,7 @@ export default function TimeSheetPage ({ navigation }) {
             <View style={styles.itemContainer}>
                 <Shadow distance={3} style={styles.shadowView}>
                     <FontAwesome
-                        name={index === 1 ? "sign-in" : index === 0 ? "sign-out" : null}
+                        name={index === 1 ? "sign-out" : index === 0 ? "sign-in" : null}
                         size={34}
                         color={ index === 1 ? COLORS.powderBlue : index === 0 ? COLORS.orange : null }
                         style={{ paddingRight: 20, marginLeft: 10 }}

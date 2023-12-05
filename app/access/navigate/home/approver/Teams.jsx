@@ -101,12 +101,11 @@ export default function TeamsPage ({ navigation }) {
     const [selectedDate, setSelectedDate] = useState(null)
     const [events, setEvents] = useState(null)
     const [mergedData, setMergedData] = useState(null)
-    const [formattedDateData, setFormattedDateData] = useState(false)
 
     const onHandleDayPress = (day) => {
         // setSelectedDate(DateTimeUtils.getDashDateReverse(day.dateString))
         setSelectedDate(day.dateString)
-        setEvents(data[day.dateString] || [])
+        setEvents(mergedData[day.dateString] || [])
 
         const selectedDateObj = new Date(day.dateString)
         
@@ -114,19 +113,28 @@ export default function TeamsPage ({ navigation }) {
         const year = selectedDateObj.getFullYear()
     }    
 
-    const formatDateKeyData = async () => {
-        const formattedData = {}
-    
-        Object.keys(data).forEach(dateKey => {
-          const formattedDate = moment(dateKey, 'YYYYMMDD').format('YYYY-MM-DD')
-          formattedData[formattedDate] = data[dateKey]
-        })
+    // const formatDateKeyData = async () => {
+    //     const formattedData = {}
 
-        return formattedData
+    //     Object.keys(mergedData).forEach(dateKey => {
+    //         console.log(dateKey)
+    //     })
+    
+    //     Object.keys(data).forEach(dateKey => {
+    //       const formattedDate = moment(dateKey, 'YYYYMMDD').format('YYYY-MM-DD')
+    //       formattedData[formattedDate] = data[dateKey]
+    //     })
+
+    //     return formattedData
+    // }
+
+    
+    const fortmatDateString = dateString => {
+        return moment(dateString, 'YYYYMMDD').format('YYYY-MM-DD');
     }
 
-    const onHandleItemPress = () => {
-        navigation.navigate('TeamMember')
+    const onHandleItemPress = (event) => {
+        navigation.navigate('TeamMember', event)
     }
 
     const handleMergeData = async () => {
@@ -134,48 +142,47 @@ export default function TeamsPage ({ navigation }) {
       
         // Iterate over dates
         Object.keys(data).forEach(date => {
-            newData[date] = [];
-      
+            const formattedDate = fortmatDateString(date)
+            newData[formattedDate] = []
+
             // Iterate over IDs for each date
             data[date].forEach(employee => {
-                const id = employee.id;
+                const id = employee.id
                 const mergedInfo = {
                 ...employee,
                 ...calendarData[date].find(item => item.id === id),
                 };
-        
+
                 // // Find the clocked information for the ID and date
                 // const clockedInfo = clockedData[date].find(clocked => clocked[0].id === id);
-        
+
                 // // Merge clocked information
                 // if (clockedInfo) {
-                //   mergedInfo.clocked = clockedInfo[0].clocked;
-                //   mergedInfo.time = clockedInfo[0].time;
-                //   mergedInfo.location = clockedInfo[0].location;
+                // mergedInfo.clocked = clockedInfo[0].clocked;
+                // mergedInfo.time = clockedInfo[0].time;
+                // mergedInfo.location = clockedInfo[0].location;
+                // } else {
+                // // Set default values if clocked information is not found
+                // mergedInfo.clocked = null;
+                // mergedInfo.time = null;
+                // mergedInfo.location = null;
                 // }
+
+                newData[formattedDate].push(mergedInfo);
+            });
+            });
         
-                newData[date].push(mergedInfo);
-            })
-        })
-        
-        console.log(newData)
-        setMergedData(newData)
+        return newData
     }
 
+
     useEffect(() => {
-        const mergedData = async () => {
-            const formattedData = await handleMergeData()
-            setFormattedDateData(formattedData)
+        const onMergeData = async () => {
+            const merged = await handleMergeData()
+            setMergedData(merged)
         }
 
-        mergedData()
-
-        const fetchData = async () => {
-            const formattedData = await formatDateKeyData()
-            setData(formattedData)
-        }
-        
-        fetchData()  
+        onMergeData()
 
         setTimeout(() => {
             setIsLoading(false)
@@ -189,9 +196,10 @@ export default function TeamsPage ({ navigation }) {
             { isLoading ? ( <Loader /> ) : ( 
                 <View style={styles.container}>
                     <Agenda
-                        items={data}
+                        items={mergedData}
                         onDayPress={onHandleDayPress}
                         showOnlySelectedDayItem
+                        enableSwipeMonths
 
                         renderList={() => (
                             <View>
@@ -201,9 +209,13 @@ export default function TeamsPage ({ navigation }) {
                                     
                                 { events && events.map((event, index) => (
                                     <TouchableOpacity 
-                                        style={styles.itemView} key={index}
-                                        onPress={onHandleItemPress}
-                                        >
+                                        style={[styles.buttonView, event.status != "Work Day" && styles.disabledButton]} key={index}
+                                        onPress={() => onHandleItemPress(event)}
+
+                                        disabled={
+                                            event.status == 'Work Day' ? false : true
+                                        }>
+                                        
                                         <Shadow distance={3} offset={[2,3]} style={styles.shadowView}>
                                             <CachedImage
                                                 source={{ uri: ICONS.juan }}
@@ -220,6 +232,7 @@ export default function TeamsPage ({ navigation }) {
                                 )) }
                             </View>
                         )}
+
                     />
                 </View>
             )}
@@ -239,7 +252,6 @@ const styles = StyleSheet.create({
         height: 50, 
         borderRadius: 90,
         marginRight: 20,
-       
     },
 
     shadowView: {
@@ -252,11 +264,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
-    itemView: {
+    buttonView: {
         backgroundColor: COLORS.clearWhite,
         marginVertical: 10,
         marginHorizontal: 20,
         borderRadius: 20,
+    },
+    
+    disabledButton: {
+        opacity: 0.4
     },
 
     boldText: {

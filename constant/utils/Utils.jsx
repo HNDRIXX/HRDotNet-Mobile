@@ -64,6 +64,33 @@ export const Utils = {
         ) : null
     },
 
+    circledBulletColor: (valueColor) => {
+        let color
+
+        switch (valueColor) {
+            case "Work Day":
+                color = COLORS.green
+                break
+    
+            case "Holiday":
+                color = COLORS.red
+                break
+    
+            case "Leave": 
+                color = COLORS.filed
+                break
+          
+            case "Rest Day": 
+                color = COLORS.purple
+                break
+    
+            default:
+                color = COLORS.darkGray
+        }
+    
+        return color
+    },
+
     withinFirst: (filedDate) => {
         return moment(filedDate, 'YYYYMMDD').isBetween(firstDayOfMonth, fifteenthDayOfMonth, null, '[]');
     },
