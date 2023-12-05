@@ -1,12 +1,38 @@
 import { View, Text, StyleSheet, ActivityIndicator} from 'react-native'
 import CachedImage from 'expo-cached-image'
 import { Shadow } from 'react-native-shadow-2'
+import { FontAwesome } from '@expo/vector-icons'
+import DashedLine from 'react-native-dashed-line'
 
 import { COLORS, DateTimeUtils, ICONS } from '../../../../../../constant'
 import PageHeader from '../../../../../../components/header/PagesHeader'
 import Hr from '../../../../../../components/use/Hr'
 
 export default function TeamMember () {
+
+    const displayBulletDay = () => {
+        return (
+            <View style={styles.dayBelowEventWrapper}>
+                <FontAwesome
+                    name="circle"
+                    size={27}
+                    color={COLORS.orange}
+                    style={styles.topCircle}
+                />
+
+                <Text style={styles.dayBelowEvent}>
+                    Empty
+                </Text>
+            </View>
+        )
+    }
+
+    // const displayClockedDay = () => {
+    //     return (
+            
+    //     )
+    // }
+
     return (
         <>
             <PageHeader pageName={'Team Member'}/>
@@ -23,25 +49,78 @@ export default function TeamMember () {
                                     <ActivityIndicator size={'small'} color={COLORS.clearWhite} style={{ marginRight: 30, marginLeft: 40 }} />
                                 }
                             />
+
                             <Text style={[styles.boldText, { marginTop: 20 }]}>Juan dela Cruz</Text>
                             <Text style={styles.regularText}>Quality Assurance Specialist</Text>
                         </View>
 
-                        <View style={styles.rowView}>
-                            <Text>Today</Text>
-                            <Text>Date</Text>
+                        <View style={styles.rowViewSpace}>
+                            <Text style={styles.mediumText}>Today</Text>
+                            <Text >Date</Text>
+                        </View>
+
+                        {displayBulletDay()}
+
+                        <View>                            
+                            <Text style={styles.clockedTitle}>Clock-In</Text>
+                                
+                            <View style={styles.rowView}>
+                                <FontAwesome
+                                    name={'sign-in'}
+                                    size={34}
+                                    color={COLORS.orange}
+                                    style={{ paddingRight: 20, marginLeft: 8 }}
+                                />
+                    
+                                <View>
+                                    <Text style={styles.mediumText}>08:00:00 AM</Text>
+                                    <Text style={{ fontStyle: 'italic', fontSize: 15 }}>Manila Location</Text>
+                                </View>
+                            </View>
+
+                            <DashedLine
+                                dashLength={10}
+                                dashColor={COLORS.lightGray2}
+                                dashGap={ 2}
+                                dashThickness={2}
+                                style={{ marginTop: 15}}
+                            />
+
+                            <Text style={styles.clockedTitle}>Clock-Out</Text>
+
+                            <View style={styles.rowView}>
+                                <FontAwesome
+                                    name={'sign-out'}
+                                    size={34}
+                                    color={COLORS.powderBlue}
+                                    style={{ paddingRight: 20, marginLeft: 10 }}
+                                />
+                    
+                                <View>
+                                    <Text style={styles.mediumText}>07:00:00 PM</Text>
+                                    <Text style={styles.regularText}>Manila Location</Text>
+                                </View>
+                            </View>
+                        </View>
+
+                        <View style={styles.hrView}>
+                            <Hr />
                         </View>
 
                         <View>
-                            <Text>Clock-In</Text>
-                            <Text>Clock-Out</Text>
-                        </View>
+                            <View style={styles.rowViewSpace}>
+                                <Text style={styles.italiceS}>Previous</Text>
+                                <Text style={styles.italiceS}>Date</Text>
+                            </View>
 
-                        <Hr />
+                            {displayBulletDay()}
+                            
+                            <View style={styles.rowViewSpace}>
+                                <Text style={styles.italiceS}>Previous</Text>
+                                <Text style={styles.italiceS}>Date</Text>
+                            </View>
 
-                        <View>
-                            <Text>Previous</Text>
-                            <Text>Upcoming</Text>
+                            {displayBulletDay()}
                         </View>
                     </Shadow>
                 </View>
@@ -64,6 +143,10 @@ const styles = StyleSheet.create({
     regularText: {
         fontFamily: 'Inter_400Regular',
         fontSize: 14,
+    },
+
+    mediumText: {
+        fontFamily: 'Inter_600SemiBold',
     },
 
     wrapper: {
@@ -91,6 +174,52 @@ const styles = StyleSheet.create({
 
     rowView: {
         flexDirection: 'row',
+    },
+
+    rowViewSpace: {
+        flexDirection: 'row',
         justifyContent: 'space-between'
+    },
+
+    hrView: {
+        marginTop: 20,
+        marginBottom: 10,
+    },
+
+    // Calendar Styles
+    dayBelowEventWrapper: {
+        flex: 0,
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '50%',
+        height: 25,
+        paddingLeft: 40,
+        borderRadius: 50,
+        borderColor: COLORS.orange,
+        borderWidth: 1,
+        marginLeft: 20,
+        marginVertical: 10,
+        backgroundColor: COLORS.clearWhite,
+    },
+
+    topCircle: {
+        position: 'absolute',
+        zIndex: 99,
+        marginLeft: -1,
+    },
+
+    italiceS: {
+        fontStyle: 'italic',
+        fontWeight: '600',
+        fontSize: 15,
+    },
+
+    // Clocked Styles
+
+    clockedTitle: {
+        fontStyle: 'italic',
+        fontWeight: '600',
+        color: COLORS.tr_gray,
+        marginVertical: 10
     }
 })

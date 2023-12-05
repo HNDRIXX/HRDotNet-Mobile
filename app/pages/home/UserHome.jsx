@@ -17,7 +17,7 @@ import Loader from "../../../components/loader/Loader"
 
 export default function Home ({ navigation }) {  
     const [isLoading, setIsLoading] = useState(true)
-
+    
     const route = useRoute()
     const insets = useSafeAreaInsets()
     const styles = STYLES.UserHome(insets)
@@ -28,25 +28,25 @@ export default function Home ({ navigation }) {
         }, 800)
     }, [])
     
-    useEffect(() => {
-        const handleBackPress = () => {
-          return true
-        }
+    // useEffect(() => {
+    //     const handleBackPress = () => {
+    //       return true
+    //     }
     
-        if (Platform.OS === 'android') {
-          BackHandler.addEventListener('hardwareBackPress', handleBackPress)
-        } else if (Platform.OS === 'ios') {
-          BackHandlerIOS.addEventListener('hardwareBackPress', handleBackPress)
-        }
+    //     if (Platform.OS === 'android') {
+    //       BackHandler.addEventListener('hardwareBackPress', handleBackPress)
+    //     } else if (Platform.OS === 'ios') {
+    //       BackHandlerIOS.addEventListener('hardwareBackPress', handleBackPress)
+    //     }
     
-        return () => {
-          if (Platform.OS === 'android') {
-            BackHandler.removeEventListener('hardwareBackPress', handleBackPress)
-          } else if (Platform.OS === 'ios') {
-            BackHandlerIOS.removeEventListener('hardwareBackPress', handleBackPress)
-          }
-        }
-    }, [])
+    //     return () => {
+    //       if (Platform.OS === 'android') {
+    //         BackHandler.removeEventListener('hardwareBackPress', handleBackPress)
+    //       } else if (Platform.OS === 'ios') {
+    //         BackHandlerIOS.removeEventListener('hardwareBackPress', handleBackPress)
+    //       }
+    //     }
+    // }, [])
 
     return (
         <>

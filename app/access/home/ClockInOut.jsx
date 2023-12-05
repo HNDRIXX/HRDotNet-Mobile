@@ -172,7 +172,7 @@ export default function ClockInOut ({ navigation }) {
           {location ? (
             <View style={styles.container}>
               <MapView 
-                style={{ flex: 1 }} 
+                style={{ flex: 1}} 
                 initialRegion={region} 
                 userInterfaceStyle='light'
                 userLocationPriority='high'

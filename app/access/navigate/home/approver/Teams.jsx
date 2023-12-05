@@ -100,7 +100,8 @@ export default function TeamsPage ({ navigation }) {
     const [isLoading, setIsLoading] = useState(true)
     const [selectedDate, setSelectedDate] = useState(null)
     const [events, setEvents] = useState(null)
-    const [formatted, setFormatted] = useState(false)
+    const [mergedData, setMergedData] = useState(null)
+    const [formattedDateData, setFormattedDateData] = useState(false)
 
     const onHandleDayPress = (day) => {
         // setSelectedDate(DateTimeUtils.getDashDateReverse(day.dateString))
@@ -128,13 +129,53 @@ export default function TeamsPage ({ navigation }) {
         navigation.navigate('TeamMember')
     }
 
+    const handleMergeData = async () => {
+        const newData = {};
+      
+        // Iterate over dates
+        Object.keys(data).forEach(date => {
+            newData[date] = [];
+      
+            // Iterate over IDs for each date
+            data[date].forEach(employee => {
+                const id = employee.id;
+                const mergedInfo = {
+                ...employee,
+                ...calendarData[date].find(item => item.id === id),
+                };
+        
+                // // Find the clocked information for the ID and date
+                // const clockedInfo = clockedData[date].find(clocked => clocked[0].id === id);
+        
+                // // Merge clocked information
+                // if (clockedInfo) {
+                //   mergedInfo.clocked = clockedInfo[0].clocked;
+                //   mergedInfo.time = clockedInfo[0].time;
+                //   mergedInfo.location = clockedInfo[0].location;
+                // }
+        
+                newData[date].push(mergedInfo);
+            })
+        })
+        
+        console.log(newData)
+        setMergedData(newData)
+    }
+
     useEffect(() => {
+        const mergedData = async () => {
+            const formattedData = await handleMergeData()
+            setFormattedDateData(formattedData)
+        }
+
+        mergedData()
+
         const fetchData = async () => {
             const formattedData = await formatDateKeyData()
             setData(formattedData)
         }
-
-        fetchData()
+        
+        fetchData()  
 
         setTimeout(() => {
             setIsLoading(false)

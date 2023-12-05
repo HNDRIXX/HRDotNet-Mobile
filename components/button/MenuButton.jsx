@@ -61,7 +61,7 @@ export default function MenuButton ({ clockedDate, clockedTime, clockedLocation 
                                 onPress={() => navigation.navigate('LoanLedger')}>
                                 <CachedImage
                                     source={{ uri: ICONS.loanLedger }}
-                                    cacheKey={`loanLedger`}
+                                    cacheKey={`ledger`}
                                     {...commonProps}
                                 />
                             </TouchableOpacity>

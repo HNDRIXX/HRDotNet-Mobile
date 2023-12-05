@@ -38,10 +38,10 @@ export default function NotificationsItem ({ item, index, formattedDate, onPress
                         source={{ uri: ICONS.fileApprovals }}
                         cacheKey={`fileApprovals`}
                         {...commonProps}
-                        style={{ height: 40, width: 40, marginLeft: -9}}
+                        style={{ height: 40, width: 40 }}
                     />
                 )
-    
+                
             default: null
         }
     }
@@ -66,7 +66,7 @@ export default function NotificationsItem ({ item, index, formattedDate, onPress
                     </View>
 
                     <View style={styles.bodyContentWrapper}>
-                        <Text 
+                        <Text
                             numberOfLines={2}
                             style={styles.description}>{item.message}</Text>
 
