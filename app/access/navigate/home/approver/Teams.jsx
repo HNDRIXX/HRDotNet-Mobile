@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Image } from 'expo-image';
 import { Agenda } from 'react-native-calendars';
 import CachedImage from 'expo-cached-image';
@@ -14,21 +14,21 @@ import CalendarNote from '../../../../../components/note/CalendarNote';
 export default function TeamsPage ({ navigation }) {
     const [data, setData] = useState({ 
         '20231204' : [
-            { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist' },
-            { id: 'MGL002', name: 'Brian Noel Cruz', position: 'Training Specialist' },
-            { id: 'MGL003', name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist'},
+            { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist', uri: ICONS.alejandro },
+            { id: 'MGL002', name: 'Brian Noel Cruz', position: 'Training Specialist', uri: ICONS.brian },
+            { id: 'MGL003', name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist', uri: ICONS.christine },
         ],
         
         '20231205' : [
-            { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist' },
-            { id: 'MGL002', name: 'Brian Noel Cruz', position: 'Training Specialist' },
-            { id: 'MGL003', name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist'},
+            { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist', uri: ICONS.alejandro },
+            { id: 'MGL002', name: 'Brian Noel Cruz', position: 'Training Specialist', uri: ICONS.brian },
+            { id: 'MGL003', name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist', uri: ICONS.christine},
         ],
 
         '20231206' : [
-            { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist' },
-            { id: 'MGL002', name: 'Brian Noel Cruz', position: 'Training Specialist' },
-            { id: 'MGL003', name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist'},
+            { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist', uri: ICONS.alejandro },
+            { id: 'MGL002', name: 'Brian Noel Cruz', position: 'Training Specialist', uri: ICONS.brian },
+            { id: 'MGL003', name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist', uri: ICONS.christine},
         ],
     })
 
@@ -52,63 +52,37 @@ export default function TeamsPage ({ navigation }) {
         ],
     })
 
-    const [clockedData, setClockedData] = useState({
-        '20231204' : [
-            [
-                { id: 'MGL001', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
-                { id: 'MGL001', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
-            ],
-            [
-                { id: 'MGL002', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
-                { id: 'MGL002', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
-            ],
-            [
-                { id: 'MGL003', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
-                { id: 'MGL003', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
-            ],
-        ],
-        '20231205' : [
-            [
-                { id: 'MGL001', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
-                { id: 'MGL001', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
-            ],
-            [
-                { id: 'MGL002', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
-                { id: 'MGL002', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
-            ],
-            [
-                { id: 'MGL003', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
-                { id: 'MGL003', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
-            ],
-        ],
-        '20231206' : [
-            [
-                { id: 'MGL001', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
-                { id: 'MGL001', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
-            ],
-            [
-                { id: 'MGL002', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
-                { id: 'MGL002', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
-            ],
-            [
-                { id: 'MGL003', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
-                { id: 'MGL003', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
-            ],
-        ],
-    })
+    const [clockedData, setClockedData] = useState([
+        { id: 'MGL001', date: '20231204', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+        { id: 'MGL001', date: '20231204', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+        { id: 'MGL002', date: '20231204', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+        { id: 'MGL002', date: '20231204', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+        { id: 'MGL003', date: '20231204', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+        { id: 'MGL003', date: '20231204', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+        { id: 'MGL001', date: '20231206', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+        { id: 'MGL001', date: '20231206', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+        { id: 'MGL002', date: '20231206', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+        { id: 'MGL002', date: '20231206', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+        { id: 'MGL003', date: '20231206', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+        { id: 'MGL003', date: '20231206', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+    ])
 
     const [isLoading, setIsLoading] = useState(true)
     const [selectedDate, setSelectedDate] = useState(null)
+    const [prevSelectedDate, setPrevSelectedDate] = useState(null)
+    const [nextSelectedDate, setNextSelectedDate] = useState(null)
     const [events, setEvents] = useState(null)
     const [mergedData, setMergedData] = useState(null)
+    const [organizedClockedData, setOrganizedClockedData] = useState(null)
 
     const onHandleDayPress = (day) => {
-        // setSelectedDate(DateTimeUtils.getDashDateReverse(day.dateString))
         setSelectedDate(day.dateString)
+        setPrevSelectedDate(DateTimeUtils.subtractDashCurrDate(day.dateString))
+        setNextSelectedDate(DateTimeUtils.addDashCurrDate(day.dateString))
         setEvents(mergedData[day.dateString] || [])
 
         const selectedDateObj = new Date(day.dateString)
-        
+    
         const month = selectedDateObj.toLocaleString('default', { month: 'long' })
         const year = selectedDateObj.getFullYear()
     }    
@@ -130,51 +104,86 @@ export default function TeamsPage ({ navigation }) {
 
     
     const fortmatDateString = dateString => {
-        return moment(dateString, 'YYYYMMDD').format('YYYY-MM-DD');
+        return moment(dateString, 'YYYYMMDD').format('YYYY-MM-DD')
     }
 
     const onHandleItemPress = (event) => {
-        navigation.navigate('TeamMember', event)
+        const id = event?.id
+
+        const currClocked = onGetOrganizedClocked(selectedDate, id)
+        const prevEvent = onGetMergedData(prevSelectedDate, id)
+        const nextEvent = onGetMergedData(nextSelectedDate, id)
+
+        navigation.navigate('TeamMember', { 
+            selectedDate,  
+            prevSelectedDate,
+            nextSelectedDate,
+            prevEvent,
+            nextEvent,
+            event, 
+            currClocked
+        })
     }
 
     const handleMergeData = async () => {
-        const newData = {};
-      
-        // Iterate over dates
+        const newData = {}
+
         Object.keys(data).forEach(date => {
             const formattedDate = fortmatDateString(date)
             newData[formattedDate] = []
 
-            // Iterate over IDs for each date
             data[date].forEach(employee => {
                 const id = employee.id
                 const mergedInfo = {
-                ...employee,
-                ...calendarData[date].find(item => item.id === id),
-                };
+                    ...employee,
+                    ...calendarData[date].find(item => item.id === id),
+                }
 
-                // // Find the clocked information for the ID and date
-                // const clockedInfo = clockedData[date].find(clocked => clocked[0].id === id);
+                newData[formattedDate].push(mergedInfo)
+            })
+        })
 
-                // // Merge clocked information
-                // if (clockedInfo) {
-                // mergedInfo.clocked = clockedInfo[0].clocked;
-                // mergedInfo.time = clockedInfo[0].time;
-                // mergedInfo.location = clockedInfo[0].location;
-                // } else {
-                // // Set default values if clocked information is not found
-                // mergedInfo.clocked = null;
-                // mergedInfo.time = null;
-                // mergedInfo.location = null;
-                // }
-
-                newData[formattedDate].push(mergedInfo);
-            });
-            });
-        
         return newData
     }
 
+    const onGetOrganizedClocked = (date, id) => {
+        const entries = organizedClockedData[moment(date, 'YYYY-MM-DD').format('YYYYMMDD')]
+
+        if (entries) {
+        const specificEntries = entries
+            .filter((entry) => entry.id === id)
+            .map(({ clocked, id, location, time }) => ({ clocked, id, location, time }))
+
+            if (specificEntries.length > 0) {
+                return specificEntries
+            }
+        }
+    }
+
+    const onGetMergedData = (date, id) => {
+        const entries = mergedData[date]
+
+        if (entries) {
+            const specificEntry = entries.find((entry) => entry.id === id)
+            if (specificEntry) {
+                return specificEntry
+            }
+        }
+    }
+
+    useEffect(() => {
+        const transformedData = clockedData.reduce((acc, entry) => {
+            const dateKey = entry.date
+            const newEntry = { id: entry.id, clocked: entry.clocked, time: entry.time, location: entry.location }
+    
+            acc[dateKey] = acc[dateKey] || []
+            acc[dateKey].push(newEntry)
+    
+            return acc
+        }, {})
+    
+        setOrganizedClockedData(transformedData)
+    }, [])
 
     useEffect(() => {
         const onMergeData = async () => {
@@ -210,17 +219,18 @@ export default function TeamsPage ({ navigation }) {
                                 { events && events.map((event, index) => (
                                     <TouchableOpacity 
                                         style={[styles.buttonView, event.status != "Work Day" && styles.disabledButton]} key={index}
-                                        onPress={() => onHandleItemPress(event)}
 
-                                        disabled={
-                                            event.status == 'Work Day' ? false : true
-                                        }>
+                                        onPress={() => { onHandleItemPress(event)} } 
+                                    >
                                         
                                         <Shadow distance={3} offset={[2,3]} style={styles.shadowView}>
                                             <CachedImage
-                                                source={{ uri: ICONS.juan }}
-                                                cacheKey={`juan`}
+                                                source={{ uri: event.uri }}
+                                                cacheKey={`imageProfile0${index}`}
                                                 style={styles.userProfile}
+                                                placeholderContent={
+                                                    <ActivityIndicator size={'small'} color={COLORS.powderBlue}/>
+                                                }
                                             />
 
                                             <View>

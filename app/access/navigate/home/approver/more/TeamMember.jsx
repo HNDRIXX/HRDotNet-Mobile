@@ -1,3 +1,4 @@
+import React, {useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator} from 'react-native';
 import CachedImage from 'expo-cached-image';
 import { Shadow } from 'react-native-shadow-2';
@@ -11,32 +12,100 @@ import Hr from '../../../../../../components/use/Hr';
 
 export default function TeamMember () {
     const route = useRoute()
-    const params = route.params
+    const [isClockedIn, setClockedIn] = useState(null)
+    const [isClockedOut, setClockedOut] = useState(null)
 
+    const currDate = route.params?.selectedDate
+    const prevDate = route.params?.prevSelectedDate
+    const nextDate = route.params?.nextSelectedDate
+
+    const prevEvent = route.params?.prevEvent
+    const nextEvent = route.params?.nextEvent
+    const currEvent = route.params?.event
+    const clockedParams = route.params?.currClocked
+    
     const checkCircledBullet = (value) => {
         return Utils.circledBulletColor(value)
     }
 
-    const displayBulletDay = (status, event) => {
+    const currDateBullet = (status, event, expanded) => {
         return (
-            <View style={styles.dayBelowEventWrapper(checkCircledBullet(params?.status))}>
+            <View style={[styles.dayBelowEventWrapper(checkCircledBullet(status)), expanded && { width: '95%' }]}>
                 <FontAwesome
                     name="circle"
                     size={27}
-                    color={checkCircledBullet(params?.status)}
+                    color={checkCircledBullet(status)}
                     style={styles.topCircle}
                 />
 
-                <Text style={styles.dayBelowEvent}>{status} {event}</Text>
+                <Text style={styles.dayBelowEvent}>
+                    {status ? `${status} : ${event}` : 'None'}
+                </Text>
             </View>
         )
     }
 
-    // const displayClockedDay = () => {
-    //     return (
-            
-    //     )
-    // }
+    const displayClockedData = (action) => {
+        return clockedParams ? (
+            Object.entries(clockedParams).map(([index, entry]) =>
+                entry?.clocked === action && (
+                    <View key={index}>
+                        <Text style={styles.mediumText}>{DateTimeUtils.timeConvertWithSeconds(entry?.time)}</Text>
+                        <Text style={styles.italicStyle}>{entry?.location}</Text>
+                    </View>
+                ) 
+            )
+        ) : <Text style={styles.italicStyle}>No History</Text>
+    } 
+
+    // useEffect(() => {
+    //     Object.entries(clockedParams).map(([index, entry]) => 
+    //     entry?.clocked == "In" ? (
+    //         <View key={index}>                                
+    //             <View style={styles.rowView}>
+    //                 <FontAwesome
+    //                     name={'sign-in'}
+    //                     size={34}
+    //                     color={COLORS.orange}
+    //                     style={{ paddingRight: 20, marginLeft: 8 }}
+    //                 />
+        
+    //                 <View>
+    //                     <Text style={styles.mediumText}>{DateTimeUtils.timeConvertWithSeconds(entry?.time)}</Text>
+    //                     <Text style={styles.italicStyle}>{entry?.location}</Text>
+    //                 </View>
+    //             </View>
+    //         </View>
+    //     ) : entry?.clocked == "Out" ? (
+    //         <View key={index}>
+    //             <DashedLine
+    //                 dashLength={10}
+    //                 dashColor={COLORS.lightGray2}
+    //                 dashGap={2}
+    //                 dashThickness={2}
+    //                 style={{ marginTop: 15}}
+    //             />
+
+    //             <Text style={styles.clockedTitle}>Clock-Out</Text>
+
+    //             <View style={styles.rowView}>
+    //                 <FontAwesome
+    //                     name={'sign-out'}
+    //                     size={34}
+    //                     color={COLORS.powderBlue}
+    //                     style={{ paddingRight: 17, marginLeft: 10 }}
+    //                 />
+        
+    //                 <View>
+    //                     <Text style={styles.mediumText}>{DateTimeUtils.timeConvertWithSeconds(entry?.time)}</Text>
+    //                     <Text style={styles.italicStyle}>{entry?.location}</Text>
+    //                 </View>
+    //             </View>
+    //         </View>
+    //     ) : null
+    // )
+    // }, [])
+    
 
     return (
         <>
@@ -47,63 +116,59 @@ export default function TeamMember () {
                     <Shadow distance={4} style={styles.shadowView}>
                         <View style={styles.topView}>
                             <CachedImage 
-                                source={{ uri: ICONS.juan }}
-                                cacheKey='juan'
+                                source={{ uri: currEvent.uri }}
+                                cacheKey={`imageProfile${currEvent.name}`}
                                 style={styles.imageProfile}
                                 placeholderContent={
-                                    <ActivityIndicator size={'small'} color={COLORS.clearWhite} style={{ marginRight: 30, marginLeft: 40 }} />
+                                    <ActivityIndicator size={'small'} color={COLORS.powderBlue} />
                                 }
                             />
-
-                            <Text style={[styles.boldText, { marginTop: 20 }]}>{params?.name}</Text>
-                            <Text style={styles.regularText}>{params?.position}</Text>
+                            
+                            <Text style={[styles.boldText, { marginTop: 20 }]}>{currEvent?.name}</Text>
+                            <Text style={styles.regularText}>{currEvent?.position}</Text>
                         </View>
 
                         <View style={styles.rowViewSpace}>
                             <Text style={styles.mediumText}>Today</Text>
-                            <Text >Date</Text>
+                            <Text style={styles.mediumText}>{DateTimeUtils.getHalfDateWithExtra(currDate)}</Text>
                         </View>
 
-                        {displayBulletDay(params?.status, params?.event)}
+                        {currDateBullet(currEvent?.status, currEvent?.event, true)}
 
-                        <View>                            
+                        <View>                         
                             <Text style={styles.clockedTitle}>Clock-In</Text>
-                                
-                            <View style={styles.rowView}>
-                                <FontAwesome
-                                    name={'sign-in'}
-                                    size={34}
-                                    color={COLORS.orange}
-                                    style={{ paddingRight: 20, marginLeft: 8 }}
-                                />
-                    
-                                <View>
-                                    <Text style={styles.mediumText}>08:00:00 AM</Text>
-                                    <Text style={{ fontStyle: 'italic', fontSize: 15 }}>Manila Location</Text>
+                            
+                            <View>                                
+                                <View style={styles.rowView}>
+                                    <FontAwesome
+                                        name={'sign-in'}
+                                        size={34}
+                                        color={COLORS.orange}
+                                        style={{ paddingRight: 20, marginLeft: 8 }}
+                                    />
+                        
+                                    {displayClockedData('In')}
                                 </View>
-                            </View>
 
-                            <DashedLine
-                                dashLength={10}
-                                dashColor={COLORS.lightGray2}
-                                dashGap={ 2}
-                                dashThickness={2}
-                                style={{ marginTop: 15}}
-                            />
-
-                            <Text style={styles.clockedTitle}>Clock-Out</Text>
-
-                            <View style={styles.rowView}>
-                                <FontAwesome
-                                    name={'sign-out'}
-                                    size={34}
-                                    color={COLORS.powderBlue}
-                                    style={{ paddingRight: 20, marginLeft: 10 }}
+                                <DashedLine
+                                    dashLength={10}
+                                    dashColor={COLORS.lightGray2}
+                                    dashGap={2}
+                                    dashThickness={2}
+                                    style={{ marginTop: 15}}
                                 />
-                    
-                                <View>
-                                    <Text style={styles.mediumText}>07:00:00 PM</Text>
-                                    <Text style={styles.regularText}>Manila Location</Text>
+
+                                <Text style={styles.clockedTitle}>Clock-Out</Text>
+
+                                <View style={styles.rowView}>
+                                    <FontAwesome
+                                        name={'sign-out'}
+                                        size={34}
+                                        color={COLORS.powderBlue}
+                                        style={{ paddingRight: 17, marginLeft: 10 }}
+                                    />
+
+                                    {displayClockedData('Out')}
                                 </View>
                             </View>
                         </View>
@@ -114,18 +179,18 @@ export default function TeamMember () {
 
                         <View>
                             <View style={styles.rowViewSpace}>
-                                <Text style={styles.italiceS}>Previous</Text>
-                                <Text style={styles.italiceS}>Date</Text>
+                                <Text style={styles.italicTitle}>Previous</Text>
+                                <Text style={styles.italicTitle}>{DateTimeUtils.getHalfDateWithExtra(prevDate)}</Text>
                             </View>
 
-                            {displayBulletDay()}
+                            {currDateBullet(prevEvent?.status)}
                             
                             <View style={styles.rowViewSpace}>
-                                <Text style={styles.italiceS}>Previous</Text>
-                                <Text style={styles.italiceS}>Date</Text>
+                                <Text style={styles.italicTitle}>Upcoming</Text>
+                                <Text style={styles.italicTitle}>{DateTimeUtils.getHalfDateWithExtra(nextDate)}</Text>
                             </View>
 
-                            {displayBulletDay()}
+                            {currDateBullet(nextEvent?.status)}
                         </View>
                     </Shadow>
                 </View>
@@ -179,6 +244,7 @@ const styles = StyleSheet.create({
 
     rowView: {
         flexDirection: 'row',
+        alignItems: 'center',
     },
 
     rowViewSpace: {
@@ -200,6 +266,7 @@ const styles = StyleSheet.create({
         paddingLeft: 40,
         borderRadius: 50,
         borderColor: color,
+        width: '50%',
         borderWidth: 1,
         marginLeft: 10,
         marginVertical: 10,
@@ -212,10 +279,16 @@ const styles = StyleSheet.create({
         marginLeft: -1,
     },
 
-    italiceS: {
+    italicStyle: {
+        fontStyle: 'italic',
+        fontWeight: '500',
+        fontSize: 11,
+    },
+
+    italicTitle: {
         fontStyle: 'italic',
         fontWeight: '600',
-        fontSize: 15,
+        fontSize: 13,
     },
 
     // Clocked Styles

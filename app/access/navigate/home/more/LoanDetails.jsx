@@ -112,7 +112,7 @@ export default function LoanDetails ({ navigation }) {
                                             <Text style={styles.topText}>{params.loanTitle}</Text>
                                             
                                             <View style={styles.topLeftDetail}>
-                                                <Text style={styles.topText}>{params.balance}</Text>
+                                                <Text style={styles.topText}>{Utils.amountFormat(params.balance)}</Text>
                                                 <Text style={[styles.topText, { fontSize: 10, fontFamily: 'Inter_500Medium' }]}>Remaining Balance</Text>
                                             </View>
                                         </View>
@@ -121,7 +121,7 @@ export default function LoanDetails ({ navigation }) {
                                             <Text style={styles.boldText}>Payment Date:
                                             <Text style={styles.bodyText}> {DateTimeUtils.dateFullConvert(item.paymentDate)}</Text></Text>
                                             <Text style={styles.boldText}>Payment Amount:
-                                            <Text style={styles.bodyText}> {item.paymentAmount}</Text></Text>
+                                            <Text style={styles.bodyText}> {Utils.amountFormat(item.paymentAmount)}</Text></Text>
                                         </View>
                                     </Shadow>
                                 </View>

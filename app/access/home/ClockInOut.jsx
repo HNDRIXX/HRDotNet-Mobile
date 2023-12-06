@@ -11,7 +11,7 @@ import { Image } from 'expo-image';
 import PagesHeader from '../../../components/header/PagesHeader'
 import SuccessTimeClock from '../../../components/prompt/SuccessTimeClock'
 import RefreshPage from '../../../components/use/RefreshPage'
-import { COLORS, Utils, LocationUtils, DateTimeUtils } from '../../../constant';
+import { COLORS, ICONS, Utils, LocationUtils, DateTimeUtils } from '../../../constant';
 
 export default function ClockInOut ({ navigation }) {
   const [clockedValue, setClockedValue] = useState(1)
@@ -186,7 +186,7 @@ export default function ClockInOut ({ navigation }) {
                 >
                   <View style={{ alignSelf: 'center', justifyContent: 'center' }}>
                     <Image 
-                      source={require('../../../assets/icons/usermap.png')}
+                      source={{ uri: ICONS.userPin }}
                       style={{ width: 80, height: 80}}
                       contentFit='contain'
                     />
