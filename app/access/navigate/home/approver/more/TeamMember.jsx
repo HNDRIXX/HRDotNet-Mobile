@@ -23,7 +23,7 @@ export default function TeamMember () {
     const nextEvent = route.params?.nextEvent
     const currEvent = route.params?.event
     const clockedParams = route.params?.currClocked
-    
+
     const checkCircledBullet = (value) => {
         return Utils.circledBulletColor(value)
     }
@@ -39,7 +39,7 @@ export default function TeamMember () {
                 />
 
                 <Text style={styles.dayBelowEvent}>
-                    {status ? `${status} : ${event}` : 'None'}
+                    {status ? `${status}${event ? ' : ' + event : ''}` : 'None'}
                 </Text>
             </View>
         )
@@ -58,7 +58,11 @@ export default function TeamMember () {
         ) : <Text style={styles.italicStyle}>No History</Text>
     } 
 
-    // useEffect(() => {
+    const checkTodayDate = () => {
+        return DateTimeUtils.dashDateFormat() === currDate ? 'Today' : '';
+    }
+
+    useEffect(() => {
     //     Object.entries(clockedParams).map(([index, entry]) => 
     //     entry?.clocked == "In" ? (
     //         <View key={index}>                                
@@ -104,8 +108,7 @@ export default function TeamMember () {
     //         </View>
     //     ) : null
     // )
-    // }, [])
-    
+    }, [])
 
     return (
         <>
@@ -115,7 +118,7 @@ export default function TeamMember () {
                 <View style={styles.wrapper}>
                     <Shadow distance={4} style={styles.shadowView}>
                         <View style={styles.topView}>
-                            <CachedImage 
+                            <CachedImage
                                 source={{ uri: currEvent.uri }}
                                 cacheKey={`imageProfile${currEvent.name}`}
                                 style={styles.imageProfile}
@@ -128,8 +131,12 @@ export default function TeamMember () {
                             <Text style={styles.regularText}>{currEvent?.position}</Text>
                         </View>
 
+                            
                         <View style={styles.rowViewSpace}>
-                            <Text style={styles.mediumText}>Today</Text>
+                            <Text style={styles.mediumText}>{checkTodayDate(
+                                
+                            )}</Text>
+
                             <Text style={styles.mediumText}>{DateTimeUtils.getHalfDateWithExtra(currDate)}</Text>
                         </View>
 

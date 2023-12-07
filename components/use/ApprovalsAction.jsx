@@ -16,30 +16,30 @@ export default function ApprovalsAction ({isDisabled, selectAll, toggleSelectAll
                     onValueChange={toggleSelectAll}
                 />
                 
-                <Text style={styles.regularText}>All</Text>
+                <Text style={styles.regularText} >All</Text>
             </View>
 
-           <View style={styles.rowView}>
+            <View style={styles.rowView}>
                 <TouchableOpacity
-                    style={styles.button}
+                    style={[styles.button, isDisabled && styles.disabled]}
                     disabled={isDisabled}
                 >
                     <MaterialIcons 
                         name="cancel" 
                         size={24} 
-                        color={isDisabled ? COLORS.darkGray : COLORS.red} />
+                        color={isDisabled ? COLORS.tr_gray : COLORS.red} />
                     <Text style={styles.boldText}>Cancel</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity 
-                    style={styles.button}
+                    style={[styles.button, isDisabled && styles.disabled]}
                     disabled={isDisabled}
                     onPress={onHandleApprove}
                 >
                     <FontAwesome 
                         name="check-circle" 
                         size={24} 
-                        color={isDisabled ? COLORS.darkGray : COLORS.green} />
+                        color={isDisabled ? COLORS.tr_gray : COLORS.green} />
                     <Text style={styles.boldText}>Approve</Text>
                 </TouchableOpacity>
            </View>
@@ -62,6 +62,10 @@ const styles = StyleSheet.create({
     button: {
         flexDirection: 'row',
         alignItems: 'center'
+    },
+
+    disabled: {
+        opacity: 0.30
     },
 
     regularText: {

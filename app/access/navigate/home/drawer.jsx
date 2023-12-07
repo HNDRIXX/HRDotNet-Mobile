@@ -7,6 +7,10 @@ import { COLORS, ICONS, STYLES} from "../../../../constant";
 
 export default function DrawerPage ({ navigation }) {
     const styles = STYLES.Drawer
+
+    const onHandlePress = (page) => {
+        navigation.navigate(`${page}`)
+    }
     
     return (
         <>
@@ -50,14 +54,17 @@ export default function DrawerPage ({ navigation }) {
                         <Text style={styles.textButton}>Terms and Conditions</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button} >
+                    <TouchableOpacity 
+                        style={styles.button} 
+                        onPress={() => onHandlePress('AboutUs')}
+                    >
                         <CachedImage
                             source={{ uri: ICONS.info }}
                             cacheKey={`info`}
                             placeholderContent={( 
                                 <ActivityIndicator size={'small'} />
                             )} 
-                            style={{ height: 30, width: 30 }} 
+                            style={{ height: 30, width: 30 }}
                         />
                         
                         <Text style={styles.textButton}>About Us</Text>

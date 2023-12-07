@@ -136,7 +136,7 @@ export default function ClockInOut ({ navigation }) {
     setTimeout(() => {
       setRefreshing(false)
     }, 3000)
-  }, []) 
+  }, [])
 
   useEffect(() => {
     const timer = setInterval(() => setTime(moment()), 1000)  
@@ -184,13 +184,13 @@ export default function ClockInOut ({ navigation }) {
                   title="Your Location" 
                   description="You are here" 
                 >
-                  <View style={{ alignSelf: 'center', justifyContent: 'center' }}>
+                  {/* <View style={{ alignSelf: 'center', justifyContent: 'center' }}>
                     <Image 
                       source={{ uri: ICONS.userPin }}
                       style={{ width: 80, height: 80}}
                       contentFit='contain'
                     />
-                  </View>
+                  </View> */}
                 </Marker>
 
                 {geofences.map((geofence, index) => (
@@ -229,7 +229,7 @@ export default function ClockInOut ({ navigation }) {
 
                   <Text style={styles.textClockIn}>Clock-Out</Text>
                 </TouchableOpacity>
-                  ) : (
+                ) : (
                     <TouchableOpacity 
                       style={[ styles.clockInBtn, 
                         !isInsideGeofences.some((inside) => inside) ? styles.disabledBtn : null  ]}

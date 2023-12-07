@@ -3,16 +3,17 @@ import moment from "moment";
 
 export const DateTimeUtils = {
     currDate: () => new Date(),
+    momentCurrDate: () => moment(),
     momentCurrTime: () => moment().format('HH:mm'),
     momentCurrDateWithExtra : () => moment().format('MMMM D, YYYY, dddd'),
     momentCurrDateFormat: () => moment().format('MMMM DD, YYYY'),
-    momentCurrDate: () => moment(),
     getDashDate: (date) => moment(date, 'YYYYMMDD').format('MMM-DD-YYYY'),
     getDashDateReverse: (date) => moment(date, 'YYYYMMDD').format('YYYY-MM-DD'),
     getHalfDateWithExtra: (date) => moment(date, 'YYYYMMDD').format('MMM DD, ddd'),
     getCurrMonth: () => moment().format('MMMM'),
     getCurrYear: () => moment().format('YYYY'),
     defaultDateFormat: () => moment().format('YYYYMMDD'),
+    dashDateFormat: () => moment().format('YYYY-MM-DD'),
     converDateFormat: (date) => moment(date, 'MMMM DD, YYYY').format('YYYYMMDD'),
 
     timeConvert: (time) => moment(time, 'HH:mm:ss').format('hh:mm A'),

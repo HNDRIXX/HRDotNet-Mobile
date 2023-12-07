@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, BackHandler, Alert, KeyboardAvoidingView } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, Entypo } from "@expo/vector-icons";
 import SelectDropdown from "react-native-select-dropdown";
 import { useRoute } from "@react-navigation/native";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
@@ -42,23 +42,23 @@ export default function OBRequest ({ navigation }) {
     const styles = STYLES.OBRequest
     const imageParams = route.params?.image
 
+    const getLocationPermission = async () => {
+        LocationUtils.locationPermissionEnabled()
+    
+          try {
+              LocationUtils.officialWorkLocation(location, setLocation)
+          } catch (error) {
+              await getLocationPermission()
+              return
+          }
+    }
+
     useEffect(() => {
         imageParams != "undefined" && setSelectedFile(imageParams)
     }, [imageParams])
 
     
     useEffect(() => {
-        const getLocationPermission = async () => {
-          LocationUtils.locationPermissionEnabled()
-      
-            try {
-                LocationUtils.officialWorkLocation(location, setLocation)
-            } catch (error) {
-                await getLocationPermission()
-                return
-            }
-        }
-
         getLocationPermission()
 
         const intervalId = setInterval(() => {
@@ -143,13 +143,22 @@ export default function OBRequest ({ navigation }) {
                                 isInputCheck={isInputCheck}
                             /> 
 
-                            <TextInput
-                                style={[styles.textInput, styles.border]}
-                                onChangeText={(text) => setLocation(text)}
-                                value={location}
-                                placeholder="Location"
-                                placeholderTextColor={COLORS.tr_gray}
-                            />
+                            <View style={[styles.rowView, styles.border]}>
+                                <TextInput
+                                    // style={[styles.textInput]}
+                                    onChangeText={(text) => setLocation(text)}
+                                    value={location}
+                                    placeholder="Location"
+                                    placeholderTextColor={COLORS.tr_gray}
+                                />
+
+                                <FontAwesome5 
+                                    name="location-arrow"
+                                    size={20}
+                                    color={COLORS.darkGray}  
+                                    onPress={() => getLocationPermission()}                               
+                                />
+                            </View>
                         </View>
 
                         <View style={styles.wrapper}>

@@ -43,6 +43,7 @@ import ApprovalsPage from './access/navigate/home/approver/Approvals';
 import ApprovalsDetails from './access/navigate/home/approver/more/ApprovalsDetails'
 import TeamMember from './access/navigate/home/approver/more/TeamMember'
 import Loader from '../components/loader/Loader';
+import AboutUsPage from './access/navigate/home/more/AboutUs';
 
 export default function Index() {
     const [fontsLoaded] = useFonts()
@@ -79,7 +80,7 @@ export default function Index() {
                     },
 
                     tabBarIcon: ({ focused, color, size }) => {
-                        let iconName;
+                        let iconName
 
                         if (route.name === 'Home') {
                             iconName = focused
@@ -128,92 +129,92 @@ export default function Index() {
 
     const MainStack = () => {
         return (
-                <Stack.Navigator
-                    screenOptions={{
-                        headerShown: false,
-                        gestureEnabled: false,
-                        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+            <Stack.Navigator
+                screenOptions={{
+                    headerShown: false,
+                    gestureEnabled: false,
+                    cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+                }}
+                initialRouteName="LogIn"
+            >
+                <Stack.Screen name="LogIn" component={LogInPage} />
+                <Stack.Screen name="ForgotPassword" component={ForgotPasswordPage} />
+                <Stack.Screen name="ResetPassword" component={ResetPasswordPage} />
+                <Stack.Screen name="TabStack" component={TabStack} />
+
+                <Stack.Screen name="ClockInOut" component={ClockInOut} />
+
+                <Stack.Screen name="LoanLedger" component={LoanLedgerPage} />
+                <Stack.Screen 
+                    name="LoanDetails" 
+                    component={LoanDetails}
+                    options={{
+                        cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
+                    }}/>
+
+                <Stack.Screen name="Approvals" component={ApprovalsPage} />
+                <Stack.Screen 
+                    name="ApprovalsDetails" 
+                    component={ApprovalsDetails}
+                    options={{
+                        cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
+                    }} />           
+
+                <Stack.Screen name="Teams" component={TeamsPage} />
+                <Stack.Screen 
+                    name="TeamMember" 
+                    component={TeamMember}
+                    options={{
+                        cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
+                    }} />  
+
+                <Stack.Screen name="TimeSheet" component={TimeSheetPage} />
+                <Stack.Screen name="Pending" component={PendingPage} />
+                <Stack.Screen name="VacationLeave" component={VacationLeavePage} />
+                <Stack.Screen name="SickLeave" component={SickLeavePage} />
+                <Stack.Screen name="Notification" component={NotificationPage} />
+                <Stack.Screen name="NotificationDetails" component={NotificationDetails} />
+                <Stack.Screen 
+                    name="SideDrawer" 
+                    component={DrawerPage} 
+                    options={{
+                        gestureDirection: "horizontal-inverted"
                     }}
-                    initialRouteName="LogIn"
-                >
-                    <Stack.Screen name="LogIn" component={LogInPage} />
-                    <Stack.Screen name="ForgotPassword" component={ForgotPasswordPage} />
-                    <Stack.Screen name="ResetPassword" component={ResetPasswordPage} />
-                    <Stack.Screen name="TabStack" component={TabStack} />
+                />
 
-                    <Stack.Screen name="ClockInOut" component={ClockInOut} />
+                <Stack.Screen name="AttachedFile" component={AttachedFile} />
+                <Stack.Screen 
+                    name="MorePage" 
+                    component={MorePage}
+                    options={{
+                        cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
+                    }} />                    
 
-                    <Stack.Screen name="LoanLedger" component={LoanLedgerPage} />
-                    <Stack.Screen 
-                        name="LoanDetails" 
-                        component={LoanDetails}
-                        options={{
-                            cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
-                        }}/>
+                <Stack.Screen name="COSRequest" component={COSRequest} />
+                <Stack.Screen name="OBRequest" component={OBRequest} />
+                <Stack.Screen name="OTRequest" component={OTRequest} />
+                <Stack.Screen name="OSRequest" component={OSRequest} />
+                <Stack.Screen name="LVRequest" component={LVRequest} />
+                <Stack.Screen name="MLRequest" component={MLRequest} />
 
-                    <Stack.Screen name="Approvals" component={ApprovalsPage} />
-                    <Stack.Screen 
-                        name="ApprovalsDetails" 
-                        component={ApprovalsDetails}
-                        options={{
-                            cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
-                        }} />           
+                <Stack.Screen name="MorePayslip" component={MorePayslip} />
 
-                    <Stack.Screen name="Teams" component={TeamsPage} />
-                    <Stack.Screen 
-                        name="TeamMember" 
-                        component={TeamMember}
-                        options={{
-                            cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
-                        }} />  
+                <Stack.Screen 
+                    name="RequestSummary" 
+                    component={RequestSummary}
+                    options={{
+                        cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
+                    }}/>
 
-                    <Stack.Screen name="TimeSheet" component={TimeSheetPage} />
-                    <Stack.Screen name="Pending" component={PendingPage} />
-                    <Stack.Screen name="VacationLeave" component={VacationLeavePage} />
-                    <Stack.Screen name="SickLeave" component={SickLeavePage} />
-                    <Stack.Screen name="Notification" component={NotificationPage} />
-                    <Stack.Screen name="NotificationDetails" component={NotificationDetails} />
-                    <Stack.Screen 
-                        name="SideDrawer" 
-                        component={DrawerPage} 
-                        options={{
-                            gestureDirection: "horizontal-inverted"
-                        }}
-                    />
-
-                    <Stack.Screen name="AttachedFile" component={AttachedFile} />
-                    <Stack.Screen 
-                        name="MorePage" 
-                        component={MorePage}
-                        options={{
-                            cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
-                        }} />                    
-
-
-                    <Stack.Screen name="COSRequest" component={COSRequest} />
-                    <Stack.Screen name="OBRequest" component={OBRequest} />
-                    <Stack.Screen name="OTRequest" component={OTRequest} />
-                    <Stack.Screen name="OSRequest" component={OSRequest} />
-                    <Stack.Screen name="LVRequest" component={LVRequest} />
-                    <Stack.Screen name="MLRequest" component={MLRequest} />
-
-                    <Stack.Screen name="MorePayslip" component={MorePayslip} />
-
-                    <Stack.Screen 
-                        name="RequestSummary" 
-                        component={RequestSummary}
-                        options={{
-                            cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
-                        }}/>
-
-                    <Stack.Screen 
-                        name="CameraAccess" 
-                        component={CameraAccess}
-                        options={{
-                            cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid
-                        }}/>
-
-                </Stack.Navigator>
+                <Stack.Screen 
+                    name="CameraAccess" 
+                    component={CameraAccess}
+                    options={{
+                        cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid
+                    }}/>
+                <Stack.Screen name="AboutUs" component={AboutUsPage} />
+                
+            </Stack.Navigator>
         )
     }
 

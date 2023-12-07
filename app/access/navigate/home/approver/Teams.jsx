@@ -16,16 +16,26 @@ export default function TeamsPage ({ navigation }) {
         '20231204' : [
             { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist', uri: ICONS.alejandro },
             { id: 'MGL002', name: 'Brian Noel Cruz', position: 'Training Specialist', uri: ICONS.brian },
+            { id: 'MGL004', name: 'Dave Andrew Carandang', position: 'Messenger', uri: ICONS.dave },
             { id: 'MGL003', name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist', uri: ICONS.christine },
         ],
         
         '20231205' : [
             { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist', uri: ICONS.alejandro },
+            { id: 'MGL004', name: 'Dave Andrew Carandang', position: 'Messenger', uri: ICONS.dave },
             { id: 'MGL002', name: 'Brian Noel Cruz', position: 'Training Specialist', uri: ICONS.brian },
             { id: 'MGL003', name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist', uri: ICONS.christine},
         ],
 
         '20231206' : [
+            { id: 'MGL004', name: 'Dave Andrew Carandang', position: 'Messenger', uri: ICONS.dave },
+            { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist', uri: ICONS.alejandro },
+            { id: 'MGL002', name: 'Brian Noel Cruz', position: 'Training Specialist', uri: ICONS.brian },
+            { id: 'MGL003', name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist', uri: ICONS.christine},
+        ],
+
+        '20231207' : [
+            { id: 'MGL004', name: 'Dave Andrew Carandang', position: 'Messenger', uri: ICONS.dave },
             { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist', uri: ICONS.alejandro },
             { id: 'MGL002', name: 'Brian Noel Cruz', position: 'Training Specialist', uri: ICONS.brian },
             { id: 'MGL003', name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist', uri: ICONS.christine},
@@ -46,6 +56,12 @@ export default function TeamsPage ({ navigation }) {
         ],
 
         '20231206' : [
+            { id: 'MGL001', event: '8:00 AM to 6:00 PM', status: 'Work Day' },
+            { id: 'MGL002', event: '8:00 AM to 6:00 PM', status: 'Work Day' },
+            { id: 'MGL003', event: '8:00 AM to 6:00 PM', status: 'Work Day'},
+        ],
+
+        '20231207' : [
             { id: 'MGL001', event: '8:00 AM to 6:00 PM', status: 'Work Day' },
             { id: 'MGL002', event: '8:00 AM to 6:00 PM', status: 'Work Day' },
             { id: 'MGL003', event: '8:00 AM to 6:00 PM', status: 'Work Day'},
@@ -75,16 +91,19 @@ export default function TeamsPage ({ navigation }) {
     const [mergedData, setMergedData] = useState(null)
     const [organizedClockedData, setOrganizedClockedData] = useState(null)
 
+    const [month, setMonth] = useState(DateTimeUtils.getCurrMonth)
+    const [year, setYear] = useState(DateTimeUtils.getCurrYear)
+
     const onHandleDayPress = (day) => {
         setSelectedDate(day.dateString)
         setPrevSelectedDate(DateTimeUtils.subtractDashCurrDate(day.dateString))
         setNextSelectedDate(DateTimeUtils.addDashCurrDate(day.dateString))
         setEvents(mergedData[day.dateString] || [])
 
-        const selectedDateObj = new Date(day.dateString)
-    
-        const month = selectedDateObj.toLocaleString('default', { month: 'long' })
-        const year = selectedDateObj.getFullYear()
+        const dateValue = new Date(day.dateString)
+
+        setMonth(dateValue.toLocaleString('default', { month: 'long' }))
+        setYear(dateValue.getFullYear())
     }    
 
     // const formatDateKeyData = async () => {
@@ -101,7 +120,6 @@ export default function TeamsPage ({ navigation }) {
 
     //     return formattedData
     // }
-
     
     const fortmatDateString = dateString => {
         return moment(dateString, 'YYYYMMDD').format('YYYY-MM-DD')
@@ -127,7 +145,7 @@ export default function TeamsPage ({ navigation }) {
 
     const handleMergeData = async () => {
         const newData = {}
-
+      
         Object.keys(data).forEach(date => {
             const formattedDate = fortmatDateString(date)
             newData[formattedDate] = []
@@ -138,13 +156,16 @@ export default function TeamsPage ({ navigation }) {
                     ...employee,
                     ...calendarData[date].find(item => item.id === id),
                 }
-
+            
                 newData[formattedDate].push(mergedInfo)
             })
+      
+            newData[formattedDate].sort((a, b) => a.name.localeCompare(b.name))
         })
 
         return newData
     }
+      
 
     const onGetOrganizedClocked = (date, id) => {
         const entries = organizedClockedData[moment(date, 'YYYY-MM-DD').format('YYYYMMDD')]
@@ -172,6 +193,9 @@ export default function TeamsPage ({ navigation }) {
     }
 
     useEffect(() => {
+        const tempDate = DateTimeUtils.defaultDateFormat()
+        const formattedTempDate = DateTimeUtils.addDashCurrDate(tempDate)
+
         const transformedData = clockedData.reduce((acc, entry) => {
             const dateKey = entry.date
             const newEntry = { id: entry.id, clocked: entry.clocked, time: entry.time, location: entry.location }
@@ -181,7 +205,7 @@ export default function TeamsPage ({ navigation }) {
     
             return acc
         }, {})
-    
+
         setOrganizedClockedData(transformedData)
     }, [])
 
@@ -200,15 +224,16 @@ export default function TeamsPage ({ navigation }) {
     
     return (
         <>
-            <PageHeader pageName={'Teams'}/>
+            <PageHeader pageName={'Teams'} />
 
             { isLoading ? ( <Loader /> ) : ( 
                 <View style={styles.container}>
+                    <Text style={styles.monthYearText}>{month} {year}</Text>
+
                     <Agenda
                         items={mergedData}
                         onDayPress={onHandleDayPress}
                         showOnlySelectedDayItem
-                        enableSwipeMonths
 
                         renderList={() => (
                             <View>
@@ -229,7 +254,8 @@ export default function TeamsPage ({ navigation }) {
                                                 cacheKey={`imageProfile0${index}`}
                                                 style={styles.userProfile}
                                                 placeholderContent={
-                                                    <ActivityIndicator size={'small'} color={COLORS.powderBlue}/>
+                                                    <ActivityIndicator size={'small'} color={COLORS.powderBlue} 
+                                                        style={{ marginRight: 30 }} />
                                                 }
                                             />
 
@@ -242,8 +268,13 @@ export default function TeamsPage ({ navigation }) {
                                 )) }
                             </View>
                         )}
-
                     />
+                    
+                    {events && events.length <= 0 && (
+                        <View style={{ position: 'absolute', top: '20%', left: '26%'}}>
+                            <Text style={styles.noEventsText}>No agenda for this day.</Text>
+                        </View>
+                    )}
                 </View>
             )}
             
@@ -255,6 +286,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.clearWhite,
+    },
+
+    monthYearText: {
+        fontFamily: 'Inter_600SemiBold',
+        padding: 15,
+        fontSize: 18,
     },
 
     userProfile: {
@@ -291,5 +328,12 @@ const styles = StyleSheet.create({
 
     regularText: {
         fontFamily: 'Inter_400Regular'
-    }
+    },
+
+    noEventsText: {
+        color: COLORS.tr_gray,
+        textAlign: 'center',
+        padding: 20,
+        fontFamily: 'Inter_500Medium'
+    },
 })

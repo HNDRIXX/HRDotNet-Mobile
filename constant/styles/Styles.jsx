@@ -1033,7 +1033,6 @@ export const STYLES = StyleSheet.create({
 
         monthYearText: {
             fontFamily: 'Inter_600SemiBold',
-            color: COLORS.darkGray,
             padding: 15,
             fontSize: 18,
         },
