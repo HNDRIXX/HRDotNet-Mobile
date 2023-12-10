@@ -23,11 +23,11 @@ export default function ClockInOut ({ navigation }) {
   const [location, setLocation] = useState(null)
   const [region, setRegion] = useState(null)
   const [geofences, setGeofences] = useState([
-    // {
-    //   latitude: 14.62115091925712,
-    //   longitude: 120.99299900745191,
-    //   radius: 16,
-    // },
+    {
+      latitude: 14.62115091925712,
+      longitude: 120.99299900745191,
+      radius: 16,
+    },
     // {
     //   latitude: 14.606756738855745, 
     //   longitude: 120.97320725674159,
@@ -55,58 +55,58 @@ export default function ClockInOut ({ navigation }) {
   const [time, setTime] = useState(moment())
   const route = useRoute()
 
-  const getLocationPermission = async () => {  
+  const getLocationPermission = () => {
     LocationUtils.locationPermissionEnabled()
-    // LocationUtils.locationEnabled()
-    
-    const userLocation = await Location.getCurrentPositionAsync({})
-    setLocation(userLocation.coords)
-    setRegion({
-      latitude: userLocation.coords.latitude,
-      longitude: userLocation.coords.longitude,
-      latitudeDelta: 0.001,
-      longitudeDelta: 0.00001,
-    })
-
-    const geocodeLocation = await Location.reverseGeocodeAsync({
-      latitude: userLocation.coords.latitude,
-      longitude: userLocation.coords.longitude,
-    })
-
-    const currAddress = geocodeLocation[0]
-
-    setClockedAddress(`${currAddress?.name} ${currAddress?.street}, 
-    ${currAddress?.city}, ${currAddress?.country}`)
-
-    const locationWatcher = await Location.watchPositionAsync(
-      { distanceInterval: 5 },
-      (newLocation) => {
-        setLocation(newLocation.coords)
+      .then(() => Location.getCurrentPositionAsync({}))
+      .then((userLocation) => {
+        setLocation(userLocation.coords);
         setRegion({
-          latitude: newLocation.coords.latitude,
-          longitude: newLocation.coords.longitude,
-          // latitudeDelta: 0.0922,
-          // longitudeDelta: 0.0421,
+          latitude: userLocation.coords.latitude,
+          longitude: userLocation.coords.longitude,
           latitudeDelta: 0.001,
           longitudeDelta: 0.00001,
         })
-
-        const insideGeofences = geofences.map((geofence) => {
-          const distance = LocationUtils.calculationDistance(
-            newLocation.coords.latitude,
-            newLocation.coords.longitude,
-            geofence.latitude,
-            geofence.longitude
-          )
-
-          return distance <= geofence.radius
-        })
-
-        setIsInsideGeofences(insideGeofences)
-      }
-    )
-
-    return () => locationWatcher.remove()
+    
+        return Location.reverseGeocodeAsync({
+          latitude: userLocation.coords.latitude,
+          longitude: userLocation.coords.longitude,
+        });
+      })
+      .then((geocodeLocation) => {
+        const currAddress = geocodeLocation[0];
+        setClockedAddress(`${currAddress?.name} ${currAddress?.street}, ${currAddress?.city}, ${currAddress?.country}`);
+    
+        return Location.watchPositionAsync({ distanceInterval: 5 }, (newLocation) => {
+          setLocation(newLocation.coords);
+          setRegion({
+            latitude: newLocation.coords.latitude,
+            longitude: newLocation.coords.longitude,
+            latitudeDelta: 0.001,
+            longitudeDelta: 0.00001,
+          });
+    
+          const insideGeofences = geofences.map((geofence) => {
+            const distance = LocationUtils.calculationDistance(
+              newLocation.coords.latitude,
+              newLocation.coords.longitude,
+              geofence.latitude,
+              geofence.longitude
+            );
+    
+            return distance <= geofence.radius;
+          });
+    
+          setIsInsideGeofences(insideGeofences);
+        });
+      })
+      .then((locationWatcher) => {
+        // Return a cleanup function to remove the location watcher
+        return () => locationWatcher.remove();
+      })
+      .catch((error) => {
+        // Handle errors here
+        console.error('Error getting location:', error);
+      });
   }
 
   const openCustomAlert = () => {
@@ -154,11 +154,7 @@ export default function ClockInOut ({ navigation }) {
   // }, [time])
   
   useEffect(() => {
-    const getLocation = async () => {
-      await getLocationPermission()
-    }
-  
-    getLocation()
+    getLocationPermission()
   }, [geofences, isRestart])
 
   return (

@@ -9,9 +9,7 @@ export const LocationUtils = {
         const { status } = await Location.requestForegroundPermissionsAsync()
 
         if (status !== 'granted') {
-          // Permission denied, request again
-          await LocationUtils.locationPermissionEnabled()
-          return
+          return LocationUtils.locationPermissionEnabled()
         }
     },
 
@@ -19,39 +17,45 @@ export const LocationUtils = {
         const isLocationEnabled = await Location.hasServicesEnabledAsync();
     
         if (!isLocationEnabled) {
-          const askEnableLocation = await Location.enableNetworkProviderAsync()
-          if (!askEnableLocation) {
-            await LocationUtils.locationEnabled()
-            return
-          }
+            const askEnableLocation = await Location.enableNetworkProviderAsync()
+            if (!askEnableLocation) {
+                return LocationUtils.locationEnabled()
+            }
         }
     },
 
     officialWorkLocation: async (location, setLocation) => {
-        try {
-            const isLocationEnabled = await Location.hasServicesEnabledAsync()
-            const { coords } = await Location.getCurrentPositionAsync({})
-            
-            const geocodeLocation = await Location.reverseGeocodeAsync({
-                latitude: coords.latitude,
-                longitude: coords.longitude,
-            })
-
-            if (!isLocationEnabled) {
-                const askEnableLocation = await Location.enableNetworkProviderAsync()
-                
-                if (!askEnableLocation) {
-                    await LocationUtils.officialWorkLocation()
-                    return
+        Location.hasServicesEnabledAsync()
+            .then((isLocationEnabled) => {
+                if (!isLocationEnabled) {
+                    return Location.enableNetworkProviderAsync()
+                } else {
+                    return Location.getCurrentPositionAsync({})
                 }
-            }
-            
-            const currAddress = geocodeLocation[0]
-            setLocation(`${currAddress?.name} ${currAddress?.street}, ${currAddress?.city}, ${currAddress?.country}`)
-        } catch (error) {
-            // return LocationUtils.officialWorkLocation()
-        }
-    },
+            })
+            .then((result) => {
+                if (!result) {
+                    return LocationUtils.officialWorkLocation()
+                } else {
+                    const { coords } = result
+                    return Location.reverseGeocodeAsync({
+                        latitude: coords.latitude,
+                        longitude: coords.longitude,
+                    })
+                }
+            })
+            .then((geocodeLocation) => {
+                if (geocodeLocation) {
+                    const currAddress = geocodeLocation[0]
+                    setLocation(
+                        `${currAddress?.name} ${currAddress?.street}, ${currAddress?.city}, ${currAddress?.country}`
+                    )
+                }
+            })
+            .catch((error) => {
+                // Handle errors here
+            })
+    },    
 
     openLocation: async () => {
         try {

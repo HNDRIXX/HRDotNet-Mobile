@@ -26,6 +26,7 @@ export default function OBRequest ({ navigation }) {
 
     const [timeInText, setTimeInText] = useState("00:00")
     const [timeOutText, setTimeOutText] = useState("00:00")
+    const [placeholderLoc, setPlaceholderLoc] = useState("Trying to fetch location...")
 
     const [isDatePicker, setDatePicker] = useState(false)
     const [isTimeInPicker, setTimeInPicker] = useState(false)
@@ -43,30 +44,27 @@ export default function OBRequest ({ navigation }) {
     const imageParams = route.params?.image
 
     const getLocationPermission = async () => {
-        LocationUtils.locationPermissionEnabled()
-    
-          try {
-              LocationUtils.officialWorkLocation(location, setLocation)
-          } catch (error) {
-              await getLocationPermission()
-              return
-          }
+        try {
+            await LocationUtils.locationPermissionEnabled()
+            await LocationUtils.officialWorkLocation(location, setLocation)
+        } catch (error) {
+            await getLocationPermission()
+        }
     }
+    
+    useEffect(() => {
+        const fetchData = async () => {
+            await getLocationPermission()
+            setPlaceholderLoc("Done")
+        }
+    
+        fetchData()
+    }, [])    
 
     useEffect(() => {
         imageParams != "undefined" && setSelectedFile(imageParams)
     }, [imageParams])
 
-    
-    useEffect(() => {
-        getLocationPermission()
-
-        const intervalId = setInterval(() => {
-            getLocationPermission()
-        }, 2000)
-      
-        return () => clearInterval(intervalId)
-    }, [])
 
     const newData = data.map(item => `${item.timeIn} to ${item.timeOut}`)
 
@@ -148,7 +146,7 @@ export default function OBRequest ({ navigation }) {
                                     // style={[styles.textInput]}
                                     onChangeText={(text) => setLocation(text)}
                                     value={location}
-                                    placeholder="Location"
+                                    placeholder={placeholderLoc}
                                     placeholderTextColor={COLORS.tr_gray}
                                 />
 
@@ -156,7 +154,10 @@ export default function OBRequest ({ navigation }) {
                                     name="location-arrow"
                                     size={20}
                                     color={COLORS.darkGray}  
-                                    onPress={() => getLocationPermission()}                               
+                                    onPress={() => {
+                                        alert("Processing...")
+                                        getLocationPermission()
+                                    }}                               
                                 />
                             </View>
                         </View>
