@@ -44,6 +44,8 @@ import ApprovalsDetails from './access/navigate/home/approver/more/ApprovalsDeta
 import TeamMember from './access/navigate/home/approver/more/TeamMember'
 import Loader from '../components/loader/Loader';
 import AboutUsPage from './access/navigate/home/more/AboutUs';
+import ContactsPage from './access/navigate/home/approver/Contacts';
+import ContactInfo from './access/navigate/home/approver/more/ContactInfo';
 
 export default function Index() {
     const [fontsLoaded] = useFonts()
@@ -51,9 +53,7 @@ export default function Index() {
     const Stack = createStackNavigator()
     const Tab = createBottomTabNavigator()
 
-    if (!fontsLoaded) {
-        return ( <Loader /> )
-    }
+    if (!fontsLoaded) { return ( <Loader /> ) }
 
     const config = {
         animation: 'spring',
@@ -150,7 +150,7 @@ export default function Index() {
                     component={LoanDetails}
                     options={{
                         cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
-                    }}/>
+                    }} />
 
                 <Stack.Screen name="Approvals" component={ApprovalsPage} />
                 <Stack.Screen 
@@ -213,7 +213,14 @@ export default function Index() {
                         cardStyleInterpolator: CardStyleInterpolators.forRevealFromBottomAndroid
                     }}/>
                 <Stack.Screen name="AboutUs" component={AboutUsPage} />
-                
+                <Stack.Screen name="Contacts" component={ContactsPage} />
+
+                <Stack.Screen 
+                    name="ContactInfo" 
+                    component={ContactInfo}
+                    options={{
+                        cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter
+                    }} />
             </Stack.Navigator>
         )
     }

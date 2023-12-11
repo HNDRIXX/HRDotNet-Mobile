@@ -1,6 +1,8 @@
-import { Dimensions, StyleSheet, Platform } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco
 
+import { Dimensions, StyleSheet, Platform } from "react-native";
 import { COLORS } from "../Theme";
 
 const paddingIOS = Platform.OS === "ios"
@@ -814,13 +816,14 @@ export const STYLES = StyleSheet.create({
         },
 
         button: {
-            padding: 20,
+            paddingHorizontal: 18,
+            paddingVertical: 13,
             backgroundColor: COLORS.clearWhite,
             marginHorizontal: 20,
             marginVertical: 10,
             flexDirection: 'row',
             alignItems: 'center',
-            borderRadius: 20,
+            borderRadius: 15,
 
             elevation: 5,
             shadowColor: COLORS.darkGray,
@@ -898,7 +901,6 @@ export const STYLES = StyleSheet.create({
 
         btnHorizontal: {
             flexDirection: 'row',
-            marginHorizontal: 10,
             borderBottomColor: COLORS.lighterOrange,
             borderBottomWidth: 2,
         },
@@ -1250,7 +1252,8 @@ export const STYLES = StyleSheet.create({
     
         textInput: {
             paddingLeft: 15,
-            paddingVertical: 12
+            paddingVertical: 10,
+            height: 'auto',
         },
     
         button: {
@@ -1347,7 +1350,8 @@ export const STYLES = StyleSheet.create({
     
         textInput: {
             paddingLeft: 15,
-            height: 45
+            paddingVertical: 10,
+            height: 'auto',
         },
     
         timeWrapper:{
@@ -1466,7 +1470,8 @@ export const STYLES = StyleSheet.create({
     
         textInput: {
             paddingLeft: 15,
-            height: 45
+            paddingVertical: 10,
+            height: 'auto',
         },
     
         timeWrapper:{
@@ -1583,10 +1588,16 @@ export const STYLES = StyleSheet.create({
         itemPicker: {
             fontSize: 14
         },
+
+        locationInput: {
+            width: '80%',
+            textAlign: 'left'
+        },
     
         textInput: {
             paddingLeft: 15,
-            height: 45
+            paddingVertical: 10,
+            height: 'auto',
         },
     
         timeWrapper:{
@@ -1692,7 +1703,8 @@ export const STYLES = StyleSheet.create({
     
         textInput: {
             paddingLeft: 15,
-            height: 45
+            paddingVertical: 10,
+            height: 'auto',
         },
     
         timeWrapper:{
@@ -1796,9 +1808,9 @@ export const STYLES = StyleSheet.create({
         },
     
         textInput: {
-            fontFamily: 'Inter_500Medium',
             paddingLeft: 15,
-            height: 45
+            paddingVertical: 10,
+            height: 'auto',
         },
     
         timeWrapper:{

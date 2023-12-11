@@ -196,6 +196,7 @@ export default function LVRequest ({ navigation }) {
                                 style={[styles.textInput, styles.border]}
                                 onChangeText={(text) => setReason(text)}
                                 value={reason}
+                                multiline
                                 placeholder="Details"
                                 placeholderTextColor={COLORS.tr_gray}
                             />

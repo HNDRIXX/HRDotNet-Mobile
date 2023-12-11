@@ -4,7 +4,7 @@ import MapView, { Marker, Circle, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useRoute } from '@react-navigation/native';
 import { Shadow } from 'react-native-shadow-2';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import moment from 'moment';
 import { Image } from 'expo-image';
 
@@ -13,7 +13,7 @@ import SuccessTimeClock from '../../../components/prompt/SuccessTimeClock'
 import RefreshPage from '../../../components/use/RefreshPage'
 import { COLORS, ICONS, Utils, LocationUtils, DateTimeUtils } from '../../../constant';
 
-export default function ClockInOut ({ navigation }) {
+export default function ClockInOut({ navigation }) {
   const [clockedValue, setClockedValue] = useState(1)
   const [clockedStatus, setClockedStatus] = useState('')
   const [clockedTime, setClockedTime] = useState('')
@@ -59,54 +59,52 @@ export default function ClockInOut ({ navigation }) {
     LocationUtils.locationPermissionEnabled()
       .then(() => Location.getCurrentPositionAsync({}))
       .then((userLocation) => {
-        setLocation(userLocation.coords);
+        setLocation(userLocation.coords)
         setRegion({
           latitude: userLocation.coords.latitude,
           longitude: userLocation.coords.longitude,
           latitudeDelta: 0.001,
           longitudeDelta: 0.00001,
         })
-    
+
         return Location.reverseGeocodeAsync({
           latitude: userLocation.coords.latitude,
           longitude: userLocation.coords.longitude,
-        });
+        })
       })
       .then((geocodeLocation) => {
-        const currAddress = geocodeLocation[0];
-        setClockedAddress(`${currAddress?.name} ${currAddress?.street}, ${currAddress?.city}, ${currAddress?.country}`);
-    
+        const currAddress = geocodeLocation[0]
+        setClockedAddress(`${currAddress?.name} ${currAddress?.street}, ${currAddress?.city}, ${currAddress?.country}`)
+
         return Location.watchPositionAsync({ distanceInterval: 5 }, (newLocation) => {
-          setLocation(newLocation.coords);
+          setLocation(newLocation.coords)
           setRegion({
             latitude: newLocation.coords.latitude,
             longitude: newLocation.coords.longitude,
             latitudeDelta: 0.001,
             longitudeDelta: 0.00001,
-          });
-    
+          })
+
           const insideGeofences = geofences.map((geofence) => {
             const distance = LocationUtils.calculationDistance(
               newLocation.coords.latitude,
               newLocation.coords.longitude,
               geofence.latitude,
               geofence.longitude
-            );
-    
-            return distance <= geofence.radius;
-          });
-    
-          setIsInsideGeofences(insideGeofences);
-        });
+            )
+
+            return distance <= geofence.radius
+          })
+
+          setIsInsideGeofences(insideGeofences)
+        })
       })
       .then((locationWatcher) => {
-        // Return a cleanup function to remove the location watcher
-        return () => locationWatcher.remove();
+        return () => locationWatcher.remove()
       })
       .catch((error) => {
-        // Handle errors here
-        console.error('Error getting location:', error);
-      });
+        console.error('Error getting location:', error)
+      })
   }
 
   const openCustomAlert = () => {
@@ -117,17 +115,17 @@ export default function ClockInOut ({ navigation }) {
   }
 
   const closeCustomAlert = async () => {
-      setIsSuccessAlertVisible(false)
+    setIsSuccessAlertVisible(false)
 
-      navigation.navigate('TabStack', {
-          screen: 'Home',
-          params: {
-            clockedValue: clockedValue,
-            clockedStatus: clockedStatus,
-            clockedDate: clockedDate,
-            clockedTime: clockedTime,
-          },
-      })  
+    navigation.navigate('TabStack', {
+      screen: 'Home',
+      params: {
+        clockedValue: clockedValue,
+        clockedStatus: clockedStatus,
+        clockedDate: clockedDate,
+        clockedTime: clockedTime,
+      },
+    })
   }
 
   const onRefresh = useCallback(() => {
@@ -139,7 +137,7 @@ export default function ClockInOut ({ navigation }) {
   }, [])
 
   useEffect(() => {
-    const timer = setInterval(() => setTime(moment()), 1000)  
+    const timer = setInterval(() => setTime(moment()), 1000)
     return () => clearInterval(timer)
   }, [])
 
@@ -148,46 +146,38 @@ export default function ClockInOut ({ navigation }) {
   //     const intervalId = setInterval(() => {
   //       getLocationPermission()
   //     }, 2000)
-      
+
   //     return () => clearInterval(intervalId)
   //   }
   // }, [time])
-  
+
   useEffect(() => {
     getLocationPermission()
   }, [geofences, isRestart])
 
   return (
     <>
-      <PagesHeader pageName={'Time Clock'}/>
+      <PagesHeader pageName={'Time Clock'} />
 
-      { isLoading ? (
+      {isLoading ? (
         <RefreshPage setRestart={setRestart} onRefresh={onRefresh} refreshing={refreshing} />
       ) : (
         <>
           {location ? (
             <View style={styles.container}>
-              <MapView 
-                style={{ flex: 1}} 
-                initialRegion={region} 
+              <MapView
+                style={{ flex: 1 }}
+                initialRegion={region}
                 userInterfaceStyle='light'
                 userLocationPriority='high'
-                showsUserLocation 
+                showsUserLocation
                 followsUserLocation
               >
-                <Marker 
-                  coordinate={location} 
-                  title="Your Location" 
-                  description="You are here" 
-                >
-                  {/* <View style={{ alignSelf: 'center', justifyContent: 'center' }}>
-                    <Image 
-                      source={{ uri: ICONS.userPin }}
-                      style={{ width: 80, height: 80}}
-                      contentFit='contain'
-                    />
-                  </View> */}
-                </Marker>
+                <Marker
+                  coordinate={location}
+                  title="Your Location"
+                  description="You are here"
+                ></Marker>
 
                 {geofences.map((geofence, index) => (
                   <Circle
@@ -195,63 +185,75 @@ export default function ClockInOut ({ navigation }) {
                     center={{ latitude: geofence.latitude, longitude: geofence.longitude }}
                     radius={geofence.radius}
                     strokeWidth={2}
-                    strokeColor={isInsideGeofences[index] ? COLORS.opaqueGreen : COLORS.opaqueRed }
-                    fillColor={isInsideGeofences[index] ? COLORS.opaqueGreen : COLORS.opaqueRed }
+                    strokeColor={isInsideGeofences[index] ? COLORS.opaqueGreen : COLORS.opaqueRed}
+                    fillColor={isInsideGeofences[index] ? COLORS.opaqueGreen : COLORS.opaqueRed}
                   />
                 ))}
               </MapView>
 
               <Shadow style={styles.bottomContainer}>
-              <View style={styles.dateTimeWrapper}>
-                <Text style={styles.dateText}>{DateTimeUtils.momentCurrDateWithExtra()}</Text>
-                <Text style={styles.timeText}>{time.format('h:mm:ss A')}</Text>
-              </View>
-
-              { route.params.clockedValue == 0 ? (
-                <TouchableOpacity 
-                  style={[ styles.clockOutBtn, !isInsideGeofences.some((inside) => inside) ? styles.disabledBtn : null ]}
-                  disabled={!isInsideGeofences.some((inside) => inside)}
-                  onPress={() => {
-                    setClockedStatus("Clocked Out")
-                    setClockedValue(1)
-                    openCustomAlert()
+                <TouchableOpacity
+                  style={{
+                    position: 'absolute',
+                    right: '10%',
+                    top: '10%',
                   }}
+
+                  onPress={() => onRefresh()}
                 >
-                  <Ionicons
-                    name='stopwatch'
-                    size={22}
-                    color={COLORS.clearWhite}
-                  />
-
-                  <Text style={styles.textClockIn}>Clock-Out</Text>
+                  <FontAwesome name="refresh" size={20} color={COLORS.darkGray} />
                 </TouchableOpacity>
+
+                <View style={styles.dateTimeWrapper}>
+                  <Text style={styles.dateText}>{DateTimeUtils.momentCurrDateWithExtra()}</Text>
+                  <Text style={styles.timeText}>{time.format('h:mm:ss A')}</Text>
+                </View>
+
+                {route.params.clockedValue == 0 ? (
+                  <TouchableOpacity
+                    style={[styles.clockOutBtn, !isInsideGeofences.some((inside) => inside) ? styles.disabledBtn : null]}
+                    disabled={!isInsideGeofences.some((inside) => inside)}
+                    onPress={() => {
+                      setClockedStatus("Clocked Out")
+                      setClockedValue(1)
+                      openCustomAlert()
+                    }}
+                  >
+                    <Ionicons
+                      name='stopwatch'
+                      size={22}
+                      color={COLORS.clearWhite}
+                    />
+
+                    <Text style={styles.textClockIn}>Clock-Out</Text>
+                  </TouchableOpacity>
                 ) : (
-                    <TouchableOpacity 
-                      style={[ styles.clockInBtn, 
-                        !isInsideGeofences.some((inside) => inside) ? styles.disabledBtn : null  ]}
+                  <TouchableOpacity
+                    style={[styles.clockInBtn,
+                    !isInsideGeofences.some((inside) => inside) ? styles.disabledBtn : null]}
 
-                      disabled={!isInsideGeofences.some((inside) => inside)}
+                    disabled={!isInsideGeofences.some((inside) => inside)}
 
-                      onPress={() => {
-                        setClockedStatus("Clocked In")
-                        setClockedValue(0)
-                        openCustomAlert()
-                      }}
-                    >
-                      <Ionicons
-                        name='stopwatch'
-                        size={22}
-                        color={COLORS.clearWhite}
-                      />
+                    onPress={() => {
+                      setClockedStatus("Clocked In")
+                      setClockedValue(0)
+                      openCustomAlert()
+                    }}
+                  >
+                    <Ionicons
+                      name='stopwatch'
+                      size={22}
+                      color={COLORS.clearWhite}
+                    />
 
-                      <Text style={styles.textClockIn}>Clock-In</Text>
-                    </TouchableOpacity>
-                  )}
-                </Shadow>
-              </View>
-            ) : (
-              <RefreshPage setRestart={setRestart} onRefresh={onRefresh} refreshing={refreshing} />
-            )}
+                    <Text style={styles.textClockIn}>Clock-In</Text>
+                  </TouchableOpacity>
+                )}
+              </Shadow>
+            </View>
+          ) : (
+            <RefreshPage setRestart={setRestart} onRefresh={onRefresh} refreshing={refreshing} />
+          )}
 
           <SuccessTimeClock
             clockedTime={clockedTime}
@@ -275,8 +277,8 @@ const styles = StyleSheet.create({
   },
 
   disabledBtn: {
-      backgroundColor: 'gray',
-      opacity: 0.3,
+    backgroundColor: 'gray',
+    opacity: 0.3,
   },
 
   bottomContainer: {

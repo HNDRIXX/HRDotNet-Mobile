@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco
+
 import React, { useState, useEffect } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Platform, ActivityIndicator, Dimensions } from 'react-native'
 import { Image } from 'expo-image'
@@ -103,7 +107,7 @@ export default function MenuButton ({ clockedDate, clockedTime, clockedLocation 
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity 
                         style={[styles.gridButton, { padding: padding }]}
-                        onPress={() => navigation.navigate('OTRequest')}>
+                        onPress={() => navigation.navigate('Contacts')}>
                         <CachedImage
                             source={{ uri: ICONS.contacts }}
                             cacheKey={`contacts`}

@@ -10,6 +10,7 @@ import Loader from '../../../../../components/loader/Loader';
 import { COLORS, ICONS, DateTimeUtils } from '../../../../../constant';
 import PageHeader from '../../../../../components/header/PagesHeader'
 import CalendarNote from '../../../../../components/note/CalendarNote';
+import TeamsContactsItem from '../../../../../components/items/home/TeamsContactsItem';
 
 export default function TeamsPage ({ navigation }) {
     const [data, setData] = useState({ 
@@ -242,29 +243,13 @@ export default function TeamsPage ({ navigation }) {
                                 )}
                                     
                                 { events && events.map((event, index) => (
-                                    <TouchableOpacity 
-                                        style={[styles.buttonView, event.status != "Work Day" && styles.disabledButton]} key={index}
-
-                                        onPress={() => { onHandleItemPress(event)} } 
-                                    >
-                                        
-                                        <Shadow distance={3} offset={[2,3]} style={styles.shadowView}>
-                                            <CachedImage
-                                                source={{ uri: event.uri }}
-                                                cacheKey={`imageProfile0${index}`}
-                                                style={styles.userProfile}
-                                                placeholderContent={
-                                                    <ActivityIndicator size={'small'} color={COLORS.powderBlue} 
-                                                        style={{ marginRight: 30 }} />
-                                                }
-                                            />
-
-                                            <View>
-                                                <Text style={styles.boldText}>{event.name}</Text>
-                                                <Text style={styles.regularText}>{event.position}</Text>
-                                            </View>
-                                        </Shadow>
-                                    </TouchableOpacity>
+                                    <View key={index} style={styles.paddingSides}>
+                                        <TeamsContactsItem 
+                                            event={event}
+                                            isActive={false}
+                                            onHandlePress={() => onHandleItemPress(event)}
+                                        />
+                                    </View>
                                 )) }
                             </View>
                         )}
@@ -294,40 +279,8 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
 
-    userProfile: {
-        width: 50, 
-        height: 50, 
-        borderRadius: 90,
-        marginRight: 20,
-    },
-
-    shadowView: {
-        width: '100%',
-        backgroundColor: COLORS.clearWhite,
-        padding: 15,
-        borderRadius: 20,
-        
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-
-    buttonView: {
-        backgroundColor: COLORS.clearWhite,
-        marginVertical: 10,
-        marginHorizontal: 20,
-        borderRadius: 20,
-    },
-    
-    disabledButton: {
-        opacity: 0.4
-    },
-
-    boldText: {
-        fontFamily: 'Inter_600SemiBold'
-    },
-
-    regularText: {
-        fontFamily: 'Inter_400Regular'
+    paddingSides: {
+        paddingHorizontal: 15,
     },
 
     noEventsText: {

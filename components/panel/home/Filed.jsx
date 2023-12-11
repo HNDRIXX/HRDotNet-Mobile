@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Modal, TextInput } from "react-native";
 import * as Animatable from 'react-native-animatable';
-import { AntDesign, Entypo, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
-import moment from "moment/moment";
 
 import { Search } from "../../use/Search";
 import Loader from "../../../components/loader/Loader"

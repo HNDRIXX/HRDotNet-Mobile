@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco
+
 import React, { useState } from "react"
 import { View, Text, StyleSheet,TouchableOpacity} from "react-native"
 
@@ -7,11 +11,11 @@ import FiledPanel from '../../../../components/panel/home/Filed'
 import PageHeader from "../../../../components/header/PagesHeader"
 
 export default function PendingPage ({ navigation }) {
+    const styles = STYLES.Pending
+
     const [activePanel, setActivePanel] = useState(1)
     const [filedCount, setFiledCount] = useState(0)
     const [reviewedCount, setReviewedCount] = useState(0)
-
-    const styles = STYLES.Pending
 
     const switchPanel = (panelNum) => {
         setActivePanel(panelNum)

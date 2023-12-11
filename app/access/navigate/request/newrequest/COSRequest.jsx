@@ -183,6 +183,7 @@ export default function COSRequest ({ navigation }) {
                         onChangeText={(text) => setReason(text)}
                         value={reason}
                         maxLength={500}
+                        multiline
                         placeholder="Details"
                         placeholderTextColor={COLORS.tr_gray}
                     />

@@ -253,6 +253,7 @@ export default function OSRequest ({ navigation }) {
                                 onChangeText={(text) => setReason(text)}
                                 value={reason}
                                 placeholder="Details"
+                                multiline
                                 placeholderTextColor={COLORS.tr_gray}
                             />
                         </View>

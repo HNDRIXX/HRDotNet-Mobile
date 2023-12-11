@@ -1,6 +1,9 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco
+
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
-import { AntDesign, FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
-import { Image } from "react-native-expo-image-cache";
+import { AntDesign, } from "@expo/vector-icons";
 import CachedImage from 'expo-cached-image'
 
 import { COLORS, ICONS, STYLES} from "../../../../constant";
@@ -11,7 +14,7 @@ export default function DrawerPage ({ navigation }) {
     const onHandlePress = (page) => {
         navigation.navigate(`${page}`)
     }
-    
+
     return (
         <>
             <View style={styles.container}>
@@ -27,8 +30,7 @@ export default function DrawerPage ({ navigation }) {
                 </View>
 
                 <View style={{ marginTop: 20 }}>
-                    <TouchableOpacity style={styles.button} >
-                 
+                    <TouchableOpacity style={styles.button}>
                         <CachedImage
                             source={{ uri: ICONS.privacy }}
                             cacheKey={`privacy`}

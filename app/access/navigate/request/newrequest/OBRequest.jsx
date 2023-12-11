@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, BackHandler, Alert, KeyboardAvoidingView } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
-import { FontAwesome5, Entypo } from "@expo/vector-icons";
 import SelectDropdown from "react-native-select-dropdown";
 import { useRoute } from "@react-navigation/native";
-import { Ionicons, AntDesign } from "@expo/vector-icons";
+import { Ionicons, AntDesign, FontAwesome5, Entypo } from "@expo/vector-icons";
 
 import PageHeader from "../../../../../components/header/PagesHeader";
 import FileAttachedNote from "../../../../../components/note/FileAttachedNote";
@@ -16,6 +15,10 @@ import { ScrollView } from "react-native";
 const data = [{ timeIn: "10:00 AM", timeOut: "7:00 PM"}, { timeIn: "8:00 AM", timeOut: "6:00 PM" }]
 
 export default function OBRequest ({ navigation }) {
+    const route = useRoute()
+    const styles = STYLES.OBRequest
+    const imageParams = route.params?.image
+    
     const [OBDate, setOBDate] = useState(null)
     const [location, setLocation] = useState('')
 
@@ -39,10 +42,6 @@ export default function OBRequest ({ navigation }) {
 
     const [shiftSched, setShiftSched] = useState(null)
 
-    const route = useRoute()
-    const styles = STYLES.OBRequest
-    const imageParams = route.params?.image
-
     const getLocationPermission = async () => {
         try {
             await LocationUtils.locationPermissionEnabled()
@@ -55,7 +54,7 @@ export default function OBRequest ({ navigation }) {
     useEffect(() => {
         const fetchData = async () => {
             await getLocationPermission()
-            setPlaceholderLoc("Done")
+            setPlaceholderLoc("Location")
         }
     
         fetchData()
@@ -143,22 +142,33 @@ export default function OBRequest ({ navigation }) {
 
                             <View style={[styles.rowView, styles.border]}>
                                 <TextInput
-                                    // style={[styles.textInput]}
+                                    style={styles.locationInput}
                                     onChangeText={(text) => setLocation(text)}
                                     value={location}
                                     placeholder={placeholderLoc}
                                     placeholderTextColor={COLORS.tr_gray}
                                 />
 
-                                <FontAwesome5 
-                                    name="location-arrow"
-                                    size={20}
-                                    color={COLORS.darkGray}  
-                                    onPress={() => {
-                                        alert("Processing...")
-                                        getLocationPermission()
-                                    }}                               
-                                />
+                                <View style={styles.rowView}>
+                                    <Entypo 
+                                        name="circle-with-cross" 
+                                        size={22} 
+                                        color={COLORS.darkGray} 
+                                        style={{ marginRight: 10}} 
+                                        onPress={() => setLocation('')}     
+                                    />
+
+                                    <FontAwesome5 
+                                        name="location-arrow"
+                                        size={18}
+                                        color={COLORS.darkGray}  
+                                        onPress={() => {
+                                            alert("Processing...")
+                                            getLocationPermission()
+                                        }}                               
+                                    />
+                                </View>
+
                             </View>
                         </View>
 
@@ -262,6 +272,7 @@ export default function OBRequest ({ navigation }) {
                                 style={[styles.textInput, styles.border]}
                                 onChangeText={(text) => setReason(text)}
                                 value={reason}
+                                multiline={true}
                                 placeholder="Details"
                                 placeholderTextColor={COLORS.tr_gray}
                             />
