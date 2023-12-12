@@ -111,7 +111,8 @@ const styles = StyleSheet.create({
 
     semiBoldText: {
         fontFamily: 'Inter_600SemiBold',
-        fontSize: 13
+        color: COLORS.blue,
+        fontSize: 14
     },
 
     regularText: {

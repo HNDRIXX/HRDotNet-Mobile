@@ -14,6 +14,7 @@ export const DateTimeUtils = {
     getCurrYear: () => moment().format('YYYY'),
     defaultDateFormat: () => moment().format('YYYYMMDD'),
     dashDateFormat: () => moment().format('YYYY-MM-DD'),
+    dashToDefaultFormat: (date) => moment(date, 'YYYY-MM-DD').format('YYYYMMDD'),
     converDateFormat: (date) => moment(date, 'MMMM DD, YYYY').format('YYYYMMDD'),
 
     timeConvert: (time) => moment(time, 'HH:mm:ss').format('hh:mm A'),

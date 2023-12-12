@@ -12,61 +12,32 @@ import PageHeader from '../../../../../components/header/PagesHeader'
 import CalendarNote from '../../../../../components/note/CalendarNote';
 import TeamsContactsItem from '../../../../../components/items/home/TeamsContactsItem';
 
-export default function TeamsPage ({ navigation }) {
-    const [data, setData] = useState({ 
-        '20231204' : [
-            { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist', uri: ICONS.alejandro },
-            { id: 'MGL002', name: 'Brian Noel Cruz', position: 'Training Specialist', uri: ICONS.brian },
-            { id: 'MGL004', name: 'Dave Andrew Carandang', position: 'Messenger', uri: ICONS.dave },
-            { id: 'MGL003', name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist', uri: ICONS.christine },
-        ],
-        
-        '20231205' : [
-            { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist', uri: ICONS.alejandro },
-            { id: 'MGL004', name: 'Dave Andrew Carandang', position: 'Messenger', uri: ICONS.dave },
-            { id: 'MGL002', name: 'Brian Noel Cruz', position: 'Training Specialist', uri: ICONS.brian },
-            { id: 'MGL003', name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist', uri: ICONS.christine},
-        ],
-
-        '20231206' : [
-            { id: 'MGL004', name: 'Dave Andrew Carandang', position: 'Messenger', uri: ICONS.dave },
-            { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist', uri: ICONS.alejandro },
-            { id: 'MGL002', name: 'Brian Noel Cruz', position: 'Training Specialist', uri: ICONS.brian },
-            { id: 'MGL003', name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist', uri: ICONS.christine},
-        ],
-
-        '20231207' : [
-            { id: 'MGL004', name: 'Dave Andrew Carandang', position: 'Messenger', uri: ICONS.dave },
-            { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist', uri: ICONS.alejandro },
-            { id: 'MGL002', name: 'Brian Noel Cruz', position: 'Training Specialist', uri: ICONS.brian },
-            { id: 'MGL003', name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist', uri: ICONS.christine},
-        ],
-    })
+export default function TeamsPage({ navigation }) {
+    const [data, setData] = useState([
+        { id: 'MGL001', name: 'Alejandro Alcanar', position: 'Customer Service Specialist', uri: ICONS.alejandro, event: '', status: '' },
+        { id: 'MGL002', name: 'Brian Noel Cruz', position: 'Training Specialist', uri: ICONS.brian },
+        { id: 'MGL004', name: 'Dave Andrew Carandang', position: 'Messenger', uri: ICONS.dave },
+        { id: 'MGL003', name: 'Christine Joy Reyes', position: 'Quality Assurance Specialist', uri: ICONS.christine },
+    ])
 
     const [calendarData, setCalendarData] = useState({
-        '20231204' : [
+        '20231204': [
             { id: 'MGL001', event: '8:00 AM to 6:00 PM', status: 'Work Day' },
             { id: 'MGL002', event: '', status: 'Leave' },
-            { id: 'MGL003', event: '8:00 AM to 5:00 PM', status: 'Work Day'},
+            { id: 'MGL003', event: '8:00 AM to 5:00 PM', status: 'Work Day' },
         ],
-        
-        '20231205' : [
+
+        '20231205': [
             { id: 'MGL001', event: '', status: 'Holiday' },
             { id: 'MGL002', event: '', status: 'Holiday' },
-            { id: 'MGL003', event: '', status: 'Holiday'},
+            { id: 'MGL003', event: '', status: 'Holiday' },
         ],
 
-        '20231206' : [
+        '20231206': [
             { id: 'MGL001', event: '8:00 AM to 6:00 PM', status: 'Work Day' },
             { id: 'MGL002', event: '8:00 AM to 6:00 PM', status: 'Work Day' },
-            { id: 'MGL003', event: '8:00 AM to 6:00 PM', status: 'Work Day'},
-        ],
-
-        '20231207' : [
-            { id: 'MGL001', event: '8:00 AM to 6:00 PM', status: 'Work Day' },
-            { id: 'MGL002', event: '8:00 AM to 6:00 PM', status: 'Work Day' },
-            { id: 'MGL003', event: '8:00 AM to 6:00 PM', status: 'Work Day'},
-        ],
+            { id: 'MGL003', event: '8:00 AM to 6:00 PM', status: 'Work Day' },
+        ]
     })
 
     const [clockedData, setClockedData] = useState([
@@ -85,45 +56,69 @@ export default function TeamsPage ({ navigation }) {
     ])
 
     const [isLoading, setIsLoading] = useState(true)
+    const [events, setEvents] = useState(null)
+    const [mergedData, setMergedData] = useState(null)
+    const [selectedDateData, setSelectedDateData] = useState([])
     const [selectedDate, setSelectedDate] = useState(null)
     const [prevSelectedDate, setPrevSelectedDate] = useState(null)
     const [nextSelectedDate, setNextSelectedDate] = useState(null)
-    const [events, setEvents] = useState(null)
-    const [mergedData, setMergedData] = useState(null)
-    const [organizedClockedData, setOrganizedClockedData] = useState(null)
 
     const [month, setMonth] = useState(DateTimeUtils.getCurrMonth)
     const [year, setYear] = useState(DateTimeUtils.getCurrYear)
+    const [organizedClockedData, setOrganizedClockedData] = useState(null)
 
-    const onHandleDayPress = (day) => {
-        setSelectedDate(day.dateString)
-        setPrevSelectedDate(DateTimeUtils.subtractDashCurrDate(day.dateString))
-        setNextSelectedDate(DateTimeUtils.addDashCurrDate(day.dateString))
-        setEvents(mergedData[day.dateString] || [])
+    const compressData = (selectedDate) => {
+        const clockedData = calendarData[DateTimeUtils.dashToDefaultFormat(selectedDate)] || []
 
-        const dateValue = new Date(day.dateString)
+        setSelectedDate(selectedDate)
+        setPrevSelectedDate(DateTimeUtils.subtractDashCurrDate(selectedDate))
+        setNextSelectedDate(DateTimeUtils.addDashCurrDate(selectedDate))
 
+        const dateValue = new Date(selectedDate)
         setMonth(dateValue.toLocaleString('default', { month: 'long' }))
         setYear(dateValue.getFullYear())
-    }    
 
-    // const formatDateKeyData = async () => {
-    //     const formattedData = {}
+        const compressedData = data.map(({ id }) => {
+            const userData = data.find((user) => user.id === id)
+            const calendarItem = clockedData.find((item) => item.id === id) || { event: '', status: '' }
 
-    //     Object.keys(mergedData).forEach(dateKey => {
-    //         console.log(dateKey)
-    //     })
-    
-    //     Object.keys(data).forEach(dateKey => {
-    //       const formattedDate = moment(dateKey, 'YYYYMMDD').format('YYYY-MM-DD')
-    //       formattedData[formattedDate] = data[dateKey]
-    //     })
+            return {
+                ...userData,
+                event: calendarItem.event,
+                status: calendarItem.status,
+                date: selectedDate,
+            }
+        })
 
-    //     return formattedData
-    // }
-    
-    const fortmatDateString = dateString => {
-        return moment(dateString, 'YYYYMMDD').format('YYYY-MM-DD')
+        setData(compressedData)
+    }
+
+    const onGetOrganizedClocked = (date, id) => {
+        const entries = organizedClockedData[DateTimeUtils.dashToDefaultFormat(date)]
+        
+        if (entries) {
+            const specificEntries = entries
+                .filter((entry) => entry.id === id)
+                .map(({ clocked, id, location, time }) => ({ clocked, id, location, time }))
+
+            if (specificEntries.length > 0) {
+                return specificEntries
+            }
+        }
+    }
+
+    const onGetMergedData = (selectedDate, id) => {
+        const clockedData = calendarData[DateTimeUtils.dashToDefaultFormat(selectedDate)] || []
+
+        const userData = data.find((user) => user.id === id)
+        const calendarItem = clockedData.find((item) => item.id === id) || { event: '', status: '' }
+
+        return {
+            ...userData,
+            event: calendarItem.event,
+            status: calendarItem.status,
+            date: selectedDate,
+        }
     }
 
     const onHandleItemPress = (event) => {
@@ -133,136 +128,70 @@ export default function TeamsPage ({ navigation }) {
         const prevEvent = onGetMergedData(prevSelectedDate, id)
         const nextEvent = onGetMergedData(nextSelectedDate, id)
 
-        navigation.navigate('TeamMember', { 
-            selectedDate,  
+        navigation.navigate('TeamMember', {
+            selectedDate,
             prevSelectedDate,
             nextSelectedDate,
             prevEvent,
             nextEvent,
-            event, 
+            event,
             currClocked
         })
     }
 
-    const handleMergeData = async () => {
-        const newData = {}
-      
-        Object.keys(data).forEach(date => {
-            const formattedDate = fortmatDateString(date)
-            newData[formattedDate] = []
-
-            data[date].forEach(employee => {
-                const id = employee.id
-                const mergedInfo = {
-                    ...employee,
-                    ...calendarData[date].find(item => item.id === id),
-                }
-            
-                newData[formattedDate].push(mergedInfo)
-            })
-      
-            newData[formattedDate].sort((a, b) => a.name.localeCompare(b.name))
-        })
-
-        return newData
-    }
-      
-
-    const onGetOrganizedClocked = (date, id) => {
-        const entries = organizedClockedData[moment(date, 'YYYY-MM-DD').format('YYYYMMDD')]
-
-        if (entries) {
-        const specificEntries = entries
-            .filter((entry) => entry.id === id)
-            .map(({ clocked, id, location, time }) => ({ clocked, id, location, time }))
-
-            if (specificEntries.length > 0) {
-                return specificEntries
-            }
-        }
-    }
-
-    const onGetMergedData = (date, id) => {
-        const entries = mergedData[date]
-
-        if (entries) {
-            const specificEntry = entries.find((entry) => entry.id === id)
-            if (specificEntry) {
-                return specificEntry
-            }
-        }
-    }
-
     useEffect(() => {
-        const tempDate = DateTimeUtils.defaultDateFormat()
-        const formattedTempDate = DateTimeUtils.addDashCurrDate(tempDate)
-
         const transformedData = clockedData.reduce((acc, entry) => {
             const dateKey = entry.date
             const newEntry = { id: entry.id, clocked: entry.clocked, time: entry.time, location: entry.location }
-    
+
             acc[dateKey] = acc[dateKey] || []
             acc[dateKey].push(newEntry)
-    
+
             return acc
         }, {})
 
         setOrganizedClockedData(transformedData)
-    }, [])
-
-    useEffect(() => {
-        const onMergeData = async () => {
-            const merged = await handleMergeData()
-            setMergedData(merged)
-        }
-
-        onMergeData()
+        compressData(moment().format('YYYY-MM-DD'))
 
         setTimeout(() => {
             setIsLoading(false)
         }, 800)
     }, [])
-    
+
     return (
         <>
             <PageHeader pageName={'Teams'} />
 
-            { isLoading ? ( <Loader /> ) : ( 
+            {isLoading ? (<Loader />) : (
                 <View style={styles.container}>
                     <Text style={styles.monthYearText}>{month} {year}</Text>
 
                     <Agenda
                         items={mergedData}
-                        onDayPress={onHandleDayPress}
+                        onDayPress={(date) => compressData(date.dateString)}
                         showOnlySelectedDayItem
 
                         renderList={() => (
                             <View>
-                                {selectedDate == null && (
-                                    <CalendarNote />
-                                )}
-                                    
-                                { events && events.map((event, index) => (
-                                    <View key={index} style={styles.paddingSides}>
-                                        <TeamsContactsItem 
-                                            event={event}
+                                {data
+                                    ?.slice()
+                                    .sort((a, b) => a.name.localeCompare(b.name))
+                                    .map((item, index) => (
+                                        <View key={index} style={styles.paddingSides}>
+                                        <TeamsContactsItem
+                                            event={item}
                                             isActive={false}
-                                            onHandlePress={() => onHandleItemPress(event)}
+                                            onHandlePress={() => onHandleItemPress(item)}
                                         />
-                                    </View>
-                                )) }
+                                        </View>
+                                    ))
+                                }
                             </View>
                         )}
                     />
-                    
-                    {events && events.length <= 0 && (
-                        <View style={{ position: 'absolute', top: '20%', left: '26%'}}>
-                            <Text style={styles.noEventsText}>No agenda for this day.</Text>
-                        </View>
-                    )}
                 </View>
             )}
-            
+
         </>
     )
 }

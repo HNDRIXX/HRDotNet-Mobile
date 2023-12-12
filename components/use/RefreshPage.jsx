@@ -4,25 +4,27 @@ import { FontAwesome } from '@expo/vector-icons'
 import { COLORS } from '../../constant'
 
 export default function RefreshPage ({ setRestart, refreshing, onRefresh }) {
-    return (
-      <ScrollView
-        style={{ flex: 1 }}
-        contentContainerStyle={{
-          flexGrow: 1,
-        }}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={['#007AFF']}
-          />
-        }
-      >
-        <View style={styles.container}>
-          <ActivityIndicator size={'large'} color={COLORS.powderBlue}/>
-        </View>
-      </ScrollView>
-    )
+  return (
+    <ScrollView
+      style={{ flex: 1 }}
+      
+      contentContainerStyle={{
+        flexGrow: 1,
+      }}
+
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          colors={['#007AFF']}
+        />
+      }
+    >
+      <View style={styles.container}>
+        <ActivityIndicator size={'large'} color={COLORS.powderBlue} />
+      </View>
+    </ScrollView>
+  )
 }
 
 const styles = StyleSheet.create({

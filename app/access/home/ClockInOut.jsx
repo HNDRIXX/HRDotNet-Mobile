@@ -198,8 +198,6 @@ export default function ClockInOut({ navigation }) {
                     right: '10%',
                     top: '10%',
                   }}
-
-                  onPress={() => onRefresh()}
                 >
                   <FontAwesome name="refresh" size={20} color={COLORS.darkGray} />
                 </TouchableOpacity>
