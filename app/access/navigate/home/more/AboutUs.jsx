@@ -1,9 +1,14 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { Shadow } from 'react-native-shadow-2'
 
 import { COLORS, STRINGS } from '../../../../../constant'
 
 import PageHeader from '../../../../../components/header/PagesHeader'
+
 export default function AboutUsPage () {
     return (
         <View style={styles.main}>

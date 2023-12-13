@@ -26,7 +26,6 @@ const ImageCache = ({ source, style }) => {
           );
           localUri = downloadedImage;
         } else {
-          // Local image, no need to download
           localUri = source;
         }
 

@@ -1,6 +1,6 @@
 // HRDotNet-Mobile
 // Designed by : Alex Diane Vivienne Candano
-// Developed by: Patrick William Quintana Lofranco
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { View, Text, StyleSheet, ScrollView, RefreshControl, FlatList } from "react-native";
@@ -84,6 +84,7 @@ export default function COSApprovals () {
     const [checkCount, setCheckCount] = useState(null)
     const [prevCount, setPrevCount] = useState(null)
 
+    const [isTextPrompt , setIsTextPrompt] = useState(null)
     const [isVisible, setVisible] = useState(false)
     const [isSuccessPrompt, setSuccessPrompt] = useState(false)
     const [isLoading, setLoading] = useState(true)
@@ -107,14 +108,15 @@ export default function COSApprovals () {
         setVisible(false)
         
         const dataSet = [...filteredData]
+        const textValue =  isTextPrompt === 1 ? 'Approved' : 'Cancelled'
     
         for (let i = 0; i < dataSet.length; i++) {
-            if (dataSet[i].isChecked && dataSet[i].status !== 'Approve') {
-                dataSet[i].status = 'Approve'
+            if (dataSet[i].isChecked && dataSet[i].status !== textValue) {
+                dataSet[i].status = textValue
             }
         }
 
-        const updatedData = dataSet.filter(item => item.status !== 'Approve')
+        const updatedData = dataSet.filter(item => item.status !== textValue)
         
         setData(updatedData)
         setFilteredData(updatedData)
@@ -158,12 +160,19 @@ export default function COSApprovals () {
                     <ApprovalsAction 
                         isDisabled={filteredData.every(item => !item.isChecked)}
                         selectAll={selectAll}
-
                         toggleSelectAll={() => ApprovalsUtils.toggleSelectAll(filteredData, setFilteredData, 
                         selectAll, setSelectAll, setSortedData)}
-
                         isVisible={isVisible}
-                        onHandleApprove={() => setVisible(true)}
+
+                        onHandleApprove={() => {
+                            setVisible(true)
+                            setIsTextPrompt (1)
+                        }}
+                        
+                        onHandleCancel={() => {
+                            setVisible(true)
+                            setIsTextPrompt (0)
+                        }}
                     />
                     
                     {filteredData.length > 0 ? (
@@ -173,7 +182,8 @@ export default function COSApprovals () {
                                 <RefreshControl
                                     refreshing={refreshing}
                                     onRefresh={onRefresh} 
-                                    colors={[COLORS.powderBlue]}/>
+                                    colors={[COLORS.powderBlue]}
+                                />
                             }
                         >
                             <Animatable.View
@@ -213,13 +223,13 @@ export default function COSApprovals () {
             <ConfirmationPrompt 
                 isVisible={isVisible}
                 setVisible={setVisible}
-                subTitle={STRINGS.approvalsConfirmation(checkCount)}
+                subTitle={STRINGS.approvalsConfirmation(checkCount, isTextPrompt )}
                 onHandlePress={onHandleConfirmApprove}
             />
 
             <SuccessPromptPage
                 title={"Success!"}
-                subTitle={STRINGS.approvalSuccess(prevCount)}
+                subTitle={STRINGS.approvalSuccess(prevCount, isTextPrompt)}
                 buttonText={"OKAY"}
                 visible={isSuccessPrompt} 
                 onClose={() => setSuccessPrompt(false)} 

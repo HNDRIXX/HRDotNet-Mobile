@@ -3,10 +3,12 @@ import React from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import * as Animatable from 'react-native-animatable';
 
-import { COLORS, ICONS } from '../../../constant'
+import { COLORS, COMPONENT_STYLES, ICONS } from '../../../constant'
 import Loader from '../../loader/Loader';
 
 export default function PersonalPanel () {
+    const styles = COMPONENT_STYLES.Personal
+    
     return (
         <>
             <Animatable.View
@@ -73,68 +75,3 @@ export default function PersonalPanel () {
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    topView: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 20,
-    },
-
-    imageView: {
-        borderRadius: 90,
-        borderWidth: 7,
-        marginBottom: 10,
-        borderColor: COLORS.white,
-    },
-    
-    bodyView: {
-        backgroundColor: COLORS.clearWhite,
-        width: '100%',
-        height: '85%',
-        position: 'absolute',
-        bottom: 0,
-        zIndex: -1,
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
-    },
-
-    profilePic: {
-        width: 160, 
-        height: 160,
-        borderRadius: 80,
-    },
-
-    nameText: {
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 27,
-        color: COLORS.orange
-    },
-
-    subText: {
-        fontFamily: 'Inter_500Medium',
-        fontSize: 15,
-    },
-
-    infoView: {
-        marginHorizontal: 20,
-        marginBottom: 30,
-        flexGrow: 0,
-    },
-
-    titleText: {
-        fontFamily: 'Inter_400Regular',
-        marginHorizontal: 15,
-        marginVertical: 8,
-    },
-
-    contentText: {
-        fontFamily: 'Inter_500Medium',
-        fontSize: 13,
-        borderColor: COLORS.darkGray,
-        borderWidth: 2,
-        padding: 10,
-        borderRadius: 13,
-        paddingLeft: 20,
-    }
-})

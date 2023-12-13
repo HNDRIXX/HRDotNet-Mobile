@@ -6,7 +6,7 @@ import { Entypo } from '@expo/vector-icons';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
 
-import { COLORS, DateTimeUtils, Utils} from '../../../constant'
+import { COLORS, COMPONENT_STYLES, DateTimeUtils, Utils} from '../../../constant'
 import { Shadow } from 'react-native-shadow-2';
 import { Search } from '../../use/Search'
 import RecentPayItem from '../../items/profile/RecentPayItem';
@@ -378,6 +378,8 @@ const TKData = [
 ]
 
 export default function PayslipPanel () {
+    const styles = COMPONENT_STYLES.Payslip
+    
     const [filterText, setFilterText] = useState('')
 
     const [isFirstHalf, setFirstHalf] = useState(null)
@@ -455,19 +457,3 @@ export default function PayslipPanel () {
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    animatedView: {
-        backgroundColor: COLORS.clearWhite,
-        opacity: 1, 
-        flex: 1, 
-        paddingHorizontal: 20,
-    },
-
-    payHistoryTitle: {
-        fontFamily: 'Inter_600SemiBold',
-        marginHorizontal: 3,
-        fontSize: 16,
-        marginVertical: 13,
-    },
-})

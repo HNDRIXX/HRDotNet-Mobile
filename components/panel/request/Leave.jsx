@@ -74,11 +74,13 @@ export default function LeavePanel () {
     let filteredData = []
 
     filteredData = data.filter((newItem) => {
-        const formattedDate = DateTimeUtils.dateFullConvert(newItem.startDate)
+        const formattedStartDate = DateTimeUtils.dateFullConvert(newItem.startDate)
+        const formattedEndDate = DateTimeUtils.dateFullConvert(newItem.endDate)
         
         return (
             newItem.status.toLowerCase().includes(filterText.toLowerCase()) ||
-            formattedDate.toLowerCase().includes(filterText.toLowerCase())
+            formattedStartDate.toLowerCase().includes(filterText.toLowerCase()) || 
+            formattedEndDate.toLowerCase().includes(filterText.toLowerCase())
         )
     })
 

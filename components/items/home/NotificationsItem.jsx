@@ -4,9 +4,11 @@ import { Image } from 'react-native-expo-image-cache'
 import DashedLine from 'react-native-dashed-line'
 import CachedImage from 'expo-cached-image'
 
-import { ICONS, COLORS } from '../../../constant'
+import { ICONS, COLORS, COMPONENT_STYLES } from '../../../constant'
 
 export default function NotificationsItem ({ item, index, formattedDate, onPress }) {
+    const styles = COMPONENT_STYLES.NotificationsItem(item)
+    
     const getSourceUri = (name) => {
         const commonProps = {
             placeholderContent: <ActivityIndicator size={'small'} style={{ marginTop: 30 }} />,
@@ -59,7 +61,7 @@ export default function NotificationsItem ({ item, index, formattedDate, onPress
  
                 { getSourceUri(item.name) }
 
-                <View style={styles.contentWrapper(item)}>
+                <View style={styles.contentWrapper}>
                     <View style={styles.topContentWrapper}>
                         <Text style={styles.contentTitle}>{item.name}</Text>
                         <Text style={styles.contentDate}>{formattedDate}</Text>
@@ -90,49 +92,3 @@ export default function NotificationsItem ({ item, index, formattedDate, onPress
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    contentTitle: {
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 14,
-    },
-
-    contentDate: {
-        fontFamily: 'Inter_400Regular',
-        color: COLORS.darkGray,
-        fontSize: 12,
-    },
-
-    innerContent: {
-        flexDirection: 'row',
-        alignItems: 'center', 
-        marginLeft: 5,   
-    },
-
-    contentWrapper: (item) => ({
-        width: item.isReaded ? '100%' : '95%',
-        paddingHorizontal: 20,
-        paddingRight: 40,
-        flexDirection: 'column'
-    }),
-
-    topContentWrapper: {
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-    },
-
-    bodyContentWrapper: {
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-    },
-
-    description: {
-        width: '80%',
-        color: COLORS.darkGray,
-        fontSize: 13,
-    },
-
-    dashLine: {
-        paddingVertical: 15,
-    }
-})

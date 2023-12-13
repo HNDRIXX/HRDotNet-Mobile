@@ -1,8 +1,10 @@
 import { View, Text, StyleSheet } from 'react-native'
 
-import { COLORS, STRINGS } from '../../constant'
+import { COLORS, STRINGS, COMPONENT_STYLES } from '../../constant'
 
 export default function FileAttachedNote ({ isFileNote, isInvalidError, isSizeError }) {
+    const styles = COMPONENT_STYLES.FileAttachedNote
+
     return (
         <>
             { isFileNote && (
@@ -19,24 +21,3 @@ export default function FileAttachedNote ({ isFileNote, isInvalidError, isSizeEr
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-
-    fileNote: {
-        fontStyle: 'italic',
-        fontSize: 13,
-        marginHorizontal: 20,
-        marginVertical: 10,
-    },
-
-    fileError: {
-        fontSize: 13,
-        paddingHorizontal: 20,
-        paddingVertical: 5,
-        color: COLORS.red,
-        fontStyle: 'italic',
-    },
-})

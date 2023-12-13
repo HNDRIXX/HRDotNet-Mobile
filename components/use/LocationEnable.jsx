@@ -5,9 +5,6 @@ import * as Location from 'expo-location';
 import { COLORS } from "../../constant";
 
 export default function LocationEnablePage () {
-
- 
-
     return (
         <>
             <PageHeader pageName={''}/>

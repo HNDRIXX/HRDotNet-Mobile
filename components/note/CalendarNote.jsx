@@ -1,9 +1,11 @@
 import { View, Text, StyleSheet } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 
-import { COLORS } from '../../constant'
+import { COLORS, COMPONENT_STYLES } from '../../constant'
 
 export default function CalendarNote () {
+    const styles = COMPONENT_STYLES.CalendarNote
+    
     return (
         <View style={styles.container}>
             <AntDesign
@@ -16,17 +18,3 @@ export default function CalendarNote () {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 50,
-    },
-
-    text: {
-        fontFamily: 'Inter_400Regular',
-        color: COLORS.tr_gray,
-        paddingTop: 20
-    }
-})

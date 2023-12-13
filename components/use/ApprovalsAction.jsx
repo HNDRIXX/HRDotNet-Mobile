@@ -2,10 +2,11 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
 import Checkbox from 'expo-checkbox'
 
-import { COLORS } from '../../constant'
+import { COLORS, COMPONENT_STYLES } from '../../constant'
 
-export default function ApprovalsAction ({isDisabled, selectAll, toggleSelectAll, onHandleApprove}) {
-
+export default function ApprovalsAction ({isDisabled, selectAll, toggleSelectAll, onHandleCancel, onHandleApprove}) {
+    const styles = COMPONENT_STYLES.ApprovalsAction
+    
     return (
         <View style={styles.container}>
             <View style={styles.rowView}>
@@ -23,6 +24,7 @@ export default function ApprovalsAction ({isDisabled, selectAll, toggleSelectAll
                 <TouchableOpacity
                     style={[styles.button, isDisabled && styles.disabled]}
                     disabled={isDisabled}
+                    onPress={onHandleCancel}
                 >
                     <MaterialIcons 
                         name="cancel" 
@@ -46,42 +48,3 @@ export default function ApprovalsAction ({isDisabled, selectAll, toggleSelectAll
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-
-    rowView: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 13,
-    },
-
-    button: {
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-
-    disabled: {
-        opacity: 0.30
-    },
-
-    regularText: {
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 17
-    },
-
-    boldText: {
-        fontFamily: 'Inter_600SemiBold',
-        marginLeft: 5,
-        fontSize: 15
-    },
-
-    checkBox: {
-        marginTop: 2,
-        borderColor: COLORS.orange, 
-        borderWidth: 2,
-    }
-})

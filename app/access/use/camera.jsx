@@ -195,7 +195,7 @@ export default function CameraAccess ({ navigation }) {
                             >
                                 <Ionicons 
                                     name="ios-images" 
-                                    size={40} 
+                                    size={35} 
                                     color={COLORS.clearWhite}
                                 />   
                             </TouchableOpacity>
@@ -206,7 +206,7 @@ export default function CameraAccess ({ navigation }) {
                             >
                                 <Image
                                     source={require('../../../assets/icons/shutter.png')}
-                                    style={{ width: 110, height: 110 }}
+                                    style={{ width: 100, height: 100 }}
                                     contentFit="contain"
                                     onLoadEnd={() => setIsLoading(false)}
                                 />

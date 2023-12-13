@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity,  } from 'react-native';
 
-import { COLORS } from '../../../constant';
+import { COLORS, COMPONENT_STYLES } from '../../../constant';
 import { Shadow } from 'react-native-shadow-2';
 
 export default function PendingItem ({ item, lastIndex, index, newItem }) {
+    const styles = COMPONENT_STYLES.PendingItem(index, lastIndex)
+    
     return (
-        <View style={styles.itemContainer(index, lastIndex)} key={index}>
-            <Shadow distance={3} style={styles.itemWrapper(index, lastIndex)}>
+        <View style={styles.itemContainer} key={index}>
+            <Shadow distance={3} style={styles.itemWrapper}>
                 <View style={styles.dateRowWrapper}>
                     <Text style={styles.statusText}>{item.status}</Text>
                     <Text style={styles.currDateText}>{newItem.formattedDate}</Text>    
@@ -24,84 +26,3 @@ export default function PendingItem ({ item, lastIndex, index, newItem }) {
         </View>
     )
 }
-
-const styles = StyleSheet.create({ 
-    itemContainer: (index, lastIndex) => ({
-        backgroundColor: COLORS.clearWhite,
-        justifyContent: 'center',
-        alignSelf: 'center',
-        width: '90%',
-
-        borderTopLeftRadius: index == 0 ? 20 : 0,
-        borderTopRightRadius: index == 0 ? 20 : 0,
-        borderBottomLeftRadius : lastIndex == index ? 20 : 0,
-        borderBottomRightRadius : lastIndex == index ? 20 : 0, 
-
-        paddingTop: index == 0 ? 5 : 0,
-        paddingBottom: lastIndex == index ? 5 : 0,
-
-        borderBottomColor: COLORS.darkGray,
-        borderBottomWidth: lastIndex != index ? 1.5 : 0,
-    }),
-
-    itemWrapper: (index, lastIndex) => ({
-        width: '100%',
-        padding: 7,
-
-        borderTopLeftRadius: index == 0 ? 20 : 0,
-        borderTopRightRadius: index == 0 ? 20 : 0,
-        borderBottomLeftRadius : lastIndex == index ? 20 : 0,
-        borderBottomRightRadius : lastIndex == index ? 20 : 0,
-    }),
-
-
-    dateRowWrapper: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingTop: 10,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        backgroundColor: COLORS.clearWhite,
-        paddingHorizontal: 20,
-    },
-
-    rowWrapper: {
-        flexDirection: 'row',
-        marginLeft: 20,
-        alignItems: 'center',
-    },
-
-    currDateText: {
-        fontFamily: 'Inter_500Medium',
-        fontSize: 13,
-    },
-
-    statusText: {
-        fontFamily: 'Inter_700Bold',
-        fontSize: 17,
-        color: COLORS.black,
-    },
-
-    bodyWrapper: {
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-    },
-
-    reasonWrapper: {
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-    },
-
-    boldText: {
-        fontFamily: 'Inter_500Medium',
-        fontSize: 13,
-        color: COLORS.darkGray,
-    },
-
-    valueText: {
-        fontFamily: 'Inter_400Regular',
-        fontSize: 13,
-        color: COLORS.darkGray,
-    },
-
-})

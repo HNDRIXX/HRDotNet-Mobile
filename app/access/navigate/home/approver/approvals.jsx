@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import React, {useState, useEffect} from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, BackHandler } from 'react-native'
 import * as Animatable from 'react-native-animatable';

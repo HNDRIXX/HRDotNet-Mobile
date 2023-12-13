@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -73,6 +77,7 @@ export default function LVRequest ({ navigation }) {
         }
     }
 
+    
     return (
         <View style={styles.mainView}>
             <PageHeader pageName={"LV New Request"} />

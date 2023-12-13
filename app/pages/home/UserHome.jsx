@@ -3,7 +3,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions, BackHandler, BackHandlerIOS, Platform } from "react-native";
 import { Image } from 'react-native-elements';
 import CachedImage from "expo-cached-image";
-// import { Image } from "expo-image";
 import { useRoute } from "@react-navigation/native";
 import { Shadow } from "react-native-shadow-2";
 import * as Animatable from 'react-native-animatable';
@@ -15,13 +14,13 @@ import MenuButton from "../../../components/button/MenuButton";
 import TimeOff from "../../../components/button/TimeOff";
 import Loader from "../../../components/loader/Loader"
 
-export default function Home ({ navigation }) {  
-    const [isLoading, setIsLoading] = useState(true)
-    
+export default function Home ({ navigation }) { 
     const route = useRoute()
     const insets = useSafeAreaInsets()
     const styles = STYLES.UserHome(insets)
 
+    const [isLoading, setIsLoading] = useState(true)
+    
     useEffect(() => {
         setTimeout(() => {
             setIsLoading(false)
@@ -137,7 +136,3 @@ export default function Home ({ navigation }) {
         </>
     )
 }
-
-const styles = StyleSheet.create({
-   
-})

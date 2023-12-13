@@ -2,9 +2,10 @@ import { View, Text, StyleSheet, TouchableOpacity} from 'react-native'
 import { Entypo } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 
-import { COLORS, DateTimeUtils } from '../../../constant'
+import { COLORS, COMPONENT_STYLES, DateTimeUtils } from '../../../constant'
 
 export default function ApprovalsItem ({ item, formattedAppliedDate, onPanel }) {
+    const styles = COMPONENT_STYLES.ApprovalsItem
     const navigation = useNavigation()
 
     return (
@@ -98,35 +99,3 @@ export default function ApprovalsItem ({ item, formattedAppliedDate, onPanel }) 
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingHorizontal: 7,
-        paddingLeft: 16,
-        paddingVertical: 10,
-    },
-
-    itemView: {
-    },
-
-    rowView: {
-        flexDirection: 'row',
-    },
-
-    rowSpaceView: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-    },
-
-    boldText: {
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 16
-    },
-
-    regularText: {
-        fontFamily: 'Inter_400Regular',
-        fontSize: 14
-    }
-})

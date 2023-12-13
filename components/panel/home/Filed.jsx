@@ -60,7 +60,7 @@ export default function FiledPanel ({ onAnimate, setFiledCount} ) {
                 <Animatable.View
                     animation={onAnimate ? 'fadeIn' : ''}
                     duration={600}
-                    style={[styles.bodyContainer, {opacity: onAnimate ? 1 : 0,}]}
+                    style={{flex: 1, opacity: onAnimate ? 1 : 0,}}
                 >
                     <View style={{ marginHorizontal: 20 }}>
                         <Search 
@@ -93,9 +93,3 @@ export default function FiledPanel ({ onAnimate, setFiledCount} ) {
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    bodyContainer: {
-        flex: 1,
-    },
-})

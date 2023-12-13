@@ -1,4 +1,8 @@
-import { useEffect, useState } from 'react'
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
+import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, BackHandler, TouchableOpacity } from 'react-native'
 import { Shadow } from 'react-native-shadow-2';
 import { useRoute } from '@react-navigation/native';

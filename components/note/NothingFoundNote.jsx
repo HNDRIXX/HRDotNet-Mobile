@@ -1,9 +1,11 @@
 import { View, Text, StyleSheet } from "react-native";
 
 import { Entypo } from "@expo/vector-icons";
-import { COLORS } from "../../constant";
+import { COLORS, COMPONENT_STYLES } from "../../constant";
 
 export default function NothingFoundNote () {
+    const styles = COMPONENT_STYLES.NothingFoundNote
+
     return (
         <View style={styles.container}>
             <Entypo name="emoji-sad" size={24} color={COLORS.tr_gray} />
@@ -11,16 +13,3 @@ export default function NothingFoundNote () {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        margin: 40,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-
-    text: {
-        fontFamily: 'Inter_500Medium',
-        color: COLORS.tr_gray
-    }
-})

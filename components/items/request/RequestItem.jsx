@@ -5,15 +5,17 @@ import { router } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
 import { Shadow } from 'react-native-shadow-2';
 
-import { COLORS, Utils, DateTimeUtils } from '../../../constant';
+import { COLORS, Utils, DateTimeUtils, COMPONENT_STYLES } from '../../../constant';
 
 export default function RequestItem ({onPanel, newItem, index}) {
+    const styles = COMPONENT_STYLES.RequestItem(newItem)
+    
     const navigation = useNavigation()
 
     return (
         <View style={styles.itemContainer} key={index}>
             <Shadow distance={5} offset={[4, 1]} style={styles.itemWrapper}>
-                <View style={styles.dateRowWrapper(newItem)}>
+                <View style={styles.dateRowWrapper}>
                     <Text style={styles.currDateText}>{
                         onPanel == 0 ? newItem.formattedAppliedDate :
                         onPanel == 1 ? newItem.formattedOfficialWorkDate :
@@ -75,78 +77,3 @@ export default function RequestItem ({onPanel, newItem, index}) {
         </View>
     )
 }
-
-const styles = StyleSheet.create({ 
-    itemContainer: {
-        backgroundColor: COLORS.clearWhite,
-        marginHorizontal: 20,
-        marginBottom: 25,
-        borderRadius: 20,
-    },
-
-    itemWrapper: {
-        width: '100%',
-        backgroundColor: COLORS.clearWhite,
-        borderRadius: 20,
-    },
-
-    dateRowWrapper: (newItem)  => ({
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        padding: 10,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
-        backgroundColor: 
-            newItem.status == "Approved" ? COLORS.green :
-            newItem.status == "Reviewed" ? COLORS.purple :
-            newItem.status == "Filed" ? COLORS.filed :
-            newItem.status == "Cancelled" ? COLORS.red 
-            : COLORS.orange
-        ,
-        paddingHorizontal: 20,
-    }),
-
-    rowWrapper: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-
-    currDateText: {
-        fontFamily: 'Inter_600SemiBold',
-        color: COLORS.clearWhite,
-    },
-
-    statusText: {
-        fontFamily: 'Inter_600SemiBold',
-        color: COLORS.clearWhite,
-    },
-
-    bodyWrapper: {
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-    },
-
-    reasonWrapper: {
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-    },
-
-    boldText: {
-        fontFamily: 'Inter_600SemiBold'
-    },
-
-    valueText: {
-        fontFamily: 'Inter_400Regular',
-    },
-
-    moreText: {
-        fontSize: 13,
-        paddingBottom: 2,
-    },
-
-    moreButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    }
-
-})

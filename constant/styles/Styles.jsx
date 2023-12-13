@@ -13,7 +13,6 @@ export const STYLES = StyleSheet.create({
             flex: 1,
         },
         
-
         logo: {
             width: 230, height: 100,
             marginBottom: 20,

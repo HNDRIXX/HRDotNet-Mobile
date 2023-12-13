@@ -55,7 +55,7 @@ export default function ReviewedPanel ({ onAnimate, setReviewedCount } ) {
                 <Animatable.View
                     animation={onAnimate ? 'fadeIn' : ''}
                     duration={600}
-                    style={[styles.bodyContainer, {opacity: onAnimate ? 1 : 0}]}
+                    style={{ flex: 1, opacity: onAnimate ? 1 : 0 }}
                 >
                     <View style={{ marginHorizontal: 20 }}>
                         <Search 
@@ -88,10 +88,3 @@ export default function ReviewedPanel ({ onAnimate, setReviewedCount } ) {
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    bodyContainer: {
-        flex: 1,
-    },
-
-})

@@ -1,8 +1,10 @@
 import { View, Text, StyleSheet } from 'react-native'
 
-import { ErrorUtils } from '../../../constant'
+import { COMPONENT_STYLES, ErrorUtils } from '../../../constant'
 
 export default function TitleInput ({title, inputValue, isInputCheck})  {
+    const styles = COMPONENT_STYLES.TitleInput
+    
     return (
         <View style={{ flexDirection: 'row' }}>
             <Text style={styles.title}>{title}</Text>
@@ -10,12 +12,3 @@ export default function TitleInput ({title, inputValue, isInputCheck})  {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    title: {
-        fontFamily: 'Inter_600SemiBold',
-        marginLeft: 15,
-        marginRight: 8,
-        marginBottom: 5,
-    }
-})

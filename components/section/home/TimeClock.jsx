@@ -5,9 +5,11 @@ import { Shadow } from 'react-native-shadow-2';
 import {  Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
 
-import { COLORS, DateTimeUtils } from '../../../constant';
+import { COLORS, COMPONENT_STYLES, DateTimeUtils } from '../../../constant';
 
 export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, clockedTime }) {
+    const styles = COMPONENT_STYLES.TimeClock
+    
     const [time, setTime] = useState(moment())
 
     const navigation = useNavigation()
@@ -67,67 +69,3 @@ export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, c
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    topBox: {
-        backgroundColor: COLORS.clearWhite,
-        paddingVertical: 20,
-        width: '87%',
-        marginTop: -45,
-        marginBottom: 5,
-        borderRadius: 20,
-        borderColor: COLORS.orange,
-        borderWidth: 1.5,
-    },
-    
-    linkButton: {
-        alignSelf: 'center',
-        marginTop: 10,
-    },
-
-    clockInButton: {
-        backgroundColor: COLORS.orange,
-        width: 170,
-        borderRadius: 15,
-        paddingVertical: 5,
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-
-    clockOutButton: {
-        backgroundColor: COLORS.powderBlue,
-        width: 170,
-        borderRadius: 15,
-        paddingVertical: 5,
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-
-    timeInOutText: {
-        fontSize: 18,
-        marginLeft: 5,
-        color: COLORS.clearWhite,
-        fontFamily: 'Inter_600SemiBold',
-    },
-
-    timeText: {
-        fontFamily: 'Inter_700Bold', 
-        fontSize: 25,
-        textAlign: 'center',
-        color: COLORS.black,
-    },
-
-    dateText: {
-        fontFamily: 'Inter_600SemiBold',
-        color: COLORS.black,
-        textAlign: 'center',
-        fontSize: 13,
-    },
-
-    clockInOutText: {
-        fontFamily: 'Inter_500Medium',
-        color: COLORS.darkGray,
-        fontSize: 13,
-        textAlign: 'center'
-    }
-})

@@ -2,10 +2,10 @@ import React from "react";
 import { View, TextInput, StyleSheet, Platform } from "react-native";
 import { FontAwesome, Entypo } from "@expo/vector-icons";
 
-import { COLORS } from "../../constant";
+import { COLORS, COMPONENT_STYLES } from "../../constant";
 
 export const Search = ({ filterText, setFilterText }) => {
-
+  const styles = COMPONENT_STYLES.Search
   const platformIOS = Platform.OS === 'ios'
 
   return (
@@ -24,29 +24,3 @@ export const Search = ({ filterText, setFilterText }) => {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  topContainer: {
-    width: "100%",
-    paddingVertical: 10,
-    flexDirection: "row",
-    justifyContent: 'flex-start',
-  },
-
-  searchContainer: {
-    flexDirection: "row",
-    alignItems: 'center',
-    marginLeft: -1,
-  },
-
-  searchValueText: (platformIOS) => ({
-    backgroundColor: COLORS.clearWhite,
-    fontFamily: "Inter_500Medium",
-    fontSize: 16,
-    borderRadius: 15,
-    width: 130,
-    marginLeft: 10,
-    paddingHorizontal: 10,
-    paddingVertical: platformIOS ? 5 : 0
-  }),
-})

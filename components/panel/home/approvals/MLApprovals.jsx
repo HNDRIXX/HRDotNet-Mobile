@@ -94,6 +94,7 @@ export default function OSApprovals () {
     const [isLoading, setLoading] = useState(true)
     const [selectAll, setSelectAll] = useState(false)
     const [isDisabled, setDisabled] = useState(true)
+    const [isTextPrompt, setIsTextPrompt] = useState(null)
 
     const [refreshing, setRefreshing] = useState(false)
     const scrollViewRef = useRef(null)
@@ -113,14 +114,15 @@ export default function OSApprovals () {
         setVisible(false)
         
         const dataSet = [...filteredData]
+        const textValue = isTextPrompt === 1 ? 'Approved' : 'Cancelled'
     
         for (let i = 0; i < dataSet.length; i++) {
-            if (dataSet[i].isChecked && dataSet[i].status !== 'Approve') {
-                dataSet[i].status = 'Approve'
+            if (dataSet[i].isChecked && dataSet[i].status !== textValue) {
+                dataSet[i].status = textValue
             }
         }
 
-        const updatedData = dataSet.filter(item => item.status !== 'Approve')
+        const updatedData = dataSet.filter(item => item.status !== textValue)
         
         setData(updatedData)
         setFilteredData(updatedData)
@@ -169,7 +171,16 @@ export default function OSApprovals () {
                         selectAll, setSelectAll, setSortedData)}
 
                         isVisible={isVisible}
-                        onHandleApprove={() => setVisible(true)}
+
+                        onHandleApprove={() => {
+                            setIsTextPrompt(1)
+                            setVisible(true)
+                        }}
+
+                        onHandleCancel={() => {
+                            setIsTextPrompt(0)
+                            setVisible(true)
+                        }}
                     />
                     
                     {filteredData.length > 0 ? (
@@ -219,13 +230,13 @@ export default function OSApprovals () {
             <ConfirmationPrompt 
                 isVisible={isVisible}
                 setVisible={setVisible}
-                subTitle={STRINGS.approvalsConfirmation(checkCount)}
+                subTitle={STRINGS.approvalsConfirmation(checkCount, isTextPrompt)}
                 onHandlePress={onHandleConfirmApprove}
             />
 
             <SuccessPromptPage
                 title={"Success!"}
-                subTitle={STRINGS.approvalSuccess(prevCount)}
+                subTitle={STRINGS.approvalSuccess(prevCount, isTextPrompt)}
                 buttonText={"OKAY"}
                 visible={isSuccessPrompt} 
                 onClose={() => setSuccessPrompt(false)} 

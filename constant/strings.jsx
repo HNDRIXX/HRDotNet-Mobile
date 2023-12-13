@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 const STRINGS = {
     fillFormError: "Please complete your request form.",
     
@@ -21,11 +25,11 @@ const STRINGS = {
 
     In scelerisque egestas urna et lobortis. Proin erat risus, aliquam in dignissim sit amet, posuere nec velit. In pharetra ligula ligula, vitae suscipit ante blandit eu. Curabitur sed est pulvinar, placerat ligula sed, lacinia augue. Curabitur volutpat cursus dui at fermentum.`,
 
-    pendingCOSConfirmation: (pendingCount, checkCount) => `There are <b>pending COS requests</b> for <b><u>${pendingCount} out of ${checkCount}</u></b> <b>selected OB requests.</b> Kindly review and decide on the unresolved applications to be made available for approval or cancellation.${'\n\n'} In the meantime, the <b><u>${pendingCount} other selected OB requests</u></b> will be <b><u>approved.</u></b>${'\n'}Continue?`,
+    pendingCOSConfirmation: (pendingCount, checkCount, text) => `There are <b>pending COS requests</b> for <b><u>${pendingCount} out of ${checkCount}</u></b> <b>selected OB requests.</b> Kindly review and decide on the unresolved applications to be made available for approval or cancellation.${'\n\n'} In the meantime, the <b><u>${pendingCount} other selected OB requests</u></b> will be <b><u>${text === 1 ? 'approve.' : 'cancellation.'}</u></b>${'\n'}Continue?`,
 
-    approvalsConfirmation: (checkCount) => `<b><u>${checkCount} COS Request/s</u></b> are selected for <b><u>approval.</u></b>${'\n'}Continue?`,
+    approvalsConfirmation: (count, text) => `<b><u>${count} COS Request/s</u></b> are selected for <b><u>${ text === 1 ? 'approval' : 'cancellation'}.</u></b>${'\n'}Continue?`,
 
-    approvalSuccess: (prevCount) => `You have successfully approved${'\n'}<b><u>${prevCount} OB Request/s!</u></b>`,
+    approvalSuccess: (count, text) => `You have successfully ${text === 1 ? 'approved.' : 'cancelled.'}<b><u>${'\n'}${count} OB Request/s!</u></b>`,
 }
 
 export { STRINGS }

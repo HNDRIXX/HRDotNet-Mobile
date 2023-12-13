@@ -4,9 +4,10 @@ import { Image } from "expo-image";
 import CachedImage from 'expo-cached-image'
 import { useNavigation } from "@react-navigation/native";
 
-import { COLORS, ICONS } from "../../constant";
+import { COLORS, ICONS, COMPONENT_STYLES } from "../../constant";
 
 export default function TimeOff () {
+    const styles = COMPONENT_STYLES.TimeOff
     const navigation = useNavigation()
 
     const screenWidth = Dimensions.get('window').height
@@ -57,56 +58,3 @@ export default function TimeOff () {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        // height: 150,
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
-        marginHorizontal: 30,
-        marginBottom: 10,
-    },
-
-    button: {
-        flex: 1,
-        backgroundColor: COLORS.clearWhite,
-        marginHorizontal: 6,
-        flexDirection: 'row',
-        borderRadius: 20,
-        justifyContent: 'center',
-
-        elevation: 3,
-        shadowColor: COLORS.black,
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        shadowOffset : { width: 1, height: 5},
-
-    },
-
-    textWrapper: {
-        color: COLORS.black,
-        fontFamily: 'Inter_600SemiBold',
-    },
-
-    alignWrapper: {
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexDirection: 'row'
-    },
-
-    totalText: {
-        fontFamily: 'Inter_700Bold',
-        fontSize: 20,
-        textAlign: 'center'
-    },
-
-    title: {
-        color: COLORS.black,
-        fontSize: 12,
-        lineHeight: 14,
-        textAlign: 'center',
-        fontFamily: 'Inter_500Medium',
-    },
-})

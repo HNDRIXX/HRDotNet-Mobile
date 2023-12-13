@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator, KeyboardAvoidingView } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -15,19 +19,19 @@ import OverTimePrompt from "../../../../../components/prompt/OverTimePrompt";
 
 const data = [
     { 
-        OTDate: '20231115',
+        OTDate: '20231201',
         actualOTIn: '18:15:00',
         actualOTOut: '21:15:00',
         shiftSchedule: '08:00 AM to 06:00 PM (Default Schedule)',
     },
     { 
-        OTDate: '20231116',
+        OTDate: '20231202',
         actualOTIn: '18:38:00',
         actualOTOut: '21:45:00',
         shiftSchedule: '06:30 AM to 05:30 PM (Default Schedule)',
     },
     { 
-        OTDate: '20231117',
+        OTDate: '20231203',
         actualOTIn: '18:38:00',
         actualOTOut: '21:45:00',
         shiftSchedule: '06:30 AM to 05:30 PM (Default Schedule)',
@@ -268,6 +272,7 @@ export default function OTRequest ({ navigation }) {
                                 onChangeText={(text) => setReason(text)}
                                 value={reason}
                                 placeholder="Details"
+                                multiline
                                 placeholderTextColor={COLORS.tr_gray}
                             />
                         </View>

@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Image } from 'expo-image';
 import { Agenda } from 'react-native-calendars';
-import CachedImage from 'expo-cached-image';
-import { Shadow } from 'react-native-shadow-2';
 import moment from 'moment';
 
 import Loader from '../../../../../components/loader/Loader';

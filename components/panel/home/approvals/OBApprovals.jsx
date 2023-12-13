@@ -99,6 +99,7 @@ export default function OBApprovals () {
     const [isSuccessPrompt, setSuccessPrompt] = useState(false)
     const [isLoading, setLoading] = useState(true)
     const [selectAll, setSelectAll] = useState(false)
+    const [isTextPrompt, setIsTextPrompt] = useState(null)
 
     const [refreshing, setRefreshing] = useState(false)
     const scrollViewRef = useRef(null)
@@ -127,19 +128,21 @@ export default function OBApprovals () {
         setSelectAll(false)
         setVisible(false)
         setPrevCount(0)
-        let count = 1
 
+        let count = 1
         const dataSet = [...filteredData]
+        const textValue =  isTextPrompt === 1 ? 'Approved' : 'Cancelled'
     
         for (let i = 0; i < dataSet.length; i++) {
-            if (dataSet[i].isChecked && dataSet[i].isCOS == 1 && dataSet[i].status !== 'Approve') {
-                dataSet[i].status = 'Approve'
+            if (dataSet[i].isChecked && dataSet[i].isCOS == 1 && dataSet[i].status !== textValue) {
+                dataSet[i].status = textValue
                 setPrevCount(count++)
             }
+
             dataSet[i].isChecked = false
         }
 
-        const updatedData = dataSet.filter(item => item.status !== 'Approve')
+        const updatedData = dataSet.filter(item => item.status !== textValue)
         
         setData(updatedData)
         setFilteredData(updatedData)
@@ -190,7 +193,16 @@ export default function OBApprovals () {
                         selectAll, setSelectAll, setSortedData)}
 
                         isVisible={isVisible}
-                        onHandleApprove={onHandleApprove}
+
+                        onHandleApprove={() => {
+                            setIsTextPrompt(1)
+                            onHandleApprove()
+                        }}
+
+                        onHandleCancel={() => {
+                            setIsTextPrompt(0)
+                            onHandleApprove()
+                        }}
                     />
                     
                     {filteredData.length > 0 ? (
@@ -200,7 +212,7 @@ export default function OBApprovals () {
                                 <RefreshControl
                                     refreshing={refreshing}
                                     onRefresh={onRefresh}
-                                    colors={[COLORS.powderBlue]}/>
+                                    colors={[COLORS.powderBlue]} />
                             }
                         >
                             <Animatable.View
@@ -211,25 +223,26 @@ export default function OBApprovals () {
                                     {filteredData
                                         .filter(item => item.status === "Reviewed")
                                         .map((item, index) => (
-                                        <View 
-                                            style={styles.rowView}
-                                            key={index}
-                                        >
-                                            <Checkbox
-                                                color={COLORS.orange}
-                                                style={styles.checkBox}
-                                                value={item.isChecked}
-
-                                                onValueChange={(value) => ApprovalsUtils.onCheckboxValueChange(filteredData, value, index, setSelectAll, setFilteredData)}
-                                            />
-
-                                            <ApprovalsItem 
-                                                item={item}
-                                                onPanel={1}
+                                            <View 
+                                                style={styles.rowView}
                                                 key={index}
-                                            />
-                                        </View>
-                                    ))}
+                                            >
+                                                <Checkbox
+                                                    color={COLORS.orange}
+                                                    style={styles.checkBox}
+                                                    value={item.isChecked}
+
+                                                    onValueChange={(value) => ApprovalsUtils.onCheckboxValueChange(filteredData, value, index, setSelectAll, setFilteredData)}
+                                                />
+
+                                                <ApprovalsItem 
+                                                    item={item}
+                                                    onPanel={1}
+                                                    key={index}
+                                                />
+                                            </View>
+                                        )
+                                    )}
                                 </View>
                             </Animatable.View>
                         </ScrollView>
@@ -241,14 +254,14 @@ export default function OBApprovals () {
                 isVisible={isVisible}
                 setVisible={setVisible}
                 subTitle={
-                    isConfirmSelection ? STRINGS.pendingCOSConfirmation(pendingCount, checkCount) : STRINGS.approvalsConfirmation(checkCount)
+                    isConfirmSelection ? STRINGS.pendingCOSConfirmation(pendingCount, checkCount, isTextPrompt) : STRINGS.approvalsConfirmation(checkCount, isTextPrompt)
                 }
                 onHandlePress={onHandleConfirmApprove}
             />
 
             <SuccessPromptPage
                 title={"Success!"}
-                subTitle={STRINGS.approvalSuccess(prevCount)}
+                subTitle={STRINGS.approvalSuccess(prevCount, isTextPrompt)}
                 buttonText={"OKAY"}
                 visible={isSuccessPrompt} 
                 onClose={() => setSuccessPrompt(false)} 

@@ -3,9 +3,10 @@ import { Shadow } from "react-native-shadow-2"
 import moment from "moment"
 import { FontAwesome } from "@expo/vector-icons"
 
-import { COLORS } from "../../../constant"
+import { COLORS, COMPONENT_STYLES } from "../../../constant"
 
 export default function CalendarEvent({ selectedDate, formatDate, yesterday, tomorrow, events, checkColor, previousDate, updatedValueEvents, defaultDate, nextDate } ) {
+    const styles = COMPONENT_STYLES.CalendarEvent
 
     const dayBelowView = (date) => {
         return events.map((event, index) => {
@@ -93,136 +94,3 @@ export default function CalendarEvent({ selectedDate, formatDate, yesterday, tom
         </Shadow>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        borderTopLeftRadius: 40,
-        borderTopRightRadius: 40,
-        paddingHorizontal: 10,
-        paddingVertical: 40,
-        width: '100%',
-        height: 300,
-        shadowColor: COLORS.darkGray,
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        shadowOffset : { width: 1, height: 5},
-        backgroundColor: COLORS.clearWhite,
-    },
-
-    topView: {
-        paddingHorizontal: 20,
-        paddingBottom: 10,
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    
-    dayStatus: {
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 18,
-    },  
-
-    selectedDayText: {
-        fontSize: 12,
-        textAlign: 'center',
-        fontFamily: 'Inter_400Regular',
-    },
-    
-    selectedEvent: {
-        paddingHorizontal: 20,
-        paddingBottom: 10,
-        backgroundColor: COLORS.clearWhite,
-    },
-    
-    topCircle: {
-        position: 'absolute',
-        zIndex: 99,
-        marginLeft: -1,
-    },
-    
-      
-    dayBelowEvent: {
-        fontSize: 13,
-        fontFamily: 'Inter_400Regular'
-    },
-    
-    dayEventText: {
-        textAlign: 'center',
-        paddingLeft: 10,
-        fontSize: 16,
-        fontFamily: 'Inter_500Medium',
-    },
-    
-    dayContentWrapper: {
-        paddingVertical: 10,
-        borderBottomColor: COLORS.tr_gray,
-        borderBottomWidth: 1.5,
-    },
-    
-    dayContentText: {
-        fontSize: 14,
-        textAlign: 'center',
-        fontFamily: 'Inter_500Medium',
-    },
-    
-    dayBelowWrapper: {
-        paddingHorizontal: 10,
-        padding: 5,
-    },
-    
-    rowWrapper: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    
-    boldText: {
-        fontFamily: 'Inter_500Medium',
-        color: COLORS.black,
-        fontWeight: '700',
-        fontStyle: 'italic',
-    },
-    
-    dateBelowText: {
-        marginTop: 5,
-        fontFamily: 'Inter_400Regular',
-        color: COLORS.black,
-        fontSize: 12,
-    },
-
-    noEventsText: {
-        fontSize: 13,
-        textAlign: 'center',
-        color: COLORS.darkGray,
-        fontFamily: 'Inter_400Regular',
-    },
-
-    selectedDayEvent: (color) => ({
-        flex: 0,
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '50%',
-        height: 35,
-        paddingLeft: 40,
-        borderRadius: 50,
-        borderColor: color,
-        borderColor: color ? COLORS.clearWhite : null,
-        backgroundColor: COLORS.clearWhite,
-        elevation: 5,
-        // shadowColor: COLORS.darkGray,
-        // shadowOpacity: 0.1,
-        // shadowRadius: 2,
-        // shadowOffset : { width: 1, height: 5},
-    }),
-  
-    dayBelowEventWrapper: (color) => ({
-        flex: 0,
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '50%',
-        height: 25,
-        paddingLeft: 40,
-        borderRadius: 50,
-        borderColor: color,
-        borderWidth: 1,
-        backgroundColor: COLORS.clearWhite,
-    }),
-})

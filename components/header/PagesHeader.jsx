@@ -5,10 +5,12 @@ import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { COLORS } from "../../constant";
+import { COLORS, COMPONENT_STYLES } from "../../constant";
 
 export default function PageHeader ({ pageName, backStatus }) {
     const [isDisabled, setDisabled] = useState(false)
+
+    const styles = COMPONENT_STYLES.PagesHeader
     const navigation = useNavigation()
     const insets = useSafeAreaInsets()
 
@@ -18,7 +20,9 @@ export default function PageHeader ({ pageName, backStatus }) {
     }
 
     return (
-        <View style={[styles.topHeader, { paddingTop: insets.top }]}>
+        <View style={[styles.topHeader, 
+            { paddingTop: insets.top }
+        ]}>
             <TouchableOpacity 
                 style={styles.backButton} 
                 onPress={onBackHandler}
@@ -31,27 +35,3 @@ export default function PageHeader ({ pageName, backStatus }) {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    backButton: {
-        paddingHorizontal: 17,
-        paddingVertical: 3,
-        marginTop: 5
-    },
-
-    topHeader: {
-        paddingBottom: 10,
-        alignItems: 'center',
-        flexDirection: 'row',
-        backgroundColor: COLORS.powderBlue,
-    },
-    
-    textHeader: {
-        color: COLORS.clearWhite,
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 18,
-        flex: 1,
-        textAlign: 'center',
-        marginRight: 60,
-    },
-})
