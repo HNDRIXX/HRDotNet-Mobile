@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { Easing } from 'react-native-reanimated';
 
-import Home from './pages/home/ApproverHome';
+import Home from './pages/home/Home';
 import Calendar from './pages/Calendar';
 import Request from './pages/Request';
 import Profile from './pages/Profile';
@@ -46,6 +46,10 @@ import Loader from '../components/loader/Loader';
 import AboutUsPage from './access/navigate/home/more/AboutUs';
 import ContactsPage from './access/navigate/home/approver/Contacts';
 import ContactInfo from './access/navigate/home/approver/more/ContactInfo';
+
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
 
 export default function Index() {
     const [fontsLoaded] = useFonts()

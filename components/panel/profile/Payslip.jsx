@@ -1,6 +1,8 @@
-import { useState } from 'react';
-import { Image } from 'expo-image'
-import React, { useEffect } from 'react'
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
 import { Entypo } from '@expo/vector-icons';
 import * as Animatable from 'react-native-animatable';

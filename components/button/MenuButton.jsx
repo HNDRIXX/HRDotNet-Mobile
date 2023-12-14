@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import React, { useState, useEffect } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Platform, Dimensions, ActivityIndicator } from 'react-native'
 import { Image } from 'expo-image'
@@ -6,7 +10,7 @@ import { useNavigation } from '@react-navigation/native'
 
 import { COLORS, ICONS, COMPONENT_STYLES } from '../../constant'
 
-export default function MenuButton({ clockedDate, clockedTime, clockedLocation }) {
+export default function MenuButton({ show, clockedDate, clockedTime, clockedLocation }) {
     const styles = COMPONENT_STYLES.MenuButton
     const navigation = useNavigation()
 
@@ -20,7 +24,7 @@ export default function MenuButton({ clockedDate, clockedTime, clockedLocation }
     }
 
     return (
-        <>
+        <View style={styles.container}>
             <View style={styles.buttonWrapper}>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
@@ -75,45 +79,45 @@ export default function MenuButton({ clockedDate, clockedTime, clockedLocation }
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         style={[styles.gridButton, { padding: padding }]}
-                        onPress={() => navigation.navigate('COSRequest')} >
+                        onPress={() => navigation.navigate( show === 0 ? 'COSRequest' : 'Approvals' )} >
                         <CachedImage
-                            source={{ uri: ICONS.COSRequest }}
-                            cacheKey={`COSRequest`}
+                            source={{ uri: show === 0 ? ICONS.COSRequest : ICONS.approvalsIcon }}
+                            cacheKey={ show === 0 ? 'COSRequest' : 'approvalsIcon' }
                             {...commonProps}
                         />
                     </TouchableOpacity>
 
-                    <Text style={styles.textButton}>COS Request</Text>
+                    <Text style={styles.textButton}>{ show === 0 ? 'COS Request' : 'Approvals' }</Text>
                 </View>
 
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         style={[styles.gridButton, { padding: padding }]}
-                        onPress={() => navigation.navigate('OBRequest')}>
+                        onPress={() => navigation.navigate( show === 0 ? 'OBRequest' : 'Teams' )}>
                         <CachedImage
-                            source={{ uri: ICONS.OBRequest }}
-                            cacheKey={`OBRequest`}
+                            source={{ uri: show === 0 ? ICONS.OBRequest : ICONS.teams }}
+                            cacheKey={ show === 0 ? 'OBRequest' : 'teams' }
                             {...commonProps}
                         />
                     </TouchableOpacity>
 
-                    <Text style={styles.textButton}>OB Request</Text>
+                    <Text style={styles.textButton}>{ show === 0 ? 'OB Request' : 'Teams' }</Text>
                 </View>
 
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         style={[styles.gridButton, { padding: padding }]}
-                        onPress={() => navigation.navigate('OTRequest')}>
+                        onPress={() => navigation.navigate( show === 0 ? 'OTRequest' : 'Contacts' )}>
                         <CachedImage
-                            source={{ uri: ICONS.OTRequest }}
-                            cacheKey={`OTRequest`}
+                            source={{ uri: show === 0 ? ICONS.OTRequest : ICONS.contacts }}
+                            cacheKey={show === 0 ? 'OTRequest' : 'contacts' }
                             {...commonProps}
                         />
                     </TouchableOpacity>
 
-                    <Text style={styles.textButton}>OT Request</Text>
+                    <Text style={styles.textButton}>{show === 0 ? 'OT Request' : 'Contacts'}</Text>
                 </View>
             </View>
-        </>
+        </View>
     )
 }

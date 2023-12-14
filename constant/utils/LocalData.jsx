@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { DateTimeUtils } from "./DateTimeUtils";
@@ -5,7 +9,7 @@ import { DateTimeUtils } from "./DateTimeUtils";
 export const LocalData = {
     insertCOS: (route) => AsyncStorage.getItem('COSData')
         .then((storedData) => {
-            const existingData = JSON.parse(storedData) || [];
+            const existingData = JSON.parse(storedData) || []
 
             const itemCount = existingData.length
 
@@ -25,16 +29,16 @@ export const LocalData = {
             }
 
             existingData.push(newItem)
-            const updatedDataString = JSON.stringify(existingData);
+            const updatedDataString = JSON.stringify(existingData)
 
-            return AsyncStorage.setItem('COSData', updatedDataString);
+            return AsyncStorage.setItem('COSData', updatedDataString)
         })
         .then(() => {})
         .catch((error) => {}),
 
     insertOB: (route) => AsyncStorage.getItem('OBData')
         .then((storedData) => {
-            const existingData = JSON.parse(storedData) || [];
+            const existingData = JSON.parse(storedData) || []
 
             const itemCount = existingData.length
 
@@ -63,7 +67,7 @@ export const LocalData = {
 
     insertOT: (route) => AsyncStorage.getItem('OTData')
         .then((storedData) => {
-            const existingData = JSON.parse(storedData) || [];
+            const existingData = JSON.parse(storedData) || []
 
             const itemCount = existingData.length
 
@@ -82,9 +86,9 @@ export const LocalData = {
             }
 
             existingData.push(newItem)
-            const updatedDataString = JSON.stringify(existingData);
+            const updatedDataString = JSON.stringify(existingData)
 
-            return AsyncStorage.setItem('OBData', updatedDataString);
+            return AsyncStorage.setItem('OBData', updatedDataString)
         })
         .then(() => {})
         .catch((error) => {})

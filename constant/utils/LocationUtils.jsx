@@ -1,6 +1,8 @@
-import { DateTimeUtils } from "./DateTimeUtils";
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import * as Location from 'expo-location';
-import { useNavigation } from "@react-navigation/native";
 
 const deg2rad = (deg) => deg * (Math.PI / 180)
 
@@ -52,9 +54,7 @@ export const LocationUtils = {
                     )
                 }
             })
-            .catch((error) => {
-                // Handle errors here
-            })
+            .catch((error) => {})
     },    
 
     openLocation: async () => {

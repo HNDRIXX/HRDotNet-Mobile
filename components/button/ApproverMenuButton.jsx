@@ -8,9 +8,10 @@ import { Image } from 'expo-image'
 import { useNavigation } from '@react-navigation/native'
 import CachedImage from 'expo-cached-image'
 
-import { COLORS, ICONS } from '../../constant'
+import { COLORS, COMPONENT_STYLES, ICONS } from '../../constant'
 
-export default function MenuButton ({ clockedDate, clockedTime, clockedLocation }) {
+export default function ApproverMenuButton ({ clockedDate, clockedTime, clockedLocation }) {
+    const styles = COMPONENT_STYLES.MenuButton
     const navigation = useNavigation()
 
     const screenWidth = Dimensions.get('window').height
@@ -121,72 +122,3 @@ export default function MenuButton ({ clockedDate, clockedTime, clockedLocation 
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        marginHorizontal: 15
-    },
-
-    buttonWrapper: {
-        flexDirection: 'row',
-    }, 
-
-    buttonContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 10,
-    },
-
-    gridButton: {
-        borderRadius: 10,
-        backgroundColor: COLORS.clearWhite,
-        alignItems: 'center',
-        justifyContent: 'center',
-
-        elevation: 5.5,
-        shadowColor: COLORS.darkGray,
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        shadowOffset : { width: 1, height: 5},
-    },
-
-    textButton: {
-        fontFamily: 'Inter_500Medium',
-        color: COLORS.black,
-        paddingTop: 5.5,
-        fontSize: 12,
-        textAlign: 'center'
-    },
-
-    partitionWrapper: { 
-        marginHorizontal: 4,
-        marginVertical: 10,
-    },
-
-    textPartition : {
-        fontFamily: 'DMSans_500Medium',
-        color: COLORS.darkGray,
-    },
-
-    iconRow: {
-        color: COLORS.clearWhite,
-    },
-
-    rowButton: {
-        flex: 1,
-        backgroundColor: COLORS.orange,
-        padding: 25.5,
-        borderRadius: 10,
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        flexDirection: 'row',
-        marginBottom: 10,
-    },
-
-    buttonTextWrapper: {
-        paddingLeft: 10,
-        paddingTop: 5.5,
-    }
-})

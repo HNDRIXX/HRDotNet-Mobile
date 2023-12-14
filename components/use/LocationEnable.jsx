@@ -1,7 +1,10 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 import PageHeader from "../header/PagesHeader";
-import * as Location from 'expo-location';
 import { COLORS } from "../../constant";
 
 export default function LocationEnablePage () {

@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import { Utils } from "../utils/Utils"
 import { DateTimeUtils } from "../utils/DateTimeUtils"
 

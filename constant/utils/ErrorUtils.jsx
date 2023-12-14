@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import { FontAwesome } from "@expo/vector-icons"
 
 import { COLORS } from "../Theme"

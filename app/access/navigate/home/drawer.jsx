@@ -77,7 +77,7 @@ export default function DrawerPage ({ navigation }) {
                     style={styles.logOutButton}
                     onPress={() => navigation.navigate('LogIn')}
                 >
-                    <Text style={styles.logOutText}>LOG-OUT</Text>
+                    <Text style={styles.logOutText}>LOG OUT</Text>
                 </TouchableOpacity>
             </View>
         </>

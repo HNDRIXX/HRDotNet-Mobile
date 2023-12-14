@@ -1,18 +1,20 @@
-import { useState, useEffect, useRef } from "react";
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
+import React, { useState, useEffect, useRef, Validator } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Platform, Alert } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import { Image } from "expo-image";
 import { Entypo } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { COLORS, useFonts, STYLES} from "../../../constant";
 import { Account } from "../../../constant/array/Account";
-import { Image } from "expo-image";
-import moment from "moment";
-import * as Notifications from 'expo-notifications';
-import * as TaskManager from 'expo-task-manager';
 
 export default function LogInPage ({ navigation }) {
     const [fontsLoaded] = useFonts()
-    const [userName, setUserName] = useState('')
+    const [userName, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [isShowPassword, setShowPassword] = useState(false)
 
@@ -26,24 +28,42 @@ export default function LogInPage ({ navigation }) {
         )
     }
 
-    const toggleShowPassword = () => {
-        setShowPassword(!isShowPassword)
-    }
+    const toggleShowPassword = () => { setShowPassword(!isShowPassword) }
     
     const onHandleLogIn = () => {
-        navigation.navigate('TabStack', { screen: 'UserHome' })
         // const user = Account.find(account => account.userName === userName && account.password === password)
-        // const acc = Account.find(account => account.role)
+        const user = Account.find(account => account.userName === 'MGL01' && account.password === 'sql123')
 
-        // if (user) {
-        //     if (acc.role == "web-user") {
-        //     } 
+        if (user) {
+            const userData = {
+                id: user.id,
+                accNumber: user.accNumber,
+                role: user.role,
+                name: user.name,
+                position: user.position,
+                company: user.company,
+                branch: user.branch,
+                division: user.division,
+                department: user.department,
+                section: user.section,
+                phoneNumber: user.phoneNumber,
+                emailAddress: user.emailAddress,
+                uri: user.uri
+            }
+        
+            const jsonData = JSON.stringify(userData)
+        
+            AsyncStorage.setItem('userAcc', jsonData)
+                .then(() => {
+                    setUsername('')
+                    setPassword('')
 
-        //     setUserName('')
-        //     setPassword('')
-        // } else {
-        //     alert('Invalid username or password')
-        // }
+                    navigation.navigate('TabStack', { screen: 'UserHome' })
+                })
+                .catch((error) => {
+                    // console.error('Error saving data:', error)
+                })
+        } else { alert('Invalid username or password') }
     }
 
     return (
@@ -65,7 +85,7 @@ export default function LogInPage ({ navigation }) {
                         <View style={styles.inputWrapper}>
                             <TextInput
                                 style={styles.textInput}
-                                onChangeText={(text) => setUserName(text)}
+                                onChangeText={(text) => setUsername(text)}
                                 
                                 value={userName}
                                 placeholder="Username"

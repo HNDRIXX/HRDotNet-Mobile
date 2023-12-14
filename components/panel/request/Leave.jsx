@@ -1,8 +1,12 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet, ScrollView, RefreshControl } from "react-native";
 import * as Animatable from 'react-native-animatable';
 
-import { COLORS, Utils, DateTimeUtils, RequestUtils } from "../../../constant";
+import { COLORS, COMPONENT_STYLES, Utils, DateTimeUtils, RequestUtils } from "../../../constant";
 import { SearchAndNew } from "../../use/SearchAndNew";
 import RequestItem from "../../items/request/RequestItem"
 import Loader from "../../loader/Loader";
@@ -41,6 +45,8 @@ const data = [
 ]
 
 export default function LeavePanel () {
+    const styles = COMPONENT_STYLES.Request
+
     const [isLoading, setLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
 
@@ -157,17 +163,3 @@ export default function LeavePanel () {
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    bodyContainer: {
-        flex: 1,
-    },
-
-    itemStatusText: {
-        fontFamily: 'Inter_500Medium',
-        color: COLORS.darkGray,
-        padding: 10,
-        fontSize: 18,
-        marginHorizontal: 15
-    },
-})

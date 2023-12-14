@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import React, { useRef, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Shadow } from "react-native-shadow-2";
@@ -10,13 +14,13 @@ export default function BottomModal ({isBackdrop, setBackdrop, isModal, setModal
     const bottomSheetRef = useRef(null)
 
     const openBottomSheet = () => {
-        bottomSheetRef.current.expand();
+        bottomSheetRef.current.expand()
     }
     
     const closeBottomSheet = () => {
         setModal(false)
         setBackdrop(false)
-        bottomSheetRef.current.close();
+        bottomSheetRef.current.close()
     }
 
      return (

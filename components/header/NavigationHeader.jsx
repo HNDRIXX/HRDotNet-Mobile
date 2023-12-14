@@ -1,4 +1,8 @@
-import { View, Text, StyleSheet,  } from "react-native";
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
+import { View, Text, StyleSheet, } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { COLORS, COMPONENT_STYLES } from "../../constant";

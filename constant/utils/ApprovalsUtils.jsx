@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import React from "react"
 import moment from "moment"
 
@@ -7,7 +11,7 @@ export const ApprovalsUtils = {
     sortByDateAsync: async (data) => {
         return new Promise((resolve) => {
             const reviewedData = data.filter((item) => item.status === "Reviewed")
-
+            
             const sorted = reviewedData.sort((a, b) => {
                 const dateA = moment(a.date, "YYYYMMDD")
                 const dateB = moment(b.date, "YYYYMMDD")
@@ -17,7 +21,6 @@ export const ApprovalsUtils = {
             resolve(sorted)
         })
     },
-
 
     onFilterData: (indexPanel, sortedData, filterText, setFilteredData, filteredData) => {
         const formattedDateKey = indexPanel === 0 ? 'COSDate' :
@@ -44,7 +47,7 @@ export const ApprovalsUtils = {
 
             return textMatches.some(Boolean)
         })
-
+        
         setFilteredData(filtered)
     },
 

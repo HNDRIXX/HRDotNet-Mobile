@@ -1,5 +1,8 @@
-import moment from "moment";
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
 
+import moment from "moment";
 
 export const DateTimeUtils = {
     currDate: () => new Date(),

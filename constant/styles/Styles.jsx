@@ -841,9 +841,9 @@ export const STYLES = StyleSheet.create({
             marginVertical: 60,
             backgroundColor: 'red',
             padding: 15,
-            width: 200,
+            width: 160,
             alignSelf: 'center',
-            borderRadius: 20,
+            borderRadius: 23,
 
             elevation: 5,
             shadowColor: COLORS.darkGray,

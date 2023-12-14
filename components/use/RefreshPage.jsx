@@ -1,5 +1,8 @@
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, ScrollView, RefreshControl } from 'react-native'
-import { FontAwesome } from '@expo/vector-icons'
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
+import { View, ActivityIndicator, ScrollView, RefreshControl } from 'react-native'
 
 import { COLORS, COMPONENT_STYLES } from '../../constant'
 

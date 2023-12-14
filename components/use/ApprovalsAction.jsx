@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
 import Checkbox from 'expo-checkbox'

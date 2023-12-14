@@ -10,7 +10,6 @@ import { useRoute } from '@react-navigation/native';
 import { Shadow } from 'react-native-shadow-2';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import moment from 'moment';
-import { Image } from 'expo-image';
 
 import PagesHeader from '../../../components/header/PagesHeader'
 import SuccessTimeClock from '../../../components/prompt/SuccessTimeClock'
@@ -306,30 +305,31 @@ const styles = StyleSheet.create({
   },
 
   clockInBtn: {
-    width: 170,
+    width: 190,
     marginTop: 10,
     flexDirection: 'row',
     alignSelf: 'center',
     backgroundColor: COLORS.orange,
     justifyContent: 'center',
-    padding: 13,
-    borderRadius: 8
+    padding: 9,
+    borderRadius: 15
   },
 
   clockOutBtn: {
-    width: 170,
+    width: 190,
     marginTop: 10,
     flexDirection: 'row',
     alignSelf: 'center',
     backgroundColor: COLORS.powderBlue,
     justifyContent: 'center',
-    padding: 13,
-    borderRadius: 8
+    padding: 9,
+    borderRadius: 15
   },
 
   textClockIn: {
     color: COLORS.clearWhite,
     fontSize: 17,
-    fontFamily: 'Inter_700Bold'
+    fontFamily: 'Inter_600SemiBold',
+    marginLeft: 7
   },
 })

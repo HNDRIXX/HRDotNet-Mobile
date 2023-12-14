@@ -1,6 +1,6 @@
 // HRDotNet-Mobile
-// Designed by : Alex
-// Developed by: Patrick 
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { View, Text, StyleSheet, ScrollView, RefreshControl, FlatList } from "react-native";

@@ -12,3 +12,7 @@ npx create-expo-app -e with-router
 
 - [Expo Router: Docs](https://expo.github.io/router)
 - [Expo Router: Repo](https://github.com/expo/router)
+
+## 🛠 Contributions (HRDotNet-Mobile)
+- Designed by : Alex Diane Vivienne Candano
+- Developed by: Patrick William Quintana Lofranco, Jessie Cuerda

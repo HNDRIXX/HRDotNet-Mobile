@@ -1,13 +1,18 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import React, { useState } from "react";
 import { View, Text , StyleSheet, TouchableOpacity, ScrollView } from "react-native";
-import moment from "moment";
 import DashedLine from "react-native-dashed-line";
 
 import SuccessPromptPage from "../../../../components/prompt/SuccessPrompt";
-import { COLORS, STRINGS, DateTimeUtils } from "../../../../constant";
+import { COLORS, STRINGS, DateTimeUtils, COMPONENT_STYLES } from "../../../../constant";
 import { Image } from "expo-image";
 
 export default function OBSummary({ route, imageParams, openCustomAlert, closeCustomAlert, isSuccessAlertVisible }) {
+    const styles = COMPONENT_STYLES.RequestSummary
+    
     return (
         <>
             <View style={styles.container}>
@@ -34,13 +39,13 @@ export default function OBSummary({ route, imageParams, openCustomAlert, closeCu
 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>OB Time-in</Text>
-                        <Text style={styles.summaryText}>{moment(route?.timeIn, 'hh:mm').format('hh:mm A')}</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(route?.timeIn)}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
                     <View style={styles.rowView}>
                         <Text style={styles.boldText}>OB Time-out</Text>
-                        <Text style={styles.summaryText}>{moment(route?.timeOut, 'hh:mm').format('hh:mm A')}</Text>
+                        <Text style={styles.summaryText}>{DateTimeUtils.timeConvert(route?.timeOut)}</Text>
                         <DashedLine style={styles.dashed} dashColor={COLORS.gray} dashLength={5} />
                     </View>
 
@@ -86,66 +91,3 @@ export default function OBSummary({ route, imageParams, openCustomAlert, closeCu
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingVertical: 20,
-        paddingHorizontal: 20,
-        backgroundColor: COLORS.clearWhite
-    },
-
-    summaryView: {
-        height: 100,
-        borderColor: COLORS.darkGray,
-        borderWidth: 1, 
-        borderRadius: 20,
-        marginTop: 30,
-        padding: 15
-    },
-
-    rowView: {
-        margin: 10,
-    },
-
-    text: {
-        fontFamily: 'Inter_500Medium'
-    },
-
-    summaryText: {
-        fontFamily: 'Inter_500Medium',
-        marginLeft: 20,
-    },
-
-    dashed: {
-        paddingTop: 10,
-    },
-
-    boldText: {
-        fontFamily: 'Inter_600SemiBold',
-        color: COLORS.tr_gray
-    },
-
-    button: {
-        justifyContent: 'center',
-        alignSelf: 'center',
-        backgroundColor: COLORS.orange,
-        width: 170,
-        padding: 10,
-        borderRadius: 20,
-        marginTop: 10,
-    },
-
-    textButton: {
-        fontFamily: 'Inter_700Bold',
-        fontSize: 16,
-        color: COLORS.clearWhite,
-        textAlign: 'center',
-    },
-
-    attachmentView: {
-        flexDirection: 'row', 
-        alignItems: 'center', 
-        marginVertical: 10 
-    },
-})

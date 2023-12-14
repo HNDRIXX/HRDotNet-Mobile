@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
@@ -11,7 +15,7 @@ export default function BottomNavigation () {
     const [screen, setScreen] = useState('HomeScreen')
     
     const handleButtonPressed = (screenName) => () => {
-        setScreen(screenName);
+        setScreen(screenName)
         navigation.navigate(screenName)
     }
 

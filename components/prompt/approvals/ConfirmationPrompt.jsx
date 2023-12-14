@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 import StyledText from 'react-native-styled-text'
@@ -48,10 +52,6 @@ export default function ConfirmationPrompt({ isVisible, setVisible, subTitle, on
         </>
     )
 }
-
-const styles = StyleSheet.create({
- 
-})
 
 const textStyles = StyleSheet.create({
     b: {

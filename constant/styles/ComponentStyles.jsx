@@ -1,9 +1,10 @@
-import { Dimensions, StyleSheet, Platform } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+ // HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
+import { StyleSheet } from "react-native";
 
 import { COLORS } from "../Theme";
-
-const paddingIOS = Platform.OS === "ios"
 
 export const COMPONENT_STYLES = StyleSheet.create({
     // Button Component
@@ -12,31 +13,31 @@ export const COMPONENT_STYLES = StyleSheet.create({
             flex: 1,
             marginHorizontal: 15
         },
-
+    
         buttonWrapper: {
             flexDirection: 'row',
-        },
-
+        }, 
+    
         buttonContainer: {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
             marginBottom: 10,
         },
-
+    
         gridButton: {
             borderRadius: 10,
             backgroundColor: COLORS.clearWhite,
             alignItems: 'center',
             justifyContent: 'center',
-
+    
             elevation: 5.5,
             shadowColor: COLORS.darkGray,
             shadowOpacity: 0.1,
             shadowRadius: 2,
-            shadowOffset: { width: 1, height: 5 },
+            shadowOffset : { width: 1, height: 5},
         },
-
+    
         textButton: {
             fontFamily: 'Inter_500Medium',
             color: COLORS.black,
@@ -44,21 +45,21 @@ export const COMPONENT_STYLES = StyleSheet.create({
             fontSize: 12,
             textAlign: 'center'
         },
-
-        partitionWrapper: {
+    
+        partitionWrapper: { 
             marginHorizontal: 4,
             marginVertical: 10,
         },
-
-        textPartition: {
+    
+        textPartition : {
             fontFamily: 'DMSans_500Medium',
             color: COLORS.darkGray,
         },
-
+    
         iconRow: {
             color: COLORS.clearWhite,
         },
-
+    
         rowButton: {
             flex: 1,
             backgroundColor: COLORS.orange,
@@ -69,7 +70,7 @@ export const COMPONENT_STYLES = StyleSheet.create({
             flexDirection: 'row',
             marginBottom: 10,
         },
-
+    
         buttonTextWrapper: {
             paddingLeft: 10,
             paddingTop: 5.5,
@@ -1135,6 +1136,85 @@ export const COMPONENT_STYLES = StyleSheet.create({
         }
     },
 
+    // Request Component
+    Request: {
+        bodyContainer: {
+            flex: 1,
+        },
+        
+        itemStatusText: {
+            fontFamily: 'Inter_500Medium',
+            color: COLORS.darkGray,
+            padding: 10,
+            fontSize: 18,
+            marginHorizontal: 15
+        },
+    },
+
+    // Summary Component
+    RequestSummary: { 
+        container: {
+            flex: 1,
+            paddingVertical: 20,
+            paddingHorizontal: 20,
+            backgroundColor: COLORS.clearWhite
+        },
+    
+        summaryView: {
+            height: 100,
+            borderColor: COLORS.darkGray,
+            borderWidth: 1, 
+            borderRadius: 20,
+            marginTop: 30,
+            padding: 15
+        },
+    
+        rowView: {
+            margin: 10,
+        },
+    
+        text: {
+            fontFamily: 'Inter_500Medium'
+        },
+    
+        summaryText: {
+            fontFamily: 'Inter_500Medium',
+            marginLeft: 20,
+        },
+    
+        dashed: {
+            paddingTop: 10,
+        },
+    
+        boldText: {
+            fontFamily: 'Inter_600SemiBold',
+            color: COLORS.tr_gray
+        },
+    
+        button: {
+            justifyContent: 'center',
+            alignSelf: 'center',
+            backgroundColor: COLORS.orange,
+            width: 170,
+            padding: 10,
+            borderRadius: 20,
+            marginTop: 10,
+        },
+    
+        textButton: {
+            fontFamily: 'Inter_700Bold',
+            fontSize: 16,
+            color: COLORS.clearWhite,
+            textAlign: 'center',
+        },
+    
+        attachmentView: {
+            flexDirection: 'row', 
+            alignItems: 'center', 
+            marginVertical: 10 
+        },
+    },
+
     // Section Component
 
     // Calendar Section
@@ -1276,8 +1356,8 @@ export const COMPONENT_STYLES = StyleSheet.create({
         topBox: {
             backgroundColor: COLORS.clearWhite,
             paddingVertical: 20,
-            width: '87%',
-            marginTop: -45,
+            width: '90%',
+            marginTop: -40,
             marginBottom: 5,
             borderRadius: 20,
             borderColor: COLORS.orange,

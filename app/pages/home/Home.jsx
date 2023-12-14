@@ -1,51 +1,51 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import React, { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions, BackHandler, BackHandlerIOS, Platform} from "react-native";
+import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions, } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { Shadow } from "react-native-shadow-2";
 import * as Animatable from 'react-native-animatable';
-import { Image } from 'react-native-elements';
+import { Image } from "expo-image";
 import CachedImage from "expo-cached-image";
-// import { Image } from "react-native-expo-image-cache";
 import { FontAwesome, Entypo } from "@expo/vector-icons";
+import GifImage from '@lowkey/react-native-gif';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { COLORS, ICONS } from "../../../constant";
 import TimeClock from "../../../components/section/home/TimeClock";
+import MenuButton from "../../../components/button/MenuButton";
 import ApproverMenuButton from "../../../components/button/ApproverMenuButton"
 import TimeOff from "../../../components/button/TimeOff";
 import Loader from "../../../components/loader/Loader"
 
 export default function Home ({ navigation }) {  
     const [isLoading, setIsLoading] = useState(true)
+    const [userData, setUserData] = useState(null)
     
     const route = useRoute()
     const insets = useSafeAreaInsets()
 
     useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const storedUserData = await AsyncStorage.getItem('userAcc')
+                const parsedUserData = JSON.parse(storedUserData)
+
+                setUserData(parsedUserData)
+            } catch (error) {
+                console.error('Error fetching data:', error)
+            }
+        }
+
+        fetchUserData()
+        
         setTimeout(() => {
-        setIsLoading(false)
+            setIsLoading(false)
         }, 800)
     }, [])
-
-    // useEffect(() => {
-    //     const handleBackPress = () => {
-    //       return true
-    //     }
-    
-    //     if (Platform.OS === 'android') {
-    //       BackHandler.addEventListener('hardwareBackPress', handleBackPress)
-    //     } else if (Platform.OS === 'ios') {
-    //       BackHandlerIOS.addEventListener('hardwareBackPress', handleBackPress)
-    //     }
-    
-    //     return () => {
-    //       if (Platform.OS === 'android') {
-    //         BackHandler.removeEventListener('hardwareBackPress', handleBackPress)
-    //       } else if (Platform.OS === 'ios') {
-    //         BackHandlerIOS.removeEventListener('hardwareBackPress', handleBackPress)
-    //       }
-    //     }
-    // }, [])
 
     return (
         <>
@@ -58,43 +58,58 @@ export default function Home ({ navigation }) {
                     <View style={{ flex: 1, paddingTop: insets.top, backgroundColor: COLORS.powderBlue }}>
                         <StatusBar backgroundColor={COLORS.powderBlue} barStyle={'light-content'} />
 
-                        <View style={styles.headerView}>
-                            <View style={styles.headerNavigation}>
-                                <TouchableOpacity
-                                    onPress={() => navigation.navigate('SideDrawer')}>
-                                    <FontAwesome name={'bars'} size={25} color={COLORS.clearWhite} />
-                                </TouchableOpacity>
+                        <View style={styles.topView}>
+                            <GifImage
+                                source={require('../../../assets/lights.gif')}
+                                style={{
+                                    width: '109%',
+                                    height: 69,
+                                    position: 'absolute',
+                                    zIndex: -1,
+                                    top: -20,
+                                }}
+                                resizeMode={'cover'}
+                            />  
                             
-                                <TouchableOpacity
-                                    onPress={() => navigation.navigate('Notification')}
-                                >
-                                    <FontAwesome name={'bell'} size={25} color={COLORS.clearWhite} />
-                                </TouchableOpacity>
-                            </View>
+                            <View style={styles.headerView}>
+                                <View style={styles.headerNavigation}>
+                                    <TouchableOpacity
+                                        onPress={() => navigation.navigate('SideDrawer')}>
+                                        <FontAwesome name={'bars'} size={25} color={COLORS.clearWhite} 
+                                            style={{ backgroundColor: COLORS.powderBlue }} />
+                                    </TouchableOpacity>
+                                
+                                    <TouchableOpacity
+                                        onPress={() => navigation.navigate('Notification')}>
+                                        <FontAwesome name={'bell'} size={25} color={COLORS.clearWhite} />
+                                    </TouchableOpacity>
+                                </View>
 
-                            <View style={styles.welcomeView}>
-                                <CachedImage
-                                    source={{ uri: ICONS.maria }}
-                                    cacheKey={`maria`}
-                                    style={styles.userIcon}
-                                    placeholderContent={
-                                        <ActivityIndicator size={'small'} color={COLORS.clearWhite} style={{ marginRight: 30, marginLeft: 40 }} />
-                                    }
-                                />
+                                <View style={styles.welcomeView}>
+                                    <CachedImage
+                                        source={{ uri: userData?.uri }}
+                                        cacheKey={`userImg+${userData?.name}+${userData?.userName}`}
+                                        style={styles.userIcon}
+                                        placeholderContent={
+                                            <ActivityIndicator size={'small'} color={COLORS.clearWhite} 
+                                                style={{ marginRight: 35, marginLeft: 40 }} />
+                                        }
+                                    />
 
-                                <View>
-                                    <Text style={styles.helloText}>Hello,</Text>
-                                    <Text style={styles.nameText}>Maria Clara!</Text>
+                                    <View>
+                                        <Text style={styles.helloText}>Hello,</Text>
+                                        <Text style={styles.nameText}>{userData?.name}</Text>
 
-                                    <View style={styles.statusView}>
-                                        <Entypo name={'briefcase'} size={17} color={COLORS.clearWhite} />
+                                        <View style={styles.statusView}>
+                                            <Entypo name={'briefcase'} size={17} color={COLORS.clearWhite} />
 
-                                        <Text style={styles.statusText}>Work Day</Text>
+                                            <Text style={styles.statusText}>Work Day</Text>
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
 
-                            <Text style={styles.timeClockText}>Time Clock</Text>
+                                <Text style={styles.timeClockText}>Time Clock</Text>
+                            </View>
                         </View>
 
                         <Shadow
@@ -117,7 +132,9 @@ export default function Home ({ navigation }) {
                                 >
                                 <View style={[styles.sectionView, { marginBottom: 20 }]}>
                                     <Text style={styles.mainTitle}>Menu</Text>
-                                    <ApproverMenuButton 
+
+                                    <MenuButton   
+                                        show={ userData?.role === 'user' ? 0 : 1 }    
                                         clockedDate={route.params?.clockedDate}
                                         clockedTime={route.params?.clockedTime}
                                         clockedLocation={route.params?.clockedAddress}
@@ -144,18 +161,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
-    headerView: {
-        padding: 20,
+    topView: {
         paddingTop: 15,
         height: 225,
         backgroundColor: COLORS.powderBlue,
+    },
+
+    headerView: {
+        marginTop: 8,
+        paddingHorizontal: 20,
     },
 
     headerNavigation: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginHorizontal: 8,
-        marginBottom: 10,
+        marginBottom: 2,
     },
 
     welcomeView: {

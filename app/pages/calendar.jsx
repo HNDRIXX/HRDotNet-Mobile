@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import React, { useState, useRef, useEffect } from "react";
 import { View, StyleSheet,  RefreshControl } from "react-native";
 import { Calendar } from "react-native-calendars";

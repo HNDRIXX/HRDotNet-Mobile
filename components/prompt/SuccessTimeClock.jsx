@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 

@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import { COLORS } from './Theme'
 import { useFonts } from './Fonts'
 import { ICONS } from './Icons'
@@ -26,4 +30,4 @@ export { COLORS,
          STYLES, 
          COMPONENT_STYLES, 
          ApprovalsUtils 
-    }
+     }

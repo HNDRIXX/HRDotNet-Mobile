@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import moment from "moment"
 
 import { DateTimeUtils } from "./DateTimeUtils"
@@ -28,8 +32,7 @@ export const RequestUtils = {
                 setDatePicker(false)
             }
         } else {
-            if (selectedDate.isSameOrAfter(currentDate.startOf('month')) && selectedDate.isSameOrBefore(currentDate.date(15))
-            ) {
+            if (selectedDate.isSameOrAfter(currentDate.startOf('month')) && selectedDate.isSameOrBefore(currentDate.date(15))) {
                 setOBDate(moment(date).format('YYYYMMDD'))
                 setDatePicker(false)
             } else {

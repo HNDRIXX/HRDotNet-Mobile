@@ -1,19 +1,22 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { Shadow } from 'react-native-shadow-2';
-import {  Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
 
 import { COLORS, COMPONENT_STYLES, DateTimeUtils } from '../../../constant';
 
 export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, clockedTime }) {
     const styles = COMPONENT_STYLES.TimeClock
-    
-    const [time, setTime] = useState(moment())
-
     const navigation = useNavigation()
     const dateToday = moment().format('MMMM DD, YYYY')
+
+    const [time, setTime] = useState(moment())
 
     useEffect(() => {
         const timer = setInterval(() => setTime(moment()), 1000)
@@ -24,19 +27,6 @@ export default function TimeClock ({ clockedValue, clockedStatus, clockedDate, c
 
     return (
         <View style={styles.topBox}>
-            {/* <Image 
-                source={require('../../../assets/icons/hat.png')}
-                style={{ width: 67, height: 60, position: 'absolute', right: -22, top: -25, 
-                    transform: [{ rotate: '30deg'}],
-                }}
-            />
-
-            <Image 
-                source={require('../../../assets/icons/alpine.png')}
-                contentFit='fill'
-                style={{ width: 100, height: 25, position: 'absolute', top: -8, left: 5 }}
-            /> */}
-            
             <View style={styles.wrapperBox}>
                 <Text style={styles.dateText}>{DateTimeUtils.momentCurrDateWithExtra()}</Text>
                 <Text style={styles.timeText}>{time.format('h:mm:ss A')}</Text>

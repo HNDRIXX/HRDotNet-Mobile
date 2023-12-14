@@ -1,5 +1,10 @@
-import React, { useState } from "react";
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { STYLES } from "../../constant";
 import NavigationHeader from "../../components/header/NavigationHeader";
@@ -7,10 +12,27 @@ import PersonalPanel from "../../components/panel/profile/Personal";
 import PayslipPanel from "../../components/panel/profile/Payslip";
 
 export default function Profile ({ navigation }) {
+    const [userData, setUserData] = useState(null)
     const [isPanel, setPanel] = useState(0)
 
     const styles = STYLES.Profile
 
+    useEffect(() => {
+    const fetchUserData = async () => {
+        try {
+            const storedUserData = await AsyncStorage.getItem('userAcc')
+
+            const parsedUserData = JSON.parse(storedUserData)
+
+            setUserData(parsedUserData)
+        } catch (error) {
+            console.error('Error fetching data:', error)
+        }
+    }
+
+    fetchUserData()
+    }, [])
+    
     return (
         <>
             <NavigationHeader headerName="Profile" />
@@ -41,7 +63,9 @@ export default function Profile ({ navigation }) {
 
 
                     { isPanel == 0 ? (
-                        <PersonalPanel />
+                        <PersonalPanel 
+                            userData={userData}
+                        />
                     ) : isPanel == 1 ? (
                         <PayslipPanel />
                     ) : null }

@@ -1,15 +1,19 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import React, { useState } from "react";
 import { View, Text , StyleSheet, TouchableOpacity, ScrollView } from "react-native";
-import { useRoute } from "@react-navigation/native";
-import moment from "moment";
 import DashedLine from "react-native-dashed-line";
 
 import PageHeader from "../../../../components/header/PagesHeader";
 import SuccessPromptPage from "../../../../components/prompt/SuccessPrompt";
-import { COLORS, STRINGS, DateTimeUtils, RequestUtils } from "../../../../constant";
+import { COLORS, COMPONENT_STYLES, STRINGS, DateTimeUtils, RequestUtils } from "../../../../constant";
 import { Image } from "expo-image";
 
 export default function MLSummary({ route, imageParams, openCustomAlert, closeCustomAlert, isSuccessAlertVisible }) {
+    const styles = COMPONENT_STYLES.RequestSummary
+
     return (
         <>
             <View style={styles.container}>

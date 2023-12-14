@@ -1,3 +1,7 @@
+// HRDotNet-Mobile
+// Designed by : Alex Diane Vivienne Candano
+// Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
+
 import React, { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions, BackHandler, BackHandlerIOS, Platform } from "react-native";
@@ -26,26 +30,6 @@ export default function Home ({ navigation }) {
             setIsLoading(false)
         }, 800)
     }, [])
-    
-    // useEffect(() => {
-    //     const handleBackPress = () => {
-    //       return true
-    //     }
-    
-    //     if (Platform.OS === 'android') {
-    //       BackHandler.addEventListener('hardwareBackPress', handleBackPress)
-    //     } else if (Platform.OS === 'ios') {
-    //       BackHandlerIOS.addEventListener('hardwareBackPress', handleBackPress)
-    //     }
-    
-    //     return () => {
-    //       if (Platform.OS === 'android') {
-    //         BackHandler.removeEventListener('hardwareBackPress', handleBackPress)
-    //       } else if (Platform.OS === 'ios') {
-    //         BackHandlerIOS.removeEventListener('hardwareBackPress', handleBackPress)
-    //       }
-    //     }
-    // }, [])
 
     return (
         <>
