@@ -12,31 +12,29 @@ import { useRoute } from '@react-navigation/native';
 
 import { Ionicons,  } from '@expo/vector-icons';
 
-import { COLORS, DateTimeUtils } from '../../../constant';
+import { COLORS, COMPONENT_STYLES, DateTimeUtils } from '../../../constant';
 import PageHeader from '../../../components/header/PagesHeader';
 
 export default function CameraAccess ({ navigation }) {
-    const [hasPermission, setHasPermission] = useState(null)
-    const [type, setType] = useState(Camera.Constants.Type.back)
-    const [userImage, setUserImage] = useState("")
-    const [imgPath, setImgPath] = useState("")
-    const [isLoading, setIsLoading] = useState(true)
-
-    const [isBase, setBase] = useState(null)
-
+    const styles = COMPONENT_STYLES.Camera
     const route = useRoute()
 
-    useEffect(() => {
-        (async () => {     
-            const { status } = await Camera.requestCameraPermissionsAsync()
-            setHasPermission(status === 'granted')
+    const [isBase, setBase] = useState(null)
+    const [hasPermission, setHasPermission] = useState(null)
+    const [type, setType] = useState(Camera.Constants.Type.back)
+    const [userImage, setUserImage] = useState(null)
+    const [imgPath, setImgPath] = useState(null)
+    const [isLoading, setIsLoading] = useState(true)
 
-            if(status != 'granted'){ Linking.openSettings() }
-        })()
-    }, [])
+    useEffect(() => {( async () => {     
+        const { status } = await Camera.requestCameraPermissionsAsync()
+        setHasPermission(status === 'granted')
+
+        status != 'granted' && Linking.openSettings() 
+    })}, [])
 
     const takePicture = async () => {
-        if(cameraRef) {
+        if( cameraRef ) {
             const photo = await cameraRef.takePictureAsync()
 
             const newUri = `${FileSystem.documentDirectory}${Date.now()}.jpg`;
@@ -55,7 +53,7 @@ export default function CameraAccess ({ navigation }) {
 
     const convertImageToBase64 = async (imageUri) => {
         const imageBase64Data = await FileSystem.readAsStringAsync(imageUri, {
-          encoding: FileSystem.EncodingType.Base64,
+            encoding: FileSystem.EncodingType.Base64,
         })
     
         return imageBase64Data
@@ -80,72 +78,45 @@ export default function CameraAccess ({ navigation }) {
     }
 
     const onRequestHandle = () => {
-        switch ( route.params?.onPanel ) {
+        const navigateToScreen = (screenName) => {
+            navigation.navigate(screenName, {
+                image: {
+                    uri: encodeURIComponent(imgPath),
+                    time: DateTimeUtils.momentCurrTime(),
+                    date: DateTimeUtils.momentCurrDateFormat(),
+                },
+            })
+        }
+      
+        switch (route.params?.onPanel) {
             case 0:
-                navigation.navigate('COSRequest', {
-                    image: {
-                        uri: encodeURIComponent(imgPath),
-                        time: DateTimeUtils.momentCurrTime(),
-                        date: DateTimeUtils.momentCurrDateFormat()
-                    }
-                })
+                navigateToScreen('COSRequest')
                 break
-            
+        
             case 1:
-                navigation.navigate('OBRequest', { 
-                    image: {
-                        uri: encodeURIComponent(imgPath),
-                        time: DateTimeUtils.momentCurrTime(),
-                        date: DateTimeUtils.momentCurrDateFormat()
-                    }
-                })
+                navigateToScreen('OBRequest')
                 break
-            
-            case 2: 
-                navigation.navigate('OTRequest', { 
-                    image: {
-                        uri: encodeURIComponent(imgPath),
-                        time: DateTimeUtils.momentCurrTime(),
-                        date: DateTimeUtils.momentCurrDateFormat()
-                    }
-                }) 
+        
+            case 2:
+                navigateToScreen('OTRequest')
                 break
-            
+        
             case 3:
-                navigation.navigate('OSRequest', { 
-                    image: {
-                        uri: encodeURIComponent(imgPath),
-                        time: DateTimeUtils.momentCurrTime(),
-                        date: DateTimeUtils.momentCurrDateFormat()
-                    }
-                })
+                navigateToScreen('OSRequest')
                 break
-
+        
             case 4:
-                navigation.navigate('LVRequest', { 
-                    image: {
-                        uri: encodeURIComponent(imgPath),
-                        time: DateTimeUtils.momentCurrTime(),
-                        date: DateTimeUtils.momentCurrDateFormat()
-                    }
-                })
+                navigateToScreen('LVRequest')
                 break
-            
+        
             case 5:
-                navigation.navigate('MLRequest', { 
-                    image: {
-                        uri: encodeURIComponent(imgPath),
-                        time: DateTimeUtils.momentCurrTime(),
-                        date: DateTimeUtils.momentCurrDateFormat()
-                    }
-                })
+                navigateToScreen('MLRequest')
                 break
-
+        
             default:
-                alert("No onPanel found")
                 break
         }
-    }
+    }      
 
     return (
         <>
@@ -153,9 +124,7 @@ export default function CameraAccess ({ navigation }) {
                 <View style={styles.previewView}>
                     <PageHeader pageName={"Image Preview"} />
 
-                    {isLoading && (
-                        <ActivityIndicator size={'large'} />
-                    )}
+                    {isLoading && ( <ActivityIndicator size={'large'} /> )}
                     
                     <Image
                         source={{ uri: userImage }}
@@ -188,9 +157,7 @@ export default function CameraAccess ({ navigation }) {
                         style={{ flex: 1 }} 
                         type={type}
                         autoFocus
-                        ref={(ref) => {
-                            cameraRef = ref
-                        }}   
+                        ref={(ref) => { cameraRef = ref }}   
                     >
                         <View style={styles.buttonContainer}>
                             <TouchableOpacity
@@ -237,91 +204,3 @@ export default function CameraAccess ({ navigation }) {
         </>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1
-    },
-
-    topHeader: {
-        padding: 20,
-        paddingTop: 45,
-        paddingBottom: 10,
-        alignItems: 'center',
-        backgroundColor: COLORS.powderBlue,
-    },
-
-    textHeader: {
-        color: COLORS.clearWhite,
-        fontFamily: 'Inter_600SemiBold',
-        fontSize: 18,
-    },
-
-    camera: {
-        flex: 1,
-    },
-
-    buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: COLORS.black,
-        width: '100%',
-        position: 'absolute',
-        bottom: 0,
-        padding: 30,
-    },
-
-    button: {
-        alignSelf: 'center',
-        backgroundColor: 'transparent',
-        verticalAlign: 'middle',
-    },
-
-    text: {
-        fontSize: 16,
-        color: COLORS.clearWhite,
-        fontFamily: 'Inter_600SemiBold',
-        padding: 6,
-    },
-
-    previewView: {
-        flex: 1,
-        backgroundColor: COLORS.clearWhite,
-    },
-
-    btnWrapper: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 30,
-    },
-
-    doneBtn: {
-        width: 170,
-        margin: 10,
-        backgroundColor: COLORS.green,
-        alignItems: 'center',
-        paddingHorizontal: 17,
-        paddingVertical: 10,
-        borderRadius: 50,
-    },
-
-    deleteBtn: {
-        width: 170,
-        margin: 10,
-        borderColor: COLORS.red,
-        borderWidth: 2,
-        alignItems: 'center',
-        paddingHorizontal: 17,
-        paddingVertical: 10,
-        borderRadius: 50,
-    },
-
-    textBtn: {
-        width: 200,
-        fontFamily: 'Inter_600SemiBold',
-        textAlign: 'center',
-        fontSize: 17,
-    },
-})

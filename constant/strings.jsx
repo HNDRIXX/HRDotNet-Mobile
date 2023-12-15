@@ -21,6 +21,10 @@ const STRINGS = {
     aboutUsTitleThree: "3. Transparency Center",
     aboutUsTitleFour: "4. Contributors",
 
+    alex: 'Alexis Diane Vivienne Candano',
+    patrick: 'Patrick William Lofranco',
+    jess: 'Jessie Cuerda',
+
     aboutTheCompany: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam gravida eleifend ante non venenatis. Sed et laoreet libero. Sed consequat dui a quam malesuada facilisis. Aenean eget dictum odio. Mauris eu massa ut nunc vehicula porttitor vitae eget turpis. Nunc imperdiet elit ipsum, in sagittis turpis imperdiet sit amet. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 
     In scelerisque egestas urna et lobortis. Proin erat risus, aliquam in dignissim sit amet, posuere nec velit. In pharetra ligula ligula, vitae suscipit ante blandit eu. Curabitur sed est pulvinar, placerat ligula sed, lacinia augue. Curabitur volutpat cursus dui at fermentum.`,

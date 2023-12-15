@@ -34,9 +34,7 @@ export default function DrawerPage ({ navigation }) {
                         <CachedImage
                             source={{ uri: ICONS.privacy }}
                             cacheKey={`privacy`}
-                            placeholderContent={( 
-                                <ActivityIndicator size={'small'} />
-                            )} 
+                            placeholderContent={( <ActivityIndicator size={'small'} />  )} 
                             style={{ height: 30, width: 30 }} 
                         />
 
@@ -47,9 +45,7 @@ export default function DrawerPage ({ navigation }) {
                         <CachedImage
                             source={{ uri: ICONS.terms }}
                             cacheKey={`condition`}
-                            placeholderContent={( 
-                                <ActivityIndicator size={'small'} />
-                            )} 
+                            placeholderContent={( <ActivityIndicator size={'small'} /> )} 
                             style={{ height: 30, width: 30 }} 
                         />
                     
@@ -63,9 +59,7 @@ export default function DrawerPage ({ navigation }) {
                         <CachedImage
                             source={{ uri: ICONS.info }}
                             cacheKey={`info`}
-                            placeholderContent={( 
-                                <ActivityIndicator size={'small'} />
-                            )} 
+                            placeholderContent={( <ActivityIndicator size={'small'} /> )} 
                             style={{ height: 30, width: 30 }}
                         />
                         

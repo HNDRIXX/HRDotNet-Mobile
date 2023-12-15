@@ -37,8 +37,9 @@ const data = [
 
 
 export default function VacationLeavePage ({ navigation }) {
-    const [isLoading, setLoading] = useState(true)
     const styles = STYLES.VacationLeave
+    const [isLoading, setLoading] = useState(true)
+    const [currYear, setCurrYear] = useState(DateTimeUtils.getCurrYear())
     
     useEffect(() => {
         setTimeout(() => {
@@ -62,17 +63,9 @@ export default function VacationLeavePage ({ navigation }) {
 
                 <View>
                     <Text style={styles.titleText}>Available Credits</Text>
-                    <Text style={styles.yearText}>for <Text style={styles.yearValue}>{DateTimeUtils.getCurrYear()}</Text></Text>
+                    <Text style={styles.yearText}>for <Text style={styles.yearValue}>{currYear}</Text></Text>
                 </View>
             </View>
-
-            <View style={styles.creditContainer}>
-                <Shadow distance={3} style={styles.creditShadow}>
-                    <Text style={styles.creditsValue}>3.00</Text>
-                </Shadow>
-            </View>
-
-            <Text style={styles.detailsTitle}>Details</Text>
 
             { isLoading ? (<Loader />) : (
                 <Animatable.View
@@ -80,15 +73,18 @@ export default function VacationLeavePage ({ navigation }) {
                     duration={500}
                     style={{ opacity: 1, flex: 1, backgroundColor: COLORS.clearWhite }}
                 >
+                    <View style={styles.creditContainer}>
+                        <Shadow distance={3} style={styles.creditShadow}>
+                            <Text style={styles.creditsValue}>3.00</Text>
+                        </Shadow>
+                    </View>
+
+                    <Text style={styles.detailsTitle}>Details</Text>
+
                     <FlatList 
                         data={data}
                         renderItem={({item, index}) => {
-                            return (
-                                <TimeOffItem 
-                                    item={item}
-                                />
-                            )
-
+                            return ( <TimeOffItem item={item} /> )
                         }}
                     />
                 </Animatable.View>

@@ -2007,4 +2007,93 @@ export const STYLES = StyleSheet.create({
             marginVertical: 10 
         },
     },
+
+    Camera: {
+        container: {
+            flex: 1
+        },
+    
+        topHeader: {
+            padding: 20,
+            paddingTop: 45,
+            paddingBottom: 10,
+            alignItems: 'center',
+            backgroundColor: COLORS.powderBlue,
+        },
+    
+        textHeader: {
+            color: COLORS.clearWhite,
+            fontFamily: 'Inter_600SemiBold',
+            fontSize: 18,
+        },
+    
+        camera: {
+            flex: 1,
+        },
+    
+        buttonContainer: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            backgroundColor: COLORS.black,
+            width: '100%',
+            position: 'absolute',
+            bottom: 0,
+            padding: 30,
+        },
+    
+        button: {
+            alignSelf: 'center',
+            backgroundColor: 'transparent',
+            verticalAlign: 'middle',
+        },
+    
+        text: {
+            fontSize: 16,
+            color: COLORS.clearWhite,
+            fontFamily: 'Inter_600SemiBold',
+            padding: 6,
+        },
+    
+        previewView: {
+            flex: 1,
+            backgroundColor: COLORS.clearWhite,
+        },
+    
+        btnWrapper: {
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 30,
+        },
+    
+        doneBtn: {
+            width: 170,
+            margin: 10,
+            backgroundColor: COLORS.green,
+            alignItems: 'center',
+            paddingHorizontal: 17,
+            paddingVertical: 10,
+            borderRadius: 50,
+        },
+    
+        deleteBtn: {
+            width: 170,
+            margin: 10,
+            borderColor: COLORS.red,
+            borderWidth: 2,
+            alignItems: 'center',
+            paddingHorizontal: 17,
+            paddingVertical: 10,
+            borderRadius: 50,
+        },
+    
+        textBtn: {
+            width: 200,
+            fontFamily: 'Inter_600SemiBold',
+            textAlign: 'center',
+            fontSize: 17,
+        },
+    },
+    
 })

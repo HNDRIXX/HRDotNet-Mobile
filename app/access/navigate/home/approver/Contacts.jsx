@@ -36,7 +36,8 @@ export default function ContactsPage({ navigation }) {
             emailAddress: 'emailaddress@gmail.com',
             uri: ICONS.dave,
         },
-    ]);
+    ])
+    
     const [isLoading, setIsLoading] = useState(true)
     const [filteredData, setFilteredData] = useState(data)
     const [filterText, setFilterText] = useState('')
@@ -80,9 +81,7 @@ export default function ContactsPage({ navigation }) {
                 <Search setFilterText={setFilterText} filterText={filterText} />
             </View>
 
-            {isLoading ? (
-                <Loader />
-            ) : (
+            {isLoading ? ( <Loader /> ) : (
                 <Animatable.View animation={'fadeIn'} duration={600} style={[styles.bodyContainer]}>
                     { flatListData.length > 0 ? (
                         <FlatList
@@ -93,6 +92,7 @@ export default function ContactsPage({ navigation }) {
                             renderItem={({ item, index }) => (
                                 <>
                                     <Text style={styles.letterTitle}>{item.title}</Text>
+
                                     {item.data.map((event) => (
                                         <TeamsContactsItem
                                             key={event.name}
@@ -104,15 +104,14 @@ export default function ContactsPage({ navigation }) {
                                     ))}
                                 </>
                             )}
+
                             getItemLayout={(data, index) => ({
                                 length: 50,
                                 offset: 50 * index,
                                 index,
                             })}
                         />
-                    ) : (
-                        <NothingFoundNote />
-                    )}
+                    ) : ( <NothingFoundNote /> )}
                 </Animatable.View>
             )}
         </View>

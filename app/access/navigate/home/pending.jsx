@@ -31,7 +31,6 @@ export default function PendingPage ({ navigation }) {
                     onPress={() => switchPanel(1)}
                 >
                     <Text style={[ styles.counterText, activePanel === 1 && styles.selectedCounter ]}>{filedCount}</Text>
-
                     <Text style={[ styles.buttonText, activePanel === 1 && styles.selectedTextButton ]}>Filed</Text>
                 </TouchableOpacity>
 
@@ -40,7 +39,6 @@ export default function PendingPage ({ navigation }) {
                     onPress={() => switchPanel(2)}
                 >
                     <Text style={[ styles.counterText, activePanel === 2 && styles.selectedCounter ]}>{reviewedCount}</Text>
-
                     <Text style={[ styles.buttonText, activePanel === 2 && styles.selectedTextButton ]}>Reviewed</Text>
                 </TouchableOpacity>
             </View>

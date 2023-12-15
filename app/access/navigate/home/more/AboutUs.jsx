@@ -44,11 +44,11 @@ export default function AboutUsPage () {
                             <Text style={styles.verticalSemiBoldText}>{STRINGS.aboutUsTitleFour}</Text>
 
                             <Text style={styles.boldText}>Designed by</Text>
-                            <Text style={[styles.regularText, styles.indentText]}>Alexis Diane Vivienne Candano</Text>
+                            <Text style={[styles.regularText, styles.indentText]}>{STRINGS.alex}</Text>
                             
                             <Text style={[styles.boldText, { marginTop: 20 }]}>Developed by</Text>
-                            <Text style={[styles.regularText, styles.indentText]}>Patrick William Lofranco</Text>
-                            <Text style={[styles.regularText, styles.indentText]}>Jessie Cuerda</Text>
+                            <Text style={[styles.regularText, styles.indentText]}>{STRINGS.patrick}</Text>
+                            <Text style={[styles.regularText, styles.indentText]}>{STRINGS.jess}</Text>
                         </View>
                     </Shadow>
                 </View>

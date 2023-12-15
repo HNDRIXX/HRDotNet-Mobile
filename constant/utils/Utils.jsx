@@ -21,7 +21,6 @@ const lastDayOfMonth = moment().endOf('month')
 const sixteenthDayOfMonth = moment().date(15)
 
 export const Utils = {
-    
     leaveTypes: [
         'Bereavement Leave', 
         'Birthday Leave',
@@ -37,36 +36,23 @@ export const Utils = {
     ],
 
     statusIcon: (status) => {
-        return status === "Filed" ? (
-            <FontAwesome5 
-                name="file-import" 
-                size={17}
+        const iconConfig = {
+            Filed: { name: 'file-import', size: 17 },
+            Reviewed: { name: 'file-find', size: 20 },
+            Approved: { name: 'checkcircle', size: 17 },
+            Cancelled: { name: 'circle-with-cross', size: 19 },
+        }
+      
+        const icon = iconConfig[status]
+        return icon ? (
+            <FontAwesome5
+                name={icon.name}
+                size={icon.size}
                 color={COLORS.clearWhite}
                 style={{ marginRight: 10 }}
             />
-        ) : status == "Reviewed" ? (
-            <MaterialCommunityIcons 
-                name="file-find" 
-                size={20} 
-                color={COLORS.clearWhite} 
-                style={{ marginRight: 10 }}
-            />
-        ) : status == "Approved" ? (
-            <AntDesign
-                name="checkcircle"
-                size={17}
-                color={COLORS.clearWhite}
-                style={{ marginRight: 10 }}
-            />
-        ) : status == "Cancelled" ? (
-            <Entypo
-                name="circle-with-cross"
-                size={19}
-                color={COLORS.clearWhite}
-                style={{ marginRight: 10 }}
-            /> 
         ) : null
-    },
+    },    
 
     circledBulletColor: (valueColor) => {
         let color
@@ -165,9 +151,7 @@ export const Utils = {
                     }
                 }
             }
-        } catch (error) {
-            console.error('Error picking document:', error)
-        }
+        } catch (error) { }
     },
 
     fetchDataLoc: async ( setIsLoading, setLocation, setMapRegion, setCurrAddress ) => {
@@ -194,9 +178,7 @@ export const Utils = {
             const fullAddress = `${address[0].name} ${address[0].street}, ${address[0].city}, ${address[0].country}`
             setIsLoading(false)
             setCurrAddress(fullAddress)
-        } catch (error) {
-            //   console.error("Error fetching location and address:", error)
-        } 
+        } catch (error) { } 
     },
 
     permissionLocation: async (setIsLoading, setLocation, setMapRegion, setCurrAddress) => {

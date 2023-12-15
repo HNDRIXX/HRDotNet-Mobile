@@ -37,7 +37,7 @@ export default function ContactInfo ({ navigation}) {
                     <View style={styles.centerView}>
                         <CachedImage
                             source={{ uri: params.uri }}
-                            cacheKey={`contactInfo-${params.name}`}
+                            cacheKey={`contactsImage-${params.name}`}
                             style={styles.userProfile}
                             placeholderContent={
                                 <ActivityIndicator size={'small'} color={COLORS.powderBlue} 

@@ -4,7 +4,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions, } from "react-native";
+import { ScrollView, StatusBar, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, Dimensions, ImageBackground } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { Shadow } from "react-native-shadow-2";
 import * as Animatable from 'react-native-animatable';
@@ -17,11 +17,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { COLORS, ICONS } from "../../../constant";
 import TimeClock from "../../../components/section/home/TimeClock";
 import MenuButton from "../../../components/button/MenuButton";
-import ApproverMenuButton from "../../../components/button/ApproverMenuButton"
+import ApproverMenuButton from "../../../components/button/ApproverMenuButton";
 import TimeOff from "../../../components/button/TimeOff";
-import Loader from "../../../components/loader/Loader"
+import Loader from "../../../components/loader/Loader";
 
-export default function Home ({ navigation }) {  
+export default function Home ({ navigation }) {
     const [isLoading, setIsLoading] = useState(true)
     const [userData, setUserData] = useState(null)
     
@@ -41,10 +41,8 @@ export default function Home ({ navigation }) {
         }
 
         fetchUserData()
-        
-        setTimeout(() => {
-            setIsLoading(false)
-        }, 800)
+
+        setTimeout(() => { setIsLoading(false) }, 800)
     }, [])
 
     return (
@@ -62,8 +60,9 @@ export default function Home ({ navigation }) {
                             <GifImage
                                 source={require('../../../assets/lights.gif')}
                                 style={{
-                                    width: '109%',
-                                    height: 69,
+                                    width: '102%',
+                                    height: 90,
+                                    opacity: 0.6,
                                     position: 'absolute',
                                     zIndex: -1,
                                     top: -20,
@@ -75,8 +74,7 @@ export default function Home ({ navigation }) {
                                 <View style={styles.headerNavigation}>
                                     <TouchableOpacity
                                         onPress={() => navigation.navigate('SideDrawer')}>
-                                        <FontAwesome name={'bars'} size={25} color={COLORS.clearWhite} 
-                                            style={{ backgroundColor: COLORS.powderBlue }} />
+                                        <FontAwesome name={'bars'} size={25} color={COLORS.clearWhite} />
                                     </TouchableOpacity>
                                 
                                     <TouchableOpacity
@@ -129,7 +127,7 @@ export default function Home ({ navigation }) {
                                 style={styles.scrollView}
                                 bounces={false}
                                 contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}
-                                >
+                            >
                                 <View style={[styles.sectionView, { marginBottom: 20 }]}>
                                     <Text style={styles.mainTitle}>Menu</Text>
 
@@ -176,7 +174,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginHorizontal: 8,
-        marginBottom: 2,
+        marginBottom: 5,
     },
 
     welcomeView: {

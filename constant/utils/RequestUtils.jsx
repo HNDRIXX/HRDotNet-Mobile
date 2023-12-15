@@ -14,18 +14,14 @@ export const RequestUtils = {
             return (`${DateTimeUtils.dateMonthDayConvert(item.startDate)} - ${DateTimeUtils.dateDayYearConvert(item.endDate)}`)
         }
     },
-
-    consoleLog: (date, setOBDate, setDatePicker) => {
-        setOBDate("20231112")
-    },
-
+    
     checkSelectedDate: (date, setOBDate, setDatePicker) => {
         const currentDate = moment()
         const selectedDate = moment(date)
 
         if (DateTimeUtils.checkDateHalf(currentDate)) {
             if (selectedDate.isSameOrAfter(currentDate.date(16)) && selectedDate.isSameOrBefore(currentDate.endOf('month'))) {
-                setOBDate(moment(date).format('YYYYMMDD'))
+                setOBDate(DateTimeUtils.setDefaultDateFormat(date))
                 setDatePicker(false)
             } else {
                 alert('Please select a date between the 16th and the last day of the current month.')
@@ -33,7 +29,7 @@ export const RequestUtils = {
             }
         } else {
             if (selectedDate.isSameOrAfter(currentDate.startOf('month')) && selectedDate.isSameOrBefore(currentDate.date(15))) {
-                setOBDate(moment(date).format('YYYYMMDD'))
+                setOBDate(DateTimeUtils.setDefaultDateFormat(date))
                 setDatePicker(false)
             } else {
                 alert('Please select a date between the 1st and 15th day of the current month.');

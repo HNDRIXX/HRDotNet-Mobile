@@ -114,34 +114,33 @@ export default function LoanLedgerPage () {
                             filterText={filterText}
                             setFilterText={setFilterText}
                         />
-
                         
-                    { filteredData.length > 0 ? (
-                        <ScrollView
-                            ref={scrollViewRef}
-                            refreshControl={
-                            <RefreshControl
-                                refreshing={refreshing}
-                                onRefresh={refresh} />
-                            }
-                            style={styles.loanLedgerList}
-                        >
-                            {filteredData.map((item, index) => (
-                                <LoanLedgerItem 
-                                    key={index}
-                                    item={{ 
-                                        ...item,
-                                        details: details,
-                                        formattedTransactionDate: DateTimeUtils.dateFullConvert(item.transactionDate), 
-                                        formattedApprovedDate:  DateTimeUtils.dateFullConvert(item.approvedDate),
-                                        formattedGrantedDate: DateTimeUtils.dateFullConvert(item.grantedDate),
-                                        formattedFirstDueDate: DateTimeUtils.dateFullConvert(item.firstDueDate),
-                                    }}
-                                />
-                            ))}
+                        { filteredData.length > 0 ? (
+                            <ScrollView
+                                ref={scrollViewRef}
+                                refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={refresh} />
+                                }
+                                style={styles.loanLedgerList}
+                            >
+                                {filteredData.map((item, index) => (
+                                    <LoanLedgerItem 
+                                        key={index}
+                                        item={{ 
+                                            ...item,
+                                            details: details,
+                                            formattedTransactionDate: DateTimeUtils.dateFullConvert(item.transactionDate), 
+                                            formattedApprovedDate:  DateTimeUtils.dateFullConvert(item.approvedDate),
+                                            formattedGrantedDate: DateTimeUtils.dateFullConvert(item.grantedDate),
+                                            formattedFirstDueDate: DateTimeUtils.dateFullConvert(item.firstDueDate),
+                                        }}
+                                    />
+                                ))}
 
-                        </ScrollView>
-                        ) : ( <NothingFoundNote /> )}
+                            </ScrollView>
+                            ) : ( <NothingFoundNote /> )}
                     </View>
                 </Animatable.View>
             )}

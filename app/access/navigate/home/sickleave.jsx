@@ -36,8 +36,9 @@ const data = [
 ]
 
 export default function SickLeavePage ({ navigation }) {
-    const [isLoading, setLoading] = useState(true)
     const styles = STYLES.SickLeave
+    const [isLoading, setLoading] = useState(true)
+    const [currYear, setCurrYear] = useState(DateTimeUtils.getCurrYear())
 
     useEffect(() => {
         setTimeout(() => {
@@ -51,7 +52,7 @@ export default function SickLeavePage ({ navigation }) {
 
             <View style={styles.topContainer}>
                 <CachedImage
-                    source={{  uri: ICONS.medicine}}
+                    source={{ uri: ICONS.medicine }}
                     style={{ width: 70, height: 70, marginRight: 10 }}
                     cacheKey={`medecine`}
                     placeholderContent={( 
@@ -61,33 +62,27 @@ export default function SickLeavePage ({ navigation }) {
 
                 <View>
                     <Text style={styles.titleText}>Available Credits</Text>
-                    <Text style={styles.yearText}>for <Text style={styles.yearValue}>{DateTimeUtils.getCurrYear()}</Text></Text>
+                    <Text style={styles.yearText}>for <Text style={styles.yearValue}>{currYear}</Text></Text>
                 </View>
             </View>
-
-            <View style={styles.creditContainer}>
-                <Shadow distance={3} style={styles.creditShadow}>
-                    <Text style={styles.creditsValue}>1.50</Text>
-                </Shadow>
-            </View>
-
-            <Text style={styles.detailsTitle}>Details</Text>
             
-            { isLoading ? (<Loader />) : (
+            { isLoading ? ( <Loader /> ) : (
                 <Animatable.View
                     animation={'fadeIn'}
                     duration={500}
                     style={{ opacity: 1, flex: 1, backgroundColor: COLORS.clearWhite }}
                 >
+                    <View style={styles.creditContainer}>
+                        <Shadow distance={3} style={styles.creditShadow}>
+                            <Text style={styles.creditsValue}>1.50</Text>
+                        </Shadow>
+                    </View>
+
+                    <Text style={styles.detailsTitle}>Details</Text>
+                    
                     <FlatList 
                         data={data}
-                        renderItem={({item, index}) => {
-                            return (
-                                <TimeOffItem 
-                                    item={item}
-                                />
-                            )
-                        }}
+                        renderItem={({item, index}) => { return ( <TimeOffItem item={item} /> ) }}
                     />
                 </Animatable.View>
             )}

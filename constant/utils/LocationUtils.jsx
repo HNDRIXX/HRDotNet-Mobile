@@ -74,9 +74,7 @@ export const LocationUtils = {
             // const { coords } = await Location.getCurrentPositionAsync({})
             // setLocation(`${coords.latitude.toString()}, ${coords.longitude.toString()}`)
             // setProceed(true)
-            } catch (error) {
-            console.error('Error getting location:', error);
-            }
+        } catch (error) { }
     },
 
     calculationDistance: (lat1, lon1, lat2, lon2) => {

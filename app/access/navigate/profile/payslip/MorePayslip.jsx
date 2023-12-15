@@ -60,7 +60,7 @@ const TimekeepingText = ({ title, text, gap }) => {
     )
 }
 
-export default function MorePayslip () {
+export default function MorePayslip ({ navigation }) {
     const route = useRoute()
     const params = route.params.item
     const TKparams = route.params.TKData
@@ -88,7 +88,7 @@ export default function MorePayslip () {
 
             console.log(`Nakasave sa ${destination}`)
             setPdfUri(destination)
-            setAlert(true)
+            setAlert(!isAlert)
         }
     }
 

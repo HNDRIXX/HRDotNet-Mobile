@@ -15,6 +15,7 @@ export const DateTimeUtils = {
     getHalfDateWithExtra: (date) => moment(date, 'YYYYMMDD').format('MMM DD, ddd'),
     getCurrMonth: () => moment().format('MMMM'),
     getCurrYear: () => moment().format('YYYY'),
+    setDefaultDateFormat: (date) => moment(date).format('YYYYMMDD'),
     defaultDateFormat: () => moment().format('YYYYMMDD'),
     dashDateFormat: () => moment().format('YYYY-MM-DD'),
     dashToDefaultFormat: (date) => moment(date, 'YYYY-MM-DD').format('YYYYMMDD'),

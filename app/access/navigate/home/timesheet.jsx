@@ -94,8 +94,8 @@ export default function TimeSheetPage ({ navigation }) {
                 <Shadow distance={3} style={styles.shadowView}>
                     <FontAwesome
                         name={index === 1 ? "sign-out" : index === 0 ? "sign-in" : null}
-                        size={34}
                         color={ index === 1 ? COLORS.powderBlue : index === 0 ? COLORS.orange : null }
+                        size={34}
                         style={{ paddingRight: 20, marginLeft: 10 }}
                     />
         
@@ -137,9 +137,7 @@ export default function TimeSheetPage ({ navigation }) {
 
                                 renderList={() => (
                                     <View style={styles.agendaItem}>
-                                        {selectedDate == null && (
-                                            <CalendarNote />
-                                        )}
+                                        {selectedDate == null && ( <CalendarNote /> )}
                                         
                                         {selectedDate && events && events.length === 0 ? (
                                             <Text style={styles.noEventsText}>No events to display</Text>
@@ -147,9 +145,7 @@ export default function TimeSheetPage ({ navigation }) {
                                     </View>
                                 )}
 
-                                renderEmptyData={() => (
-                                    <Text style={styles.noDisplayText}>No agenda for this day.</Text>
-                                )}
+                                renderEmptyData={() => ( <Text style={styles.noDisplayText}>No agenda for this day.</Text> )}
                             />
                         </View>
                     </>

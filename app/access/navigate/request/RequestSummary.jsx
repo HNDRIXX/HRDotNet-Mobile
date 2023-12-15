@@ -28,14 +28,14 @@ export default function RequestSummary({ navigation }) {
         switch (onPanel) {
             case 0:
                 LocalData.insertCOS(route)
-                break;
+                break
 
             case 1:
                 LocalData.insertOB(route)
-                break;
+                break
 
             default:
-                break;
+                break
         }
         setIsSuccessAlertVisible(true)
     }
@@ -98,8 +98,6 @@ export default function RequestSummary({ navigation }) {
                     isSuccessAlertVisible={isSuccessAlertVisible}
                 />
             ): null }
-            
-
         </>
     )
 }

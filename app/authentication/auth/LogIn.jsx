@@ -7,6 +7,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator,
 import { StatusBar } from "expo-status-bar";
 import { Image } from "expo-image";
 import { Entypo } from "@expo/vector-icons";
+import GifImage from '@lowkey/react-native-gif';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { COLORS, useFonts, STYLES} from "../../../constant";

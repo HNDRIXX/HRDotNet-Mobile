@@ -62,7 +62,7 @@ export default function NotificationPage () {
         <View style={styles.container}>
             <PageHeader pageName="Notifications" />
 
-            { isLoading ? (<Loader />) : (
+            { isLoading ? ( <Loader /> ) : (
                 <View style={styles.wrapper}> 
                     <Shadow distance={4} style={styles.shadowView}>
                         <FlatList 
