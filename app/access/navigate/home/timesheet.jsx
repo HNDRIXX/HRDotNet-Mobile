@@ -11,10 +11,25 @@ import DashedLine from 'react-native-dashed-line'
 import { useRoute } from '@react-navigation/native'
 import { Shadow } from 'react-native-shadow-2'
 
-import { COLORS, STYLES } from '../../../../constant'
+import { COLORS, STYLES, DateTimeUtils } from '../../../../constant'
 import CalendarNote from '../../../../components/note/CalendarNote'
 import PageHeader from '../../../../components/header/PagesHeader'
 import Loader from '../../../../components/loader/Loader'
+
+const data = [
+    { id: 'MGL001', date: '20231204', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+    { id: 'MGL001', date: '20231204', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+    { id: 'MGL002', date: '20231204', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+    { id: 'MGL002', date: '20231204', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+    { id: 'MGL003', date: '20231204', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+    { id: 'MGL003', date: '20231204', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+    { id: 'MGL001', date: '20231206', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+    { id: 'MGL001', date: '20231206', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+    { id: 'MGL002', date: '20231206', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+    { id: 'MGL002', date: '20231206', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+    { id: 'MGL003', date: '20231206', clocked: 'In', time: '08:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+    { id: 'MGL003', date: '20231206', clocked: 'Out', time: '18:00:00', location: '12 Catanduanes St. Quezon City, NCR' },
+]
 
 export default function TimeSheetPage ({ navigation }) {
     const route = useRoute()
@@ -27,45 +42,23 @@ export default function TimeSheetPage ({ navigation }) {
 
     const [selectedDate, setSelectedDate] = useState(null)
     const [events, setEvents] = useState(null)
-
-    const items = {
-        '2023-11-05': [
-            { time: '10:10:08 AM', location: '12 Cataduanes St. Quezon City' },
-            { time: '06:01:02 PM', location: '12 Cataduanes St. Quezon City' }],
-        
-        '2023-11-06': [
-            { time: '07:49:01 AM', location: '12 Cataduanes St. Quezon City' },
-            { time: '06:20:05 PM', location: '12 Cataduanes St. Quezon City' }],
-        
-        '2023-11-12': [
-            { time: '07:31:01 AM', location: '12 Cataduanes St. Quezon City' },
-            { time: '08:31:01 PM', location: '12 Cataduanes St. Quezon City' }],
-        
-        '2023-11-13': [
-            { time: '07:21:19 AM', location: '12 Cataduanes St. Quezon City' },
-            { time: null, location: null }],
-    }
-
-    const newData = {
-        time: route.params?.clockedTime,
-        location: route.params?.clockedLocation
-    }
-
-    const formattedDate = moment(route.params?.clockedDate, 'MMMM DD, YYYY, dddd').format('YYYY-MM-DD')
-
-    if (items[formattedDate]) {
-        const existingData = items[formattedDate]
-
-        if (existingData.length === 1) {
-            existingData.push(newData)
-        } else {
-        }
-    } else {
-        items[formattedDate] = [newData]
-        items[formattedDate].push({ time: null, location: null })
-    }
+    const [formattedDateData, setFormattedDateData] = useState(null)
 
     useEffect(() => {
+        const transformedData = data.reduce((acc, entry) => {
+            if (entry.id === "MGL002") {
+                const dateKey = moment(entry.date, 'YYYYMMDD').format('YYYY-MM-DD')
+                const newEntry = { id: entry.id, clocked: entry.clocked, time: entry.time, location: entry.location }
+
+                acc[dateKey] = acc[dateKey] || []
+                acc[dateKey].push(newEntry)
+            }
+
+            return acc
+        }, {})
+
+        setFormattedDateData(transformedData)
+
         setTimeout(() => {
             setIsLoading(false)
         }, 800)
@@ -73,7 +66,7 @@ export default function TimeSheetPage ({ navigation }) {
 
     const dayPress = (day) => {
         setSelectedDate(day.dateString)
-        setEvents(items[day.dateString] || [])
+        setEvents(formattedDateData[day.dateString] || [])
 
         const selectedDateObj = new Date(day.dateString)
         
@@ -84,41 +77,51 @@ export default function TimeSheetPage ({ navigation }) {
         setYear(year)
     }    
     
-    const renderEventItem = (event, index) => (
-        <View key={index} style={index === 3 ? { paddingBottom: 500 } : {}}>
-            <Text style={styles.clockInOutText}>
-                {index === 0 ? "Clock-in : " : index === 1 ? "Clock-out :" : null}
-            </Text>
-      
-            <View style={styles.itemContainer}>
-                <Shadow distance={3} style={styles.shadowView}>
-                    <FontAwesome
-                        name={index === 1 ? "sign-out" : index === 0 ? "sign-in" : null}
-                        color={ index === 1 ? COLORS.powderBlue : index === 0 ? COLORS.orange : null }
-                        size={34}
-                        style={{ paddingRight: 20, marginLeft: 10 }}
-                    />
+    const renderEventItem = (event, index) => {
+        const isClockIn = index === 0
+        const isClockOut = index === 1
+        const paddingBottom = index === 3 ? 500 : 0
+        const clockIconName = isClockIn ? "sign-in" : isClockOut ? "sign-out" : null
+        const clockIconColor = isClockIn ? COLORS.orange : isClockOut ? COLORS.powderBlue : null
         
-                    <View style={styles.item}>
-                        {!event.time && !event.location ? (
-                            <DashedLine
-                                dashLength={5}
-                                dashColor={COLORS.darkGray}
-                                dashGap={2}
-                                dashThickness={2}
-                                style={{ width: 130, paddingVertical: 23 }}
-                            />
-                        ) : (
-                            <>
-                                <Text style={styles.itemText}>{event.time}</Text>
-                                <Text style={styles.itemLoc}>{event.location}</Text>
-                            </>
-                        )}
-                    </View>
-                </Shadow>
+        const dashLine = !event.time && !event.location ? (
+            <DashedLine
+                dashLength={5}
+                dashColor={COLORS.darkGray}
+                dashGap={2}
+                dashThickness={2}
+                style={{ width: 130, paddingVertical: 23 }}
+            />
+        ) : null
+
+        return (
+            <View key={index} style={{ paddingBottom }}>
+                <Text style={styles.clockInOutText}>
+                    {isClockIn ? "Clock-in : " : isClockOut ? "Clock-out :" : null}
+                </Text>
+
+                <View style={styles.itemContainer}>
+                    <Shadow distance={3} style={styles.shadowView}>
+                        <FontAwesome
+                            name={clockIconName}
+                            color={clockIconColor}
+                            size={34}
+                            style={{ paddingRight: 20, marginLeft: 10 }}
+                        />
+
+                        <View style={styles.item}>
+                            {dashLine || (
+                                <>
+                                    <Text style={styles.itemText}>{DateTimeUtils.timeConvert(event.time)}</Text>
+                                    <Text style={styles.itemLoc}>{event.location}</Text>
+                                </>
+                            )}
+                        </View>
+                    </Shadow>
+                </View>
             </View>
-        </View>
-    )
+        )
+    }
       
     return (
         <>
@@ -131,7 +134,7 @@ export default function TimeSheetPage ({ navigation }) {
                             <Text style={styles.monthYearText}>{month} {year}</Text>
 
                             <Agenda
-                                items={items}
+                                items={formattedDateData}
                                 onDayPress={dayPress}
                                 showOnlySelectedDayItem
 

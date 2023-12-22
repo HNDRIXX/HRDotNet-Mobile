@@ -100,7 +100,7 @@ export default function OBRequest ({ navigation }) {
                 timeOut: timeOut,
                 reason: reason,
                 attachedFile: JSON.stringify(selectedFile),
-            })   
+            })
         }
     }
 
@@ -121,6 +121,7 @@ export default function OBRequest ({ navigation }) {
                                 inputValue={OBDate} 
                                 isInputCheck={isInputCheck}
                             />   
+                            
 
                             <View style={[styles.rowView, styles.border]}>
                                 <Text style={styles.text}>
@@ -130,11 +131,11 @@ export default function OBRequest ({ navigation }) {
                                 
                                 <Ionicons 
                                     name="calendar" 
-                                    size={24} 
+                                    size={24}
                                     color={COLORS.darkGray} 
                                     onPress={() => setDatePicker(true)}   
                                 />
-                            </View>
+                            </View>     
                         </View>
 
                         <View style={styles.wrapper}>

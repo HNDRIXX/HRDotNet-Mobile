@@ -39,7 +39,7 @@ export const Utils = {
         const iconConfig = {
             Filed: { name: 'file-import', size: 17 },
             Reviewed: { name: 'file-find', size: 20 },
-            Approved: { name: 'checkcircle', size: 17 },
+            Approved: { name: 'check', size: 17 },
             Cancelled: { name: 'circle-with-cross', size: 19 },
         }
       

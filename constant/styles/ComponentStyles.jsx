@@ -1470,7 +1470,8 @@ export const COMPONENT_STYLES = StyleSheet.create({
         container: {
             flex: 1,
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            backgroundColor: COLORS.clearWhite,
         },
 
         button: {
@@ -1487,6 +1488,13 @@ export const COMPONENT_STYLES = StyleSheet.create({
             marginLeft: 10,
             color: COLORS.clearWhite
         },
+
+        text: {
+            fontFamily: 'Inter_400Regular',
+            fontStyle: 'italic',
+            marginTop: 10,
+            color: COLORS.darkGray,
+        }
     },
 
     Search: {

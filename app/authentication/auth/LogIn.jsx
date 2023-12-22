@@ -33,7 +33,7 @@ export default function LogInPage ({ navigation }) {
     
     const onHandleLogIn = () => {
         // const user = Account.find(account => account.userName === userName && account.password === password)
-        const user = Account.find(account => account.userName === 'MGL01' && account.password === 'sql123')
+        const user = Account.find(account => account.userName === 'MGL02' && account.password === 'sql123')
 
         if (user) {
             const userData = {

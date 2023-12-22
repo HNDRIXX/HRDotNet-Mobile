@@ -2,11 +2,12 @@
 // Designed by : Alex Diane Vivienne Candano
 // Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
 
-import { View, ActivityIndicator, ScrollView, RefreshControl } from 'react-native'
+import { View, Text, ActivityIndicator, ScrollView, RefreshControl } from 'react-native'
+import * as Animatable from 'react-native-animatable';
 
 import { COLORS, COMPONENT_STYLES } from '../../constant'
 
-export default function RefreshPage({ setRestart, refreshing, onRefresh }) {
+export default function RefreshPage({ setRestart, refreshing, onRefresh, text }) {
   const styles = COMPONENT_STYLES.RefreshPage
 
   return (
@@ -27,6 +28,16 @@ export default function RefreshPage({ setRestart, refreshing, onRefresh }) {
     >
       <View style={styles.container}>
         <ActivityIndicator size={'large'} color={COLORS.powderBlue} />
+
+        { text && (
+          <Animatable.View
+              animation={'fadeIn'}
+              duration={500}
+              delay={5000}
+          >
+            <Text style={styles.text}>{text}</Text>
+          </Animatable.View>
+        )}
       </View>
     </ScrollView>
   )
