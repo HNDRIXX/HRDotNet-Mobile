@@ -13,6 +13,8 @@ const sequelize = new Sequelize('HRDotNet', 'sa', 'sql123$%^', {
   }
 })
 
+app.use(express.json());
+
 sequelize.authenticate()
   .then(() => {
     console.log('Connected to the database')
@@ -25,7 +27,7 @@ app.use(cors())
 
 app.get('/api/tAccountType', async (req, res) => {
   try {
-    const result = await sequelize.query('SELECT *FROM tBank')
+    const result = await sequelize.query('SELECT * FROM tBank')
     res.json(result[0])
 
     console.log(result[0])
@@ -37,27 +39,31 @@ app.get('/api/tAccountType', async (req, res) => {
 
 app.post('/api/login', async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password } = req.body
 
-    const result = await sequelize.query('SELECT * FROM sys.sql_logins WHERE name = ?', {
-      replacements: [username],
-    });
+    const result = await sequelize.query(
+      "SELECT name FROM sys.sql_logins WHERE PWDCOMPARE(:password, password_hash) = 1 AND name = :username",
+      {
+        replacements: { username, password },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
 
-    if (result.length === 0) {
-      return res.status(401).json({ message: 'Invalid username or password' });
+    if (result.length > 0) {
+      const result = await sequelize.query("SELECT * FROM tSysUser WHERE Username = :username", {
+        replacements: { username },
+        type: sequelize.QueryTypes.SELECT,
+      })
+
+      res.json(result[0])
+    } else {
+      res.status(401).json({ success: false, message: 'Invalid username or password' })
     }
-
-    if (!(await sequelize.query('EXEC HAS_DBACCESS(?, ?)', { replacements: [username, password] }))) {
-      return res.status(401).json({ message: 'Invalid username or password' });
-    }
-
-    const token = generateToken(/* ...user details... */);
-    res.json({ token });
   } catch (error) {
-    console.error('Error during login:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error('Error executing query', error);
+    res.status(500).json({ success: false, message: 'Error connecting to the database' })
   }
-});
+})
 
 app.listen(3000, () => {
   console.log('Server started on port 3000')

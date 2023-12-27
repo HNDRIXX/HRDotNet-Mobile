@@ -8,6 +8,7 @@ import { StatusBar } from "expo-status-bar";
 import { Image } from "expo-image";
 import { Entypo } from "@expo/vector-icons";
 import GifImage from '@lowkey/react-native-gif';
+import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { COLORS, useFonts, STYLES} from "../../../constant";
@@ -15,8 +16,8 @@ import { Account } from "../../../constant/array/Account";
 
 export default function LogInPage ({ navigation }) {
     const [fontsLoaded] = useFonts()
-    const [userName, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    const [userName, setUsername] = useState('MGL4815')
+    const [password, setPassword] = useState('sql123$%^')
     const [isShowPassword, setShowPassword] = useState(false)
 
     const styles = STYLES.LogIn
@@ -31,42 +32,29 @@ export default function LogInPage ({ navigation }) {
 
     const toggleShowPassword = () => { setShowPassword(!isShowPassword) }
     
-    const onHandleLogIn = () => {
-        // const user = Account.find(account => account.userName === userName && account.password === password)
-        const user = Account.find(account => account.userName === 'MGL02' && account.password === 'sql123')
+    const onHandleLogIn = async () => {
+        try {
+          const response = await fetch('http://10.0.1.82:3000/api/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username: userName, password: password }),
+          });
+      
+          const data = await response.json();
+      
+          if (response.ok) {
+            setUsername('')
+            setPassword('')
 
-        if (user) {
-            const userData = {
-                id: user.id,
-                accNumber: user.accNumber,
-                role: user.role,
-                name: user.name,
-                position: user.position,
-                company: user.company,
-                branch: user.branch,
-                division: user.division,
-                department: user.department,
-                section: user.section,
-                phoneNumber: user.phoneNumber,
-                emailAddress: user.emailAddress,
-                uri: user.uri
-            }
-        
-            const jsonData = JSON.stringify(userData)
-        
-            AsyncStorage.setItem('userAcc', jsonData)
-                .then(() => {
-                    setUsername('')
-                    setPassword('')
+            console.log(data)
 
-                    navigation.navigate('TabStack', { screen: 'UserHome' })
-                })
-                .catch((error) => {
-                    // console.error('Error saving data:', error)
-                })
-        } else { alert('Invalid username or password') }
+            navigation.navigate('TabStack', { screen: 'UserHome' })
+          } else { console.error(data.message) }
+        } catch (error) { console.error(error) }
     }
-
+      
     return (
         <>
             <View style={{ flex: 1, backgroundColor: COLORS.clearWhite }}>
@@ -120,7 +108,7 @@ export default function LogInPage ({ navigation }) {
 
                         <TouchableOpacity 
                             style={styles.loginBtn}
-                            onPress={onHandleLogIn}
+                            onPress={() => onHandleLogIn()}
                         >
                             <Text style={styles.loginText}>LOG IN</Text>
                         </TouchableOpacity>

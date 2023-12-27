@@ -57,18 +57,18 @@ export default function Home ({ navigation }) {
                         <StatusBar backgroundColor={COLORS.powderBlue} barStyle={'light-content'} />
 
                         <View style={styles.topView}>
-                            <GifImage
-                                source={require('../../../assets/lights.gif')}
+                            {/* <GifImage
+                                source={require('../../../assets/orgaments.png')}
                                 style={{
-                                    width: '102%',
-                                    height: 90,
+                                    width: '100%',
+                                    height: 130,
                                     opacity: 0.6,
                                     position: 'absolute',
                                     zIndex: -1,
-                                    top: -20,
+                                    top: -40,
                                 }}
                                 resizeMode={'cover'}
-                            />  
+                            />   */}
                             
                             <View style={styles.headerView}>
                                 <View style={styles.headerNavigation}>
