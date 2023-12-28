@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { COLORS, ICONS, COMPONENT_STYLES } from "../../constant";
 
-export default function TimeOff () {
+export default function TimeOff ({ vacationCount, sickCount, vacationData, sickData}) {
     const styles = COMPONENT_STYLES.TimeOff
     const navigation = useNavigation()
 
@@ -24,7 +24,7 @@ export default function TimeOff () {
         <View style={styles.container}>
             <TouchableOpacity 
                 style={[styles.button]}
-                onPress={() => navigation.navigate('VacationLeave')}
+                onPress={() => navigation.navigate('VacationLeave', { vData: vacationData, vCount: vacationCount})}
             >
                 <View style={[styles.alignWrapper, { height: imageSize}]}>
                     <CachedImage
@@ -34,7 +34,7 @@ export default function TimeOff () {
                     />
 
                     <View>
-                        <Text style={styles.totalText}>3.00</Text>
+                        <Text style={styles.totalText}>{vacationCount}</Text>
                         <Text style={styles.title}>Vacation{'\n'}Leave</Text>
                     </View>
                 </View>
@@ -42,7 +42,7 @@ export default function TimeOff () {
 
             <TouchableOpacity 
                 style={[styles.button]}
-                onPress={() => navigation.navigate('SickLeave')}
+                onPress={() => navigation.navigate('SickLeave', { sData: sickData, sCount: sickCount})}
             >
                 <View style={[styles.alignWrapper, { height: imageSize }]}>
                     <CachedImage
@@ -52,7 +52,7 @@ export default function TimeOff () {
                     />
 
                     <View>
-                        <Text style={styles.totalText}>1.50</Text>
+                        <Text style={styles.totalText}>{sickCount}</Text>
                         <Text style={styles.title}>Sick{'\n'}Leave</Text>
                     </View>
                 </View>

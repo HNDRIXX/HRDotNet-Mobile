@@ -32,8 +32,12 @@ export default function PersonalPanel ({ userData }) {
                     <View style={styles.topView}>
                         <View style={styles.imageView}>
                             <CachedImage
-                                source={{ uri: userData?.uri }}
-                                cacheKey={`userImg+${userData?.name}+${userData?.userName}`}
+                                source={{ 
+                                    uri: userData?.ID_Gender === 1 ? ICONS.male : 
+                                         userData?.ID_Gender === 2 ? ICONS.female :
+                                         null 
+                                }}
+                                cacheKey={`profileUser+${userData?.FirstName}+${userData?.Code}`}
                                 placeholderContent={
                                     <ActivityIndicator size={'small'} color={COLORS.darkGray} style={styles.profilePic} />
                                 }
@@ -41,9 +45,9 @@ export default function PersonalPanel ({ userData }) {
                             />
                         </View>
 
-                        <Text style={styles.nameText}>{userData?.name}</Text>
-                        <Text style={styles.subText}>{userData?.position}</Text>
-                        <Text style={styles.subText}>#{userData?.accNumber}</Text>
+                        <Text style={styles.nameText}>{userData?.FirstName}, {userData?.LastName} {userData?.MiddleName}</Text>
+                        <Text style={styles.subText}>{userData?.Name_Department}</Text>
+                        <Text style={styles.subText}>#{userData?.Code}</Text>
                     </View>
                     
                     <View style={styles.bodyView}></View>
@@ -53,37 +57,37 @@ export default function PersonalPanel ({ userData }) {
                         contentContainerStyle={{ flexGrow: 0 }}>
                         <View style={styles.rowView}>
                             <Text style={styles.titleText}>Company</Text>
-                            <Text style={styles.contentText}>{userData?.company}</Text>
+                            <Text style={styles.contentText}>{userData?.Name_Company}</Text>
                         </View>
 
                         <View style={styles.rowView}>
                             <Text style={styles.titleText}>Branch</Text>
-                            <Text style={styles.contentText}>{userData?.branch}</Text>
+                            <Text style={styles.contentText}>{userData?.Name_Branch}</Text>
                         </View>
 
                         <View style={styles.rowView}>
                             <Text style={styles.titleText}>Division</Text>
-                            <Text style={styles.contentText}>{userData?.division}</Text>
+                            <Text style={styles.contentText}>{userData?.Name_Division}</Text>
                         </View>
 
                         <View style={styles.rowView}>
                             <Text style={styles.titleText}>Department</Text>
-                            <Text style={styles.contentText}>{userData?.department}</Text>
+                            <Text style={styles.contentText}>{userData?.Name_Department}</Text>
                         </View>
 
                         <View style={styles.rowView}>
                             <Text style={styles.titleText}>Section</Text>
-                            <Text style={styles.contentText}>{userData?.section}</Text>
+                            <Text style={styles.contentText}>{userData?.Name_Section}</Text>
                         </View>
 
                         <View style={styles.rowView}>
                             <Text style={styles.titleText}>Contact Number</Text>
-                            <Text style={styles.contentText}>{userData?.phoneNumber}</Text>
+                            <Text style={styles.contentText}>{userData?.MobileNo}</Text>
                         </View>
 
                         <View style={styles.rowView}>
                             <Text style={styles.titleText}>Email Address</Text>
-                            <Text style={styles.contentText}>{userData?.emailAddress}</Text>
+                            <Text style={styles.contentText}>{userData?.EmailAdd}</Text>
                         </View>
                     </ScrollView>
                 </Animatable.View>

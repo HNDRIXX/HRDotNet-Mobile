@@ -8,6 +8,7 @@ import * as Animatable from 'react-native-animatable';
 import { Image } from "react-native-expo-image-cache";
 import CachedImage from 'expo-cached-image'
 import { Shadow } from "react-native-shadow-2";
+import { useRoute } from '@react-navigation/native';
 
 import Loader from '../../../../components/loader/Loader';
 import { COLORS, ICONS, STYLES, DateTimeUtils } from "../../../../constant";
@@ -35,12 +36,15 @@ const data = [
     },
 ]
 
-
 export default function VacationLeavePage ({ navigation }) {
     const styles = STYLES.VacationLeave
     const [isLoading, setLoading] = useState(true)
     const [currYear, setCurrYear] = useState(DateTimeUtils.getCurrYear())
     
+    const route = useRoute()
+    const vParams = route.params?.vData
+    const vCount = route.params?.vCount
+
     useEffect(() => {
         setTimeout(() => {
             setLoading(false)
@@ -75,14 +79,14 @@ export default function VacationLeavePage ({ navigation }) {
                 >
                     <View style={styles.creditContainer}>
                         <Shadow distance={3} style={styles.creditShadow}>
-                            <Text style={styles.creditsValue}>3.00</Text>
+                            <Text style={styles.creditsValue}>{vCount}</Text>
                         </Shadow>
                     </View>
 
                     <Text style={styles.detailsTitle}>Details</Text>
 
                     <FlatList 
-                        data={data}
+                        data={vParams}
                         renderItem={({item, index}) => {
                             return ( <TimeOffItem item={item} /> )
                         }}

@@ -24,9 +24,20 @@ import Loader from "../../../components/loader/Loader";
 export default function Home ({ navigation }) {
     const [isLoading, setIsLoading] = useState(true)
     const [userData, setUserData] = useState(null)
-    
+
+    const [vacationData, setVacationData] = useState(null)
+    const [sickData, setSickData] = useState(null)
+
+    const [vacationCount, setVacationCount] = useState(0)
+    const [sickCount, setSickCount] = useState(0)
+
     const route = useRoute()
     const insets = useSafeAreaInsets()
+
+    const userParams = route.params?.user
+    const userID = userParams?.ID_Employee
+    const userGroup = userParams?.Name_SysUserGroup
+    const userGender = userParams?.ID_Gender
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -45,6 +56,39 @@ export default function Home ({ navigation }) {
         setTimeout(() => { setIsLoading(false) }, 800)
     }, [])
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('http://10.0.1.82:3000/api/home', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ IDEmployee: userID }),
+                })
+    
+                const data = await response.json()
+    
+                if (response.ok) {
+                    await AsyncStorage.setItem('userID', userID.toString())
+
+                    const vFilter = data.filter(transaction => transaction.ID_LeaveParameter === 1)
+                    const sFilter = data.filter(transaction => transaction.ID_LeaveParameter === 2)
+
+                    const vCount = vFilter.reduce((total, transaction) => total + transaction.Amount, 0)
+                    const sCount = sFilter.reduce((total, transaction) => total + transaction.Amount, 0)
+        
+                    setVacationCount(vCount)
+                    setSickCount(sCount)
+                    setVacationData(vFilter)
+                    setSickData(sFilter)
+                } else { alert(data.message) }
+            } catch (error) { console.error(error) }
+        }
+    
+        fetchData()
+    }, []) 
+    
     return (
         <>
             {isLoading ? ( <Loader /> ) : ( 
@@ -57,18 +101,18 @@ export default function Home ({ navigation }) {
                         <StatusBar backgroundColor={COLORS.powderBlue} barStyle={'light-content'} />
 
                         <View style={styles.topView}>
-                            {/* <GifImage
-                                source={require('../../../assets/orgaments.png')}
+                            <GifImage
+                                source={require('../../../assets/lights.gif')}
                                 style={{
-                                    width: '100%',
-                                    height: 130,
+                                    width: '102%',
+                                    height: 90,
                                     opacity: 0.6,
                                     position: 'absolute',
                                     zIndex: -1,
-                                    top: -40,
+                                    top: -20,
                                 }}
                                 resizeMode={'cover'}
-                            />   */}
+                            />  
                             
                             <View style={styles.headerView}>
                                 <View style={styles.headerNavigation}>
@@ -85,8 +129,12 @@ export default function Home ({ navigation }) {
 
                                 <View style={styles.welcomeView}>
                                     <CachedImage
-                                        source={{ uri: userData?.uri }}
-                                        cacheKey={`userImg+${userData?.name}+${userData?.userName}`}
+                                        source={{ 
+                                            uri: userGender === 1 ? ICONS.male : 
+                                            userGender === 2 ? ICONS.female :
+                                            null 
+                                        }}
+                                        cacheKey={`profileUser+${userGroup}+${userID}` }
                                         style={styles.userIcon}
                                         placeholderContent={
                                             <ActivityIndicator size={'small'} color={COLORS.clearWhite} 
@@ -96,7 +144,7 @@ export default function Home ({ navigation }) {
 
                                     <View>
                                         <Text style={styles.helloText}>Hello,</Text>
-                                        <Text style={styles.nameText}>{userData?.name}</Text>
+                                        <Text style={styles.nameText}>{userParams?.FirstName}</Text>
 
                                         <View style={styles.statusView}>
                                             <Entypo name={'briefcase'} size={17} color={COLORS.clearWhite} />
@@ -132,7 +180,9 @@ export default function Home ({ navigation }) {
                                     <Text style={styles.mainTitle}>Menu</Text>
 
                                     <MenuButton   
-                                        show={ userData?.role === 'user' ? 0 : 1 }    
+                                        show={ 
+                                            userGroup === 'WEB USER' ? 0 : 
+                                            userGroup === 'WEB APPROVER' ? 1 : null }    
                                         clockedDate={route.params?.clockedDate}
                                         clockedTime={route.params?.clockedTime}
                                         clockedLocation={route.params?.clockedAddress}
@@ -141,7 +191,12 @@ export default function Home ({ navigation }) {
 
                                 <View style={styles.sectionView}>
                                     <Text style={styles.mainTitle}>Time Off</Text>
-                                    <TimeOff />
+                                    <TimeOff
+                                        vacationCount={vacationCount}
+                                        sickCount={sickCount}
+                                        vacationData={vacationData}
+                                        sickData={sickData}
+                                    />
                                 </View>
                             </ScrollView>
                         </View>
@@ -189,6 +244,7 @@ const styles = StyleSheet.create({
         height: 83,
         borderWidth: 4,
         borderColor: COLORS.orange,
+        backgroundColor: COLORS.clearWhite,
         borderRadius: 40,
         marginRight: 15
     },
@@ -213,7 +269,8 @@ const styles = StyleSheet.create({
 
         textShadowColor: COLORS.darkGray,
         textShadowOffset: {width: 1.5, height: 2},
-        textShadowRadius: 10
+        textShadowRadius: 10,
+        textTransform: 'capitalize',
     },
 
     statusView: {

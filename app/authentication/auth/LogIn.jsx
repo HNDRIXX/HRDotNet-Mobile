@@ -3,7 +3,7 @@
 // Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
 
 import React, { useState, useEffect, useRef, Validator } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Platform, Alert } from "react-native";
+import { View, Text, StyleSheet, TextInput, Keyboard, TouchableOpacity, ActivityIndicator, Platform, Alert } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Image } from "expo-image";
 import { Entypo } from "@expo/vector-icons";
@@ -15,12 +15,13 @@ import { COLORS, useFonts, STYLES} from "../../../constant";
 import { Account } from "../../../constant/array/Account";
 
 export default function LogInPage ({ navigation }) {
+    const styles = STYLES.LogIn
     const [fontsLoaded] = useFonts()
-    const [userName, setUsername] = useState('MGL4815')
+    const [userName, setUsername] = useState('MGL5017')
     const [password, setPassword] = useState('sql123$%^')
     const [isShowPassword, setShowPassword] = useState(false)
 
-    const styles = STYLES.LogIn
+    const toggleShowPassword = () => { setShowPassword(!isShowPassword) }
 
     if (!fontsLoaded) {
         return (
@@ -29,29 +30,30 @@ export default function LogInPage ({ navigation }) {
             </View>
         )
     }
-
-    const toggleShowPassword = () => { setShowPassword(!isShowPassword) }
     
     const onHandleLogIn = async () => {
         try {
-          const response = await fetch('http://10.0.1.82:3000/api/login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username: userName, password: password }),
-          });
-      
-          const data = await response.json();
-      
-          if (response.ok) {
-            setUsername('')
-            setPassword('')
+            Keyboard.dismiss()
+            setShowPassword(false)
 
-            console.log(data)
+            const response = await fetch('http://10.0.1.82:3000/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username: userName, password: password }),
+            })
 
-            navigation.navigate('TabStack', { screen: 'UserHome' })
-          } else { console.error(data.message) }
+            const data = await response.json()
+        
+            if (response.ok) {
+                setUsername('')
+                setPassword('')
+
+                console.log(data)
+
+                navigation.navigate('TabStack', { screen: 'Home', params: { user: data } })
+            } else { alert(data.message) }
         } catch (error) { console.error(error) }
     }
       
@@ -75,7 +77,6 @@ export default function LogInPage ({ navigation }) {
                             <TextInput
                                 style={styles.textInput}
                                 onChangeText={(text) => setUsername(text)}
-                                
                                 value={userName}
                                 placeholder="Username"
                                 placeholderTextColor={COLORS.tr_gray}

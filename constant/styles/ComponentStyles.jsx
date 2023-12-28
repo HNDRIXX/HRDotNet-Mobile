@@ -843,8 +843,10 @@ export const COMPONENT_STYLES = StyleSheet.create({
 
         nameText: {
             fontFamily: 'Inter_600SemiBold',
-            fontSize: 27,
-            color: COLORS.orange
+            fontSize: 24,
+            color: COLORS.orange,
+            textAlign: 'center',
+            textTransform: 'capitalize',
         },
 
         subText: {

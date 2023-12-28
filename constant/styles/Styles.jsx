@@ -995,6 +995,8 @@ export const STYLES = StyleSheet.create({
 
         creditsValue: {
             padding: 18,
+            width: 70,
+            textAlign: 'center',
             fontSize: 25,
             color: COLORS.orange,
             fontFamily: 'Inter_600SemiBold',
@@ -1124,6 +1126,8 @@ export const STYLES = StyleSheet.create({
 
         creditsValue: {
             padding: 18,
+            width: 70,
+            textAlign: 'center',
             fontSize: 25,
             color: COLORS.orange,
             fontFamily: 'Inter_600SemiBold',

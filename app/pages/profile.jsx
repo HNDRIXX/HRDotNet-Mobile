@@ -18,19 +18,30 @@ export default function Profile ({ navigation }) {
     const styles = STYLES.Profile
 
     useEffect(() => {
-    const fetchUserData = async () => {
-        try {
-            const storedUserData = await AsyncStorage.getItem('userAcc')
+        const fetchUserData = async () => {
+            try {
+                const userID = await AsyncStorage.getItem('userID')
 
-            const parsedUserData = JSON.parse(storedUserData)
+                const response = await fetch('http://10.0.1.82:3000/api/profile', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ IDEmployee: userID }),
+                })
+    
+                const data = await response.json()
 
-            setUserData(parsedUserData)
-        } catch (error) {
-            console.error('Error fetching data:', error)
+                if (userID !== null) {
+                    if (response.ok) {
+                        console.log(data)
+                        setUserData(data)
+                    } else { alert(data.message) }
+                } else { console.log('userID not found in AsyncStorage') }
+            } catch (error) { console.error(error) }
         }
-    }
 
-    fetchUserData()
+        fetchUserData()
     }, [])
     
     return (
@@ -49,7 +60,6 @@ export default function Profile ({ navigation }) {
                                 style={[styles.textButton, isPanel == 0 && styles.textActive ]}
                             >Personal</Text>
                         </TouchableOpacity>
-
                         
                         <TouchableOpacity 
                             style={[styles.button, isPanel == 1 && styles.active ]}
