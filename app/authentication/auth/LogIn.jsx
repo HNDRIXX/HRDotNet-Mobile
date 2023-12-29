@@ -38,9 +38,7 @@ export default function LogInPage ({ navigation }) {
 
             const response = await fetch('http://10.0.1.82:3000/api/login', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json', },
                 body: JSON.stringify({ username: userName, password: password }),
             })
 
@@ -48,9 +46,6 @@ export default function LogInPage ({ navigation }) {
         
             if (response.ok) {
                 setUsername('')
-                setPassword('')
-
-                console.log(data)
 
                 navigation.navigate('TabStack', { screen: 'Home', params: { user: data } })
             } else { alert(data.message) }

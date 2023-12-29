@@ -54,7 +54,7 @@ app.post('/api/login', async (req, res) => {
       //   type: sequelize.QueryTypes.SELECT,
       // })
 
-      const result = await sequelize.query("SELECT SU.ID_Employee, SU.Name_SysUserGroup, SU.Username, SU.FirstName, SU.MiddleName, SU.LastName, E.ID_Gender FROM tSysUser SU LEFT JOIN tEmployee E ON SU.ID_Employee = E.ID WHERE SU.Username = :username", {
+      const result = await sequelize.query("SELECT SU.ID_Employee, SU.Name_SysUserGroup, SU.Username, SU.FirstName, SU.MiddleName, SU.LastName, E.ID_Gender, E.ID_Company FROM tSysUser SU LEFT JOIN tEmployee E ON SU.ID_Employee = E.ID WHERE SU.Username = :username", {
         replacements: { username },
         type: sequelize.QueryTypes.SELECT,
       })
@@ -62,7 +62,7 @@ app.post('/api/login', async (req, res) => {
       if (result.length > 0) {
         const user = result[0]
       
-        if (user.Name_SysUserGroup == "WEB USER" || user.Name_SysUserGroup == "WEB APPROVER") {
+        if (user.Name_SysUserGroup == "WEB USER" || user.Name_SysUserGroup.includes("WEB APPROVER")) {
           res.json(user);
         } else {
           res.status(500).json({ success: false, message: 'User Group Authorization Failed' })
@@ -116,6 +116,71 @@ app.post('/api/profile', async (req, res) => {
 
     if (result.length > 0) {
       res.json(result[0])
+    } else {
+      res.status(401).json({ success: false, message: 'Something went wrong' })
+    }
+  } catch (error) {
+    console.error('Error executing query', error)
+    res.status(500).json({ success: false, message: 'Error connecting to the database' })
+  }
+})
+
+app.post('/api/loanLedger', async (req, res) => {
+  try {
+    const { IDEmployee } = req.body
+
+    const result = await sequelize.query(
+      "SELECT * FROM tLoanApplication WHERE ID_Employee = :IDEmployee",
+      {
+        replacements: { IDEmployee },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    )
+
+    res.json(result)
+  } catch (error) {
+    console.error('Error executing query', error)
+    res.status(500).json({ success: false, message: 'Error connecting to the database' })
+  }
+})
+
+app.post('/api/loanLedgerDetails', async (req, res) => {
+  try {
+    const { IDEmployee } = req.body
+
+    const result = await sequelize.query(
+      "SELECT * FROM tLoanLedger WHERE ID_Employee = '138'",
+      {
+        replacements: { IDEmployee },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    )
+
+    if (result.length > 0) {
+      res.json(result)
+    } else {
+      res.status(401).json({ success: false, message: 'Something went wrong' })
+    }
+  } catch (error) {
+    console.error('Error executing query', error)
+    res.status(500).json({ success: false, message: 'Error connecting to the database' })
+  }
+})
+
+app.post('/api/payslip', async (req, res) => {
+  try {
+    const { IDCompany } = req.body
+
+    const result = await sequelize.query(
+      "SELECT * FROM tPayroll WHERE ID_Company = :IDCompany",
+      {
+        replacements: { IDCompany },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    )
+
+    if (result.length > 0) {
+      res.json(result)
     } else {
       res.status(401).json({ success: false, message: 'Something went wrong' })
     }

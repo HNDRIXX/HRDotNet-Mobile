@@ -223,10 +223,10 @@ export const COMPONENT_STYLES = StyleSheet.create({
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
             backgroundColor:
-                item.status == "Approved" ? COLORS.green :
-                    item.status == "Reviewed" ? COLORS.purple :
-                        item.status == "Filed" ? COLORS.filed :
-                            item.status == "Cancelled" ? COLORS.red
+                item.DocStatus == "Approved" ? COLORS.green :
+                    item.DocStatus == "Reviewed" ? COLORS.purple :
+                        item.DocStatus == "Filed" ? COLORS.filed :
+                            item.DocStatus == "Cancelled" ? COLORS.red
                                 : COLORS.orange
             ,
             paddingHorizontal: 20,
@@ -836,8 +836,8 @@ export const COMPONENT_STYLES = StyleSheet.create({
         },
 
         profilePic: {
-            width: 160,
-            height: 160,
+            width: 170,
+            height: 170,
             borderRadius: 80,
         },
 
@@ -868,10 +868,10 @@ export const COMPONENT_STYLES = StyleSheet.create({
 
         contentText: {
             fontFamily: 'Inter_500Medium',
-            fontSize: 13,
+            fontSize: 12,
             borderColor: COLORS.darkGray,
             borderWidth: 2,
-            padding: 10,
+            paddingVertical: 10,
             borderRadius: 13,
             paddingLeft: 20,
         }

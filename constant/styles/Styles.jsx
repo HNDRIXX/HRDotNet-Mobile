@@ -658,13 +658,13 @@ export const STYLES = StyleSheet.create({
 
         topContent: {
             backgroundColor:
-                params.status == "Filed" ?
+                params.DocStatus == "Filed" ?
                     COLORS.filed :
-                    params.status == "Reviewed" ?
+                    params.DocStatus == "Reviewed" ?
                         COLORS.purple :
-                        params.status == "Approved" ?
+                        params.DocStatus == "Approved" ?
                             COLORS.green :
-                            params.status == "Cancelled" ?
+                            params.DocStatus == "Cancelled" ?
                                 COLORS.red
                                 : COLORS.tr_gray,
 
@@ -995,7 +995,7 @@ export const STYLES = StyleSheet.create({
 
         creditsValue: {
             padding: 18,
-            width: 70,
+            width: '100%',
             textAlign: 'center',
             fontSize: 25,
             color: COLORS.orange,
@@ -1126,7 +1126,7 @@ export const STYLES = StyleSheet.create({
 
         creditsValue: {
             padding: 18,
-            width: 70,
+            width: '100%',
             textAlign: 'center',
             fontSize: 25,
             color: COLORS.orange,

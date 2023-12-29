@@ -36,6 +36,7 @@ export default function Home ({ navigation }) {
 
     const userParams = route.params?.user
     const userID = userParams?.ID_Employee
+    const userIDCompany = userParams?.ID_Company
     const userGroup = userParams?.Name_SysUserGroup
     const userGender = userParams?.ID_Gender
 
@@ -71,6 +72,7 @@ export default function Home ({ navigation }) {
     
                 if (response.ok) {
                     await AsyncStorage.setItem('userID', userID.toString())
+                    await AsyncStorage.setItem('userIDCompany', userIDCompany.toString())
 
                     const vFilter = data.filter(transaction => transaction.ID_LeaveParameter === 1)
                     const sFilter = data.filter(transaction => transaction.ID_LeaveParameter === 2)
@@ -134,7 +136,7 @@ export default function Home ({ navigation }) {
                                             userGender === 2 ? ICONS.female :
                                             null 
                                         }}
-                                        cacheKey={`profileUser+${userGroup}+${userID}` }
+                                        cacheKey={`profileImg998+${userGroup}+${userID}` }
                                         style={styles.userIcon}
                                         placeholderContent={
                                             <ActivityIndicator size={'small'} color={COLORS.clearWhite} 
@@ -178,11 +180,11 @@ export default function Home ({ navigation }) {
                             >
                                 <View style={[styles.sectionView, { marginBottom: 20 }]}>
                                     <Text style={styles.mainTitle}>Menu</Text>
-
+                                    
                                     <MenuButton   
                                         show={ 
                                             userGroup === 'WEB USER' ? 0 : 
-                                            userGroup === 'WEB APPROVER' ? 1 : null }    
+                                            userGroup.includes("WEB APPROVER") ? 1 : null }    
                                         clockedDate={route.params?.clockedDate}
                                         clockedTime={route.params?.clockedTime}
                                         clockedLocation={route.params?.clockedAddress}
@@ -191,6 +193,7 @@ export default function Home ({ navigation }) {
 
                                 <View style={styles.sectionView}>
                                     <Text style={styles.mainTitle}>Time Off</Text>
+
                                     <TimeOff
                                         vacationCount={vacationCount}
                                         sickCount={sickCount}

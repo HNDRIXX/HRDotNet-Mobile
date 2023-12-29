@@ -18,12 +18,12 @@ export default function LoanLedgerItem ({ item, details, index }) {
         <View style={styles.itemContainer} key={index}>
             <Shadow distance={8} offset={[4,0.9]} style={styles.itemWrapper}>
                 <View style={styles.dateRowWrapper}>
-                    <Text style={styles.currDateText}>{item.loanTitle}</Text>
+                    <Text style={styles.currDateText}>{item.Name_LoanType}</Text>
 
                     <View style={styles.rowWrapper}>
-                        {Utils.statusIcon(item.status)}
+                        {Utils.statusIcon(item.DocStatus)}
 
-                        <Text style={styles.statusText}>{item.status}</Text>
+                        <Text style={styles.statusText}>{item.DocStatus}</Text>
                     </View>
 
                 </View>
@@ -31,13 +31,13 @@ export default function LoanLedgerItem ({ item, details, index }) {
                 <View style={styles.bodyWrapper}>
                     <View style={styles.rowWrapper}>
                         <Text style={styles.boldText}>Balance: </Text>
-                        <Text style={styles.valueText}>Php {Utils.amountFormat(item.balance)}</Text>
+                        <Text style={styles.valueText}>Php {Utils.amountFormat(item.Balance)}</Text>
                     </View>
 
                     <View style={styles.reasonWrapper}>
                         <View style={styles.rowWrapper}>
                             <Text style={styles.boldText}>Document No: </Text>
-                            <Text style={styles.valueText}>{item.documentNo}</Text>
+                            <Text style={styles.valueText}>{item.DocumentNo}</Text>
                         </View>
 
                         <TouchableOpacity

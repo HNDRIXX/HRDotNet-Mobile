@@ -56,18 +56,14 @@ export default function Profile ({ navigation }) {
                             style={[styles.button, isPanel == 0 && styles.active ]}
                             onPress={() => setPanel(0)}
                         >
-                            <Text 
-                                style={[styles.textButton, isPanel == 0 && styles.textActive ]}
-                            >Personal</Text>
+                            <Text style={[styles.textButton, isPanel == 0 && styles.textActive ]}>Personal</Text>
                         </TouchableOpacity>
                         
                         <TouchableOpacity 
                             style={[styles.button, isPanel == 1 && styles.active ]}
                             onPress={() => setPanel(1)}
                         >
-                            <Text 
-                                style={[styles.textButton, isPanel == 1 && styles.textActive ]}
-                            >Payslip</Text>
+                            <Text style={[styles.textButton, isPanel == 1 && styles.textActive ]}>Payslip</Text>
                         </TouchableOpacity>
                     </View>
 

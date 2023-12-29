@@ -19,12 +19,12 @@ export default function LoanDetails ({ navigation }) {
             <PageHeader pageName={'Loan Details'} />
 
             <View style={styles.topContent}>
-                    <Text style={styles.topText}>{params.loanTitle}</Text>
+                    <Text style={styles.topText}>{params.Name_LoanType}</Text>
                     
                     <View style={styles.rowWrapper}>
-                        {Utils.statusIcon(params.status)}
+                        {Utils.statusIcon(params.DocStatus)}
 
-                        <Text style={styles.topText}>{params.status}</Text>
+                        <Text style={styles.topText}>{params.DocStatus}</Text>
                     </View>
                 </View>
 
@@ -32,17 +32,17 @@ export default function LoanDetails ({ navigation }) {
                     <Shadow distance={3} style={styles.content}>
                         <View style={styles.rowWrapper}>
                             <Text style={styles.titleText}>Source:</Text>
-                            <Text style={styles.valueText}>{params.source}</Text>
+                            <Text style={styles.valueText}>{params.Name_LoanSource}</Text>
                         </View>
 
                         <View style={styles.rowWrapper}>
                             <Text style={styles.titleText}>Loan Code LN:</Text>
-                            <Text style={styles.valueText}>{params.loanCode}</Text>
+                            <Text style={styles.valueText}>{params.Code_LoanClassification}</Text>
                         </View>
 
                         <View style={[styles.rowWrapper, {marginTop: 20}]}>
                             <Text style={styles.titleText}>Document No:</Text>
-                            <Text style={styles.valueText}>{params.documentNo}</Text>
+                            <Text style={styles.valueText}>{params.DocumentNo}</Text>
                         </View>
 
                         <View style={styles.rowWrapper}>
@@ -67,37 +67,37 @@ export default function LoanDetails ({ navigation }) {
 
                         <View style={[styles.rowWrapper, {marginTop: 20}]}>
                             <Text style={styles.titleText}>Reference No:</Text>
-                            <Text style={styles.valueText}>{params.referenceNo}</Text>
+                            <Text style={styles.valueText}>{params.ReferenceNo}</Text>
                         </View>
 
                         <View style={styles.rowWrapper}>
                             <Text style={styles.titleText}>Loan Amount:</Text>
-                            <Text style={styles.valueText}>{Utils.amountFormat(params.loanAmount)}</Text>
+                            <Text style={styles.valueText}>{Utils.amountFormat(params.LoanAmount)}</Text>
                         </View>
 
                         <View style={styles.rowWrapper}>
                             <Text style={styles.titleText}>Disbursed Amount:</Text>
-                            <Text style={styles.valueText}>{Utils.amountFormat(params.disbursedAmount)}</Text>
+                            <Text style={styles.valueText}>{Utils.amountFormat(params.AmountDisbursed)}</Text>
                         </View>
 
                         <View style={styles.rowWrapper}>
                             <Text style={styles.titleText}>Cycle:</Text>
-                            <Text style={styles.valueText}>{params.cycle}</Text>
+                            <Text style={styles.valueText}>{params.Name_Cycle}</Text>
                         </View>
 
                         <View style={styles.rowWrapper}>
                             <Text style={styles.titleText}>Installment Amount Per Month:</Text>
-                            <Text style={styles.valueText}>{params.installmentAmountPerMonth}</Text>
+                            <Text style={styles.valueText}>{params.PerMonth}</Text>
                         </View>
 
                         <View style={styles.rowWrapper}>
                             <Text style={styles.titleText}>Total Installment Amount:</Text>
-                            <Text style={styles.valueText}>{params.totalInstallmentAmount}</Text>
+                            <Text style={styles.valueText}>{params.TotalAmount}</Text>
                         </View>
 
                         <View style={styles.rowWrapper}>
                             <Text style={styles.titleText}>Balance:</Text>
-                            <Text style={styles.valueText}>{Utils.amountFormat(params.balance)}</Text>
+                            <Text style={styles.valueText}>{Utils.amountFormat(params.Balance)}</Text>
                         </View>
                     </Shadow>
                 </View>
@@ -108,24 +108,24 @@ export default function LoanDetails ({ navigation }) {
                     data={detailsData}
                     style={{ marginHorizontal: 20 }}
                     renderItem={({ item, index }) => {
-                        if (item.documentNo === params.documentNo) {
+                        if (params.ID_LoanClassification === item.ID_LoanClassification) {
                             return (
                                 <View style={styles.detailView}>
                                     <Shadow distance={3} style={styles.shadowView}>
                                         <View style={styles.topDetail}>
-                                            <Text style={styles.topText}>{params.loanTitle}</Text>
+                                            <Text style={styles.topText}>{item.Name_LoanType}</Text>
                                             
                                             <View style={styles.topLeftDetail}>
-                                                <Text style={styles.topText}>{Utils.amountFormat(params.balance)}</Text>
+                                                <Text style={styles.topText}>{Utils.amountFormat(item.Balance)}</Text>
                                                 <Text style={[styles.topText, { fontSize: 10, fontFamily: 'Inter_500Medium' }]}>Remaining Balance</Text>
                                             </View>
                                         </View>
 
                                         <View style={styles.bodyDetail}>
                                             <Text style={styles.boldText}>Payment Date:
-                                            <Text style={styles.bodyText}> {DateTimeUtils.dateFullConvert(item.paymentDate)}</Text></Text>
+                                            <Text style={styles.bodyText}> {DateTimeUtils.dateFullConvert(item.DateTransaction)}</Text></Text>
                                             <Text style={styles.boldText}>Payment Amount:
-                                            <Text style={styles.bodyText}> {Utils.amountFormat(item.paymentAmount)}</Text></Text>
+                                            <Text style={styles.bodyText}> {Utils.amountFormat(item.Payment)}</Text></Text>
                                         </View>
                                     </Shadow>
                                 </View>

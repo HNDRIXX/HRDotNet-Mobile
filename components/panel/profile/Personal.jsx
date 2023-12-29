@@ -37,7 +37,7 @@ export default function PersonalPanel ({ userData }) {
                                          userData?.ID_Gender === 2 ? ICONS.female :
                                          null 
                                 }}
-                                cacheKey={`profileUser+${userData?.FirstName}+${userData?.Code}`}
+                                cacheKey={`profileImg+${userData?.FirstName}+${userData?.Code}`}
                                 placeholderContent={
                                     <ActivityIndicator size={'small'} color={COLORS.darkGray} style={styles.profilePic} />
                                 }
@@ -45,7 +45,7 @@ export default function PersonalPanel ({ userData }) {
                             />
                         </View>
 
-                        <Text style={styles.nameText}>{userData?.FirstName}, {userData?.LastName} {userData?.MiddleName}</Text>
+                        <Text style={styles.nameText}>{userData?.FirstName} {userData?.LastName} {userData?.MiddleName}</Text>
                         <Text style={styles.subText}>{userData?.Name_Department}</Text>
                         <Text style={styles.subText}>#{userData?.Code}</Text>
                     </View>
@@ -57,7 +57,7 @@ export default function PersonalPanel ({ userData }) {
                         contentContainerStyle={{ flexGrow: 0 }}>
                         <View style={styles.rowView}>
                             <Text style={styles.titleText}>Company</Text>
-                            <Text style={styles.contentText}>{userData?.Name_Company}</Text>
+                            <Text style={styles.contentText}>{userData?.Name_Company.trim()}</Text>
                         </View>
 
                         <View style={styles.rowView}>

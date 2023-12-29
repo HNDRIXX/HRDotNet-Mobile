@@ -7,6 +7,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native
 import { Entypo } from '@expo/vector-icons';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { COLORS, COMPONENT_STYLES, DateTimeUtils, Utils} from '../../../constant'
 import { Shadow } from 'react-native-shadow-2';
@@ -387,6 +388,8 @@ export default function PayslipPanel () {
     const [isFirstHalf, setFirstHalf] = useState(null)
     const [isSecondHalf, setSecondHalf] = useState(null)
 
+    const [tempData, setTempData] = useState(null)
+
     const navigation = useNavigation()
 
     useEffect(() => { Utils.getHalf(setFirstHalf, setSecondHalf) })
@@ -395,13 +398,36 @@ export default function PayslipPanel () {
 
     let filteredData = []
 
-    filteredData = data.filter((item) => {
-        const formattedDate = DateTimeUtils.dateFullConvert(item.payOutSchedule)
+    filteredData = tempData?.filter((item) => {
+        const formattedDate = DateTimeUtils.dateFullConvert(item.DatePayoutSchedule)
 
-        return (
-            formattedDate.toLowerCase().includes(filterText.toLowerCase())
-        )
+        return ( formattedDate.toLowerCase().includes(filterText.toLowerCase()) )
     })
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const userIDCompany = await AsyncStorage.getItem('userIDCompany')
+
+                const response = await fetch('http://10.0.1.82:3000/api/payslip', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', },
+                    body: JSON.stringify({ IDCompany: userIDCompany }),
+                })
+    
+                const data = await response.json()
+
+                if (userIDCompany !== null) {
+                    if (response.ok) {
+                        console.log(data)
+                        setTempData(data)
+                    } else { alert(data.message) }
+                } else { console.log('userID not found in AsyncStorage') }
+            } catch (error) { console.error(error) }
+        }
+
+        fetchUserData()
+    }, [])
     
     return (
         <>
@@ -415,7 +441,7 @@ export default function PayslipPanel () {
                     setFilterText={setFilterText}
                 />
 
-                {filteredData.map((item, index) => {
+                {/* {filteredData.map((item, index) => {
                     const withinFirst = isFirstHalf && Utils.withinFirst(item.payOutSchedule)
                     const withinSecond = isSecondHalf && Utils.withinSecond(item.payOutSchedule)
 
@@ -430,17 +456,17 @@ export default function PayslipPanel () {
                             />
                         )
                     )
-                })}
+                })} */}
 
                 <Text style={styles.payHistoryTitle}>Pay History</Text>
 
-                {filteredData.length <= 0 && <NothingFoundNote /> }
+                {filteredData?.length <= 0 && <NothingFoundNote /> }
 
                 <FlatList 
                     data={filteredData}
                     renderItem={({ item, index }) => {
-                        const withinFirst = isFirstHalf && !Utils.withinFirst(item.payOutSchedule)
-                        const withinSecond = isSecondHalf && !Utils.withinSecond(item.payOutSchedule)
+                        const withinFirst = isFirstHalf && !Utils.withinFirst(item.DatePayoutSchedule)
+                        const withinSecond = isSecondHalf && !Utils.withinSecond(item.DatePayoutSchedule)
 
                         return (
                             (withinFirst || withinSecond) ? (
@@ -454,7 +480,6 @@ export default function PayslipPanel () {
                         )
                     }}
                 />
-
             </Animatable.View>
         </>
     )

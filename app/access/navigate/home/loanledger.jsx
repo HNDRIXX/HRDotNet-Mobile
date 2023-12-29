@@ -5,85 +5,33 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ScrollView, RefreshControl } from 'react-native'
 import * as Animatable from 'react-native-animatable';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Search } from '../../../../components/use/Search'
-import { COLORS, STYLES, DateTimeUtils, } from '../../../../constant'
+import { COLORS, STYLES, DateTimeUtils, Utils} from '../../../../constant'
 import LoanLedgerItem from '../../../../components/items/home/LoanLedgerItem'
 import PageHeader from '../../../../components/header/PagesHeader'
 import NothingFoundNote from '../../../../components/note/NothingFoundNote'
 import Loader from '../../../../components/loader/Loader';
 
-const data = [
-    {
-        status: "Approved",
-        loanTitle: "SSS Salary Loan",
-        balance: "10554.93",
-        documentNo: "LA22305230009",
-        source: "Government Deduction",
-        loanCode: "LN-SSS",
-        transactionDate: "20230417",
-        approvedDate: "20230419",
-        grantedDate: "20230501",
-        firstDueDate: "20230510",
-        referenceNo: "SL201708181674086",
-        loanAmount: "11013.84",
-        disbursedAmount: "11013.84",
-        cycle: "Period 1",
-        installmentAmountPerMonth: "458.91",
-        totalInstallmentAmount: "458.91",
-    },
-    {
-        status: "Filed",
-        loanTitle: "HDMF Salary Loan",
-        balance: "3671.93",
-        documentNo: "LA22305230075",
-        source: "Government Deduction",
-        loanCode: "LN-SSS",
-        transactionDate: "20230417",
-        approvedDate: "20230419",
-        grantedDate: "20230501",
-        firstDueDate: "20230510",
-        referenceNo: "SL201708181674086",
-        loanAmount: "11013.84",
-        disbursedAmount: "11013.84",
-        cycle: "Period 1",
-        installmentAmountPerMonth: "458.91",
-        totalInstallmentAmount: "458.91",
-    },
-]
-
-const details = [
-    {
-        loanTitle: "SSS Salary Loan",
-        balance: "10554.93",
-        documentNo: "LA22305230009",
-        paymentDate: "20230823",
-        paymentAmount: "458.91",
-    },
-    {
-        loanTitle: "HDMF Salary Loan",
-        balance: "3671.28",
-        documentNo: "LA22305230075",
-        paymentDate: "20230823",
-        paymentAmount: "458.91",
-    },
-]
 export default function LoanLedgerPage () {
     const styles = STYLES.LoanLedger
     const [isLoading, setLoading] = useState(true)
     const [filterText, setFilterText] = useState('')
+    const [data, setData] = useState([])
+    const [details, setDetails] = useState([])
 
     const [refreshing, setRefreshing] = useState(false)
     const scrollViewRef = useRef(null)
 
     let filteredData = []
 
-    filteredData = data.filter((item) => {
+    filteredData = data?.filter((item) => {
         return (
-            item.status.toLowerCase().includes(filterText.toLowerCase()) ||
-            item.loanTitle.toLowerCase().includes(filterText.toLowerCase()) ||
-            item.balance.toLowerCase().includes(filterText.toLowerCase()) ||
-            item.documentNo.toLowerCase().includes(filterText.toLowerCase())
+            item.Name_LoanType.toLowerCase().includes(filterText.toLowerCase()) ||
+            item.DocStatus.toLowerCase().includes(filterText.toLowerCase()) ||
+            item.DocumentNo.toLowerCase().includes(filterText.toLowerCase()) || 
+            Utils.amountFormat(item.Balance).toLowerCase().includes(filterText.toLowerCase())
         )
     })
 
@@ -93,17 +41,73 @@ export default function LoanLedgerPage () {
     }
 
     useEffect(() => {
-        setTimeout(() => {
-            setRefreshing(false)
-            setLoading(false)
-        }, 800)
+        const fetchData = async () => {
+            try {
+                const userID = await AsyncStorage.getItem('userID');
+      
+                const response = await fetch('http://10.0.1.82:3000/api/loanLedger', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ IDEmployee: userID }),
+                })
+      
+                const data = await response.json();
+      
+                // 2 - Approved
+                //Name_LoanType, ID_DocStatus, Balance, DocumentNo,
+        
+                userID !== null ? 
+                    response.ok ? setData(data) : alert(data.message)  
+                : console.log('Not Found (userID)')
+
+                setRefreshing(false)
+                setLoading(false)
+            } catch (error) {
+                console.error(error)
+            
+                setRefreshing(false)
+                setLoading(false)
+            }
+        }
+
+        fetchData()
+    }, [isLoading])
+      
+
+    useEffect(() => {
+        const fetchDataDetails = async () => {
+            try {
+                const userID = await AsyncStorage.getItem('userID')
+
+                const response = await fetch('http://10.0.1.82:3000/api/loanLedgerDetails', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ IDEmployee: userID }),
+                })
+    
+                const data = await response.json()
+                
+                userID !== null ? 
+                    response.ok ? setDetails(data) : alert(data.message)  
+                : console.log('Not Found (userID)')
+
+                setRefreshing(false)
+                setLoading(false)
+            } catch (error) { 
+                console.error(error)
+                setRefreshing(false)
+                setLoading(false)
+            }
+        }
+
+        fetchDataDetails()
     }, [isLoading])
 
     return (
         <View style={styles.container}>
             <PageHeader pageName={"Loan Ledger"} />
 
-            { isLoading ? (<Loader />) : (
+            { isLoading ? ( <Loader /> ) : (
                 <Animatable.View
                     animation={'fadeIn'}
                     duration={500}
@@ -114,33 +118,34 @@ export default function LoanLedgerPage () {
                             filterText={filterText}
                             setFilterText={setFilterText}
                         />
-                        
-                        { filteredData.length > 0 ? (
-                            <ScrollView
-                                ref={scrollViewRef}
-                                refreshControl={
-                                <RefreshControl
-                                    refreshing={refreshing}
-                                    onRefresh={refresh} />
-                                }
-                                style={styles.loanLedgerList}
-                            >
-                                {filteredData.map((item, index) => (
-                                    <LoanLedgerItem 
-                                        key={index}
-                                        item={{ 
-                                            ...item,
-                                            details: details,
-                                            formattedTransactionDate: DateTimeUtils.dateFullConvert(item.transactionDate), 
-                                            formattedApprovedDate:  DateTimeUtils.dateFullConvert(item.approvedDate),
-                                            formattedGrantedDate: DateTimeUtils.dateFullConvert(item.grantedDate),
-                                            formattedFirstDueDate: DateTimeUtils.dateFullConvert(item.firstDueDate),
-                                        }}
-                                    />
-                                ))}
 
-                            </ScrollView>
-                            ) : ( <NothingFoundNote /> )}
+                        { filteredData.length > 0 ? (
+                            <>
+                                <FlatList 
+                                    ref={scrollViewRef}
+                                    refreshControl={
+                                        <RefreshControl
+                                            refreshing={refreshing}
+                                            onRefresh={refresh} />
+                                    }
+                                    data={filteredData}
+
+                                    renderItem={({ item, index}) => 
+                                        <LoanLedgerItem 
+                                            key={index}
+                                            item={{ 
+                                                ...item,
+                                                details: details,
+                                                formattedTransactionDate: DateTimeUtils.dateFullConvert(item.DateTransaction), 
+                                                formattedApprovedDate:  DateTimeUtils.dateFullConvert(item.DateApproved),
+                                                formattedGrantedDate: DateTimeUtils.dateFullConvert(item.DateGranted),
+                                                formattedFirstDueDate: DateTimeUtils.dateFullConvert(item.DateFirstDue),
+                                            }}
+                                        />
+                                    }
+                                />
+                            </>
+                        ) : ( <NothingFoundNote /> )}
                     </View>
                 </Animatable.View>
             )}
