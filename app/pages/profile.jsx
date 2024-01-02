@@ -34,7 +34,6 @@ export default function Profile ({ navigation }) {
 
                 if (userID !== null) {
                     if (response.ok) {
-                        console.log(data)
                         setUserData(data)
                     } else { alert(data.message) }
                 } else { console.log('userID not found in AsyncStorage') }

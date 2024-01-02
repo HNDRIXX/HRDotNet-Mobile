@@ -11,6 +11,7 @@ import { useRoute } from '@react-navigation/native'
 import * as Print from 'expo-print'
 import * as FileSystem from 'expo-file-system'
 import * as Sharing from 'expo-sharing'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { Utils, DateTimeUtils, COLORS, STYLES } from '../../../../../constant'
 import PageHeader from '../../../../../components/header/PagesHeader'
@@ -60,17 +61,21 @@ const TimekeepingText = ({ title, text, gap }) => {
     )
 }
 
+
+
 export default function MorePayslip ({ navigation }) {
     const route = useRoute()
     const params = route.params.item
     const TKparams = route.params.TKData
+
+    const [tempData, setTempData] = useState(null)
 
     const [filteredData, setFilteredData] = useState([])
     const [pdfUri, setPdfUri] = useState(null)
     const [isAlert, setAlert] = useState(false)
     const [isLoading, setLoading] = useState(true)
 
-    const [dateRange, setDateRange] = useState(DateTimeUtils.dateMonthDayConvert(params?.dateTo) + ' - ' + DateTimeUtils.dateDayYearConvert(params?.dateFrom) )
+    const [dateRange, setDateRange] = useState(null)
 
     const generateAndDownloadPDF = async () => {
         const htmlContent = PayslipPrint.payslip(params, filteredData, dateRange)
@@ -100,29 +105,37 @@ export default function MorePayslip ({ navigation }) {
     }
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchUserData = async () => {
             try {
                 setLoading(true)
+                const userID = await AsyncStorage.getItem('userID')
 
-                await new Promise(resolve => setTimeout(resolve, 2000))
-        
-                const filteredData = TKparams.filter((data) => {
-                    const currentDate = moment(data.date, 'YYYYMMDD')
-                    return currentDate.isBetween(params.dateTo, params.dateFrom, null, '[]')
+                const response = await fetch('http://10.0.1.82:3000/api/morePayslip', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', },
+                    body: JSON.stringify({ IDPayroll: params?.ID, IDEmployee: userID }),
                 })
-                
-                setFilteredData(filteredData)
+    
+                const data = await response.json()
+
+                if (userID !== null) {
+                    if (response.ok) {
+                        const object = data[Object.keys(data)[0]]
+
+                        setDateRange(DateTimeUtils.dateMonthDayConvert(object?.DateFrom) + ' - ' + DateTimeUtils.dateDayYearConvert(object?.DateTo))
+                        setTempData(object)
+                    } else { alert(data.message) }
+                } else { console.log('userID not found in AsyncStorage') }
             } catch (error) {
-                console.error('Error fetching data:', error)
+                setLoading(false)
+                console.error(error) 
             } finally {
                 setLoading(false)
             }
         }
 
-        fetchData()
-
-        return () => {}
-    }, [params, TKparams])
+        fetchUserData()
+    }, [])
 
     return (
         <>
@@ -155,15 +168,15 @@ export default function MorePayslip ({ navigation }) {
                                 <Text style={styles.titleText}>MAGELLAN PERFORMANCE OUTSOURCING CORP.</Text>
 
                                 <View style={styles.textView}>
-                                    <RowTextView semiText='Document No' regularText={params?.documentNo} />
-                                    <RowTextView semiText='Employee Name' regularText={params?.employeeName} />
-                                    <RowTextView semiText='Employee Code' regularText={params?.employeeCode} />
+                                    <RowTextView semiText='Document No' regularText={params?.DocumentNo} />
+                                    <RowTextView semiText='Employee Name' regularText={tempData?.Name_Employee} />
+                                    <RowTextView semiText='Employee Code' regularText={tempData?.Code_Employee} />
                                 </View>
 
                                 <Hr />
 
                                 <View style={styles.textView}>
-                                    <RowTextView semiText='Pay Out Date' regularText={DateTimeUtils.dateFullConvert(params?.payOutSchedule)} />
+                                    <RowTextView semiText='Pay Out Date' regularText={DateTimeUtils.dateFullConvert(tempData?.DatePayoutSchedule)} />
 
                                     <RowTextView 
                                         semiText='Cut Off Period' 
@@ -198,7 +211,7 @@ export default function MorePayslip ({ navigation }) {
                                 <Hr />
 
                                 <View style={[styles.textView, { marginVertical: 0 }]}>
-                                    <RowEndView title='Total Gross Pay' text={Utils.amountFormat(params?.grossPay)}/>
+                                    <RowEndView title='Total Gross Pay' text={Utils.amountFormat(params?.GrossPay)}/>
                                 </View>
 
                                 <Text style={[styles.semiText(false), { marginTop: 10, }]}>Deductions</Text>
@@ -208,25 +221,25 @@ export default function MorePayslip ({ navigation }) {
                                 <View style={styles.textView}>
                                     <RowBetweenView 
                                         title='SSS Employee Share' 
-                                        textTwo={ Utils.amountFormat(params?.SSSShare)} />
+                                        textTwo={ Utils.amountFormat(params?.SSSES)} />
                                     
                                     <RowBetweenView 
                                         title='PhilHealth Employee Share' 
-                                        textTwo={ Utils.amountFormat(params?.philHealthShare)} />
+                                        textTwo={ Utils.amountFormat(params?.PHICEE)} />
 
                                     <RowBetweenView 
                                         title='HDMF Employee Share' 
-                                        textTwo={ Utils.amountFormat(params?.HDMFShare)} />
+                                        textTwo={ Utils.amountFormat(params?.HDMFEE)} />
 
                                     <RowBetweenView 
                                         title='Withholding Tax' 
-                                        textTwo={ Utils.amountFormat(params?.withHoldingTax)} />
+                                        textTwo={ Utils.amountFormat(params?.Tax)} />
                                 </View>
 
                                 <Hr width={2.2} />
 
                                 <View style={[styles.textView, { marginVertical: 0 }]}>
-                                    <RowEndView title='Total Deductions' text={Utils.amountFormat(params?.deductions)} />
+                                    <RowEndView title='Total Deductions' text={Utils.amountFormat(params?.Deductions)} />
                                 </View>
 
                                 <Text style={[styles.semiText, { marginTop: 10, fontFamily: 'Inter_700Bold'}]}>Net Pay</Text>
@@ -236,7 +249,7 @@ export default function MorePayslip ({ navigation }) {
                                 <View style={[styles.textView, { marginVertical: 3 }]}>
                                     <RowEndView 
                                         title='PHP' 
-                                        text={ Utils.amountFormat(params?.netPay)} 
+                                        text={ Utils.amountFormat(params?.NetPay)} 
                                         bold={true} />
                                 </View>
 

@@ -4,9 +4,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
-import { Entypo } from '@expo/vector-icons';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { COLORS, COMPONENT_STYLES, DateTimeUtils, Utils} from '../../../constant'
@@ -388,6 +388,7 @@ export default function PayslipPanel () {
     const [isFirstHalf, setFirstHalf] = useState(null)
     const [isSecondHalf, setSecondHalf] = useState(null)
 
+    const [recentPayData, setRecentPayData] = useState(null)
     const [tempData, setTempData] = useState(null)
 
     const navigation = useNavigation()
@@ -419,8 +420,13 @@ export default function PayslipPanel () {
 
                 if (userIDCompany !== null) {
                     if (response.ok) {
-                        console.log(data)
-                        setTempData(data)
+                        const sortedData = data.sort((a, b) => moment(b.DatePayoutSchedule, 'YYYYMMDD').diff(moment(a.DatePayoutSchedule, 'YYYYMMDD')))
+
+                        const recentSlip = sortedData.length > 0 ? sortedData[0] : {}
+                        const previousSlip = sortedData.slice(1)
+                        
+                        setRecentPayData(recentSlip)
+                        setTempData(previousSlip)
                     } else { alert(data.message) }
                 } else { console.log('userID not found in AsyncStorage') }
             } catch (error) { console.error(error) }
@@ -441,22 +447,13 @@ export default function PayslipPanel () {
                     setFilterText={setFilterText}
                 />
 
-                {/* {filteredData.map((item, index) => {
-                    const withinFirst = isFirstHalf && Utils.withinFirst(item.payOutSchedule)
-                    const withinSecond = isSecondHalf && Utils.withinSecond(item.payOutSchedule)
-
-                    return (
-                        (withinFirst || withinSecond) && (
-                            <RecentPayItem
-                                item={item}
-                                TKData={TKData}
-                                index={index}
-                                key={index}
-                                onHandleMore={onHandleMore}
-                            />
-                        )
-                    )
-                })} */}
+                {recentPayData != null && (
+                    <RecentPayItem
+                        item={recentPayData}
+                        TKData={TKData}
+                        onHandleMore={onHandleMore}
+                    />
+                )}
 
                 <Text style={styles.payHistoryTitle}>Pay History</Text>
 

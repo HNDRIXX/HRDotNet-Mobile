@@ -27,7 +27,8 @@ export default function RecentPayItem ({ item, TKData, index, onHandleMore }) {
 
                     <View style={{ marginLeft: 20 }}>
                         <Text style={styles.recentPayText}>Recent Pay</Text>
-                        <Text>{DateTimeUtils.dateFullConvert(item.payOutSchedule)}</Text>
+
+                        <Text>{DateTimeUtils.dateHalfMonthConvert(item?.DatePayoutSchedule)}</Text>
                     </View>
                 </View>
 
@@ -35,17 +36,17 @@ export default function RecentPayItem ({ item, TKData, index, onHandleMore }) {
                     <View>
                         <View style={styles.netpayView}>
                             <Text style={styles.netpayText}>Net Pay</Text>
-                            <Text style={styles.netpayValue}>Php {Utils.amountFormat(item.netPay)}</Text>
+                            <Text style={styles.netpayValue}>Php {Utils.amountFormat(item.NetPay)}</Text>
                         </View>
 
                         <View style={styles.grosspayView}>
                             <Text style={styles.grosspayText}>Gross Pay</Text>
-                            <Text style={styles.amountText}>{Utils.amountFormat(item.grossPay)}</Text>
+                            <Text style={styles.amountText}>{Utils.amountFormat(item.GrossPay)}</Text>
                         </View>
 
                         <View style={styles.deductionsView}>
                             <Text style={styles.deductionsText}>Deductions</Text>
-                            <Text style={styles.amountText}>{Utils.amountFormat(item.deductions)}</Text>
+                            <Text style={styles.amountText}>{Utils.amountFormat(item.Deductions)}</Text>
                         </View>
                     </View>
 

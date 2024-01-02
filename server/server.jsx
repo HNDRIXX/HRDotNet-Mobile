@@ -84,18 +84,14 @@ app.post('/api/home', async (req, res) => {
     const { IDEmployee } = req.body
 
     const result = await sequelize.query(
-      "SELECT ID_LeaveParameter, Name_LeaveParameter, DateTransaction, Source, DocumentNo, Amount, BYear FROM tLeaveLedger WHERE ID_Employee = :IDEmployee AND ID_LeaveParameter IN ('1', '2')",
+      "SELECT ID_LeaveParameter, Name_LeaveParameter, DateTransaction, Source, DocumentNo, Amount, BYear FROM tLeaveLedger WHERE ID_Employee = :IDEmployee AND ID_LeaveParameter IN ('1', '2') AND BYear = CAST(YEAR(GETDATE()) AS VARCHAR(4))",
       {
         replacements: { IDEmployee },
         type: sequelize.QueryTypes.SELECT,
       }
     )
 
-    if (result.length > 0) {
-      res.json(result)
-    } else {
-      res.status(401).json({ success: false, message: 'Something went wrong' })
-    }
+    res.json(result)
   } catch (error) {
     console.error('Error executing query', error)
     res.status(500).json({ success: false, message: 'Error connecting to the database' })
@@ -172,9 +168,32 @@ app.post('/api/payslip', async (req, res) => {
     const { IDCompany } = req.body
 
     const result = await sequelize.query(
-      "SELECT * FROM tPayroll WHERE ID_Company = :IDCompany",
+      "SELECT P.ID, P.DatePayoutSchedule, P.DocumentNo, PS.GrossPay, PS.NetPay, PS.SSSES, PS.PHICEE, PS.HDMFEE, PS.Tax, (PS.SSSES + PS.PHICEE + PS.HDMFEE + PS.Tax) AS Deductions FROM tPayroll P LEFT JOIN tPayroll_Summary PS ON P.ID = PS.ID_Payroll WHERE PS.ID_Employee = '1061'",
       {
         replacements: { IDCompany },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    )
+
+    if (result.length > 0) {
+      res.json(result)
+    } else {
+      res.status(401).json({ success: false, message: 'Something went wrong' })
+    }
+  } catch (error) {
+    console.error('Error executing query', error)
+    res.status(500).json({ success: false, message: 'Error connecting to the database' })
+  }
+})
+
+app.post('/api/morePayslip', async (req, res) => {
+  try {
+    const { IDPayroll, IDEmployee } = req.body
+
+    const result = await sequelize.query(
+      "SELECT Code_Employee, Name_Employee, DateFrom, DateTo, DatePayoutSchedule, GrossPay, Tax, NetPay FROM tPayroll_Summary WHERE ID_Employee = :IDEmployee AND ID_Payroll = :IDPayroll",
+      {
+        replacements: { IDPayroll, IDEmployee },
         type: sequelize.QueryTypes.SELECT,
       }
     )

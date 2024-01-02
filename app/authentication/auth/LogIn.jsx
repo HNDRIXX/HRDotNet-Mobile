@@ -17,7 +17,7 @@ import { Account } from "../../../constant/array/Account";
 export default function LogInPage ({ navigation }) {
     const styles = STYLES.LogIn
     const [fontsLoaded] = useFonts()
-    const [userName, setUsername] = useState('MGL5017')
+    const [userName, setUsername] = useState('MGL6998')
     const [password, setPassword] = useState('sql123$%^')
     const [isShowPassword, setShowPassword] = useState(false)
 

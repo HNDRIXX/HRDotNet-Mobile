@@ -47,7 +47,7 @@ export default function PersonalPanel ({ userData }) {
 
                         <Text style={styles.nameText}>{userData?.FirstName} {userData?.LastName} {userData?.MiddleName}</Text>
                         <Text style={styles.subText}>{userData?.Name_Department}</Text>
-                        <Text style={styles.subText}>#{userData?.Code}</Text>
+                        <Text style={styles.subText}>{userData?.Code}</Text>
                     </View>
                     
                     <View style={styles.bodyView}></View>

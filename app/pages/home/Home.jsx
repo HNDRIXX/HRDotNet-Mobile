@@ -103,19 +103,6 @@ export default function Home ({ navigation }) {
                         <StatusBar backgroundColor={COLORS.powderBlue} barStyle={'light-content'} />
 
                         <View style={styles.topView}>
-                            <GifImage
-                                source={require('../../../assets/lights.gif')}
-                                style={{
-                                    width: '102%',
-                                    height: 90,
-                                    opacity: 0.6,
-                                    position: 'absolute',
-                                    zIndex: -1,
-                                    top: -20,
-                                }}
-                                resizeMode={'cover'}
-                            />  
-                            
                             <View style={styles.headerView}>
                                 <View style={styles.headerNavigation}>
                                     <TouchableOpacity
