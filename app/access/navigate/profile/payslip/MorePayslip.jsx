@@ -69,6 +69,8 @@ export default function MorePayslip ({ navigation }) {
     const TKparams = route.params.TKData
 
     const [tempData, setTempData] = useState(null)
+    const [grossData, setGrossData] = useState(null)
+    const [RDData, setRDData] = useState(null)
 
     const [filteredData, setFilteredData] = useState([])
     const [pdfUri, setPdfUri] = useState(null)
@@ -117,15 +119,16 @@ export default function MorePayslip ({ navigation }) {
                 })
     
                 const data = await response.json()
+                
+                if (response.ok) {
+                    setTempData(data.summary[0])
+                    setGrossData(data.detail)
+                    setRDData(data.restDay)
 
-                if (userID !== null) {
-                    if (response.ok) {
-                        const object = data[Object.keys(data)[0]]
+                    console.log(data.tkData)
 
-                        setDateRange(DateTimeUtils.dateMonthDayConvert(object?.DateFrom) + ' - ' + DateTimeUtils.dateDayYearConvert(object?.DateTo))
-                        setTempData(object)
-                    } else { alert(data.message) }
-                } else { console.log('userID not found in AsyncStorage') }
+                    setDateRange(DateTimeUtils.dateMonthDayConvert(data.summary[0].DateFrom) + ' - ' + DateTimeUtils.dateDayYearConvert(data.summary[0].DateTo))
+                } else { alert(data.message) }
             } catch (error) {
                 setLoading(false)
                 console.error(error) 
@@ -136,6 +139,10 @@ export default function MorePayslip ({ navigation }) {
 
         fetchUserData()
     }, [])
+
+    const zeroValue = (value) => {
+        return value != 0  ?  true : false
+    }
 
     return (
         <>
@@ -193,20 +200,15 @@ export default function MorePayslip ({ navigation }) {
                                 <View style={styles.textView}>
                                     <RowBetweenView 
                                         title='Regular Day'
-                                        textOne={Utils.amountFormat(params?.totalWorkingHours) + ' hrs'}
-                                        textTwo={Utils.amountFormat(params?.regularDayTotal)} />
+                                        textOne={Utils.amountFormat(RDData[0]?.TotalHours) + ' hrs'}
+                                        textTwo={Utils.amountFormat(RDData[0]?.TotalAmount)} />
 
-                                    { params?.mealAllowanceTotal != '' && (
+                                    { grossData?.map(( item, index ) => (
                                         <RowBetweenView 
-                                        title='Meal Allowance'
-                                        textTwo={Utils.amountFormat(params?.mealAllowanceTotal)} />
-                                    )}
-
-                                    { params?.complexityAllowance != '' && (
-                                        <RowBetweenView 
-                                            title='Complexity Allowance'
-                                            textTwo={Utils.amountFormat(params?.complexityAllowance)} />
-                                    )}
+                                            key={index}
+                                            title={item?.Name_PayrollItem}
+                                            textTwo={Utils.amountFormat(item?.TotalAmount)} />
+                                    ))}
                                 </View>
                                 <Hr />
 
@@ -219,21 +221,15 @@ export default function MorePayslip ({ navigation }) {
                                 <Hr width={2.5} space={.1} />
 
                                 <View style={styles.textView}>
-                                    <RowBetweenView 
-                                        title='SSS Employee Share' 
-                                        textTwo={ Utils.amountFormat(params?.SSSES)} />
+                                    { zeroValue(params?.SSSES) ? <RowBetweenView title='SSS Employee Share' textTwo={Utils.amountFormat(params?.SSSES)} /> : null }
                                     
-                                    <RowBetweenView 
-                                        title='PhilHealth Employee Share' 
-                                        textTwo={ Utils.amountFormat(params?.PHICEE)} />
+                                    { zeroValue(params?.PHICEE) ?  <RowBetweenView title='PHIC Employee Share' textTwo={Utils.amountFormat(params?.PHICEE)} /> : null }
+                                    
+                                    { zeroValue(params?.HDMFEE) ? <RowBetweenView title='HDMF Employee Share' 
+                                    textTwo={ Utils.amountFormat(params?.HDMFEE)} /> : null }
 
-                                    <RowBetweenView 
-                                        title='HDMF Employee Share' 
-                                        textTwo={ Utils.amountFormat(params?.HDMFEE)} />
-
-                                    <RowBetweenView 
-                                        title='Withholding Tax' 
-                                        textTwo={ Utils.amountFormat(params?.Tax)} />
+                                    { zeroValue(params?.Tax) ? <RowBetweenView title='Withholding Tax' 
+                                    textTwo={ Utils.amountFormat(params?.Tax)} /> : null }
                                 </View>
 
                                 <Hr width={2.2} />

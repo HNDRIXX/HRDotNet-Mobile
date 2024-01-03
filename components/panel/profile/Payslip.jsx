@@ -408,17 +408,17 @@ export default function PayslipPanel () {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const userIDCompany = await AsyncStorage.getItem('userIDCompany')
+                const userID = await AsyncStorage.getItem('userID')
 
                 const response = await fetch('http://10.0.1.82:3000/api/payslip', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', },
-                    body: JSON.stringify({ IDCompany: userIDCompany }),
+                    body: JSON.stringify({ IDEmployee: userID }),
                 })
     
                 const data = await response.json()
 
-                if (userIDCompany !== null) {
+                if (userID !== null) {
                     if (response.ok) {
                         const sortedData = data.sort((a, b) => moment(b.DatePayoutSchedule, 'YYYYMMDD').diff(moment(a.DatePayoutSchedule, 'YYYYMMDD')))
 
