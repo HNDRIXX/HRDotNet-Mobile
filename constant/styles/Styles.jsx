@@ -1193,7 +1193,8 @@ export const STYLES = StyleSheet.create({
 
         tkDateText: {
             fontFamily: 'Inter_600SemiBold',
-            fontSize: 16
+            fontSize: 16,
+            marginBottom: 10
         },
 
         shadowViewButton: {

@@ -21,8 +21,9 @@ export default function Profile ({ navigation }) {
         const fetchUserData = async () => {
             try {
                 const userID = await AsyncStorage.getItem('userID')
+                const connValue = await AsyncStorage.getItem('conn')
 
-                const response = await fetch('http://10.0.1.82:3000/api/profile', {
+                const response = await fetch(`http://${connValue}:3000/api/profile`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

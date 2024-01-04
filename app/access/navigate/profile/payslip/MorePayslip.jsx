@@ -54,14 +54,12 @@ const RowEndView = ({ title, text, bold }) => {
 
 const TimekeepingText = ({ title, text, gap }) => {
     return (
-        <View style={[styles.rowText, { marginTop: gap && 30 }]}>
+        <View style={[styles.rowText, { marginTop: gap && 20 }]}>
             <Text style={[styles.semiText(false), { marginRight: 0 }]}>{title}: </Text>
             <Text style={styles.regularText(false)}>{text}</Text>
         </View>
     )
 }
-
-
 
 export default function MorePayslip ({ navigation }) {
     const route = useRoute()
@@ -71,6 +69,7 @@ export default function MorePayslip ({ navigation }) {
     const [tempData, setTempData] = useState(null)
     const [grossData, setGrossData] = useState(null)
     const [RDData, setRDData] = useState(null)
+    const [TKData, setTKData] = useState(null)
 
     const [filteredData, setFilteredData] = useState([])
     const [pdfUri, setPdfUri] = useState(null)
@@ -79,13 +78,17 @@ export default function MorePayslip ({ navigation }) {
 
     const [dateRange, setDateRange] = useState(null)
 
+    const zeroValue = (value) => {
+        return value != 0  ?  true : false
+    }
+
     const generateAndDownloadPDF = async () => {
-        const htmlContent = PayslipPrint.payslip(params, filteredData, dateRange)
+        const htmlContent = PayslipPrint.payslip(params, dateRange, tempData, grossData, RDData, TKData, zeroValue)
     
         const { uri } = await Print.printToFileAsync({ html: htmlContent })
     
         if (uri) {
-            const pdfName = DateTimeUtils.getDashDate(params?.payOutSchedule) + '-Payslip.pdf'
+            const pdfName = DateTimeUtils.getDashDate(tempData?.DatePayoutSchedule) + '-Payslip.pdf'
             const destination = `${FileSystem.documentDirectory}${pdfName}`
 
             await FileSystem.moveAsync({
@@ -111,38 +114,44 @@ export default function MorePayslip ({ navigation }) {
             try {
                 setLoading(true)
                 const userID = await AsyncStorage.getItem('userID')
-
-                const response = await fetch('http://10.0.1.82:3000/api/morePayslip', {
+                const connValue = await AsyncStorage.getItem('conn')
+    
+                const response = await fetch(`http://${connValue}:3000/api/morePayslip`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ IDPayroll: params?.ID, IDEmployee: userID }),
                 })
     
                 const data = await response.json()
-                
+    
                 if (response.ok) {
                     setTempData(data.summary[0])
                     setGrossData(data.detail)
                     setRDData(data.restDay)
-
-                    console.log(data.tkData)
-
+    
+                    let sortedData = [...data.tkData]
+    
+                    sortedData.sort((a, b) => {
+                        const dateA = moment(a.WorkDate, 'YYYYMMDD')
+                        const dateB = moment(b.WorkDate, 'YYYYMMDD')
+                    
+                        return dateA - dateB
+                    })
+    
+                    setTKData(sortedData)
                     setDateRange(DateTimeUtils.dateMonthDayConvert(data.summary[0].DateFrom) + ' - ' + DateTimeUtils.dateDayYearConvert(data.summary[0].DateTo))
-                } else { alert(data.message) }
+                } else {
+                    alert(data.message)
+                }
             } catch (error) {
-                setLoading(false)
-                console.error(error) 
+                alert('An error occurred while fetching data.')
             } finally {
                 setLoading(false)
             }
         }
-
+    
         fetchUserData()
     }, [])
-
-    const zeroValue = (value) => {
-        return value != 0  ?  true : false
-    }
 
     return (
         <>
@@ -260,44 +269,58 @@ export default function MorePayslip ({ navigation }) {
                                 <View style={styles.textView}>
                                     <RowTextView semiText='Cut-off Period' regularText={dateRange} />
                                 </View>
+
                                 <Hr width={1} />
                                 <Hr width={1} space={.1} />
 
-                                {filteredData.map(( item, index ) => (
+                                {TKData?.map(( item, index ) => (
                                     <View key={index}>
                                         <View style={styles.textView}  >
-                                            <Text style={styles.tkDateText}>{DateTimeUtils.dateFullConvert(item.date)}</Text>
+                                            <Text style={styles.tkDateText}>{DateTimeUtils.dateFullConvert(item.WorkDate)}</Text>
                                             
-                                            <View style={{ marginLeft: 30 }}>
-                                                <TimekeepingText title='Day Type' text={item.dayType} />
+                                            <View>
+                                                <TimekeepingText title='Day Type' text={item.DayType} />
                                                 
-                                                { item.dayType != 'Rest Day' && item.dayType != 'Special Holiday' && (
+                                                { (item.DayType === 'RG' || (item.DayType && item.DayType.includes('LH'))) && (
                                                     <>
-                                                        <TimekeepingText title='Schedule' text={item.schedule} />
+                                                        <TimekeepingText title='Schedule' text={item.Name_Schedule} />
 
-                                                        {item.leave == '' ? (
-                                                            <>
-                                                                <TimekeepingText title='Time-in' text={DateTimeUtils.timeConvert(item.timeIn)} />
-                                                                <TimekeepingText title='Time-out' text={DateTimeUtils.timeConvert(item.timeOut)} /> 
-                                                            </>
-                                                        ) : ( <TimekeepingText title='Leave' text={item.leave} /> )}
+                                                        <TimekeepingText title='Time-in' text={
+                                                            item.ActualTimeIn != 'No Log' ?
+                                                            DateTimeUtils.timeConvert(item.ActualTimeIn) : 'No Log'
+                                                        } />
 
-                                                        <TimekeepingText title='Regular Hours' text={item.regularHours} gap={true} />
+                                                        <TimekeepingText title='Time-Out' text={
+                                                            item.ActualTimeOut != 'No Log' ?
+                                                            DateTimeUtils.timeConvert(item.ActualTimeOut) : 'No Log'
+                                                        } />
+
+                                                        {(item.REG !== '' && item.REG !== 0 ) && (
+                                                            <TimekeepingText title='Regular Hours' text={item.REG} 
+                                                            gap={true} />
+                                                        )}
+
+                                                        {(item.Leave !== '' && item.Leave !== null && item.Leave !== 0) && (
+                                                            <View style={styles.rowText}>
+                                                                <Text style={[styles.semiText(false), {marginLeft: 1}]}>Leave: </Text>
+                                                                <Text style={styles.regularText(false)}>{item.Leave}</Text>
+                                                            </View>
+                                                        )}
+
+                                                        { (item.OT !== '' && item.OT != null && item.OT !== 0) && (
+                                                            <View style={styles.rowText}>
+                                                                <Text style={styles.semiText(false)}>Overtime: </Text>
+                                                                <Text style={styles.regularText(false)}>{item.OT}</Text>
+                                                            </View>
+                                                        )}
+
+                                                        { (item.Tardy !== '' && item.Tardy !== null && item.Tardy !== 0) && (
+                                                            <View style={styles.rowText}>
+                                                                <Text style={styles.semiText(false)}>Tardy: </Text>
+                                                                <Text style={styles.regularText(false)}>{item.tardy}</Text>
+                                                            </View>
+                                                        )}
                                                     </>
-                                                )}
-
-                                                { item.overtime != '0.00' && (
-                                                    <View style={styles.rowText}>
-                                                        <Text style={[styles.semiText(false), { marginRight: 0 }]}>Overtime: </Text>
-                                                        <Text style={styles.regularText(false)}>{item.overtime}</Text>
-                                                    </View>
-                                                )}
-
-                                                { item.tardy != '0.00' && (
-                                                    <View style={styles.rowText}>
-                                                        <Text style={[styles.semiText(false), { marginRight: 0 }]}>Tardy: </Text>
-                                                        <Text style={styles.regularText(false)}>{item.tardy}</Text>
-                                                    </View>
                                                 )}
                                             </View>
                                         </View>
@@ -305,7 +328,8 @@ export default function MorePayslip ({ navigation }) {
                                         <Hr width={1} />
                                     </View>
                                 ))}
-                                {filteredData.length <= 0 && (
+                                
+                                {TKData?.length <= 0 && (
                                     <Text style={[styles.titleText, 
                                         {fontFamily: 'Inter_400Regular', fontSize: 14, paddingVertical: 10 }]}>
                                         No Records.</Text>

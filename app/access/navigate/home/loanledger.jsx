@@ -43,9 +43,10 @@ export default function LoanLedgerPage () {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const userID = await AsyncStorage.getItem('userID');
+                const userID = await AsyncStorage.getItem('userID')
+                const connValue = await AsyncStorage.getItem('conn')
       
-                const response = await fetch('http://10.0.1.82:3000/api/loanLedger', {
+                const response = await fetch(`http://${connValue}:3000/api/loanLedger`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ IDEmployee: userID }),
@@ -78,8 +79,9 @@ export default function LoanLedgerPage () {
         const fetchDataDetails = async () => {
             try {
                 const userID = await AsyncStorage.getItem('userID')
+                const connValue = await AsyncStorage.getItem('conn')
 
-                const response = await fetch('http://10.0.1.82:3000/api/loanLedgerDetails', {
+                const response = await fetch(`http://${connValue}:3000/api/loanLedgerDetails`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ IDEmployee: userID }),

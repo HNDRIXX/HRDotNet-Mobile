@@ -409,8 +409,9 @@ export default function PayslipPanel () {
         const fetchUserData = async () => {
             try {
                 const userID = await AsyncStorage.getItem('userID')
+                const connValue = await AsyncStorage.getItem('conn')
 
-                const response = await fetch('http://10.0.1.82:3000/api/payslip', {
+                const response = await fetch(`http://${connValue}:3000/api/payslip`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', },
                     body: JSON.stringify({ IDEmployee: userID }),

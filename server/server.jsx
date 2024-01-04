@@ -168,7 +168,10 @@ app.post('/api/morePayslip', async (req, res) => {
 
       const thirdResult = await fetchData("SELECT SUM(Hours) AS TotalHours, SUM(Amount) AS TotalAmount FROM tPayroll_Detail WHERE ID_PayrollItem = '2' AND ID_Employee = :IDEmployee AND ID_Payroll = :IDPayroll", { IDPayroll, IDEmployee })
 
-      const fourthResult = await fetchData("SELECT WorkDate, Name_Employee, DayType, ActualTimeIn, ActualTimeOut, LeaveCount FROM tTKProcessingDaily_Detail WHERE ID_Employee = :IDEmployee AND WorkDate BETWEEN '20231106' AND '20231130'", { IDEmployee })
+      const DateFrom = firstResult[0].DateFrom
+      const DateTo = firstResult[0].DateTo
+
+      const fourthResult = await fetchData("SELECT WorkDate, Name_Schedule, Name_Employee, DayType, ActualTimeIn, ActualTimeOut, Leave, Tardy, REG, OT FROM tTKProcessingDaily_Detail WHERE ID_Employee = :IDEmployee AND WorkDate BETWEEN :DateFrom AND :DateTo", { IDEmployee, DateFrom, DateTo })
 
       const mergedResult = {
         summary: firstResult,

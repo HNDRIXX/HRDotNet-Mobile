@@ -60,7 +60,9 @@ export default function Home ({ navigation }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://10.0.1.82:3000/api/home', {
+                const connValue = await AsyncStorage.getItem('conn')
+
+                const response = await fetch(`http://${connValue}:3000/api/home`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

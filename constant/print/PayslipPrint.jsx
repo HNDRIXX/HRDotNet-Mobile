@@ -6,7 +6,7 @@ import { Utils } from "../utils/Utils"
 import { DateTimeUtils } from "../utils/DateTimeUtils"
 
 export const PayslipPrint = {
-    payslip: (params, filteredData, dateRange) => `
+    payslip: (params, dateRange, tempData, grossData, RDData, TKData, zeroValue) => `
         <html lang="en">
             <head>
                 <style>
@@ -90,28 +90,28 @@ export const PayslipPrint = {
                     <div class="rowView" style="margin-top: 50px;">
                         <p id="rowText">
                             <span id="boldText">Document No: </span>
-                            <span id="regularText">${params.documentNo}</span>
+                            <span id="regularText">${params.DocumentNo}</span>
                         </p>
                     </div>
 
                     <div class="rowView">
                         <p id="rowText">
                             <span id="boldText">Employee Name: </span>
-                            <span id="regularText">${params.employeeName}</span>
+                            <span id="regularText">${tempData.Name_Employee}</span>
                         </p>
                     </div>
 
                     <div class="rowView">
                         <p id="rowText">
                             <span id="boldText">Employee Code: </span>
-                            <span id="regularText">${params.employeeCode}</span>
+                            <span id="regularText">${tempData.Code_Employee}</span>
                         </p>
                     </div> <hr class="hr" />
 
                     <div class="rowView">
                         <p id="rowText">
                             <span id="boldText">Pay Out Date: </span>
-                            <span id="regularText">${DateTimeUtils.dateFullConvert(params.payOutSchedule)}</span>
+                            <span id="regularText">${DateTimeUtils.dateFullConvert(tempData.DatePayoutSchedule)}</span>
                         </p>
                     </div>
 
@@ -128,67 +128,78 @@ export const PayslipPrint = {
                     <div class="rowView">
                         <p id="rowSpaceText">
                             <span id="boldText">Regular Day: </span>
-                            <span id="regularText">${Utils.amountFormat(params.totalWorkingHours) + ' hrs'}</span>
-                            <span id="regularText">${Utils.amountFormat(params.regularDayTotal)}</span>
+                            <span id="regularText">${Utils.amountFormat(RDData[0].TotalHours) + ' hrs'}</span>
+                            <span id="regularText">${Utils.amountFormat(RDData[0].TotalAmount)}</span>
                         </p>
                     </div>
 
-                    <div class="rowView">
-                        <p id="rowSpaceText">
-                            <span id="boldText">Meal Allowance: </span>
-                            <span id="regularText">${Utils.amountFormat(params?.mealAllowanceTotal)}</span>
-                        </p>
-                    </div>
-
-                    <div class="rowView">
-                        <p id="rowSpaceText">
-                            <span id="boldText">Complexity Allowance: </span>
-                            <span id="regularText">${Utils.amountFormat(params?.complexityAllowance)}</span>
-                        </p>
-                    </div> <hr class="hr" />
+                    ${ grossData?.map((item, index) => `
+                        <div class="rowView">
+                            <p id="rowSpaceText">
+                                <span id="boldText">${item.Name_PayrollItem}</span>
+                                <span id="regularText">${Utils.amountFormat(item?.TotalAmount)}</span>
+                            </p>
+                        </div> 
+                    `).join('') }
+                    
+                    <hr class="hr" />
 
                     <div class="rowRightView">
                         <p id="rowText">
                             <span id="boldText">Total Gross Pay: </span>
-                            <span id="regularText">${Utils.amountFormat(params?.grossPay)}</span>
+                            <span id="regularText">${Utils.amountFormat(params?.GrossPay)}</span>
                         </p>
                     </div>
 
                     <p id="boldText">Deductions</p>
                     <hr class="hrThick" /> <hr class="hrThick" />
 
-                    <div class="rowView">
-                        <p id="rowSpaceText">
-                            <span id="boldText">SSS Employee Share: </span>
-                            <span id="regularText">${Utils.amountFormat(params?.SSSShare)}</span>
-                        </p>
-                    </div>
+                    ${zeroValue(params?.SSSES) ? 
+                        `<div class="rowView">
+                            <p id="rowSpaceText">
+                                <span id="boldText">SSS Employee Share: </span>
+                                <span id="regularText">${Utils.amountFormat(params?.SSSShare)}</span>
+                            </p>
+                        </div>`
+                        : ''
+                    }
 
-                    <div class="rowView">
-                        <p id="rowSpaceText">
-                            <span id="boldText">PhilHealth Employee Share: </span>
-                            <span id="regularText">${Utils.amountFormat(params?.philHealthShare)}</span>
-                        </p>
-                    </div>
+                    ${zeroValue(params?.PHICEE) ? 
+                        `<div class="rowView">
+                            <p id="rowSpaceText">
+                                <span id="boldText">PhilHealth Employee Share: </span>
+                                <span id="regularText">${Utils.amountFormat(params?.PHICEE)}</span>
+                            </p>
+                        </div>`
+                        : ''
+                    }
 
-                    <div class="rowView">
-                        <p id="rowSpaceText">
-                            <span id="boldText">HDMF Employee Share: </span>
-                            <span id="regularText">${Utils.amountFormat(params?.HDMFShare)}</span>
-                        </p>
-                    </div> 
+                    ${zeroValue(params?.HDMFEE) ? 
+                        `<div class="rowView">
+                            <p id="rowSpaceText">
+                                <span id="boldText">HDMF Employee Share: </span>
+                                <span id="regularText">${Utils.amountFormat(params?.HDMFEE)}</span>
+                            </p>
+                        </div> `
+                        : ''
+                    }
 
-                    <div class="rowView">
-                        <p id="rowSpaceText">
-                            <span id="boldText">Withholding Tax: </span>
-                            <span id="regularText">${Utils.amountFormat(params?.withHoldingTax)}</span>
-                        </p>
-                    </div> <hr class="hr" />
+                    ${zeroValue(params?.Tax) ? 
+                        `<div class="rowView">
+                            <p id="rowSpaceText">
+                                <span id="boldText">Withholding Tax: </span>
+                                <span id="regularText">${Utils.amountFormat(params?.Tax)}</span>
+                            </p>
+                        </div>`
+                        : ''
+                    }
+
+                    <hr class="hr" />
 
                     <div class="rowRightView">
                         <p id="rowText">
                             <span id="boldText">Total Deductions: </span>
-                            <span id="regularText">${Utils.amountFormat(params?.deductions)}</span>
+                            <span id="regularText">${Utils.amountFormat(params?.Deductions)}</span>
                         </p>
                     </div>
 
@@ -198,7 +209,7 @@ export const PayslipPrint = {
                     <div class="rowRightView">
                         <p id="rowText">
                             <span id="boldText">PHP </span>
-                            <span id="boldText">${Utils.amountFormat(params?.netPay)}</span>
+                            <span id="boldText">${Utils.amountFormat(params?.NetPay)}</span>
                         </p>
                     </div> <hr class="hr" />
 
@@ -216,62 +227,69 @@ export const PayslipPrint = {
                         <hr class="hrThick" /> <hr class="hrThick" />
                     </div> 
 
-                        ${filteredData.map((item, index) => `
+                        ${TKData?.map((item, index) => `
                             <div class="rowView">
-                                <p id="boldText" style="margin-top: 20px; margin-bottom: 20px; font-size: 15px; ">${DateTimeUtils.dateFullConvert(item.date)}</p>
+                                <p id="boldText" style="margin-top: 20px; margin-bottom: 20px; font-size: 15px; ">${DateTimeUtils.dateFullConvert(item.WorkDate)}</p>
 
                                 <div class="rowIndentView">     
                                     <p id="rowText">
-                                        <span id="boldText">Date Type:</span>
-                                        <span id="regularText">${item.dayType}</span>
+                                        <span id="boldText">Day Type:</span>
+                                        <span id="regularText">${item.DayType}</span>
                                     </p>
 
-                                    ${item.dayType !== 'Rest Day' && item.dayType !== 'Special Holiday' ? (
+                                    ${item.DayType === 'RG' || (item.DayType && item.DayType.includes('LH')) ? (
                                         `<p id="rowText">
                                             <span id="boldText">Schedule: </span>
-                                            <span id="regularText">${item.schedule}</span>
+                                            <span id="regularText">${item.Name_Schedule}</span>
+                                        </p>
+                                    
+                                        <p id="rowText">
+                                            <span id="boldText">Time-in: </span>
+                                            <span id="regularText">${DateTimeUtils.timeConvert(item.ActualTimeIn)}</span>
+                                        </p>
+                                        <p id="rowText">
+                                            <span id="boldText">Time-out: </span>
+                                            <span id="regularText">${DateTimeUtils.timeConvert(item.ActualTimeOut)}</span>
                                         </p>`
                                     
-                                        + (item.leave === '' ?
-                                            `<p id="rowText">
-                                                <span id="boldText">Time-in: </span>
-                                                <span id="regularText">${DateTimeUtils.timeConvert(item.timeIn)}</span>
-                                            </p>
-                                            <p id="rowText">
-                                                <span id="boldText">Time-out: </span>
-                                                <span id="regularText">${DateTimeUtils.timeConvert(item.timeOut)}</span>
+                                        + ((item.REG !== '' && item.REG !== 0) ?
+                                            `<p id="rowText" style="margin-top: 40px;">
+                                                <span id="boldText">Regular Hours: </span>
+                                                <span id="regularText">${item.REG}</span>
                                             </p>`
-                                            :
-                                            `<p id="rowText">
-                                                <span id="boldText">Leave: </span>
-                                                <span id="regularText">${item.leave}</span>
-                                            </p>`
+                                            : ''
                                         )
                                     
-                                        + `<p id="rowText" style="margin-top: 40px;">
-                                            <span id="boldText">Regular Hours: </span>
-                                            <span id="regularText">${item.regularHours}</span>
-                                        </p>`
-                                    ) : '' }
-
-                                    ${ item.overtime != '0.00' ? `
-                                        <p id="rowText">
-                                            <span id="boldText">Overtime: </span>
-                                            <span id="regularText">${item.overtime}</span>
-                                        </p>
-                                    ` : '' }
+                                        + ((item.Leave !== '' && item.Leave !== null && item.Leave !== 0) ?
+                                            `<p id="rowText">
+                                                <span id="boldText">Leave: </span>
+                                                <span id="regularText">${item.Leave}</span>
+                                            </p>`
+                                            : ''
+                                        )
+                                        
+                                        + ((item.OT !== '' && item.OT != null && item.OT !== 0) ?
+                                            `<p id="rowText">
+                                                <span id="boldText">Overtime: </span>
+                                                <span id="regularText">${item.OT}</span>
+                                            </p>`
+                                            : ''
+                                        )
                                     
-                                    ${ item.tardy != '0.00' ? `
-                                        <p id="rowText">
-                                            <span id="boldText">Tardy: </span>
-                                            <span id="regularText">${item.tardy}</span>
-                                        </p> 
-                                    ` : ''}
+                                        + ((item.Tardy !== '' && item.Tardy != null && item.Tardy !== 0) ?
+                                            `<p id="rowText">
+                                                <span id="boldText">Tardy: </span>
+                                                <span id="regularText">${item.Tardy}</span>
+                                            </p>`
+                                            : ''
+                                        )
+                                    
+                                    ) : '' }                                    
                                 </div> <hr class="hr" />
                             </div>
                         `).join('')}
 
-                        ${filteredData.length <= 0 ? `<h5 id="headerTitle">No Timekeeping Records.</h5>` : ''}
+                        ${TKData?.length <= 0 ? `<h5 id="headerTitle">No Timekeeping Records.</h5>` : ''}
                 </div>
             </body>
         </html>
