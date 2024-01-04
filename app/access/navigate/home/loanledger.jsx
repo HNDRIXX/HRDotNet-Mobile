@@ -45,8 +45,9 @@ export default function LoanLedgerPage () {
             try {
                 const userID = await AsyncStorage.getItem('userID')
                 const connValue = await AsyncStorage.getItem('conn')
+                const portValue = await AsyncStorage.getItem('port')
       
-                const response = await fetch(`http://${connValue}:3000/api/loanLedger`, {
+                const response = await fetch(`http://${connValue}:${portValue}/api/loanLedger`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ IDEmployee: userID }),
@@ -80,8 +81,11 @@ export default function LoanLedgerPage () {
             try {
                 const userID = await AsyncStorage.getItem('userID')
                 const connValue = await AsyncStorage.getItem('conn')
+                const portValue = await AsyncStorage.getItem('port')
 
-                const response = await fetch(`http://${connValue}:3000/api/loanLedgerDetails`, {
+                const setPortValue = portValue !== null ? ':' + portValue : ''
+      
+                const response = await fetch(`http://${connValue}:${setPortValue}/api/loanLedgerDetails`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ IDEmployee: userID }),

@@ -24,7 +24,7 @@ const RowTextView = ({ semiText, regularText }) => {
     return (
         <View style={styles.rowText}>
             <Text style={[styles.semiText(false), { marginRight: 3 }]}>{semiText}: </Text>
-            <Text style={styles.regularText(false)}>{regularText}</Text>
+            <Text style={styles.regularText(false, true)}>{regularText}</Text>
         </View>
     )
 }
@@ -32,7 +32,7 @@ const RowTextView = ({ semiText, regularText }) => {
 const RowBetweenView = ({ title, textOne, textTwo }) => {
     return (
         <View style={styles.regularDayView}>
-            <Text style={styles.semiText(false)}>{title}</Text>
+            <Text style={styles.semiText(false, true)}>{title}</Text>
 
             { textOne && 
                 <Text style={styles.regularText(false)}>{textOne}</Text>
@@ -115,11 +115,14 @@ export default function MorePayslip ({ navigation }) {
                 setLoading(true)
                 const userID = await AsyncStorage.getItem('userID')
                 const connValue = await AsyncStorage.getItem('conn')
-    
-                const response = await fetch(`http://${connValue}:3000/api/morePayslip`, {
+                const portValue = await AsyncStorage.getItem('port')
+                
+                const setPortValue = portValue !== null ? ':' + portValue : ''
+      
+                const response = await fetch(`http://${connValue}${setPortValue}/api/morePayslip`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ IDPayroll: params?.ID, IDEmployee: userID }),
+                    body: JSON.stringify({ IDPayroll: params?.ID, IDTKProcessing: params?.ID_TKProcessing, IDEmployee: userID }),
                 })
     
                 const data = await response.json()

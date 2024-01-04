@@ -1171,13 +1171,15 @@ export const STYLES = StyleSheet.create({
             marginVertical: 10
         },
 
-        semiText: (bold) => ({
+        semiText: (bold, width) => ({
             fontFamily: bold ? 'Inter_700Bold' : 'Inter_600SemiBold',
+            width: width ? '45%' : '',
             marginRight: 20
         }),
 
-        regularText: (bold) => ({
-            fontFamily: bold ? 'Inter_700Bold' : 'Inter_400Regular'
+        regularText: (bold, width) => ({
+            fontFamily: bold ? 'Inter_700Bold' : 'Inter_400Regular',
+            width: width ? '50%' : '',
         }),
 
         rowText: {
@@ -1189,6 +1191,7 @@ export const STYLES = StyleSheet.create({
             justifyContent: 'space-between',
             flexDirection: 'row',
             width: '100%',
+            marginVertical: 3,
         },
 
         tkDateText: {

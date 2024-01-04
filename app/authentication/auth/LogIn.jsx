@@ -18,7 +18,8 @@ import Loader from "../../../components/loader/Loader";
 export default function LogInPage ({ navigation }) {
     const styles = STYLES.LogIn
     const [fontsLoaded] = useFonts()
-    const [conn, setConn] = useState(null) 
+    const [conn, setConn] = useState(null)
+    const [port, setPort] = useState(null)
     const [userName, setUsername] = useState('MGL6998')
     const [password, setPassword] = useState('sql123$%^')
     const [isShowPassword, setShowPassword] = useState(false)
@@ -41,10 +42,13 @@ export default function LogInPage ({ navigation }) {
     }
 
     const onConnHandle = async () => {
-        await AsyncStorage.setItem('conn', conn)
 
-        alert('Connection Successful')
+        conn !== null && await AsyncStorage.setItem('conn', conn) 
+        port !== null && await AsyncStorage.setItem('port', port)
+
+        alert('Configuration Saved')
         setConn(null)
+        setPort(null)
         setModal(!isModal)
     }
     
@@ -54,15 +58,18 @@ export default function LogInPage ({ navigation }) {
             setShowPassword(false)
             
             const connValue = await AsyncStorage.getItem('conn')
+            const portValue = await AsyncStorage.getItem('port')
 
-            if (connValue === null) {
+            if (connValue === null && portValue === null) {
                 setModal(!isModal)
                 return
             }
 
             setLoading(true)
 
-            const response = await fetch(`http://${connValue}:3000/api/login`, {
+            const setPortValue = portValue !== null ? ':' + portValue : ''
+      
+            const response = await fetch(`http://${connValue}${setPortValue}/api/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', },
                 body: JSON.stringify({ username: userName, password: password }),
@@ -75,7 +82,10 @@ export default function LogInPage ({ navigation }) {
                 setLoading(false)
 
                 navigation.navigate('TabStack', { screen: 'Home', params: { user: data } })
-            } else { alert(data.message) }
+            } else { 
+                setLoading(false) 
+                alert(data.message) 
+            }
         } catch (error) { console.error(error) }
     }
       
@@ -154,6 +164,8 @@ export default function LogInPage ({ navigation }) {
                         toggleModal={toggleModal}
                         setConn={setConn}
                         isModal={isModal}
+                        port={port}
+                        setPort={setPort}
                         conn={conn}
                         onConnHandle={onConnHandle}
                     />

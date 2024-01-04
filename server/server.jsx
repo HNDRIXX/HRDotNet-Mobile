@@ -145,7 +145,7 @@ app.post('/api/payslip', async (req, res) => {
   try {
     const { IDEmployee } = req.body
 
-    const result = await fetchData("SELECT P.ID, P.DatePayoutSchedule, P.DocumentNo, PS.GrossPay, PS.NetPay, PS.SSSES, PS.PHICEE, PS.HDMFEE, PS.Tax, (PS.SSSES + PS.PHICEE + PS.HDMFEE + PS.Tax) AS Deductions FROM tPayroll P LEFT JOIN tPayroll_Summary PS ON P.ID = PS.ID_Payroll WHERE PS.ID_Employee = :IDEmployee", { IDEmployee })
+    const result = await fetchData("SELECT P.ID, P.ID_TKProcessing, P.DatePayoutSchedule, P.DocumentNo, PS.GrossPay, PS.NetPay, PS.SSSES, PS.PHICEE, PS.HDMFEE, PS.Tax, (PS.SSSES + PS.PHICEE + PS.HDMFEE + PS.Tax) AS Deductions FROM tPayroll P LEFT JOIN tPayroll_Summary PS ON P.ID = PS.ID_Payroll WHERE P.IsPosted = 1 AND PS.ID_Employee = :IDEmployee", { IDEmployee })
 
     if (result.length > 0) {
       res.json(result)
@@ -159,19 +159,19 @@ app.post('/api/payslip', async (req, res) => {
 
 app.post('/api/morePayslip', async (req, res) => {
   try {
-    const { IDPayroll, IDEmployee } = req.body
+    const { IDPayroll, IDTKProcessing, IDEmployee } = req.body
 
     const firstResult = await fetchData("SELECT Code_Employee, Name_Employee, DateFrom, DateTo, DatePayoutSchedule, GrossPay, NetPay FROM tPayroll_Summary WHERE ID_Employee = :IDEmployee AND ID_Payroll = :IDPayroll", { IDPayroll, IDEmployee })
 
     if (firstResult) {
-      const secondResult = await fetchData("SELECT ID_PayrollItem, Name_PayrollItem, SUM(Amount) AS TotalAmount FROM tPayroll_Detail WHERE ID_Employee = :IDEmployee AND ID_Payroll = :IDPayroll GROUP BY ID_PayrollItem, Name_PayrollItem HAVING ID_PayrollItem <> '65' AND ID_PayrollItem <> '2'", { IDPayroll, IDEmployee })
+      const secondResult = await fetchData("SELECT ID_PayrollItem, Name_PayrollItem, SUM(Amount) AS TotalAmount FROM tPayroll_Detail WHERE ID_Employee = :IDEmployee AND ID_Payroll = :IDPayroll GROUP BY ID_PayrollItem, Name_PayrollItem HAVING ID_PayrollItem <> '65' AND ID_PayrollItem <> '2' AND ID_PayrollItem <> '54' AND ID_PayrollItem <> '53' AND ID_PayrollItem <> '55'", { IDPayroll, IDEmployee })
 
       const thirdResult = await fetchData("SELECT SUM(Hours) AS TotalHours, SUM(Amount) AS TotalAmount FROM tPayroll_Detail WHERE ID_PayrollItem = '2' AND ID_Employee = :IDEmployee AND ID_Payroll = :IDPayroll", { IDPayroll, IDEmployee })
 
       const DateFrom = firstResult[0].DateFrom
       const DateTo = firstResult[0].DateTo
 
-      const fourthResult = await fetchData("SELECT WorkDate, Name_Schedule, Name_Employee, DayType, ActualTimeIn, ActualTimeOut, Leave, Tardy, REG, OT FROM tTKProcessingDaily_Detail WHERE ID_Employee = :IDEmployee AND WorkDate BETWEEN :DateFrom AND :DateTo", { IDEmployee, DateFrom, DateTo })
+      const fourthResult = await fetchData("SELECT WorkDate, Name_Schedule, Name_Employee, DayType, ActualTimeIn, ActualTimeOut, Leave, Tardy, REG, OT FROM tTKProcessingDaily_Detail WHERE ID_Employee = :IDEmployee AND ID_TKProcessing = :IDTKProcessing AND WorkDate BETWEEN :DateFrom AND :DateTo", { IDEmployee, IDTKProcessing, DateFrom, DateTo })
 
       const mergedResult = {
         summary: firstResult,

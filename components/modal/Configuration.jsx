@@ -5,14 +5,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { COLORS } from '../../constant'
 
-export default function Configuration ({toggleModal, setConn, isModal, conn, onConnHandle})  {
+export default function Configuration ({toggleModal, setConn, isModal, port, setPort, conn, onConnHandle})  {
 
     const [connFetch, setConnFetch] = useState(null)
+    const [portFetch, setPortFetch] = useState(null)
+
     useEffect(() => {
         const getConn = async () => {
             const connValue = await AsyncStorage.getItem('conn')
+            const portValue = await AsyncStorage.getItem('port')
 
             setConnFetch(connValue)
+            setPortFetch(portValue)
         }
 
         getConn()
@@ -36,14 +40,24 @@ export default function Configuration ({toggleModal, setConn, isModal, conn, onC
 
                         <Text style={styles.titleText}>Configuration</Text>
 
-                        {connFetch && <Text style={styles.subText}>Current: {connFetch}</Text>}
+                        <Text style={styles.subText}>Current Connection: {!connFetch ? 'None' : connFetch}</Text>
+                        <Text style={[styles.subText, {marginBottom: 20}]}>Current Port: {!portFetch ? 'None' : portFetch}</Text>
 
                         <TextInput
                             style={styles.textInput}
                             onChangeText={(text) => setConn(text)}
                             value={conn}
-                            inputMode='numeric'
                             placeholder="Enter IP Address"
+                            contextMenuHidden={true}
+                            placeholderTextColor={COLORS.tr_gray}
+                        />
+
+                        <TextInput
+                            style={styles.textInput}
+                            onChangeText={(text) => setPort(text)}
+                            value={port}
+                            placeholder="Enter Port Number"
+                            inputMode='numeric'
                             contextMenuHidden={true}
                             placeholderTextColor={COLORS.tr_gray}
                         />
@@ -91,13 +105,13 @@ const styles = StyleSheet.create({
         borderWidth: 1, 
         borderRadius: 10,
         padding: 10,
+        marginVertical: 5,
     },
 
     subText: {
         fontFamily: 'Inter_500Medium',
         fontStyle: 'italic',
         fontWeight: '600',
-        marginBottom: 10,
     },
 
     closeButton: {

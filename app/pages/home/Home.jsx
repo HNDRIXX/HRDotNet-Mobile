@@ -61,8 +61,10 @@ export default function Home ({ navigation }) {
         const fetchData = async () => {
             try {
                 const connValue = await AsyncStorage.getItem('conn')
-
-                const response = await fetch(`http://${connValue}:3000/api/home`, {
+                const portValue = await AsyncStorage.getItem('port')
+                const setPortValue = portValue !== null ? ':' + portValue : ''
+      
+                const response = await fetch(`http://${connValue}${setPortValue}/api/home`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

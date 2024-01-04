@@ -410,8 +410,10 @@ export default function PayslipPanel () {
             try {
                 const userID = await AsyncStorage.getItem('userID')
                 const connValue = await AsyncStorage.getItem('conn')
-
-                const response = await fetch(`http://${connValue}:3000/api/payslip`, {
+                const portValue = await AsyncStorage.getItem('port')
+                const setPortValue = portValue !== null ? ':' + portValue : ''
+      
+                const response = await fetch(`http://${connValue}${setPortValue}/api/payslip`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', },
                     body: JSON.stringify({ IDEmployee: userID }),
