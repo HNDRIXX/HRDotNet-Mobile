@@ -1179,7 +1179,7 @@ export const STYLES = StyleSheet.create({
 
         regularText: (bold, width) => ({
             fontFamily: bold ? 'Inter_700Bold' : 'Inter_400Regular',
-            width: width ? '50%' : '',
+            width: width ? '60%' : '',
         }),
 
         rowText: {

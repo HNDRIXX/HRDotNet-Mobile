@@ -350,3 +350,17 @@ To Do
 - Forgot Password Functions
 
 
+# Concat (Break line query)
+
+
+  --defaultSchedule
+  
+  -- last get data
+  --Cos
+  --workSchedule
+
+#   Holiday
+
+  SELECT * FROM tEmploymentRecord WHERE ID_Employee = '138'
+  SELECT * FROM tChangeSchedule WHERE ID_Employee = '138'
+  SELECT * FROM tWorkSchedule WHERE Default_ID_Schedule = '9' AND ID_Company = '1'

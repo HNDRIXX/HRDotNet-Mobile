@@ -89,6 +89,23 @@ app.post('/api/home', async (req, res) => {
   }
 })
 
+app.post('/api/calendar', async (req, res) => {
+  try {
+    const { IDEmployee } = req.body
+
+    const result = await fetchData("SELECT * FROM tEmploymentRecord WHERE ID_Employee = :IDEmployee",
+    {IDEmployee })
+
+    if (result.length > 0) {
+      res.json(result[0])
+    } else {
+      res.status(400).json({ success: false, message: 'Something went wrong' })
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error connecting to the database' })
+  }
+})
+
 app.post('/api/profile', async (req, res) => {
   try {
     const { IDEmployee } = req.body

@@ -8,10 +8,10 @@ import { Entypo } from '@expo/vector-icons'
 
 import { COLORS, COMPONENT_STYLES, DateTimeUtils, Utils } from '../../../constant'
 
-export default function PayHistoryItem ({ item, deductions, TKData, index, onHandleMore }) {
+export default function PayHistoryItem ({ item, currDeductions, index, onHandleMore }) {
     const styles = COMPONENT_STYLES.PayHistoryItem
 
-    const totalAmount = deductions?.reduce((accumulator, currentItem) => accumulator + currentItem.Amount, 0)
+    const totalDeductions = currDeductions?.reduce((accumulator, currentItem) => accumulator + currentItem.Amount, 0)
 
     return (
         <View style={styles.container}>
@@ -21,7 +21,7 @@ export default function PayHistoryItem ({ item, deductions, TKData, index, onHan
 
                 <TouchableOpacity 
                     style={styles.row}
-                    onPress={() => onHandleMore(item, deductions, TKData)}
+                    onPress={() => onHandleMore(item, totalDeductions, currDeductions)}
                 >
                     <Text style={styles.moreButtonText}>More</Text>
                     <Entypo name="chevron-small-right" size={17} color="black" />

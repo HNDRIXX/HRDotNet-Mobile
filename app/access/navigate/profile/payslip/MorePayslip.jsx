@@ -35,7 +35,7 @@ const RowBetweenView = ({ title, textOne, textTwo }) => {
             <Text style={styles.semiText(false, true)}>{title}</Text>
 
             { textOne && 
-                <Text style={styles.regularText(false)}>{textOne}</Text>
+                <Text style={[styles.regularText(false), { marginLeft: -40 }]}>{textOne}</Text>
             }
 
             <Text style={styles.regularText(false)}>{textTwo}</Text>
@@ -63,36 +63,28 @@ const TimekeepingText = ({ title, text, gap }) => {
 
 export default function MorePayslip ({ navigation }) {
     const route = useRoute()
-    const params = route.params.item
-    const deductionsParams = route.params.deductions
-    const TKparams = route.params.TKData
-    
+    const params = route.params?.item
+    const deductionsParams = route.params?.currDeductions
+    const totalDeductionsParams = route.params?.totalDeductions
 
-    console.log(deductionsParams)
-
-    const [tempData, setTempData] = useState(null)
+    const [data, setData] = useState(null)
     const [grossData, setGrossData] = useState(null)
     const [RDData, setRDData] = useState(null)
     const [TKData, setTKData] = useState(null)
 
-    const [filteredData, setFilteredData] = useState([])
     const [pdfUri, setPdfUri] = useState(null)
     const [isAlert, setAlert] = useState(false)
     const [isLoading, setLoading] = useState(true)
 
     const [dateRange, setDateRange] = useState(null)
 
-    const zeroValue = (value) => {
-        return value != 0  ?  true : false
-    }
-
     const generateAndDownloadPDF = async () => {
-        const htmlContent = PayslipPrint.payslip(params, dateRange, tempData, grossData, RDData, TKData, zeroValue)
+        const htmlContent = PayslipPrint.payslip(params, dateRange, data, grossData, RDData, TKData, deductionsParams, totalDeductionsParams)
     
         const { uri } = await Print.printToFileAsync({ html: htmlContent })
     
         if (uri) {
-            const pdfName = DateTimeUtils.getDashDate(tempData?.DatePayoutSchedule) + '-Payslip.pdf'
+            const pdfName = DateTimeUtils.getDashDate(data?.DatePayoutSchedule) + '-Payslip.pdf'
             const destination = `${FileSystem.documentDirectory}${pdfName}`
 
             await FileSystem.moveAsync({
@@ -105,7 +97,7 @@ export default function MorePayslip ({ navigation }) {
             setAlert(!isAlert)
         }
     }
-
+    
     const sharePDF = async () => {
         if (pdfUri) {
             const fileUri = pdfUri
@@ -132,7 +124,7 @@ export default function MorePayslip ({ navigation }) {
                 const data = await response.json()
     
                 if (response.ok) {
-                    setTempData(data.summary[0])
+                    setData(data.summary[0])
                     setGrossData(data.detail)
                     setRDData(data.restDay)
     
@@ -192,14 +184,14 @@ export default function MorePayslip ({ navigation }) {
 
                                 <View style={styles.textView}>
                                     <RowTextView semiText='Document No' regularText={params?.DocumentNo} />
-                                    <RowTextView semiText='Employee Name' regularText={tempData?.Name_Employee} />
-                                    <RowTextView semiText='Employee Code' regularText={tempData?.Code_Employee} />
+                                    <RowTextView semiText='Employee Name' regularText={data?.Name_Employee} />
+                                    <RowTextView semiText='Employee Code' regularText={data?.Code_Employee} />
                                 </View>
 
                                 <Hr />
 
                                 <View style={styles.textView}>
-                                    <RowTextView semiText='Pay Out Date' regularText={DateTimeUtils.dateFullConvert(tempData?.DatePayoutSchedule)} />
+                                    <RowTextView semiText='Pay Out Date' regularText={DateTimeUtils.dateFullConvert(data?.DatePayoutSchedule)} />
 
                                     <RowTextView 
                                         semiText='Cut Off Period' 
@@ -220,10 +212,11 @@ export default function MorePayslip ({ navigation }) {
                                         textTwo={Utils.amountFormat(RDData[0]?.TotalAmount)} />
 
                                     { grossData?.map(( item, index ) => (
-                                        <RowBetweenView 
-                                            key={index}
-                                            title={item?.Name_PayrollItem}
-                                            textTwo={Utils.amountFormat(item?.TotalAmount)} />
+                                        item.ID_PayrollItem != 2 && 
+                                            <RowBetweenView 
+                                                key={index}
+                                                title={item?.Name_PayrollItem}
+                                                textTwo={Utils.amountFormat(item?.TotalAmount)} />
                                     ))}
                                 </View>
                                 <Hr />
@@ -237,21 +230,18 @@ export default function MorePayslip ({ navigation }) {
                                 <Hr width={2.5} space={.1} />
 
                                 <View style={styles.textView}>
-                                    { zeroValue(params?.SSSES) ? <RowBetweenView title='SSS Employee Share' textTwo={Utils.amountFormat(params?.SSSES)} /> : null }
-                                    
-                                    { zeroValue(params?.PHICEE) ?  <RowBetweenView title='PHIC Employee Share' textTwo={Utils.amountFormat(params?.PHICEE)} /> : null }
-                                    
-                                    { zeroValue(params?.HDMFEE) ? <RowBetweenView title='HDMF Employee Share' 
-                                    textTwo={ Utils.amountFormat(params?.HDMFEE)} /> : null }
-
-                                    { zeroValue(params?.Tax) ? <RowBetweenView title='Withholding Tax' 
-                                    textTwo={ Utils.amountFormat(params?.Tax)} /> : null }
+                                    {Array.isArray(deductionsParams) ? deductionsParams.map(( item, index ) => (
+                                        <RowBetweenView 
+                                                key={index}
+                                                title={item?.Name_PayrollItem} 
+                                                textTwo={Utils.amountFormat(item.Amount)} />
+                                    )) : null}
                                 </View>
 
                                 <Hr width={2.2} />
 
                                 <View style={[styles.textView, { marginVertical: 0 }]}>
-                                    <RowEndView title='Total Deductions' text={Utils.amountFormat(params?.Deductions)} />
+                                    <RowEndView title='Total Deductions' text={Utils.amountFormat(totalDeductionsParams)} />
                                 </View>
 
                                 <Text style={[styles.semiText, { marginTop: 10, fontFamily: 'Inter_700Bold'}]}>Net Pay</Text>

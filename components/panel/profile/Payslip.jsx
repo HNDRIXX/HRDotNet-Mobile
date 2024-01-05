@@ -2,8 +2,8 @@
 // Designed by : Alex Diane Vivienne Candano
 // Developed by: Patrick William Quintana Lofranco, Jessie Cuerda
 
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, RefreshControl } from 'react-native'
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
@@ -15,370 +15,7 @@ import { Search } from '../../use/Search'
 import RecentPayItem from '../../items/profile/RecentPayItem';
 import PayHistoryItem from '../../items/profile/PayHistoryitem';
 import NothingFoundNote from '../../../components/note/NothingFoundNote'
-
-const data = [
-{
-    payOutSchedule: '20231210',
-    dateTo: '20231116',
-    dateFrom: '20231130',
-    netPay: '15378.2400',
-    grossPay: '17190.3100',
-    deductions: '1812.0600',    
-
-    documentNo: 'PP001',
-    employeeName: 'Juan dela Cruz',
-    employeeCode: '5985',
-    department: 'Quality Assurance',
-    
-    regularDayTotal: '15075.3600',
-    totalWorkingHours: '84.6200',
-    mealAllowanceTotal: '736.1000',
-    complexityAllowance: '1321.8400',
-
-    SSSShare: '675.0000',
-    philHealthShare: '301.5100',
-    HDMFShare: '100.0000',
-    withHoldingTax: '735.0000',
-},
-{
-    payOutSchedule: '20231125',
-    dateTo: '20231101',
-    dateFrom: '20231115',
-    netPay: '15378.2400',
-    grossPay: '17190.3100',
-    deductions: '1812.0600',    
-
-    documentNo: 'PP001',
-    employeeName: 'Juan dela Cruz',
-    employeeCode: '5985',
-    department: 'Quality Assurance',
-    
-    regularDayTotal: '15075.3600',
-    totalWorkingHours: '84.6200',
-    mealAllowanceTotal: '736.1000',
-    complexityAllowance: '1321.8400',
-
-    SSSShare: '675.0000',
-    philHealthShare: '301.5100',
-    HDMFShare: '100.0000',
-    withHoldingTax: '735.0000',
-},
-{
-    payOutSchedule: '20231110',
-    dateTo: '20231016',
-    dateFrom: '20231031',
-    netPay: '10000.2400',
-    grossPay: '17190.3100',
-    deductions: '1812.0600',    
-
-    documentNo: 'PP001',
-    employeeName: 'Juan dela Cruz',
-    employeeCode: '5985',
-    department: 'Quality Assurance',
-    
-    regularDayTotal: '15075.3600',
-    totalWorkingHours: '84.6200',
-    mealAllowanceTotal: '736.1000',
-    complexityAllowance: '1321.8400',
-
-    SSSShare: '675.0000',
-    philHealthShare: '301.5100',
-    HDMFShare: '100.0000',
-    withHoldingTax: '735.0000',
-},
-{
-    payOutSchedule: '20231025',
-    dateTo: '20231001',
-    dateFrom: '20231015',
-    netPay: '8016.2900',
-    grossPay: '17190.3100',
-    deductions: '1812.0600',
-
-    documentNo: 'PP002',
-    employeeName: 'Juan dela Cruz',
-    employeeCode: '5988',
-    department: 'Quality Assurance',
-
-    regularDayTotal: '15075.3600',
-    totalWorkingHours: '84.6200',
-    mealAllowanceTotal: '736.1000',
-    complexityAllowance: '1321.8400',
-
-    SSSShare: '675.0000',
-    philHealthShare: '301.5100',
-    HDMFShare: '100.0000',
-    withHoldingTax: '735.0000',
-
-},
-{
-    payOutSchedule: '20231010',
-    dateTo: '20230916',
-    dateFrom: '20230931',
-    netPay: '10941.0300',
-    grossPay: '17190.3100',
-    deductions: '1812.0600',
-
-    documentNo: 'PP003',
-    employeeName: 'Juan dela Cruz',
-    employeeCode: '5989',
-    department: 'Quality Assurance',
-
-    regularDayTotal: '15075.3600',
-    totalWorkingHours: '84.6200',
-    mealAllowanceTotal: '736.1000',
-    complexityAllowance: '1321.8400',
-
-    SSSShare: '675.0000',
-    philHealthShare: '301.5100',
-    HDMFShare: '100.0000',
-    withHoldingTax: '735.0000',
-}]
-
-const TKData = [
-    {
-        date: '20231101',
-        dayType: 'Regular Day',
-        schedule: '8:00 AM to 6:00 PM',
-        timeIn: '08:00',
-        timeOut: '18:00',
-        regularHours: '9.00',
-        overtime: '0.00',
-        leave: '',
-        tardy: '0.00',
-    },
-    {
-        date: '20231102',
-        dayType: 'Regular Day',
-        schedule: '8:00 AM to 6:00 PM',
-        timeIn: '08:00',
-        timeOut: '18:00',
-        regularHours: '9.00',
-        overtime: '0.00',
-        leave: '',
-        tardy: '0.00',
-    },
-    {
-        date: '20231103',
-        dayType: 'Regular Day',
-        schedule: '8:00 AM to 6:00 PM',
-        timeIn: '08:00',
-        timeOut: '18:00',
-        regularHours: '9.00',
-        overtime: '0.00',
-        leave: '',
-        tardy: '0.00',
-    },
-    {
-        date: '20231104',
-        dayType: 'Rest Day',
-        schedule: '',
-        timeIn: '',
-        timeOut: '',
-        regularHours: '0.00',
-        overtime: '0.00',
-        leave: '',
-        tardy: '0.00',
-    },
-    {
-        date: '20231105',
-        dayType: 'Rest Day',
-        schedule: '',
-        timeIn: '',
-        timeOut: '',
-        regularHours: '0.00',
-        overtime: '0.00',
-        leave: '',
-        tardy: '0.00',
-    },
-    {
-        date: '20231106',
-        dayType: 'Regular Day',
-        schedule: '8:00 AM to 6:00 PM',
-        timeIn: '08:00',
-        timeOut: '18:00',
-        regularHours: '9.00',
-        overtime: '0.00',
-        leave: '',
-        tardy: '0.00',
-    },
-    {
-        date: '20231107',
-        dayType: 'Regular Day',
-        schedule: '8:00 AM to 6:00 PM',
-        timeIn: '08:00',
-        timeOut: '18:00',
-        regularHours: '9.00',
-        overtime: '0.00',
-        leave: '',
-        tardy: '0.00',
-    },
-    {
-        date: '20231108',
-        dayType: 'Regular Day',
-        schedule: '8:00 AM to 6:00 PM',
-        timeIn: '08:00',
-        timeOut: '18:00',
-        regularHours: '9.00',
-        overtime: '0.00',
-        leave: '',
-        tardy: '0.00',
-    },
-    {
-        date: '20231109',
-        dayType: 'Regular Day',
-        schedule: '8:00 AM to 6:00 PM',
-        timeIn: '08:00',
-        timeOut: '18:00',
-        regularHours: '9.00',
-        overtime: '0.00',
-        leave: '',
-        tardy: '0.00',
-    },
-    {
-        date: '20231110',
-        dayType: 'Regular Day',
-        schedule: '8:00 AM to 6:00 PM',
-        timeIn: '08:00',
-        timeOut: '18:00',
-        regularHours: '9.00',
-        overtime: '0.00',
-        leave: '',
-        tardy: '0.00',
-    },
-    {
-        date: '20231111',
-        dayType: 'Rest Day',
-        schedule: '',
-        timeIn: '',
-        timeOut: '',
-        regularHours: '0.00',
-        overtime: '0.00',
-        leave: '',
-        tardy: '0.00',
-    },
-    {
-        date: '20231112',
-        dayType: 'Rest Day',
-        schedule: '',
-        timeIn: '',
-        timeOut: '',
-        regularHours: '0.00',
-        overtime: '0.00',
-        leave: '',
-        tardy: '0.00',
-    },
-    {
-        date: '20231113',
-        dayType: 'Regular Day',
-        schedule: '8:00 AM to 6:00 PM',
-        timeIn: '08:00',
-        timeOut: '18:00',
-        regularHours: '9.00',
-        overtime: '0.00',
-        leave: '',
-        tardy: '0.00',
-    },
-    {
-        date: '20231114',
-        dayType: 'Regular Day',
-        schedule: '8:00 AM to 6:00 PM',
-        timeIn: '08:00',
-        timeOut: '18:00',
-        regularHours: '9.00',
-        overtime: '0.00',
-        leave: '',
-        tardy: '0.00',
-    },
-    {
-        date: '20231115',
-        dayType: 'Regular Day',
-        schedule: '8:00 AM to 6:00 PM',
-        timeIn: '08:00',
-        timeOut: '18:00',
-        regularHours: '9.00',
-        overtime: '0.00',
-        leave: '',
-        tardy: '0.00',
-    },
-{
-    date: '20231014',
-    dayType: 'Regular Day',
-    schedule: '8:00 AM to 6:00 PM',
-    timeIn: '08:12',
-    timeOut: '18:00',
-    regularHours: '9.00',
-    overtime: '0.00',
-    leave: '0.00',
-    tardy: '0.12',
-
-},
-{
-    date: '20231015',
-    dayType: 'Regular Day',
-    schedule: '8:00 AM to 6:00 PM',
-    timeIn: '08:12',
-    timeOut: '18:00',
-    regularHours: '9.00',
-    overtime: '0.00',
-    leave: '0.00',
-    tardy: '0.12',
-},
-{
-    date: '20231016',
-    dayType: 'Regular Day',
-    schedule: '8:00 AM to 6:00 PM',
-    timeIn: '08:00',
-    timeOut: '18:00',
-    regularHours: '9.00',
-    overtime: '0.00',
-    leave: '',
-    tardy: '0.00',
-},
-{
-    date: '20231017',
-    dayType: 'Regular Day',
-    schedule: '8:00 AM to 6:00 PM',
-    timeIn: '00:00',
-    timeOut: '00:00',
-    regularHours: '9.00',
-    overtime: '0.00',
-    leave: 'Vacation Leave',
-    tardy: '0.00',
-},
-{
-    date: '20231018',
-    dayType: 'Regular Day',
-    schedule: '8:00 AM to 6:00 PM',
-    timeIn: '08:00',
-    timeOut: '18:00',
-    regularHours: '9.00',
-    overtime: '0.00',
-    leave: '',
-    tardy: '0.00',
-},
-{
-    date: '20231019',
-    dayType: 'Rest Day',
-    schedule: '8:00 AM to 6:00 PM',
-    timeIn: '0.00',
-    timeOut: '0.00',
-    regularHours: '0.00',
-    overtime: '0.00',
-    leave: '',
-    tardy: '0.00',
-},
-{
-    date: '20231020',
-    dayType: 'Special Holiday',
-    schedule: '8:00 AM to 6:00 PM',
-    timeIn: '0.00',
-    timeOut: '0.00',
-    regularHours: '0.00',
-    overtime: '0.00',
-    leave: '',
-    tardy: '0.00',
-},
-]
+import Loader from '../../loader/Loader';
 
 export default function PayslipPanel () {
     const styles = COMPONENT_STYLES.Payslip
@@ -387,16 +24,19 @@ export default function PayslipPanel () {
 
     const [isFirstHalf, setFirstHalf] = useState(null)
     const [isSecondHalf, setSecondHalf] = useState(null)
-
     const [recentPayData, setRecentPayData] = useState(null)
     const [tempData, setTempData] = useState(null)
     const [deductionsData, setDeductionsData] = useState(null)
+
+    const [isLoading, setLoading] = useState(false)
+    const [refreshing, setRefreshing] = useState(false)
+    const scrollViewRef = useRef(null)
 
     const navigation = useNavigation()
 
     useEffect(() => { Utils.getHalf(setFirstHalf, setSecondHalf) })
     
-    const onHandleMore = (item, deductions, TKData) => { navigation.navigate('MorePayslip', {item, deductions, TKData}) }
+    const onHandleMore = (item, totalDeductions, currDeductions) => { navigation.navigate('MorePayslip', {item, totalDeductions, currDeductions}) }
 
     let filteredData = []
 
@@ -409,9 +49,12 @@ export default function PayslipPanel () {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
+                setLoading(true)
+
                 const userID = await AsyncStorage.getItem('userID')
                 const connValue = await AsyncStorage.getItem('conn')
                 const portValue = await AsyncStorage.getItem('port')
+
                 const setPortValue = portValue !== null ? ':' + portValue : ''
       
                 const response = await fetch(`http://${connValue}${setPortValue}/api/payslip`, {
@@ -422,69 +65,83 @@ export default function PayslipPanel () {
     
                 const data = await response.json()
 
-                if (userID !== null) {
-                    if (response.ok) {
-                        const sortedData = data.detail.sort((a, b) => moment(b.DatePayoutSchedule, 'YYYYMMDD').diff(moment(a.DatePayoutSchedule, 'YYYYMMDD')))
+                if (response.ok) {
+                    const sortedData = data.detail.sort((a, b) => moment(b.DatePayoutSchedule, 'YYYYMMDD').diff(moment(a.DatePayoutSchedule, 'YYYYMMDD')))
 
-                        const recentSlip = sortedData.length > 0 ? sortedData[0] : {}
-                        const previousSlip = sortedData.slice(1)
-                        
-                        setRecentPayData(recentSlip)
-                        setDeductionsData(data.deductions)
-                        setTempData(previousSlip)
-                    } else { alert(data.message) }
-                } else { console.log('userID not found in AsyncStorage') }
-            } catch (error) { console.error(error) }
+                    const recentSlip = sortedData.length > 0 ? sortedData[0] : {}
+                    const previousSlip = sortedData.slice(1)
+                    
+                    setRecentPayData(recentSlip)
+                    setDeductionsData(data.deductions)
+                    setTempData(previousSlip)
+                    setLoading(false)
+                    setRefreshing(false)
+                } else { 
+                    setLoading(false)
+                    setRefreshing(false)
+                    alert(data.message) 
+                }
+            } catch (error) { 
+                setLoading(false)
+                setRefreshing(false)
+            }
         }
 
         fetchUserData()
-    }, [])
+    }, [refreshing])
     
     return (
         <>
-            <Animatable.View
-                animation={'fadeIn'}
-                duration={900}
-                style={styles.animatedView}
-            >
-                <Search 
-                    filterText={filterText}
-                    setFilterText={setFilterText}
-                />
-
-                {recentPayData != null && (
-                    <RecentPayItem
-                        item={recentPayData}
-                        deductions={deductionsData?.filter(item => item?.ID_Payroll === tempData?.ID_Payroll)}
-                        TKData={TKData}
-                        onHandleMore={onHandleMore}
+            {isLoading ? <Loader /> : (
+                <Animatable.View
+                    animation={'fadeIn'}
+                    style={styles.animatedView}
+                    duration={900}
+                >
+                    <Search 
+                        filterText={filterText}
+                        setFilterText={setFilterText}
                     />
-                )}
 
-                <Text style={styles.payHistoryTitle}>Pay History</Text>
+                    {recentPayData != null && (
+                        <RecentPayItem
+                            item={recentPayData}
+                            currDeductions={deductionsData?.filter(item => item?.ID_Payroll === tempData?.ID_Payroll)}
+                            onHandleMore={onHandleMore}
+                        />
+                    )}
 
-                {filteredData?.length <= 0 && <NothingFoundNote /> }
+                    <Text style={styles.payHistoryTitle}>Pay History</Text>
 
-                <FlatList 
-                    data={filteredData}
-                    renderItem={({ item, index }) => {
-                        const withinFirst = isFirstHalf && !Utils.withinFirst(item.DatePayoutSchedule)
-                        const withinSecond = isSecondHalf && !Utils.withinSecond(item.DatePayoutSchedule)
+                    {filteredData?.length <= 0 && <NothingFoundNote /> }
 
-                        return (
-                            (withinFirst || withinSecond) ? (
-                                <PayHistoryItem 
-                                    item={item}
-                                    deductions={deductionsData?.filter(itemFilter => itemFilter?.ID_Payroll === item?.ID_Payroll)}
-                                    TKData={TKData}
-                                    index={index}
-                                    onHandleMore={onHandleMore}
-                                />
-                            ) : null 
-                        )
-                    }}
-                />
-            </Animatable.View>
+                    <FlatList 
+                        data={filteredData}
+                        ref={scrollViewRef}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={() => setRefreshing(true)} />
+                        }
+
+                        renderItem={({ item, index }) => {
+                            const withinFirst = isFirstHalf && !Utils.withinFirst(item.DatePayoutSchedule)
+                            const withinSecond = isSecondHalf && !Utils.withinSecond(item.DatePayoutSchedule)
+
+                            return (
+                                (withinFirst || withinSecond) ? (
+                                    <PayHistoryItem 
+                                        item={item}
+                                        currDeductions={deductionsData?.filter(itemFilter => itemFilter?.ID_Payroll === item?.ID_Payroll)}
+                                        index={index}
+                                        onHandleMore={onHandleMore}
+                                    />
+                                ) : null 
+                            )
+                        }}
+                    />
+                </Animatable.View>
+            )}
         </>
     )
 }

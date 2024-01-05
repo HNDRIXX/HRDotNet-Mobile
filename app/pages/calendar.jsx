@@ -6,6 +6,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { View, StyleSheet,  RefreshControl } from "react-native";
 import { Calendar } from "react-native-calendars";
 import * as Animatable from 'react-native-animatable';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
 
 import { COLORS, STYLES, Utils } from "../../constant";
@@ -43,6 +44,32 @@ export default function CalendarScreen() {
 
   const styles = STYLES.Calendar
   const updatedValueEvents = {}
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userID = await AsyncStorage.getItem('userID')
+        const connValue = await AsyncStorage.getItem('conn')
+        const portValue = await AsyncStorage.getItem('port')
+
+        const setPortValue = portValue !== null ? ':' + portValue : ''
+
+        const response = await fetch(`http://${connValue}${setPortValue}/api/calendar`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ IDEmployee: userID }),
+        })
+
+        const data = await response.json()
+
+        if (response.ok) {
+          console.log(data)
+        } else { alert(data.message) }
+      } catch (error) { console.error(error) }
+    }
+
+    fetchUserData()
+  }, [])
 
   useEffect(() => {
       setTimeout(() => {
@@ -124,7 +151,7 @@ export default function CalendarScreen() {
     const year = parseInt(parts[2], 10)
   
     const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`
-  
+    
     return formattedDate
   }
 

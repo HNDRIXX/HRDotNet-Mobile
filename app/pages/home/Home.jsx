@@ -83,7 +83,7 @@ export default function Home ({ navigation }) {
 
                     const vCount = vFilter.reduce((total, transaction) => total + transaction.Amount, 0)
                     const sCount = sFilter.reduce((total, transaction) => total + transaction.Amount, 0)
-        
+                    
                     setVacationCount(vCount)
                     setSickCount(sCount)
                     setVacationData(vFilter)

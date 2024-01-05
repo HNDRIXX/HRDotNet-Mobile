@@ -6,7 +6,7 @@ import { Utils } from "../utils/Utils"
 import { DateTimeUtils } from "../utils/DateTimeUtils"
 
 export const PayslipPrint = {
-    payslip: (params, dateRange, tempData, grossData, RDData, TKData, zeroValue) => `
+    payslip: (params, dateRange, data, grossData, RDData, TKData, deductionsParams, totalDeductionsParams) => `
         <html lang="en">
             <head>
                 <style>
@@ -97,21 +97,21 @@ export const PayslipPrint = {
                     <div class="rowView">
                         <p id="rowText">
                             <span id="boldText">Employee Name: </span>
-                            <span id="regularText">${tempData.Name_Employee}</span>
+                            <span id="regularText">${data.Name_Employee}</span>
                         </p>
                     </div>
 
                     <div class="rowView">
                         <p id="rowText">
                             <span id="boldText">Employee Code: </span>
-                            <span id="regularText">${tempData.Code_Employee}</span>
+                            <span id="regularText">${data.Code_Employee}</span>
                         </p>
                     </div> <hr class="hr" />
 
                     <div class="rowView">
                         <p id="rowText">
                             <span id="boldText">Pay Out Date: </span>
-                            <span id="regularText">${DateTimeUtils.dateFullConvert(tempData.DatePayoutSchedule)}</span>
+                            <span id="regularText">${DateTimeUtils.dateFullConvert(data.DatePayoutSchedule)}</span>
                         </p>
                     </div>
 
@@ -154,52 +154,21 @@ export const PayslipPrint = {
                     <p id="boldText">Deductions</p>
                     <hr class="hrThick" /> <hr class="hrThick" />
 
-                    ${zeroValue(params?.SSSES) ? 
-                        `<div class="rowView">
+                    ${Array.isArray(deductionsParams) && deductionsParams.length > 0 ? deductionsParams.map((item) => `
+                        <div class="rowView">
                             <p id="rowSpaceText">
-                                <span id="boldText">SSS Employee Share: </span>
-                                <span id="regularText">${Utils.amountFormat(params?.SSSShare)}</span>
+                                <span id="boldText">${item?.Name_PayrollItem}</span>
+                                <span id="regularText">${Utils.amountFormat(item?.Amount)}</span>
                             </p>
-                        </div>`
-                        : ''
-                    }
-
-                    ${zeroValue(params?.PHICEE) ? 
-                        `<div class="rowView">
-                            <p id="rowSpaceText">
-                                <span id="boldText">PhilHealth Employee Share: </span>
-                                <span id="regularText">${Utils.amountFormat(params?.PHICEE)}</span>
-                            </p>
-                        </div>`
-                        : ''
-                    }
-
-                    ${zeroValue(params?.HDMFEE) ? 
-                        `<div class="rowView">
-                            <p id="rowSpaceText">
-                                <span id="boldText">HDMF Employee Share: </span>
-                                <span id="regularText">${Utils.amountFormat(params?.HDMFEE)}</span>
-                            </p>
-                        </div> `
-                        : ''
-                    }
-
-                    ${zeroValue(params?.Tax) ? 
-                        `<div class="rowView">
-                            <p id="rowSpaceText">
-                                <span id="boldText">Withholding Tax: </span>
-                                <span id="regularText">${Utils.amountFormat(params?.Tax)}</span>
-                            </p>
-                        </div>`
-                        : ''
-                    }
-
+                        </div>
+                    `).join('') : ''}
+                
                     <hr class="hr" />
 
                     <div class="rowRightView">
                         <p id="rowText">
                             <span id="boldText">Total Deductions: </span>
-                            <span id="regularText">${Utils.amountFormat(params?.Deductions)}</span>
+                            <span id="regularText">${Utils.amountFormat(totalDeductionsParams)}</span>
                         </p>
                     </div>
 
