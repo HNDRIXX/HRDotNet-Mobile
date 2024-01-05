@@ -145,10 +145,21 @@ app.post('/api/payslip', async (req, res) => {
   try {
     const { IDEmployee } = req.body
 
-    const result = await fetchData("SELECT P.ID, P.ID_TKProcessing, P.DatePayoutSchedule, P.DocumentNo, PS.GrossPay, PS.NetPay, PS.SSSES, PS.PHICEE, PS.HDMFEE, PS.Tax, (PS.SSSES + PS.PHICEE + PS.HDMFEE + PS.Tax) AS Deductions FROM tPayroll P LEFT JOIN tPayroll_Summary PS ON P.ID = PS.ID_Payroll WHERE P.IsPosted = 1 AND PS.ID_Employee = :IDEmployee", { IDEmployee })
+    const result = await fetchData("SELECT P.ID, P.ID_TKProcessing, P.DatePayoutSchedule, P.DocumentNo, PS.GrossPay, PS.NetPay, PS.ID_Payroll FROM tPayroll P LEFT JOIN tPayroll_Summary PS ON P.ID = PS.ID_Payroll WHERE P.IsPosted = 1 AND PS.ID_Employee = :IDEmployee", { IDEmployee })
 
     if (result.length > 0) {
-      res.json(result)
+      const deductions = await fetchData("SELECT PD.ID_Payroll, PD.ID_PayrollItem, PD.Name_PayrollItem, PD.Amount FROM tPayroll_Detail PD LEFT JOIN tPayrollItemMaster PIM ON PD.ID_PayrollItem = PIM.ID WHERE PD.ID_Employee = :IDEmployee AND PIM.ID_Type = 2", { IDEmployee })
+
+      if (deductions) {
+        const mergedResult = {
+          detail: result,
+          deductions: deductions,
+        }
+  
+        res.json(mergedResult)
+      } else {
+        res.status(400).json({ success: false, message: 'Something went wrong' })
+      }
     } else {
       res.status(400).json({ success: false, message: 'Something went wrong' })
     }
@@ -164,7 +175,7 @@ app.post('/api/morePayslip', async (req, res) => {
     const firstResult = await fetchData("SELECT Code_Employee, Name_Employee, DateFrom, DateTo, DatePayoutSchedule, GrossPay, NetPay FROM tPayroll_Summary WHERE ID_Employee = :IDEmployee AND ID_Payroll = :IDPayroll", { IDPayroll, IDEmployee })
 
     if (firstResult) {
-      const secondResult = await fetchData("SELECT ID_PayrollItem, Name_PayrollItem, SUM(Amount) AS TotalAmount FROM tPayroll_Detail WHERE ID_Employee = :IDEmployee AND ID_Payroll = :IDPayroll GROUP BY ID_PayrollItem, Name_PayrollItem HAVING ID_PayrollItem <> '65' AND ID_PayrollItem <> '2' AND ID_PayrollItem <> '54' AND ID_PayrollItem <> '53' AND ID_PayrollItem <> '55'", { IDPayroll, IDEmployee })
+      const secondResult = await fetchData("SELECT PD.ID_PayrollItem, PD.Name_PayrollItem, SUM(PD.Amount) AS TotalAmount FROM tPayroll_Detail PD LEFT JOIN tPayrollItemMaster PIM ON PD.ID_PayrollItem = PIM.ID WHERE PD.ID_Employee = :IDEmployee AND PD.ID_Payroll = :IDPayroll AND PIM.ID_Type = 1 GROUP BY PD.ID_PayrollItem, PD.Name_PayrollItem", { IDPayroll, IDEmployee })
 
       const thirdResult = await fetchData("SELECT SUM(Hours) AS TotalHours, SUM(Amount) AS TotalAmount FROM tPayroll_Detail WHERE ID_PayrollItem = '2' AND ID_Employee = :IDEmployee AND ID_Payroll = :IDPayroll", { IDPayroll, IDEmployee })
 

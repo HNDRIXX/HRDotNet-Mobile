@@ -390,12 +390,13 @@ export default function PayslipPanel () {
 
     const [recentPayData, setRecentPayData] = useState(null)
     const [tempData, setTempData] = useState(null)
+    const [deductionsData, setDeductionsData] = useState(null)
 
     const navigation = useNavigation()
 
     useEffect(() => { Utils.getHalf(setFirstHalf, setSecondHalf) })
     
-    const onHandleMore = (item, TKData) => { navigation.navigate('MorePayslip', {item, TKData}) }
+    const onHandleMore = (item, deductions, TKData) => { navigation.navigate('MorePayslip', {item, deductions, TKData}) }
 
     let filteredData = []
 
@@ -423,12 +424,13 @@ export default function PayslipPanel () {
 
                 if (userID !== null) {
                     if (response.ok) {
-                        const sortedData = data.sort((a, b) => moment(b.DatePayoutSchedule, 'YYYYMMDD').diff(moment(a.DatePayoutSchedule, 'YYYYMMDD')))
+                        const sortedData = data.detail.sort((a, b) => moment(b.DatePayoutSchedule, 'YYYYMMDD').diff(moment(a.DatePayoutSchedule, 'YYYYMMDD')))
 
                         const recentSlip = sortedData.length > 0 ? sortedData[0] : {}
                         const previousSlip = sortedData.slice(1)
                         
                         setRecentPayData(recentSlip)
+                        setDeductionsData(data.deductions)
                         setTempData(previousSlip)
                     } else { alert(data.message) }
                 } else { console.log('userID not found in AsyncStorage') }
@@ -453,6 +455,7 @@ export default function PayslipPanel () {
                 {recentPayData != null && (
                     <RecentPayItem
                         item={recentPayData}
+                        deductions={deductionsData?.filter(item => item?.ID_Payroll === tempData?.ID_Payroll)}
                         TKData={TKData}
                         onHandleMore={onHandleMore}
                     />
@@ -472,6 +475,7 @@ export default function PayslipPanel () {
                             (withinFirst || withinSecond) ? (
                                 <PayHistoryItem 
                                     item={item}
+                                    deductions={deductionsData?.filter(itemFilter => itemFilter?.ID_Payroll === item?.ID_Payroll)}
                                     TKData={TKData}
                                     index={index}
                                     onHandleMore={onHandleMore}

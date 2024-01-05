@@ -64,7 +64,11 @@ const TimekeepingText = ({ title, text, gap }) => {
 export default function MorePayslip ({ navigation }) {
     const route = useRoute()
     const params = route.params.item
+    const deductionsParams = route.params.deductions
     const TKparams = route.params.TKData
+    
+
+    console.log(deductionsParams)
 
     const [tempData, setTempData] = useState(null)
     const [grossData, setGrossData] = useState(null)

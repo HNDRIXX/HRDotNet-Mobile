@@ -9,8 +9,10 @@ import CachedImage from "expo-cached-image";
 
 import { COLORS, COMPONENT_STYLES, DateTimeUtils, Utils, ICONS } from "../../../constant";
 
-export default function RecentPayItem ({ item, TKData, index, onHandleMore }) {
+export default function RecentPayItem ({ item, deductions, TKData, index, onHandleMore }) {
     const styles = COMPONENT_STYLES.RecentPayItem
+
+    const totalAmount = deductions?.reduce((accumulator, currentItem) => accumulator + currentItem.Amount, 0)
 
     return (
         <View key={index} style={styles.topView}>
@@ -46,13 +48,13 @@ export default function RecentPayItem ({ item, TKData, index, onHandleMore }) {
 
                         <View style={styles.deductionsView}>
                             <Text style={styles.deductionsText}>Deductions</Text>
-                            <Text style={styles.amountText}>{Utils.amountFormat(item.Deductions)}</Text>
+                            <Text style={styles.amountText}>{Utils.amountFormat(totalAmount)}</Text>
                         </View>
                     </View>
 
                     <TouchableOpacity
                         style={styles.topMoreButton}
-                        onPress={() => onHandleMore(item, TKData)}
+                        onPress={() => onHandleMore(item, deductions, TKData)}
                     >
                         <View style={styles.row}>
                             <Text style={styles.moreText}>More</Text>
