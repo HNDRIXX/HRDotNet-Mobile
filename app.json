@@ -1,0 +1,56 @@
+{
+  "expo": {
+    "scheme": "acme",
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "orientation": "portrait",
+    "name": "HRDotNet-Mobile",
+    "slug": "hrdotnet-mobile",
+    "icon": "./assets/icon.png",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "android": {
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyC1YDKCTkx-ib9y0iAX_B-wSQc0Hf2AqSo"
+        }
+      },
+      "permissions": [
+        "READ_EXTERNAL_STORAGE"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.hndrx022.HRDotNetMobile"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIFileSharingEnabled": true
+      },
+      "bundleIdentifier": "com.hndrx022.HRDotNetMobile"
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "b7bf4f49-92f0-470c-b7a1-5843a61d6ebc"
+      }
+    },
+    "owner": "hrdotnet-mobile"
+  }
+}
