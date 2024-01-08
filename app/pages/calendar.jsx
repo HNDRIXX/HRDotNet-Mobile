@@ -16,30 +16,18 @@ import CalendarEvent from "../../components/section/calendar/CalendarEvent";
 import { ScrollView } from "react-native-gesture-handler";
 import Loader from "../../components/loader/Loader";
 
-const valueEvents = {
-  '20231001': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day', }, ],
-  '20231002': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day', }, ],
-  '20231003': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day', }, ],
-  '20231004': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day', }, ],
-  '20231005': [ { event: 'Approved Leave', status: 'Leave', }, ],
-  '20231006': [ { event: 'Government Declared Holiday', status: 'Holiday' } ],
-  '20231007': [ { event: 'No Work Schedule', status: 'Rest Day' } ],
-  '20231008': [ { event: 'No Work Schedule', status: 'Rest Day' } ],
-  '20231018': [ { event: 'No Work Schedule', status: 'Rest Day' } ],
-  '20231019': [ { event: 'No Work Schedule', status: 'Rest Day' } ],
-  '20231020': [ { event: 'No Work Schedule', status: 'Rest Day' } ],
-  '20231030': [ { event: 'Election', status: 'Holiday' } ],
-  '20231031': [ { event: '7:00 AM to 4:00 PM', status: 'Work Day' } ],
-}
-
 export default function CalendarScreen() {
   const [isLoading, setIsLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
 
+  const [dateCalendar, setDateCalendar] = useState(moment().format('YYYY-MM-DD'))
+  const [selectedMonth, setSelectedMonth] = useState(moment().month())
+  const [selectedYear, setSelectedYear] = useState(moment().year())
   const [selectedDate, setSelectedDate] = useState(null)
   const [events, setEvents] = useState(null)
   const [previousDate, setPreviousDate] = useState(null)
   const [nextDate, setNextDate] = useState(null)
+  const [valueEvents, setValueEvents] = useState(null)
   const scrollViewRef = useRef(null)
 
   const styles = STYLES.Calendar
@@ -48,6 +36,8 @@ export default function CalendarScreen() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
+        setIsLoading(true)
+
         const userID = await AsyncStorage.getItem('userID')
         const connValue = await AsyncStorage.getItem('conn')
         const portValue = await AsyncStorage.getItem('port')
@@ -63,19 +53,73 @@ export default function CalendarScreen() {
         const data = await response.json()
 
         if (response.ok) {
-          console.log(data)
+          try {
+            const transformData = async (inputArray) => {
+              const transformedData = {}
+            
+              for (const item of inputArray) {
+                for (const key of Object.keys(item)) {
+                  if (key.endsWith('_Date')) {
+                    const date = item[key];
+                    const scheduleKey = key.replace('_Date', '_Name_Schedule');
+                    const scheduleValue = item[scheduleKey];
+            
+                    if (transformedData[date]) {
+                      transformedData[date].push({ Name_Schedule: scheduleValue });
+                    } else {
+                      transformedData[date] = [{ Name_Schedule: scheduleValue }];
+                    }
+                  }
+                }
+              }
+            
+              return transformedData;
+            }
+
+            const modifiedWorkSched = await transformData(data.workSched)
+          
+            const startDate = moment().month(selectedMonth).startOf('month').year(selectedYear)
+            console.log(startDate)
+            const endDate = moment().month(selectedMonth).endOf('month').year(selectedYear)
+    
+            const datesObject = {}
+    
+            while (startDate.isSameOrBefore(endDate)) {
+              const formattedDate = startDate.format('YYYYMMDD')
+              const dayOfWeek = startDate.format('dddd').toUpperCase().slice(0, 3)
+    
+              const workDayData = modifiedWorkSched[formattedDate]
+
+              datesObject[formattedDate] = [
+                {
+                  day: dayOfWeek,
+                  event:
+                    (workDayData &&
+                    workDayData.length > 0 &&
+                    workDayData[workDayData.length - 1].Name_Schedule) ||
+                    data.defaultSched[0][`${dayOfWeek}_Name_Schedule`],
+                    status: data[`${dayOfWeek}_IsRestDay`] == 1 ? 'Rest Day' : 'Work Day',
+                  
+                },
+                ...(datesObject[formattedDate] || []),
+              ]
+    
+              startDate.add(1, 'days')
+            }
+    
+            setValueEvents(datesObject)
+            console.log(valueEvents)
+            setIsLoading(false)
+          } catch (error) {
+            console.error('Error fetching data:', error)
+            setIsLoading(false)
+          }
         } else { alert(data.message) }
       } catch (error) { console.error(error) }
     }
 
     fetchUserData()
-  }, [])
-
-  useEffect(() => {
-      setTimeout(() => {
-        setIsLoading(false)
-      }, 800)
-  }, [])
+  }, [selectedMonth,])
   
   for (const key in valueEvents) {
     const formattedDate = key.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3')
@@ -151,7 +195,7 @@ export default function CalendarScreen() {
     const year = parseInt(parts[2], 10)
   
     const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`
-    
+
     return formattedDate
   }
 
@@ -162,60 +206,68 @@ export default function CalendarScreen() {
   return (
     <>
       <NavigationHeader headerName="Calendar" />
-      
+
       {isLoading ? ( <Loader /> ) : (
-          <Animatable.View
+        <Animatable.View
               animation={'fadeIn'}
               duration={500}
               style={{ opacity: 1, flex: 1, backgroundColor: COLORS.clearWhite }}
-          >
-              <View style={styles.container}>
-                  <ScrollView
-                    ref={scrollViewRef}
-                    refreshControl={
-                      <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={refresh} />
-                  }>
-                    <Calendar
-                        onDayPress={dayPress}
-                        style={styles.calendarView}
-                        enableSwipeMonths
+        >
+          <View style={styles.container}>
+              <ScrollView
+                ref={scrollViewRef}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={refresh} />
+              }>
+                <Calendar
+                    onDayPress={dayPress}
+                    current={dateCalendar}
+                    onMonthChange={(date) => {
+                      setIsLoading(true)
+                      setSelectedDate(null)
+                      setSelectedMonth(date.month - 1)
+                      setSelectedYear(date.year)
+                      setDateCalendar(date.dateString)
+                    }}
+                    style={styles.calendarView}
+                    enableSwipeMonths
 
-                        headerStyle={{
-                          backgroundColor: COLORS.clearWhite,
-                        }}
+                    headerStyle={{
+                      backgroundColor: COLORS.clearWhite,
+                    }}
 
-                        theme={{
-                          dotColor: COLORS.orange,
-                          todayTextColor: COLORS.baseOrange,
-                          arrowColor: COLORS.powderBlue,
-                        }}
+                    theme={{
+                      dotColor: COLORS.powderBlue,
+                      todayTextColor: COLORS.baseOrange,
+                      arrowColor: COLORS.powderBlue,
+                    }}
 
-                        markedDates={addMarkedDates()}
-                    />
-                  </ScrollView>
+                    markedDates={addMarkedDates()}
+                />
+              </ScrollView>
+          </View>
+
+          {selectedDate ? (
+              <CalendarEvent 
+                events={events}
+                formatDate={formatDate}
+                selectedDate={selectedDate}
+                yesterday={yesterday}
+                tomorrow={tomorrow}
+                checkColor={checkColor}
+                previousDate={previousDate}
+                updatedValueEvents={updatedValueEvents}
+                defaultDate={defaultDate}
+                nextDate={nextDate}
+              />
+          ) : (
+              <View style={styles.promptView}>
+                <CalendarNote />
               </View>
-
-              {selectedDate ? (
-                  <CalendarEvent 
-                    events={events}
-                    formatDate={formatDate}
-                    selectedDate={selectedDate}
-                    yesterday={yesterday}
-                    tomorrow={tomorrow}
-                    checkColor={checkColor}
-                    previousDate={previousDate}
-                    updatedValueEvents={updatedValueEvents}
-                    defaultDate={defaultDate}
-                    nextDate={nextDate}
-                  />
-              ) : (
-                  <View style={styles.promptView}>
-                    <CalendarNote />
-                  </View>
-              )}
-          </Animatable.View>
+          )}
+        </Animatable.View>
       )}
     </>
   )

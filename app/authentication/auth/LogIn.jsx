@@ -20,7 +20,7 @@ export default function LogInPage ({ navigation }) {
     const [fontsLoaded] = useFonts()
     const [conn, setConn] = useState(null)
     const [port, setPort] = useState(null)
-    const [userName, setUsername] = useState('MGL6998')
+    const [userName, setUsername] = useState('MGL5017')
     const [password, setPassword] = useState('sql123$%^')
     const [isShowPassword, setShowPassword] = useState(false)
     const [isLoading, setLoading] = useState(false)

@@ -93,11 +93,22 @@ app.post('/api/calendar', async (req, res) => {
   try {
     const { IDEmployee } = req.body
 
-    const result = await fetchData("SELECT * FROM tEmploymentRecord WHERE ID_Employee = :IDEmployee",
+    const defaultSched = await fetchData("SELECT MON_Name_Schedule, MON_IsRestDay, TUE_Name_Schedule, TUE_IsRestDay, WED_Name_Schedule, WED_IsRestDay, THU_Name_Schedule, THU_IsRestDay, FRI_Name_Schedule, FRI_IsRestDay, SAT_Name_Schedule, SAT_IsRestDay, SUN_Name_Schedule, SUN_IsRestDay FROM tEmploymentRecord WHERE ID_Employee = :IDEmployee",
     {IDEmployee })
 
-    if (result.length > 0) {
-      res.json(result[0])
+    if (defaultSched.length > 0) {
+      const workSched = await fetchData("SELECT DayOne_Date, DayOne_Name_Schedule, DayTwo_Date, DayTwo_Name_Schedule, DayThree_Date, DayThree_Name_Schedule, DayFour_Date, DayFour_Name_Schedule, DayFive_Date, DayFive_Name_Schedule, DaySix_Date, DaySix_Name_Schedule, DaySeven_Date, DaySeven_Name_Schedule FROM tWorkSchedule_Detail WHERE ID_Employee = :IDEmployee", { IDEmployee })
+      
+      if (workSched.length > 0) {
+        const mergedResult = {
+          defaultSched: defaultSched,
+          workSched: workSched,
+        }
+
+        console.log(mergedResult.workSched)
+  
+        res.json(mergedResult)
+      }
     } else {
       res.status(400).json({ success: false, message: 'Something went wrong' })
     }
